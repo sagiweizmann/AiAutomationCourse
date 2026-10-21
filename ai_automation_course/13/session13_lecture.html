@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 13: פרויקט גמר, חלק 1: אפיון וארכיטקטורה · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* timeline */
+.tl3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tl3 .card{padding:16px;border-top:4px solid var(--c)}
+.tl3 .n{font-family:"Secular One";font-size:15px;color:var(--c)}
+.tl3 ul{margin:6px 0 0;padding-inline-start:18px;font-size:14.5px}
+.tl3 .card.now{box-shadow:0 0 0 3px color-mix(in srgb,var(--claude) 25%,transparent)}
+/* must */
+.must{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.must div{padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:14px}
+.must b{display:block;font-size:15px}
+/* rubric */
+.rb{display:grid;gap:8px}
+.rb-row{display:grid;grid-template-columns:minmax(0,1.4fr) 56px minmax(0,1fr) 54px;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14.5px}
+.rb-row small{display:block;color:var(--ink-2);font-size:12.5px}
+.rb-row .w{font-weight:800;color:var(--accent);text-align:center}
+.rb-row input{width:100%;accent-color:var(--accent)}
+.rb-row .pt{font-weight:800;text-align:center}
+.rb-tot{display:flex;gap:14px;align-items:center;margin-top:12px}
+.rb-tot b{font-family:"Secular One";font-size:32px}
+/* sizer */
+.sz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.sz .q{margin-bottom:10px}
+.sz .q label{display:block;font-size:13.5px;font-weight:700;color:var(--ink-2);margin-bottom:4px}
+.meter{position:relative;height:22px;border-radius:99px;background:linear-gradient(90deg,var(--p4) 0%,var(--good) 30%,var(--good) 62%,var(--bad) 100%);direction:ltr}
+.meter i{position:absolute;top:-6px;width:6px;height:34px;border-radius:3px;background:var(--ink);transition:left .4s}
+.meter-l{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-2);margin-top:6px;direction:ltr}
+.sz-v{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:15px;background:var(--surface-2)}
+.sz-v ul{margin:6px 0 0;padding-inline-start:18px;font-size:14px}
+/* architecture builder */
+.ab-pal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.ab-col b{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.ab-col button{display:block;width:100%;text-align:right;font:inherit;font-size:13.5px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:6px 9px;margin-bottom:6px;cursor:pointer;transition:.2s}
+.ab-col button.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--surface));font-weight:700}
+.ab-flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;direction:ltr;justify-content:center;min-height:52px;margin:14px 0;padding:12px;border-radius:14px;background:var(--surface-2)}
+.ab-flow span{direction:rtl;padding:6px 12px;border-radius:10px;font-size:13.5px;font-weight:700;background:var(--surface);border:2px solid var(--c)}
+.ab-flow i{font-style:normal;color:var(--ink-2)}
+.ab-chk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.ab-chk div{font-size:14px;padding:6px 10px;border-radius:9px}
+.ab-chk .ok{background:color-mix(in srgb,var(--good) 10%,var(--surface))}
+.ab-chk .no{background:color-mix(in srgb,var(--bad) 9%,var(--surface))}
+/* skeleton */
+.sk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.sk .card{padding:14px}
+.sk-grid{display:grid;grid-template-columns:70px repeat(4,minmax(0,1fr));gap:4px;font-size:12.5px;margin-top:8px}
+.sk-grid span{padding:5px 4px;border-radius:6px;text-align:center;background:var(--surface-2);color:var(--ink-2)}
+.sk-grid span.h{background:none;font-weight:800;color:var(--ink)}
+.sk-grid span.d{background:color-mix(in srgb,var(--c) 25%,transparent);color:var(--ink);font-weight:700}
+.sk-res{margin-top:10px;font-size:14px;padding:8px 12px;border-radius:10px}
+@media (max-width:860px){.tl3,.must,.sz,.sk,.ab-chk{grid-template-columns:minmax(0,1fr)}.ab-pal{grid-template-columns:repeat(2,minmax(0,1fr))}.rb-row{grid-template-columns:minmax(0,1fr) 48px;}.rb-row input{grid-column:1/-1}.must{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 13</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>פרויקט גמר, חלק 1: אפיון וארכיטקטורה</h1>
+  <p class="sub">בוחרים פרויקט בגודל הנכון, מאפיינים אותו, מתכננים ארכיטקטורה שעומדת בדרישות, ובונים שלד שעובד מקצה לקצה עוד היום.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session13_lecture.html" class="on">🎓 הרצאה</a><a href="session13_practice.html" class="">🛠️ תרגול</a><a href="session13_solution.html" class="">✅ פתרון</a><a href="session13_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות · שלב 5: פרויקט גמר</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--claude)"><div class="t">0:00–0:20</div><b>הדרישות והמחוון</b><span>מה מגישים, ואיך נבחנים</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:20–0:45</div><b>בחירה ואפיון</b><span>פרויקט בגודל הנכון</span></div>
+    <div class="ag" style="--c:var(--p5)"><div class="t">0:45–1:00</div><b>ארכיטקטורה ושלד</b><span>תכנון, ואז מקצה לקצה</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>סדנה</b><span>אפיון, ארכיטקטורה ושלד עובד</span></div>
+  </div>
+</section>
+
+<section class="blk" id="road">
+  <div class="kicker">חלק 1 · הדרך</div>
+  <h2>שלושה מפגשים לפרויקט</h2>
+  <div class="tl3">
+    <div class="card now" style="--c:var(--claude)"><div class="n">מפגש 13 · היום</div><b>אפיון וארכיטקטורה</b><ul><li>מסמך אפיון מאושר</li><li>תרשים ארכיטקטורה ומודל נתונים</li><li>שלד שרץ מקצה לקצה</li></ul></div>
+    <div class="card" style="--c:var(--p2)"><div class="n">מפגש 14</div><b>אב טיפוס ובדיקות</b><ul><li>כל הזרימה הראשית עובדת</li><li>סט בדיקות, לוג והתראה</li><li>מקרי קצה וגבולות</li></ul></div>
+    <div class="card" style="--c:var(--p4)"><div class="n">מפגש 15</div><b>הצגה בפני ועדה</b><ul><li>הדגמה חיה של 10 דקות</li><li>מספרים: ROI ותוצאות הבדיקות</li><li>שאלות של הוועדה</li></ul></div>
+  </div>
+  <h3 class="mt" style="margin-top:26px">דרישות חובה</h3>
+  <p class="lead">כל פרויקט, בכל נושא, חייב לכלול את הרכיבים האלה. כל אחד מהם הוא משהו שכבר בניתם בקורס.</p>
+  <div class="must">
+    <div><b>✳️ Claude בתהליך</b>לפחות קריאה אחת עם פלט מובנה (JSON), שמשפיעה על מה שקורה אחריה</div>
+    <div><b>🔗 שתי מערכות או יותר</b>מחוברות, עם מקור אמת ברור לכל סוג מידע</div>
+    <div><b>🙋 אדם באמצע</b>בכל פעולה שאי אפשר לבטל, או שיוצאת ללקוח</div>
+    <div><b>🧪 סט בדיקות</b>לפחות 10 מקרים, כולל מקרי קצה, ותוצאה מתועדת</div>
+    <div><b>📜 לוג והתראה</b>שורה לכל הרצה, והתראה אחת לפחות על שגיאה</div>
+    <div><b>💰 ROI</b>מדידת מוצא (אפילו משוערת) ויעד, לפי המחשבון ממפגש 11</div>
+    <div><b>🔐 פרטיות</b>מה יוצא, לאן, ומה מוסתר</div>
+    <div><b>📕 Runbook</b>איך מכבים, ואיך חוזרים לעבודה ידנית</div>
+  </div>
+</section>
+
+<section class="blk" id="rubric">
+  <div class="kicker">חלק 1 · המחוון</div>
+  <h2>איך הוועדה תבדוק</h2>
+  <p class="lead">הזיזו כל מחוון למקום שבו אתם חושבים שהפרויקט שלכם יעמוד, ובדקו איפה כדאי להשקיע. שימו לב: "אפיון וארכיטקטורה" ו"בדיקות" שוקלים יחד כמו "שימוש ב-Claude".</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">מחוון</span><h3>הערכה עצמית</h3></div>
+    <div class="sim-body"><div class="rb" id="rb"></div><div class="rb-tot" id="rbT"></div></div>
+  </div>
+</section>
+
+<section class="blk" id="size">
+  <div class="kicker">חלק 2 · בחירת פרויקט</div>
+  <h2>פרויקט בגודל הנכון</h2>
+  <p class="lead">יש לכם בערך 9 שעות בכיתה, ועוד כ-10 שעות בבית. פרויקט קטן מדי לא מראה מה למדתם, ופרויקט גדול מדי לא מגיע להדגמה. ענו על השאלות, וראו איפה הרעיון שלכם נמצא.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>מד גודל לפרויקט</h3></div>
+    <div class="sim-body">
+      <div class="sz">
+        <div id="szQ"></div>
+        <div><div class="meter"><i id="szI"></i></div><div class="meter-l"><span>קטן מדי</span><span>בדיוק</span><span>גדול מדי</span></div><div class="sz-v" id="szV"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout tip"><b>הנוסחה של פרויקט טוב</b>תהליך אחד <b>אמיתי</b> שמישהו מכיר מקרוב, עם <b>זרימה ראשית אחת</b> שעובדת מצוין, ועוד שניים או שלושה מקרי קצה שמטופלים. עדיף זרימה אחת מושלמת מחמש זרימות חצי עובדות.</div>
+</section>
+
+<section class="blk" id="arch">
+  <div class="kicker">חלק 3 · ארכיטקטורה</div>
+  <h2>בונים ארכיטקטורה מרכיבים</h2>
+  <p class="lead">כל פרויקט בנוי מאותן חמש שכבות: <b>טריגר</b>, <b>עיבוד</b> (Claude), <b>ידע ונתונים</b>, <b>פעולות</b> ו<b>תפעול</b>. בחרו רכיבים מכל שכבה, ובדקו מול דרישות החובה. בסוף אפשר להעתיק את התרשים כ-Mermaid.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">בונה</span><h3>הארכיטקטורה שלי</h3></div>
+    <div class="sim-body">
+      <div class="ab-pal" id="abP"></div>
+      <div class="ab-flow" id="abF"></div>
+      <div class="ab-chk" id="abC"></div>
+      <div class="copybox mt"><pre id="abM"></pre></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="skel">
+  <div class="kicker">חלק 3 · איך בונים</div>
+  <h2>שלד מקצה לקצה, ולא שכבה אחרי שכבה</h2>
+  <p class="lead">הטעות הנפוצה: לשכלל את הפרומפט במשך שבועיים, ולגלות במפגש האחרון שהחיבור ל-CRM לא עובד. <b>שלד מקצה לקצה</b> (Walking skeleton) הוא גרסה דקה מאוד של כל הזרימה, שעובדת כבר בשעה הראשונה. אחר כך מעבים כל שלב. השוו בין שתי הגישות:</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>שלושה שבועות, שתי גישות</h3></div>
+    <div class="sim-body">
+      <div class="row" style="gap:10px;flex-wrap:wrap"><button class="btn" id="skGo">▶ הרצה</button><span class="muted" id="skW" style="font-size:14px"></span></div>
+      <div class="sk mt" id="skB"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 13 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const $=id=>document.getElementById(id);
+/* ---------- rubric ---------- */
+const RB=[['בעיה עסקית ו-ROI','בעיה אמיתית, מדידת מוצא, יעד וחישוב',15],['אפיון וארכיטקטורה','מסמך ברור, תרשים, מודל נתונים ומקורות אמת',20],['שימוש ב-Claude','פרומפטים, פלט מובנה, כלים או ידע, והבחירה בין Workflow לסוכן',20],['אינטגרציה','שתי מערכות או יותר, נרמול, טיפול בשגיאות',15],['בדיקות, ניטור ואבטחה','סט בדיקות, לוג, התראה, פרטיות ו-Runbook',15],['הצגה והדגמה','הדגמה חיה שעובדת, מספרים, ותשובות לשאלות',15]];
+const RV=RB.map(()=>70);
+$('rb').innerHTML=RB.map(([n,d,w],i)=>`<div class="rb-row"><span><b>${n}</b><small>${d}</small></span><span class="w">${w}%</span><input type="range" min="0" max="100" step="10" value="${RV[i]}" data-i="${i}"><span class="pt"></span></div>`).join('');
+document.querySelectorAll('#rb input').forEach(x=>x.oninput=()=>{RV[+x.dataset.i]=+x.value;rbR();});
+function rbR(){let t=0,low=null;document.querySelectorAll('#rb input').forEach((x,i)=>{const p=RB[i][2]*RV[i]/100;t+=p;x.nextElementSibling.textContent=p.toFixed(1);if(low===null||RV[i]*RB[i][2]<RV[low]*RB[low][2])low=i;});
+ const gain=RB[low][2]*0.3;
+ $('rbT').innerHTML=`<span>ציון צפוי:</span><b style="color:${t>=85?'var(--good)':t>=70?'var(--p4)':'var(--bad)'}">${Math.round(t)}</b><span class="muted">שיפור של 30% ב"${RB[low][0]}" שווה עוד ${gain.toFixed(1)} נקודות. זה המקום הכי משתלם להשקיע בו עכשיו.</span>`;}
+rbR();
+
+/* ---------- sizer ---------- */
+const SQ=[['כמה זרימות עיקריות?','fl',[['אחת',1],['שתיים',2],['שלוש ומעלה',4]],0],['כמה מערכות מתחברות?','sy',[['אחת',0],['2–3',1],['4 ומעלה',3]],1],['Workflow או סוכן?','ag',[['Workflow',0],['Workflow עם החלטות AI',1],['סוכן עם כלים',2],['כמה סוכנים',4]],1],['כמה כלים או טכנולוגיות חדשות, שלא למדנו?','nw',[['אף אחת',0],['אחת',2],['שתיים ומעלה',4]],0],['יש לכם גישה לנתונים אמיתיים (או לדוגמה)?','da',[['כן',0],['אפשר לייצר',1],['לא ברור',3]],0],['מי המשתמש?','us',[['אני או הצוות שלי',0],['צוות אחר בארגון',1],['לקוחות חיצוניים',2]],1]];
+const SV={};SQ.forEach(q=>SV[q[1]]=q[2][q[3]][1]);
+$('szQ').innerHTML=SQ.map(([t,k,o,d])=>`<div class="q"><label>${t}</label><div class="seg" data-k="${k}">${o.map(([n,v],i)=>`<button class="${i===d?'on':''}" data-v="${v}">${n}</button>`).join('')}</div></div>`).join('');
+document.querySelectorAll('#szQ .seg button').forEach(b=>b.onclick=()=>{const s=b.parentNode;s.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));SV[s.dataset.k]=+b.dataset.v;szR();});
+function szR(){const sc=Object.values(SV).reduce((a,b)=>a+b,0);const pos=Math.min(97,Math.max(3,sc/14*100));$('szI').style.left=`calc(${pos}% - 3px)`;
+ const tips=[];if(SV.fl>=4)tips.push('צמצמו לזרימה אחת. את השאר הציגו כ"שלב 2" במצגת.');if(SV.nw>=2)tips.push('טכנולוגיה חדשה היא הסיכון הכי גדול בזמן הזה. השתמשו במה שכבר עובד לכם.');if(SV.ag>=4)tips.push('כמה סוכנים זה הרבה מקומות לטעות. התחילו בסוכן אחד, או ב-Workflow עם החלטות AI.');if(SV.da>=3)tips.push('בלי נתונים אין הדגמה. עוד היום, ייצרו נתוני דוגמה מציאותיים עם Claude.');if(SV.sy>=3)tips.push('4 מערכות ומעלה: חברו שתיים עד שלוש באמת, והשאר כגיליון שמדמה מערכת.');
+ if(sc<=3)tips.push('קטן מדי? הוסיפו מקרה קצה אמיתי עם אדם באמצע, או חיבור למערכת נוספת.');
+ const lvl=sc<=3?['קטן מדי','var(--p4)']:sc<=8?['בגודל הנכון ✓','var(--good)']:['גדול מדי','var(--bad)'];
+ $('szV').innerHTML=`<b style="color:${lvl[1]}">${lvl[0]}</b> <span class="muted">(ציון מורכבות ${sc})</span>${tips.length?'<ul>'+tips.map(t=>`<li>${t}</li>`).join('')+'</ul>':''}`;}
+szR();
+
+/* ---------- architecture builder ---------- */
+const AB=[
+ ['טריגר','--p1',[['form','📝 טופס או Webhook'],['mail','✉️ מייל נכנס'],['sched','⏰ תזמון'],['chat','💬 הודעת WhatsApp או Slack'],['file','📎 קובץ חדש בתיקייה']]],
+ ['עיבוד','--claude',[['cls','✳️ Claude: סיווג וחילוץ (JSON)'],['gen','✳️ Claude: ניסוח'],['agent','🤖 סוכן עם כלים'],['valid','✔️ ולידציה']]],
+ ['ידע ונתונים','--p5',[['sheet','📊 Google Sheets'],['crm','👥 CRM'],['kb','📚 בסיס ידע'],['mem','🗂️ זיכרון לקוח']]],
+ ['פעולות','--p2',[['human','🙋 אישור אנושי'],['notify','🔔 Slack או מייל לצוות'],['reply','💬 תשובה ללקוח'],['cal','📅 יומן'],['upsert','🔁 עדכון CRM (Upsert)']]],
+ ['תפעול','--p4',[['log','📜 לוג'],['alert','🔴 התראת שגיאה'],['eval','🧪 סט בדיקות'],['mask','🔐 הסתרת פרטים']]]
+];
+const AON={form:1,cls:1,sheet:1,human:1,notify:1,log:1};
+function abR(){
+ $('abP').innerHTML=AB.map(([n,c,items])=>`<div class="ab-col"><b>${n}</b>${items.map(([k,t])=>`<button style="--c:var(${c})" class="${AON[k]?'on':''}" data-k="${k}">${t}</button>`).join('')}</div>`).join('');
+ document.querySelectorAll('#abP button').forEach(b=>b.onclick=()=>{AON[b.dataset.k]=AON[b.dataset.k]?0:1;abR();});
+ const sel=AB.map(([n,c,items])=>[c,items.filter(([k])=>AON[k])]).filter(x=>x[1].length);
+ $('abF').innerHTML=sel.map(([c,its])=>its.map(([k,t])=>`<span style="--c:var(${c})">${t}</span>`).join(' ')).join('<i>→</i>')||'<span class="muted">בחרו רכיבים</span>';
+ const has=k=>!!AON[k];const claude=has('cls')||has('gen')||has('agent');const sys=['sheet','crm','kb','cal','notify','mail','chat'].filter(has).length;
+ const risky=has('reply')||has('upsert')||has('agent');
+ const CH=[[has('form')||has('mail')||has('sched')||has('chat')||has('file'),'יש טריגר'],[claude,'Claude בתהליך'],[has('cls')||has('agent'),'פלט מובנה או כלים'],[sys>=2,`שתי מערכות או יותר (${sys})`],[!risky||has('human'),risky?'אדם באמצע לפני פעולה החוצה':'אין פעולה מסוכנת'],[has('log'),'לוג'],[has('alert'),'התראת שגיאה'],[has('eval'),'סט בדיקות'],[!(has('reply')||has('mem'))||has('mask'),'הסתרת פרטים (יש מידע של לקוחות)'],[has('agent')?['kb','crm','sheet'].some(has):true,'לסוכן יש כלים ונתונים']];
+ $('abC').innerHTML=CH.map(([ok,t])=>`<div class="${ok?'ok':'no'}">${ok?'✅':'❌'} ${t}</div>`).join('');
+ const ids={};let m='flowchart LR\n',prev=[];sel.forEach(([c,its],li)=>{const cur=its.map(([k,t])=>{ids[k]=k;m+=`  ${k}["${t.replace(/"/g,'#quot;')}"]\n`;return k;});prev.forEach(p=>cur.forEach(q=>m+=`  ${p} --> ${q}\n`));prev=cur;});
+ $('abM').textContent=m;}
+abR();
+
+/* ---------- skeleton sim ---------- */
+const STG=['טריגר','Claude','מערכות','פעולה'];
+const PLAN={layer:[[1,0,0,0],[1,1,0,0],[1,1,1,0]],skel:[[1,1,1,1],[1,1,1,1],[1,1,1,1]]};
+const QUAL={layer:[[100,0,0,0],[100,100,0,0],[100,100,60,0]],skel:[[30,30,30,30],[70,70,60,60],[90,90,85,80]]};
+function skDraw(w){const B=(name,k,c)=>{let g='<div class="sk-grid" style="--c:var('+c+')"><span class="h"></span>'+STG.map(s=>`<span class="h">${s}</span>`).join('');
+  for(let i=0;i<3;i++){g+=`<span class="h">שבוע ${i+1}</span>`;STG.forEach((s,j)=>{const q=i<w?QUAL[k][i][j]:0;g+=`<span class="${q?'d':''}" style="${q?`opacity:${0.35+q/150}`:''}">${q?q+'%':''}</span>`;});}
+  g+='</div>';const done=w>=3;const demo=QUAL[k][Math.max(0,w-1)].every(x=>x>0)&&w>0;
+  return `<div class="card"><b>${name}</b>${g}<div class="sk-res" style="background:${!w?'var(--surface-2)':demo?'color-mix(in srgb,var(--good) 11%,var(--surface))':'color-mix(in srgb,var(--bad) 9%,var(--surface))'}">${!w?'…':demo?(done?'✓ יש הדגמה מלאה, וכל שלב טוב מספיק.':'✓ אפשר להדגים כבר עכשיו, גם אם עוד לא מושלם.'):(done?'✗ ביום ההצגה אין זרימה שעובדת. השלב האחרון לא נבנה, והחיבור התגלה כבעייתי רק בשבוע 3.':'✗ אין עדיין שום דבר להדגים.')}</div></div>`;};
+ $('skB').innerHTML=B('שכבה אחרי שכבה','layer','--p3')+B('שלד מקצה לקצה','skel','--good');
+ $('skW').textContent=w?`סוף שבוע ${w}`:'';}
+let skT=[];$('skGo').onclick=()=>{skT.forEach(clearTimeout);skT=[0,1,2,3].map(w=>setTimeout(()=>skDraw(w),w*900));};skDraw(0);
+</script>
+</body>
+</html>

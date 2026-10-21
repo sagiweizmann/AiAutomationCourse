@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 12: סיכום מפגש 12: בדיקות ותחזוקה · סיכום</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.layers{display:grid;gap:8px}
+.layers div{display:grid;grid-template-columns:44px 160px minmax(0,1fr);gap:12px;align-items:center;padding:11px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);border-inline-start:5px solid var(--c);font-size:14.5px}
+.layers .e{font-size:22px;text-align:center}
+.layers b{font-size:15px}
+.gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gl div{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.gl b{display:block}
+.gl span{font-size:14.5px;color:var(--ink-2)}
+.rules{counter-reset:r;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.rules li{counter-increment:r;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.rules li::before{content:counter(r);flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--p1);color:#fff;font-weight:800}
+.score{display:flex;align-items:center;gap:14px;margin-top:14px}
+.score b{font-family:"Secular One";font-size:30px}
+.nextup{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;border:0}
+.nextup .e{font-size:40px}
+.nextup small{color:#cfcaf5}
+.milestone{display:flex;gap:14px;align-items:center;padding:16px 20px;border-radius:16px;background:color-mix(in srgb,var(--good) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good) 35%,transparent)}
+.milestone .e{font-size:34px}
+@media (max-width:860px){.layers div{grid-template-columns:36px minmax(0,1fr)}.layers span:last-child{grid-column:2}.gl{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 12</b><span class="kind-badge">📌 סיכום</span></div>
+  <h1>סיכום מפגש 12: בדיקות ותחזוקה</h1>
+  <p class="sub">סוגרים את שלב 4: נועם לא רק עובד, אלא גם נבדק, מנוטר, עולה כמו שתכננו, ושומר על המידע. מהמפגש הבא: פרויקט הגמר.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session12_lecture.html" class="">🎓 הרצאה</a><a href="session12_practice.html" class="">🛠️ תרגול</a><a href="session12_solution.html" class="">✅ פתרון</a><a href="session12_summary.html" class="on">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="milestone"><span class="e">🏁</span><div><b style="font-size:18px">סיימנו את שלב 4: יישום והטמעה</b><div class="muted">יש לכם תוכנית הטמעה (מפגש 11), ומערך שמחזיק אותה לאורך זמן: בדיקות, ניטור, עלויות ופרטיות (מפגש 12). משם עוברים לפרויקט הגמר, שבו בונים מערכת משלכם מקצה לקצה.</div></div></div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שכבות ההגנה</div>
+  <h2>מי תופס מה</h2>
+  <div class="layers">
+    <div style="--c:var(--claude)"><span class="e">🧪</span><b>סט בדיקות</b><span>רגרסיות מכל שינוי, לפני שהוא עולה. כללים, Claude כשופט, ובדיקה אנושית</span></div>
+    <div style="--c:var(--bad)"><span class="e">🔴</span><b>התראות שגיאה</b><span>כלים ומערכות שנשברו, תוך דקות</span></div>
+    <div style="--c:var(--p4)"><span class="e">💸</span><b>התראות עלות ונפח</b><span>ספאם, לולאות וחריגה מהתקציב</span></div>
+    <div style="--c:var(--p2)"><span class="e">👀</span><b>סקירה שבועית</b><span>מה ששום כלל לא תפס. מכאן מוסיפים מקרים חדשים לסט</span></div>
+    <div style="--c:var(--p5)"><span class="e">📚</span><b>בדיקת ידע שהתיישן</b><span>מחירים ומדיניות שהשתנו, בלי שבסיס הידע עודכן</span></div>
+    <div style="--c:var(--ink-2)"><span class="e">🔐</span><b>פרטיות ואבטחה</b><span>הסתרת פרטים אישיים, מפתחות ב-Connections, מדיניות שמירה, והרשאות מינימליות</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">צ'קליסט</div>
+  <h2>לפני כל שינוי בנועם</h2>
+  <ul class="check">
+    <li>עדכנתי את <code>prompt_version</code>, או את המודל, בתרחיש</li>
+    <li>הרצתי את סט הבדיקות, ואין רגרסיות מול הגרסה הקודמת</li>
+    <li>שמרתי את הגרסה הקודמת בלשונית "גרסאות פרומפט"</li>
+    <li>אם השינוי משפיע על העלות, בדקתי אותו במחשבון ובלוג</li>
+    <li>עדכנתי את הצוות מה השתנה</li>
+  </ul>
+</section>
+
+<section class="blk">
+  <div class="kicker">מילון מושגים</div>
+  <h2>מושגים מהמפגש</h2>
+  <div class="gl">
+    <div><b>סט בדיקות (Eval set)</b><span>הודעות קבועות, עם מה שחייב ואסור שיקרה בכל אחת</span></div>
+    <div><b>רגרסיה</b><span>שינוי ששבר משהו שעבד קודם</span></div>
+    <div><b>Claude כשופט</b><span>מודל שמדרג תשובות לפי מחוון. דורש כיול</span></div>
+    <div><b>שינויים לאורך זמן (Drift)</b><span>העולם משתנה סביב הסוכן: נתונים, מערכות, פניות ומודל</span></div>
+    <div><b>לוג מובנה</b><span>שורה עם אותם שדות לכל שיחה, כולל גרסה ועלות</span></div>
+    <div><b>Prompt caching</b><span>שמירה במטמון של חלק קבוע בפרומפט, כדי שקריאה חוזרת שלו תעלה פחות</span></div>
+    <div><b>הסתרת פרטים (Masking)</b><span>החלפה של פרטים רגישים בתגית, לפני שהם יוצאים מהארגון</span></div>
+    <div><b>Runbook</b><span>הוראות פעולה לתקלה, שכל אחד בצוות יכול לבצע</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">כללי אצבע</div>
+  <h2>חמישה כללים לתחזוקה</h2>
+  <ol class="rules">
+    <li>אין שינוי בלי הרצה של סט הבדיקות. אין טעות שלא הופכת למקרה חדש בסט.</li>
+    <li>כל שורת לוג כוללת גרסה, מודל, טוקנים ועלות.</li>
+    <li>התראה 🔴 רק על מה שדורש פעולה עכשיו. השאר נכנס לדוח השבועי.</li>
+    <li>לא שולחים מידע שלא צריך: מסתירים לפני Claude, וגם בלוג.</li>
+    <li>הצעד הראשון בכל תקלה: לכבות ולחזור לעבודה ידנית. הוא חייב לעבוד גם בלי המיישם.</li>
+  </ol>
+</section>
+
+<section class="blk">
+  <div class="kicker">בדיקה עצמית</div>
+  <h2>6 שאלות: מה נשאר לכם מהמפגש?</h2>
+  <div class="card q" data-a="1"><b>1. מתי מריצים את סט הבדיקות?</b><div class="opts"><button class="opt">רק לפני ההשקה</button><button class="opt">לפני כל שינוי בפרומפט, בכלים, במודל או בבסיס הידע, וגם פעם בחודש</button><button class="opt">רק כשלקוח מתלונן</button><button class="opt">אף פעם, כי Claude לא טועה</button></div><div class="fb"><b>הסבר:</b> סט בדיקות שלא מריצים לפני שינוי לא מגן מרגרסיה.</div></div><div class="card q" data-a="1"><b>2. מה זו רגרסיה?</b><div class="opts"><button class="opt">ירידה במחיר</button><button class="opt">שינוי שתיקן דבר אחד ושבר משהו שעבד קודם</button><button class="opt">שגיאה ב-Make</button><button class="opt">לקוח שחוזר</button></div><div class="fb"><b>הסבר:</b> דוגמה מההרצאה: "יותר חם" שיפר את הטון, אבל גרם לנועם להבטיח זיכויים.</div></div><div class="card q" data-a="1"><b>3. למה מכיילים את Claude כשופט?</b><div class="opts"><button class="opt">כדי שייתן ציונים גבוהים</button><button class="opt">כדי לוודא שהציונים שלו מתאימים לשיפוט אנושי, לפני שסומכים עליהם</button><button class="opt">כי זה זול יותר</button><button class="opt">אין צורך לכייל</button></div><div class="fb"><b>הסבר:</b> שופט הוא כלי מדידה. מכיילים אותו מול דוגמאות שדירגתם בעצמכם.</div></div><div class="card q" data-a="0"><b>4. למה בסוכן, מספר הסבבים משפיע על העלות יותר מאורך התשובה?</b><div class="opts"><button class="opt">כי כל סבב שולח שוב את כל ההקשר: הוראות, כלים ותוצאות</button><button class="opt">כי Make גובה לפי סבב</button><button class="opt">כי תשובות קצרות יקרות יותר</button><button class="opt">זה לא נכון</button></div><div class="fb"><b>הסבר:</b> לכן מטמון לחלק הקבוע, ותיאורי כלים שחוסכים סבבים, הם דרכי החיסכון היעילות ביותר.</div></div><div class="card q" data-a="1"><b>5. לקוח כתב מספר כרטיס אשראי בצ'אט. מה הגישה הנכונה?</b><div class="opts"><button class="opt">לשלוח ל-Claude כמו שהוא</button><button class="opt">להסתיר אותו ב-Make לפני ש-Claude מקבל את ההודעה, וגם בלוג</button><button class="opt">לשמור בזיכרון לפעם הבאה</button><button class="opt">למחוק את כל ההודעה</button></div><div class="fb"><b>הסבר:</b> מזעור מידע: Claude מבין את הבקשה גם עם [CARD], והמספר לא יוצא מהארגון ולא נשמר.</div></div><div class="card q" data-a="1"><b>6. מה הצעד הראשון ב-Runbook כשנועם עונה תשובות מסוכנות?</b><div class="opts"><button class="opt">לנתח את הלוג</button><button class="opt">לכבות את התרחיש, ולהחזיר את הפניות לטיפול ידני</button><button class="opt">לשנות את המודל</button><button class="opt">לחכות לבוקר</button></div><div class="fb"><b>הסבר:</b> קודם עוצרים את הנזק, ורק אחר כך מבינים מה קרה. חשוב שהצעד הזה יעבוד גם בלי המיישם.</div></div>
+  <div class="card score"><span>הציון שלכם:</span><b id="sc">0/6</b><span class="muted" id="scm">ענו על השאלות כדי לראות</span></div>
+</section>
+
+<section class="blk">
+  <div class="card nextup"><span class="e">🎓</span><div><small>במפגשים הבאים · מפגשים 13–15 · שלב 5</small><div style="font-family:'Secular One';font-size:22px">פרויקט גמר</div><small>אפיון וארכיטקטורה, בניית אב טיפוס, בדיקות וניטור, והצגה בפני ועדה. מערכת אוטומציה עם Claude, לתהליך אמיתי שבחרתם.</small></div></div>
+  <div class="callout tip"><b>משימה לפני המפגש הבא</b>בחרו שני רעיונות אפשריים לפרויקט הגמר, מהארגון שלכם או ממיפוי המשימות של מפגש 11. לכל רעיון כתבו: מה התהליך היום, מי המשתמשים, אילו מערכות מעורבות, ואיך תמדדו הצלחה.</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 12 · סיכום</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+document.addEventListener('quizchange',()=>{const a=document.querySelectorAll('.q.answered').length;let c=0;document.querySelectorAll('.q.answered').forEach(q=>{if(!q.querySelector('.opt.no'))c++;});
+document.getElementById('sc').textContent=c+'/6';document.getElementById('scm').textContent=a<6?`ענית על ${a} מתוך 6`:(c>=5?'מצוין! אתם מוכנים לפרויקט הגמר':c>=3?'טוב. כדאי לחזור על החלקים שטעיתם בהם':'כדאי לעבור שוב על ההרצאה');});
+</script>
+</body>
+</html>

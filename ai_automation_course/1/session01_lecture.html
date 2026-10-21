@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 1: מבוא ל-AI ול-Claude · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* next-token */
+.nt-text{font-size:20px;line-height:1.9;padding:14px 18px;border-radius:14px;background:var(--surface-2);min-height:64px}
+.nt-text .new{background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:6px;padding:0 4px;animation:pop .5s}
+@keyframes pop{from{background:var(--accent);color:#fff}}
+.nt-cands{display:grid;gap:8px;margin-top:14px}
+.cand{display:grid;grid-template-columns:110px minmax(0,1fr) 54px;gap:10px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:10px;border:0;background:none;font:inherit;color:inherit;text-align:right}
+.cand:hover{background:var(--surface-2)}
+.cand .w{font-weight:700}
+.cand .barw{height:22px;border-radius:7px;background:var(--surface-2);overflow:hidden}
+.cand .bar{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--p1),var(--p5));transition:width .45s}
+.cand.weird .bar{background:linear-gradient(90deg,var(--p3),var(--p4))}
+.cand .pc{font-weight:800;font-size:14px;text-align:left;direction:ltr}
+.temp{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:14px;border:1px solid var(--line)}
+.temp input{width:100%;accent-color:var(--accent)}
+.temp .tv{font-weight:800;direction:ltr;min-width:36px;text-align:center}
+.temp-note{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* tokens */
+.tok-in{width:100%;min-height:84px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:inherit;padding:12px 14px;resize:vertical}
+.toks{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;min-height:40px}
+.tk{padding:2px 6px;border-radius:6px;font-size:15px;white-space:pre}
+.tok-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.ts{padding:12px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ts b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ts span{font-size:13px;color:var(--ink-2)}
+.ctx{margin-top:14px}
+.ctx-bar{height:18px;border-radius:99px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.ctx-bar div{height:100%;transition:width .5s}
+.ctx-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:6px}
+.ctx-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+/* capabilities */
+.cap{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.cap .e{font-size:24px}
+.cap b{display:block;margin:4px 0}
+.cap span{font-size:14.5px;color:var(--ink-2)}
+.cap.lim{border-color:color-mix(in srgb,var(--p3) 40%,var(--line))}
+/* hallucination */
+.hal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}
+.bubble{border-radius:16px;padding:14px 16px;font-size:15.5px}
+.bubble.user{background:var(--surface-2)}
+.bubble.bot{background:color-mix(in srgb,var(--claude) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 35%,transparent)}
+.bubble small{display:block;font-weight:800;font-size:12.5px;color:var(--ink-2);margin-bottom:4px}
+.verdict{margin-top:10px;font-weight:700;font-size:14.5px}
+.verdict.bad{color:var(--bad)}.verdict.good{color:var(--good)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* prompt builder */
+.pb{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:18px}
+.parts{display:grid;gap:8px}
+.part{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;border:2px solid var(--line);cursor:pointer;background:var(--surface);font:inherit;color:inherit;text-align:right;transition:.2s}
+.part .dot{width:14px;height:14px;border-radius:5px;background:var(--c);flex:none;opacity:.35;transition:.2s}
+.part.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.part.on .dot{opacity:1}
+.part b{font-size:15px}
+.part small{display:block;color:var(--ink-2);font-size:12.5px}
+.pv{border-radius:14px;background:var(--surface-2);padding:14px 16px;font-size:15px;min-height:120px}
+.pv span{display:block;border-inline-start:4px solid var(--c);padding-inline-start:10px;margin-bottom:8px;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.meter{display:flex;gap:4px;margin:12px 0 6px}
+.meter i{flex:1;height:10px;border-radius:4px;background:var(--surface-2);transition:.3s}
+.meter i.on{background:var(--mc)}
+.out-lbl{font-weight:800;font-size:14px;margin-top:10px}
+.outbox{border-radius:14px;padding:14px 16px;font-size:15px;background:color-mix(in srgb,var(--claude) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent);white-space:pre-wrap;min-height:90px}
+/* json */
+.jx{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);gap:12px;align-items:stretch}
+.mail{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px}
+.mail mark{background:transparent;color:inherit;border-radius:5px;transition:.35s;padding:0 2px}
+.mail mark.hl{background:color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 0 0 2px var(--c)}
+.arrow{display:grid;place-items:center;font-size:30px;color:var(--accent)}
+.json{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:13.5px;direction:ltr;text-align:left;line-height:1.8;min-height:200px}
+.json .ln{white-space:pre;opacity:0;transform:translateX(-6px);transition:.35s}
+.json .ln.show{opacity:1;transform:none}
+.json .k{color:#a5b4fc}.json .s{color:#fcd34d}.json .n{color:#5eead4}
+.sheet{margin-top:14px}
+.sheet table{font-size:14px}
+.sheet tr.newrow td{animation:rowin .7s}
+@keyframes rowin{from{background:color-mix(in srgb,var(--p2) 35%,transparent)}}
+/* claude tiles */
+.ctile{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.ctile .mock{height:120px;border-radius:12px;background:var(--surface-2);margin-bottom:12px;position:relative;overflow:hidden;padding:10px}
+.mock .l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent);margin:6px 0}
+.mock .b1{width:60%;margin-inline-start:auto;background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.mock .b2{width:75%;background:color-mix(in srgb,var(--claude) 35%,transparent)}
+.mock .side{position:absolute;inset:10px auto 10px 10px;width:34%;border-radius:8px;background:var(--surface);border:1px dashed var(--line);padding:6px}
+.mock .doc{height:14px;border-radius:4px;background:color-mix(in srgb,var(--p2) 30%,transparent);margin:5px 0}
+.mock .art{position:absolute;inset:10px 10px 10px auto;width:46%;border-radius:8px;background:var(--surface);border:1px solid var(--line);padding:8px}
+.mock .art .bar{height:10px;border-radius:4px;margin:6px 0;background:linear-gradient(90deg,var(--p1),var(--p5))}
+.ctile b{font-size:17px}
+.ctile p{margin:4px 0 0;font-size:14.5px;color:var(--ink-2)}
+.when{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--claude)}
+/* flow */
+.flow svg{width:100%;height:auto;display:block}
+.flow .lk{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+@media (max-width:760px){.pb,.hal{grid-template-columns:minmax(0,1fr)}.jx{grid-template-columns:minmax(0,1fr)}.arrow{transform:rotate(-90deg);height:40px}.cand{grid-template-columns:88px minmax(0,1fr) 48px}.tok-stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 1</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>מבוא ל-AI ול-Claude</h1>
+  <p class="sub">איך מודל שפה "חושב", מה הוא יודע לעשות ואיפה הוא טועה, איך כותבים פרומפט שעובד, ולמה אוטומציה צריכה פלט מובנה.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session01_lecture.html" class="on">🎓 הרצאה</a><a href="session01_practice.html" class="">🛠️ תרגול</a><a href="session01_solution.html" class="">✅ פתרון</a><a href="session01_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:20</div><b>איך מודל שפה עובד</b><span>ניבוי המילה הבאה, טוקנים וחלון הקשר</span></div>
+    <div class="ag" style="--c:var(--p3)"><div class="t">0:20–0:40</div><b>יכולות ומגבלות</b><span>במה AI טוב, איפה הוא טועה ולמה</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:40–1:00</div><b>הנדסת פרומפטים ופלט מובנה</b><span>6 רכיבים של פרומפט טוב, ופלט JSON</span></div>
+    <div class="ag" style="--c:var(--claude)"><div class="t">1:00–3:00</div><b>Claude בפועל + תרגול</b><span>צ'אט, Projects ו-Artifacts, ותרגול מודרך</span></div>
+  </div>
+</section>
+
+<section class="blk" id="llm">
+  <div class="kicker">חלק 1 · מודל שפה</div>
+  <h2>מודל שפה לא "יודע". הוא מנבא את ההמשך הסביר</h2>
+  <p class="lead">מודל שפה גדול (LLM) למד מכמויות עצומות של טקסט. בכל צעד הוא מחשב מה ההסתברות של כל מילה להיות הבאה בתור, בוחר אחת ממשיך כך הלאה. לכן התשובה נשמעת טבעית, אבל זה לא אומר שהיא נכונה.</p>
+
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>ניבוי המילה הבאה</h3></div>
+    <div class="sim-body">
+      <div class="nt-text" id="ntText"></div>
+      <div class="nt-cands" id="ntCands"></div>
+      <div class="row mt"><button class="btn" id="ntTop">בחר את הסבירה ביותר</button><button class="btn ghost" id="ntSample">🎲 דגימה לפי הסתברות</button><button class="btn ghost" id="ntReset">↺ התחלה מחדש</button></div>
+      <div class="temp"><b>טמפרטורה</b><input type="range" id="ntT" min="0.2" max="2" step="0.1" value="1"><span class="tv" id="ntTv">1.0</span></div>
+      <div class="temp-note" id="ntNote">אפשר ללחוץ על מילה כדי לבחור אותה, או להזיז את הטמפרטורה ולראות איך ההסתברויות משתנות.</div>
+    </div>
+  </div>
+  <div class="callout tip"><b>מה לקחת מזה</b>טמפרטורה נמוכה נותנת תשובות עקביות וצפויות, וזה מה שרוצים באוטומציה (סיווג, חילוץ נתונים). טמפרטורה גבוהה נותנת תשובות מגוונות ויצירתיות יותר, ומתאימה לרעיונות ולתוכן שיווקי.</div>
+</section>
+
+<section class="blk" id="tokens">
+  <div class="kicker">חלק 1 · טוקנים</div>
+  <h2>המודל קורא טוקנים, לא מילים</h2>
+  <p class="lead">לפני שהמודל קורא טקסט, הוא מפרק אותו לחתיכות קטנות שנקראות טוקנים. מילה יכולה להיות טוקן אחד או כמה טוקנים. על טוקנים משלמים, וטוקנים קובעים כמה טקסט נכנס ל"זיכרון העבודה" של המודל, שנקרא חלון ההקשר.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>מפרק טוקנים (המחשה)</h3></div>
+    <div class="sim-body">
+      <textarea class="tok-in" id="tokIn">שלום, אני רוצה לבדוק מה הסטטוס של הזמנה 48213. Hello, where is my order?</textarea>
+      <div class="toks" id="toks"></div>
+      <div class="tok-stats">
+        <div class="ts"><b id="tsW">0</b><span>מילים</span></div>
+        <div class="ts"><b id="tsT">0</b><span>טוקנים (בערך)</span></div>
+        <div class="ts"><b id="tsR">0</b><span>טוקנים למילה</span></div>
+      </div>
+      <div class="ctx">
+        <div class="row" style="justify-content:space-between"><b>חלון ההקשר: מה נכנס לשיחה אחת</b><div class="row"><button class="btn sm ghost" data-add="doc">+ מסמך מדיניות</button><button class="btn sm ghost" data-add="hist">+ היסטוריית שיחה</button><button class="btn sm ghost" data-add="reset">איפוס</button></div></div>
+        <div class="ctx-bar mt" id="ctxBar"></div>
+        <div class="ctx-leg" id="ctxLeg"></div>
+      </div>
+      <div class="temp-note">החלוקה כאן מפושטת ונועדה להמחשה בלבד. כל מודל מחלק טקסט קצת אחרת, ובעברית מילה מתחלקת בדרך כלל ליותר טוקנים מאשר באנגלית.</div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="limits">
+  <div class="kicker">חלק 2 · יכולות ומגבלות</div>
+  <h2>במה AI מצוין, ואיפה צריך להיזהר</h2>
+  <div class="grid4">
+    <div class="cap"><span class="e">✍️</span><b>ניסוח וכתיבה</b><span>מיילים, תשובות ללקוחות, תיאורי מוצר, פוסטים</span></div>
+    <div class="cap"><span class="e">🗂️</span><b>סיווג ומיון</b><span>לזהות נושא, דחיפות או רגש בפנייה</span></div>
+    <div class="cap"><span class="e">🔎</span><b>חילוץ מידע</b><span>שם, טלפון, סכום ותאריך מתוך טקסט חופשי</span></div>
+    <div class="cap"><span class="e">📝</span><b>סיכום</b><span>שיחות, פגישות ומסמכים ארוכים</span></div>
+    <div class="cap lim"><span class="e">🌀</span><b>הזיות</b><span>ממציא עובדות בביטחון מלא כשאין לו מידע</span></div>
+    <div class="cap lim"><span class="e">📅</span><b>מידע עדכני</b><span>הידע נעצר בתאריך מסוים, אלא אם מחברים אותו למקור</span></div>
+    <div class="cap lim"><span class="e">🧮</span><b>חישובים מדויקים</b><span>עלול לטעות בחשבון. חישובים עושים בכלי או בקוד</span></div>
+    <div class="cap lim"><span class="e">⚖️</span><b>החלטות רגישות</b><span>כסף, חוזים ופרטיות: תמיד עם אישור של אדם</span></div>
+  </div>
+
+  <div class="sim mt">
+    <div class="sim-head"><span class="tag">הדגמה</span><h3>הזיה מול תשובה מבוססת מקור</h3></div>
+    <div class="sim-body">
+      <div class="seg" id="halSeg"><button class="on" data-m="0">פרומפט רגיל</button><button data-m="1">עם מקור והוראה</button></div>
+      <div class="hal">
+        <div class="bubble user"><small>המשתמש</small><span id="halQ"></span></div>
+        <div class="bubble bot"><small>המודל</small><span id="halA"></span><div class="verdict" id="halV"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout warn"><b>כלל אצבע לאוטומציה</b>AI מנסח, מסווג ומחלץ. את העובדות נותנים לו מהמערכות שלנו (מלאי, מחירים, מדיניות), ופעולות רגישות עוברות לאישור של אדם לפני שהן מתבצעות.</div>
+</section>
+
+<section class="blk" id="prompt">
+  <div class="kicker">חלק 3 · הנדסת פרומפטים</div>
+  <h2>6 רכיבים של פרומפט טוב</h2>
+  <p class="lead">פרומפט טוב הוא תדריך לעובד חדש וחכם, שלא מכיר את העסק. ככל שהתדריך ברור יותר, התוצאה טובה יותר. אפשר להפעיל ולכבות רכיבים ולראות מה קורה לתשובה.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>בונה הפרומפטים: מענה ללקוחה שהמשלוח שלה התעכב</h3></div>
+    <div class="sim-body">
+      <div class="pb">
+        <div class="parts" id="parts"></div>
+        <div>
+          <b>הפרומפט</b>
+          <div class="pv" id="pv"></div>
+          <div class="meter" id="meter"></div>
+          <div class="muted" style="font-size:14px" id="meterL"></div>
+          <div class="out-lbl">התשובה של המודל</div>
+          <div class="outbox" id="outbox"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl mt"><table>
+    <tr><th>רכיב</th><th>שאלה שהוא עונה עליה</th><th>דוגמה</th></tr>
+    <tr><td><b>תפקיד</b></td><td>מי אתה?</td><td>אתה נציג שירות בחנות "בית ועיצוב"</td></tr>
+    <tr><td><b>הקשר</b></td><td>מה המצב?</td><td>המשלוח של הלקוחה התעכב ב-4 ימים בגלל ספק</td></tr>
+    <tr><td><b>משימה</b></td><td>מה בדיוק לעשות?</td><td>כתוב תשובה למייל של הלקוחה</td></tr>
+    <tr><td><b>פורמט</b></td><td>איך זה צריך להיראות?</td><td>עד 80 מילים, פסקה אחת, חתימה של צוות השירות</td></tr>
+    <tr><td><b>דוגמה</b></td><td>איך נראית תשובה טובה?</td><td>תשובה קודמת שאהבנו</td></tr>
+    <tr><td><b>מגבלות</b></td><td>מה אסור?</td><td>לא להבטיח תאריך שלא אושר, לא להציע החזר בלי אישור</td></tr>
+  </table></div>
+</section>
+
+<section class="blk" id="json">
+  <div class="kicker">חלק 3 · פלט מובנה</div>
+  <h2>אוטומציה צריכה JSON, לא פסקה יפה</h2>
+  <p class="lead">כשאדם קורא את התשובה, פסקה מתאימה. כשמערכת כמו Make צריכה להמשיך לעבוד עם התשובה, היא צריכה שדות קבועים עם שמות קבועים. לכן מבקשים מהמודל להחזיר JSON לפי מבנה שאנחנו מגדירים מראש.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">אנימציה</span><h3>ממייל חופשי לשורה בגיליון</h3></div>
+    <div class="sim-body">
+      <div class="jx">
+        <div class="mail" id="mail"><b>נושא: הזמנה לא הגיעה</b><br>היי, שמי <mark data-c="--p1" data-f="name">מיכל לוי</mark>. הזמנתי <mark data-c="--p2" data-f="product">מנורת עמידה מעץ</mark> (הזמנה <mark data-c="--p5" data-f="order">48213</mark>) לפני שבועיים ועדיין לא קיבלתי. <mark data-c="--p3" data-f="mood">אני ממש מאוכזבת</mark> וצריכה אותה עד יום שישי. אפשר לחזור אליי ב-<mark data-c="--p4" data-f="phone">052-1234567</mark>?</div>
+        <div class="arrow">⟵</div>
+        <div class="json" id="jsonBox"></div>
+      </div>
+      <div class="row mt"><button class="btn" id="jxGo">▶ חילוץ</button><button class="btn ghost" id="jxReset">↺ איפוס</button></div>
+      <div class="sheet tbl" id="sheet"><table><thead><tr><th>שם</th><th>הזמנה</th><th>מוצר</th><th>טלפון</th><th>דחיפות</th><th>רגש</th></tr></thead><tbody id="sheetBody"><tr><td>יוסי כהן</td><td>48190</td><td>שטיח סלון</td><td>050-7654321</td><td>נמוכה</td><td>ניטרלי</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="copybox"><pre>Return ONLY valid JSON in this exact shape:
+{
+  "customer_name": string,
+  "order_id": string | null,
+  "product": string | null,
+  "phone": string | null,
+  "urgency": "low" | "medium" | "high",
+  "sentiment": "positive" | "neutral" | "negative"
+}</pre></div>
+  <div class="callout tip"><b>למה שמות השדות באנגלית?</b>Make וכלים אחרים ממפים שדות לפי השם שלהם. שמות קבועים באנגלית, בלי רווחים, מונעים תקלות. הערכים עצמם יכולים להיות בעברית.</div>
+</section>
+
+<section class="blk" id="claude">
+  <div class="kicker">חלק 4 · Claude</div>
+  <h2>שלוש דרכים לעבוד עם Claude</h2>
+  <p class="lead">היום נעבוד בממשק של Claude. בהמשך הקורס נחבר אותו גם ל-Make דרך ה-API.</p>
+  <div class="grid3">
+    <div class="ctile"><div class="mock"><div class="l b1"></div><div class="l b2"></div><div class="l b1" style="width:40%"></div><div class="l b2" style="width:65%"></div></div><b>💬 צ'אט</b><p>שיחה חופשית: ניסוח, רעיונות, ניסוי מהיר של פרומפט.</p><div class="when">מתי: בודקים רעיון או פרומפט</div></div>
+    <div class="ctile"><div class="mock"><div class="side"><div class="doc"></div><div class="doc"></div><div class="doc" style="width:70%"></div></div><div style="margin-inline-start:0;width:58%"><div class="l b1"></div><div class="l b2"></div><div class="l b2" style="width:55%"></div></div></div><b>📁 Projects</b><p>מרחב עבודה עם הוראות קבועות ומסמכים של העסק, שכל שיחה בפרויקט משתמשת בהם.</p><div class="when">מתי: עוזר קבוע לנושא אחד</div></div>
+    <div class="ctile"><div class="mock"><div style="width:48%"><div class="l b1"></div><div class="l b2"></div></div><div class="art"><div class="bar" style="width:80%"></div><div class="bar" style="width:55%"></div><div class="bar" style="width:68%"></div></div></div><b>🧩 Artifacts</b><p>תוצר עצמאי שנפתח בצד השיחה, כמו מסמך, טבלה או כלי קטן, שאפשר לערוך ולשתף.</p><div class="when">מתי: רוצים תוצר שימושי, לא רק טקסט</div></div>
+  </div>
+  <div class="callout claude"><b>טיפ לעבודה ב-Projects</b>הוראות הפרויקט הן "פרומפט קבוע". כדאי לכתוב בהן את ששת הרכיבים: תפקיד, הקשר, משימה, פורמט, דוגמה ומגבלות. כך כל שיחה בפרויקט מתחילה מאותה נקודה.</div>
+</section>
+
+<section class="blk" id="bigpic">
+  <div class="kicker">התמונה הגדולה</div>
+  <h2>איפה Claude נכנס באוטומציה עסקית</h2>
+  <div class="card flow">
+    <svg viewBox="0 0 760 170" direction="ltr" style="direction:ltr" aria-label="קלט, Claude, פעולה">
+      <defs><linearGradient id="fg" x1="0" x2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+      <g fill="none" stroke="url(#fg)" stroke-width="2.5"><path class="lk" d="M170 85 H300"/><path class="lk" d="M460 85 H590"/></g>
+      <circle r="5" fill="#22d3ee"><animateMotion dur="1.8s" repeatCount="indefinite" path="M170 85 H300"/></circle>
+      <circle r="5" fill="#fbbf24"><animateMotion dur="1.8s" begin=".9s" repeatCount="indefinite" path="M460 85 H590"/></circle>
+      <g font-family="Heebo" text-anchor="middle">
+        <rect x="20" y="40" width="150" height="90" rx="18" fill="none" stroke="#8b85b5"/>
+        <text x="95" y="78" font-size="18" font-weight="700" fill="currentColor">קלט</text><text x="95" y="102" font-size="13" fill="#8b85b5">מייל · טופס · קובץ</text>
+        <rect x="300" y="30" width="160" height="110" rx="22" fill="url(#fg)"/>
+        <text x="380" y="80" font-size="22" font-weight="800" fill="#0d0c1a">Claude</text><text x="380" y="104" font-size="13" font-weight="700" fill="#0d0c1a">מסווג · מחלץ · מנסח</text>
+        <rect x="590" y="40" width="150" height="90" rx="18" fill="none" stroke="#8b85b5"/>
+        <text x="665" y="78" font-size="18" font-weight="700" fill="currentColor">פעולה</text><text x="665" y="102" font-size="13" fill="#8b85b5">CRM · גיליון · הודעה</text>
+      </g>
+    </svg>
+  </div>
+  <p class="muted">היום לומדים את החלק האמצעי: איך לגרום ל-Claude לעשות את העבודה נכון ובאופן עקבי. במפגשים הבאים נחבר את הקלט ואת הפעולה דרך Make.</p>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 1 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- next token ---------- */
+const NT_START="שלום דנה, ההזמנה שלך";
+const NT=[
+ [["נשלחה",46],["תגיע",28],["מוכנה",15],["בוטלה",8],["ירוקה",3]],
+ [["היום",40],["מחר",30],["אתמול",15],["בהצלחה",12],["לירח",3]],
+ [["ותגיע",38],["ותקבלי",30],["בבוקר",20],["בשעה",10],["פינגווין",2]],
+ [["תוך",45],["עד",30],["אלייך",17],["בקרוב",6],["בשירה",2]],
+ [["3 ימי עסקים.",50],["יומיים.",30],["שבוע.",15],["מאה שנה.",5]]
+];
+let ntStep=0,ntWords=[];
+const T=()=>+document.getElementById('ntT').value;
+function probs(step){const c=NT[step];const w=c.map(([_,p])=>Math.pow(p,1/T()));const s=w.reduce((a,b)=>a+b,0);return c.map(([t],i)=>[t,w[i]/s]);}
+function ntRender(){
+  const tx=document.getElementById('ntText');
+  tx.innerHTML=NT_START+" "+ntWords.map((w,i)=>i===ntWords.length-1?`<span class="new">${w}</span>`:w).join(" ")+(ntStep<NT.length?' <span style="opacity:.4">▍</span>':'');
+  const box=document.getElementById('ntCands');
+  if(ntStep>=NT.length){box.innerHTML='<div class="muted">המשפט הושלם. אפשר להתחיל מחדש ולנסות טמפרטורה אחרת.</div>';['ntTop','ntSample'].forEach(id=>document.getElementById(id).disabled=true);return;}
+  ['ntTop','ntSample'].forEach(id=>document.getElementById(id).disabled=false);
+  const ps=probs(ntStep);const minp=Math.min(...NT[ntStep].map(x=>x[1]));
+  box.innerHTML=ps.map(([t,p],i)=>`<button class="cand ${NT[ntStep][i][1]===minp?'weird':''}" data-i="${i}"><span class="w">${t}</span><span class="barw"><span class="bar" style="display:block;width:${(p*100).toFixed(1)}%"></span></span><span class="pc">${(p*100).toFixed(0)}%</span></button>`).join('');
+  box.querySelectorAll('.cand').forEach(b=>b.onclick=()=>ntPick(+b.dataset.i));
+}
+function ntPick(i){ntWords.push(NT[ntStep][i][0]);ntStep++;ntRender();}
+document.getElementById('ntTop').onclick=()=>{const ps=probs(ntStep);let bi=0;ps.forEach((x,i)=>{if(x[1]>ps[bi][1])bi=i});ntPick(bi);};
+document.getElementById('ntSample').onclick=()=>{const ps=probs(ntStep);let r=Math.random(),i=0;for(;i<ps.length-1;i++){r-=ps[i][1];if(r<=0)break;}ntPick(i);};
+document.getElementById('ntReset').onclick=()=>{ntStep=0;ntWords=[];ntRender();};
+document.getElementById('ntT').oninput=e=>{const v=+e.target.value;document.getElementById('ntTv').textContent=v.toFixed(1);
+  document.getElementById('ntNote').textContent=v<0.6?'טמפרטורה נמוכה: המילה הסבירה ביותר כמעט תמיד נבחרת. התשובות עקביות וצפויות.':v>1.4?'טמפרטורה גבוהה: גם מילים לא סבירות מקבלות סיכוי. התשובות מגוונות, ולפעמים מוזרות.':'טמפרטורה רגילה: איזון בין עקביות לגיוון.';ntRender();};
+ntRender();
+
+/* ---------- tokens ---------- */
+const TK_COL=['--p1','--p2','--p3','--p4','--p5'];
+function tokenize(s){
+  const parts=s.match(/[֐-׿]+|[A-Za-z]+|\d+|\s+|[^\s\w֐-׿]/g)||[];
+  const out=[];
+  parts.forEach(p=>{
+    if(/^\s+$/.test(p)){ if(out.length) out[out.length-1]+=p; return; }
+    let n=1;
+    if(/[֐-׿]/.test(p)) n=p.length<=2?1:Math.ceil(p.length/2.5);
+    else if(/[A-Za-z]/.test(p)) n=p.length<=5?1:Math.ceil(p.length/4);
+    else if(/\d/.test(p)) n=Math.ceil(p.length/3);
+    const sz=Math.ceil(p.length/n);
+    for(let i=0;i<p.length;i+=sz) out.push(p.slice(i,i+sz));
+  });
+  return out;
+}
+function tokRender(){
+  const s=document.getElementById('tokIn').value;
+  const t=tokenize(s);const words=(s.match(/[֐-׿A-Za-z\d]+/g)||[]).length;
+  document.getElementById('toks').innerHTML=t.map((x,i)=>`<span class="tk" style="background:color-mix(in srgb,var(${TK_COL[i%5]}) 20%,transparent)">${x.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`).join('');
+  document.getElementById('tsW').textContent=words;document.getElementById('tsT').textContent=t.length;
+  document.getElementById('tsR').textContent=words?(t.length/words).toFixed(1):'0';
+  ctx.q=t.length;ctxRender();
+}
+const ctx={sys:120,q:0,doc:0,hist:0};const CTX_MAX=2000;
+const CTX_DEF=[['sys','הוראות מערכת','--p1'],['doc','מסמכים','--p2'],['hist','היסטוריית שיחה','--p4'],['q','השאלה שלך','--p3']];
+function ctxRender(){
+  const tot=CTX_DEF.reduce((a,[k])=>a+ctx[k],0);
+  document.getElementById('ctxBar').innerHTML=CTX_DEF.map(([k,_,c])=>`<div style="width:${Math.min(100,ctx[k]/CTX_MAX*100)}%;background:var(${c})"></div>`).join('');
+  document.getElementById('ctxLeg').innerHTML=CTX_DEF.map(([k,n,c])=>`<span><i style="background:var(${c})"></i>${n}: ${ctx[k]}</span>`).join('')+`<span><b>${tot>CTX_MAX?'⚠️ החלון מלא, החלק הישן נחתך':'סה"כ '+tot+' מתוך '+CTX_MAX+' (חלון לדוגמה)'}</b></span>`;
+}
+document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const a=b.dataset.add;if(a==='reset'){ctx.doc=0;ctx.hist=0}else if(a==='doc')ctx.doc+=600;else ctx.hist+=350;ctxRender();});
+document.getElementById('tokIn').oninput=tokRender;tokRender();
+
+/* ---------- hallucination ---------- */
+const HAL=[
+ {q:'מה מדיניות ההחזרות של החנות "בית ועיצוב"?',a:'בחנות "בית ועיצוב" אפשר להחזיר מוצרים תוך 60 יום, גם אחרי שימוש, וההחזר מתקבל במזומן בכל סניף.',v:'⚠️ נשמע משכנע, אבל הכול מומצא. המודל לא מכיר את החנות ולכן ניחש.',c:'bad'},
+ {q:'ענה רק לפי מסמך המדיניות המצורף. אם אין במסמך תשובה, כתוב "אין לי מידע על כך".\n\n[מסמך: "ניתן להחזיר מוצר שלא נפתח תוך 14 יום. ההחזר יינתן לאמצעי התשלום המקורי."]\n\nמה מדיניות ההחזרות?',a:'לפי המדיניות, אפשר להחזיר מוצר שלא נפתח תוך 14 יום מהקבלה. ההחזר מתבצע לאמצעי התשלום שבו שילמת.',v:'✓ התשובה מבוססת על המקור, והמודל קיבל דרך לומר "לא יודע".',c:'good'}
+];
+function halRender(m){const h=HAL[m];document.getElementById('halQ').innerText=h.q;document.getElementById('halA').textContent=h.a;const v=document.getElementById('halV');v.textContent=h.v;v.className='verdict '+h.c;
+  document.querySelectorAll('#halSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.m===m));}
+document.querySelectorAll('#halSeg button').forEach(b=>b.onclick=()=>halRender(+b.dataset.m));halRender(0);
+
+/* ---------- prompt builder ---------- */
+const PARTS=[
+ ['role','תפקיד','מי אתה?','--p1','אתה נציג שירות לקוחות אדיב בחנות הרהיטים המקוונת "בית ועיצוב".'],
+ ['ctx','הקשר','מה המצב?','--p2','הלקוחה מיכל לוי הזמינה מנורת עמידה (הזמנה 48213). המשלוח התעכב ב-4 ימים בגלל עיכוב אצל הספק, והמוצר יישלח ביום ראשון.'],
+ ['task','משימה','מה לעשות?','--p3','כתוב תשובה למייל שבו היא מתלוננת על העיכוב.'],
+ ['fmt','פורמט','איך זה ייראה?','--p4','עד 80 מילים, פסקה אחת, בגוף שני, עם חתימה "צוות השירות של בית ועיצוב".'],
+ ['ex','דוגמה','תשובה טובה','--p5','דוגמה לטון שאנחנו אוהבים: "היי רון, אני ממש מבין את התסכול. בדקתי ו..."'],
+ ['lim','מגבלות','מה אסור?','--claude','אל תבטיח תאריך הגעה מדויק ואל תציע החזר כספי. אם היא מבקשת לבטל, הפנה אותה לטלפון 03-5551234.']
+];
+const OUTS=[
+ 'המשלוח שלך מתעכב. נעדכן כשיהיה מידע נוסף.\n\n(קצר, קר, בלי פרטים. אי אפשר לשלוח את זה ללקוחה.)',
+ 'שלום,\nאנו מתנצלים על העיכוב בהזמנתך. אנו עושים כל שביכולתנו כדי שתקבלי את המוצר בהקדם. תודה על סבלנותך.\n\n(מנומס, אבל כללי מדי ולא אומר מה קורה.)',
+ 'היי מיכל,\nמצטערים מאוד על העיכוב במשלוח של מנורת העמידה (הזמנה 48213). היה עיכוב אצל הספק, והמנורה תישלח ביום ראשון. נשמח לעדכן אותך ברגע שהיא יוצאת. אם יש עוד משהו, אנחנו כאן.\nצוות השירות של בית ועיצוב\n\n(טוב: אישי, מדויק ובאורך הנכון.)',
+ 'היי מיכל, אני ממש מבינה את התסכול, במיוחד כשמחכים למשהו חדש לבית. בדקתי את הזמנה 48213: היה עיכוב אצל הספק, ומנורת העמידה תישלח כבר ביום ראשון. אעדכן אותך ברגע שהיא בדרך. אם תרצי לבטל, אפשר להתקשר אלינו ל-03-5551234.\nצוות השירות של בית ועיצוב\n\n(מצוין: חם, מדויק, בטון של העסק, ובלי הבטחות שאסור לתת.)'
+];
+const on=new Set(['task']);
+function pbRender(){
+  document.getElementById('parts').innerHTML=PARTS.map(([k,n,d,c])=>`<button class="part ${on.has(k)?'on':''}" data-k="${k}" style="--c:var(${c})"><span class="dot"></span><span><b>${n}</b><small>${d}</small></span></button>`).join('');
+  document.querySelectorAll('.part').forEach(b=>b.onclick=()=>{const k=b.dataset.k;on.has(k)?on.delete(k):on.add(k);pbRender();});
+  const used=PARTS.filter(p=>on.has(p[0]));
+  document.getElementById('pv').innerHTML=used.length?used.map(([k,n,d,c,t])=>`<span style="--c:var(${c})">${t}</span>`).join(''):'<span class="muted" style="border:0">בחרו רכיבים מהרשימה</span>';
+  const n=used.length;const tier=!on.has('task')?0:n<=1?0:n<=3?1:(n<=5||!on.has('lim'))?2:3;
+  const col=['--p3','--p4','--p2','--good'][tier];
+  document.getElementById('meter').innerHTML=Array.from({length:6},(_,i)=>`<i class="${i<n?'on':''}" style="--mc:var(${col})"></i>`).join('');
+  document.getElementById('meterL').textContent=`${n} מתוך 6 רכיבים · `+['חלש','סביר','טוב','מצוין'][tier];
+  document.getElementById('outbox').textContent=OUTS[tier];
+}
+pbRender();
+
+/* ---------- json ---------- */
+const JL=[['{',null],['  "customer_name": "מיכל לוי",','name'],['  "order_id": "48213",','order'],['  "product": "מנורת עמידה מעץ",','product'],['  "phone": "052-1234567",','phone'],['  "urgency": "high",',null],['  "sentiment": "negative"','mood'],['}',null]];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function colorize(l){return esc(l).replace(/"([a-z_]+)":/g,'<span class="k">"$1"</span>:').replace(/: "([^"]*)"/g,': <span class="s">"$1"</span>');}
+function jxReset(){document.getElementById('jsonBox').innerHTML=JL.map(([l])=>`<div class="ln">${colorize(l)||'&nbsp;'}</div>`).join('');document.querySelectorAll('#mail mark').forEach(m=>{m.classList.remove('hl');m.style.removeProperty('--c')});
+  const tb=document.getElementById('sheetBody');while(tb.rows.length>1)tb.deleteRow(0);document.getElementById('jxGo').disabled=false;}
+async function jxGo(){document.getElementById('jxGo').disabled=true;const lns=document.querySelectorAll('#jsonBox .ln');const wait=ms=>new Promise(r=>setTimeout(r,ms));
+  for(let i=0;i<JL.length;i++){const f=JL[i][1];if(f){const m=document.querySelector(`#mail mark[data-f="${f}"]`);m.style.setProperty('--c',`var(${m.dataset.c})`);m.classList.add('hl');}lns[i].classList.add('show');await wait(450);}
+  await wait(300);const tr=document.getElementById('sheetBody').insertRow(0);tr.className='newrow';['מיכל לוי','48213','מנורת עמידה מעץ','052-1234567','גבוהה','שלילי'].forEach(v=>{tr.insertCell().textContent=v});}
+document.getElementById('jxGo').onclick=jxGo;document.getElementById('jxReset').onclick=jxReset;jxReset();
+</script>
+</body>
+</html>

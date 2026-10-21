@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 6: Workflows חכמים ב': מסמכים ואישור אנושי · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* invoice sim */
+.inv-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.invoice{background:#fffef9;color:#222;border-radius:6px;padding:18px 20px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:13.5px;position:relative;border:1px solid #e5e0d0}
+.invoice.blur{filter:blur(.6px) contrast(.8);transform:rotate(-1.2deg)}
+.invoice h4{margin:0;font-size:17px}
+.invoice .meta{display:flex;justify-content:space-between;gap:10px;margin:8px 0 10px;font-size:12.5px;color:#555}
+.invoice table{font-size:12.5px}
+.invoice th,.invoice td{padding:5px 6px;border-bottom:1px solid #eee}
+.invoice th{background:#f4f1e6;color:#333}
+.invoice .tot{margin-top:8px;display:grid;gap:2px;justify-items:start;font-size:13px}
+.invoice .tot b{font-size:15px}
+.invoice [data-f]{transition:.3s;border-radius:4px}
+.invoice [data-f].hl{background:rgba(217,119,87,.28);box-shadow:0 0 0 2px #d97757}
+.invoice .stamp{position:absolute;top:12px;left:14px;font-size:11px;font-weight:800;color:#b91c1c;border:2px solid #b91c1c;border-radius:6px;padding:1px 6px;transform:rotate(-8deg)}
+.scanline{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#d97757,transparent);top:0;opacity:0;pointer-events:none}
+.scanning .scanline{animation:scan 1.6s linear;opacity:1}
+@keyframes scan{from{top:0}to{top:100%}}
+.jbox{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;min-height:180px}
+.checks{display:grid;gap:6px;margin-top:10px}
+.chk-r{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:var(--surface-2);font-size:14.5px;opacity:.35;transition:.3s}
+.chk-r.done{opacity:1}
+.chk-r b.ok{color:var(--good)}.chk-r b.no{color:var(--bad)}.chk-r b.wa{color:var(--p4)}
+.decision{margin-top:10px;padding:12px 14px;border-radius:12px;font-weight:800;display:none}
+.decision.show{display:block}
+.decision.auto{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good)}
+.decision.human{background:color-mix(in srgb,var(--p4) 18%,var(--surface));color:color-mix(in srgb,var(--p4) 75%,var(--ink))}
+/* patterns */
+.pat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pat button{padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font:inherit;color:inherit;cursor:pointer;text-align:center}
+.pat button.on{border-color:var(--p5);background:color-mix(in srgb,var(--p5) 8%,var(--surface))}
+.pat .ic{font-size:24px;display:block}
+.pat-view{margin-top:12px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px}
+.mflow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;direction:ltr;justify-content:center;padding:14px;border-radius:14px;background:var(--surface-2)}
+.mflow span{padding:6px 11px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:13.5px;font-weight:700;direction:rtl}
+.mflow span.h{border-color:var(--p5);color:var(--p5)}
+.mflow span.c{border-color:var(--claude);color:var(--claude)}
+.mflow i{font-style:normal;color:var(--ink-2)}
+.risk{margin-top:16px;padding:14px;border-radius:14px;border:1px solid var(--line)}
+.sl{display:grid;grid-template-columns:150px minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:14.5px;margin-bottom:8px}
+.sl input{width:100%;accent-color:var(--p5)}
+.sl .v{font-weight:800;text-align:center}
+.rec{font-weight:800;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--p5) 12%,var(--surface))}
+/* approval queue */
+.q-wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+.draft{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.draft .who{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;color:var(--ink-2);margin-bottom:6px}
+.draft .orig{font-size:14px;background:var(--surface-2);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+.draft textarea{width:100%;min-height:120px;border-radius:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--claude) 6%,var(--surface));color:var(--ink);font:inherit;font-size:14.5px;padding:10px 12px;resize:vertical}
+.draft .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn.ok{background:var(--good)}.btn.no{background:var(--bad)}
+.stats4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stats4 div{padding:10px;border-radius:12px;background:var(--surface-2);text-align:center}
+.stats4 b{display:block;font-family:"Secular One";font-size:24px}
+.stats4 span{font-size:12.5px;color:var(--ink-2)}
+.qlog{margin-top:10px;font-size:13.5px;display:grid;gap:4px;max-height:200px;overflow:auto}
+.qlog div{padding:6px 10px;border-radius:8px;background:var(--surface-2)}
+@media (max-width:860px){.inv-wrap,.pat-view,.q-wrap{grid-template-columns:minmax(0,1fr)}.pat{grid-template-columns:repeat(2,minmax(0,1fr))}.sl{grid-template-columns:110px minmax(0,1fr) 76px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 6</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>Workflows חכמים ב': מסמכים ואישור אנושי</h1>
+  <p class="sub">Claude קורא חשבוניות ותמונות, Make בודק שהנתונים הגיוניים, ואדם מאשר לפני שמשהו חשוב יוצא לדרך.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session06_lecture.html" class="on">🎓 הרצאה</a><a href="session06_practice.html" class="">🛠️ תרגול</a><a href="session06_solution.html" class="">✅ פתרון</a><a href="session06_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות · מפגש 2 מתוך 2 במודול</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--claude)"><div class="t">0:00–0:20</div><b>Claude קורא מסמכים</b><span>PDF ותמונות, בצ'אט וב-API</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:20–0:35</div><b>אימות נתונים</b><span>לא סומכים על AI בלי לבדוק</span></div>
+    <div class="ag" style="--c:var(--p5)"><div class="t">0:35–1:00</div><b>אדם בתהליך (Human-in-the-loop)</b><span>ארבעה דפוסים, ואיך בונים שלב אישור</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול</b><span>חשבוניות ספקים ואישור טיוטות ללידים</span></div>
+  </div>
+</section>
+
+<section class="blk" id="docs">
+  <div class="kicker">חלק 1 · מסמכים</div>
+  <h2>Claude קורא חשבונית, ו-Make בודק אותה</h2>
+  <p class="lead">Claude יודע לקרוא PDF ותמונות: חשבוניות, קבלות, טפסים סרוקים וצילומי מסך. הוא מחלץ מהם JSON, בדיוק כמו ממייל. אבל מסמך הוא קלט מסוכן יותר, כי סריקה יכולה להיות מטושטשת ומספרים יכולים להיות שגויים כבר במקור. לכן אחרי החילוץ תמיד יש שלב של <b>אימות</b>. בחרו חשבונית והריצו.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>חשבונית ספק: חילוץ, אימות והחלטה</h3></div>
+    <div class="sim-body">
+      <div class="row" style="margin-bottom:12px"><div class="seg" id="invSeg"></div><button class="btn" id="invGo">▶ עיבוד</button></div>
+      <div class="inv-wrap">
+        <div style="position:relative" id="invHold"></div>
+        <div><b>מה Claude החזיר</b><div class="jbox mt" id="invJ">–</div>
+          <b class="mt" style="display:block;margin-top:12px">בדיקות של Make</b><div class="checks" id="invC"></div><div class="decision" id="invD"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout tip"><b>חלוקת העבודה</b>Claude <b>קורא</b> את המסמך. Make <b>מחשב ובודק</b>: האם החשבון מסתדר, האם המספר כבר קיים בגיליון, ומה הסכום. זה הכלל ממפגש 1: חישובים לא עושים במודל.</div>
+</section>
+
+<section class="blk" id="api">
+  <div class="kicker">חלק 1 · איך זה נראה ב-API</div>
+  <h2>שולחים את הקובץ כ"בלוק מסמך"</h2>
+  <p class="lead">בצ'אט פשוט מצרפים את הקובץ. ב-API הקובץ נשלח בתוך ההודעה, כטקסט מקודד (base64), לצד ההוראה. ב-Make מורידים את הקובץ (מ-Gmail או מ-Google Drive), מקודדים אותו ל-base64 בעזרת פונקציה של Make, ושולחים במודול HTTP.</p>
+  <div class="copybox"><pre>{
+  "model": "(model name from the docs)",
+  "max_tokens": 800,
+  "system": "חלץ מהחשבונית JSON בלבד: supplier, invoice_number, date, items[], subtotal, vat, total. אם שדה לא קריא, החזר null.",
+  "messages": [{
+    "role": "user",
+    "content": [
+      { "type": "document",
+        "source": { "type": "base64", "media_type": "application/pdf", "data": "{{toString(2.data; base64)}}" } },
+      { "type": "text", "text": "זו חשבונית ספק. חלץ את הנתונים." }
+    ]
+  }]
+}</pre></div>
+  <p class="muted" style="font-size:14px">לתמונה (JPG או PNG) משתמשים ב-<code>"type": "image"</code> עם media_type מתאים, כמו <code>image/jpeg</code>. את מגבלות הגודל ואת הפורמטים הנתמכים בודקים בתיעוד.</p>
+</section>
+
+<section class="blk" id="hitl">
+  <div class="kicker">חלק 2 · אדם בתהליך</div>
+  <h2>ארבעה דפוסים לשלב אדם באוטומציה</h2>
+  <p class="lead">"אדם בתהליך" (Human-in-the-loop) לא אומר שאדם בודק הכול. הוא אומר שאדם נמצא בדיוק במקום שבו טעות תעלה ביוקר. בחרו דפוס, ואחר כך השתמשו במחשבון שממליץ איזה דפוס מתאים.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">השוואה</span><h3>איפה האדם נכנס</h3></div>
+    <div class="sim-body">
+      <div class="pat" id="pat"></div>
+      <div class="pat-view"><div class="mflow" id="patF"></div><div id="patT"></div></div>
+      <div class="risk">
+        <b>איזה דפוס מתאים לתהליך שלכם?</b>
+        <div class="sl mt"><span>מחיר של טעות</span><input type="range" id="rC" min="1" max="5" value="3"><span class="v" id="vC"></span></div>
+        <div class="sl"><span>אפשר לבטל טעות?</span><input type="range" id="rU" min="1" max="5" value="3"><span class="v" id="vU"></span></div>
+        <div class="sl"><span>דיוק ה-AI בבדיקות</span><input type="range" id="rA" min="70" max="99" value="90"><span class="v" id="vA"></span></div>
+        <div class="rec" id="rec"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="queue">
+  <div class="kicker">חלק 2 · שלב אישור</div>
+  <h2>אתם הנציגים: אשרו, תקנו או דחו</h2>
+  <p class="lead">Claude הכין טיוטות תשובה לארבעה לידים. כל פעולה שלכם מפעילה את Make: אישור שולח את הטיוטה, תיקון שולח את הגרסה המתוקנת ושומר את השינוי, ודחייה מעבירה את הליד לטיפול ידני. שימו לב למדדים.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>תור האישורים</h3></div>
+    <div class="sim-body">
+      <div class="q-wrap">
+        <div class="draft" id="draft"></div>
+        <div>
+          <div class="stats4"><div><b id="sA">0</b><span>אושרו כמו שהן</span></div><div><b id="sE">0</b><span>תוקנו</span></div><div><b id="sR">0</b><span>נדחו</span></div><div><b id="sT">0</b><span>זמן שלכם (שניות)</span></div></div>
+          <div class="qlog" id="qlog"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout claude"><b>התיקונים שלכם הם זהב</b>שומרים בגיליון גם את הטיוטה המקורית וגם את הגרסה שנשלחה. אחת לשבוע מבקשים מ-Claude: "השווה בין הטיוטות לגרסאות המתוקנות, ומצא דפוסים". את מה שהוא מוצא מוסיפים להוראות. ככה הטיוטות משתפרות, וכשאחוז התיקונים בנושא מסוים יורד מספיק, אפשר להעביר אותו לשליחה אוטומטית.</div>
+</section>
+
+<section class="blk" id="howto">
+  <div class="kicker">חלק 3 · בנייה ב-Make</div>
+  <h2>שתי דרכים לבנות שלב אישור</h2>
+  <div class="grid2">
+    <div class="card"><h4>📋 דרך גיליון (פשוטה)</h4><div class="mflow" style="justify-content:flex-end"><span>תרחיש A: … ← Sheets</span><i>·</i><span>status = "ממתין"</span></div><p class="muted" style="margin:10px 0 0">הנציג משנה בגיליון את הסטטוס ל"מאושר", ואם צריך גם מתקן את הטקסט. תרחיש B רץ כל 15 דקות, מחפש שורות במצב "מאושר" שעוד לא נשלחו, שולח אותן ומעדכן את הסטטוס ל"נשלח".</p></div>
+    <div class="card"><h4>🔗 דרך קישורים במייל (מהירה)</h4><div class="mflow" style="justify-content:flex-end"><span>מייל לנציג עם 2 קישורים</span><i>→</i><span>Webhook: approve / reject</span></div><p class="muted" style="margin:10px 0 0">כל קישור מוביל לכתובת Webhook של תרחיש B, עם פרמטרים: <code>?row=12&amp;action=approve</code>. בלחיצה התרחיש רץ מיד ושולח. מתאים לאישור מהטלפון, אבל אי אפשר לתקן בו את הטקסט.</p></div>
+  </div>
+  <div class="callout warn"><b>אבטחה בקישורי אישור</b>כל מי שמחזיק בקישור יכול ללחוץ עליו. מוסיפים לקישור מחרוזת סודית (token) ובודקים אותה בתרחיש. אחרי לחיצה אחת מסמנים את השורה, כדי שלחיצה שנייה לא תשלח שוב.</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 6 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+/* ---------- invoice ---------- */
+const INV=[
+ {k:'clean',n:'תקינה',sup:'נגריית האלון בע"מ',num:'2026-0187',date:'14/10/2026',items:[['שולחן אלון 180 ס"מ',2,2100],['ספסל אלון',2,650]],sub:5500,vat:990,total:6490,dup:false,blur:false},
+ {k:'math',n:'סכום לא מסתדר',sup:'טקסטיל הצפון',num:'8841',date:'16/10/2026',items:[['כריות נוי',40,35],['שמיכות פליז',10,120]],sub:2600,vat:468,total:3168,dup:false,blur:false},
+ {k:'dup',n:'כפולה',sup:'נגריית האלון בע"מ',num:'2026-0187',date:'14/10/2026',items:[['שולחן אלון 180 ס"מ',2,2100],['ספסל אלון',2,650]],sub:5500,vat:990,total:6490,dup:true,blur:false},
+ {k:'blur',n:'סריקה מטושטשת',sup:'אור תאורה',num:null,date:'1?/10/2026',items:[['מנורת עמידה',6,410]],sub:2460,vat:442.8,total:2902.8,dup:false,blur:true}
+];
+let invI=0;
+const fmt=n=>Number(n).toLocaleString('he-IL',{minimumFractionDigits:n%1?2:0});
+function invDraw(){const v=INV[invI];
+ document.getElementById('invSeg').innerHTML=INV.map((x,i)=>`<button class="${i===invI?'on':''}" data-i="${i}">${x.n}</button>`).join('');
+ document.querySelectorAll('#invSeg button').forEach(b=>b.onclick=()=>{invI=+b.dataset.i;invDraw();});
+ document.getElementById('invHold').innerHTML=`<div class="invoice ${v.blur?'blur':''}" id="invDoc"><div class="scanline"></div>${v.dup?'<span class="stamp">נשלח שוב</span>':''}<h4 data-f="supplier">${v.sup}</h4><div class="meta"><span data-f="invoice_number">חשבונית מס ${v.num??'<span style="opacity:.25">██████</span>'}</span><span data-f="date">תאריך: ${v.date}</span></div>
+  <table><tr><th>פריט</th><th>כמות</th><th>מחיר</th><th>סה"כ</th></tr>${v.items.map(([a,q,p])=>`<tr data-f="items"><td>${a}</td><td>${q}</td><td>${fmt(p)}</td><td>${fmt(q*p)}</td></tr>`).join('')}</table>
+  <div class="tot"><span data-f="subtotal">סה"כ לפני מע"מ: ${fmt(v.sub)} ₪</span><span data-f="vat">מע"מ 18%: ${fmt(v.vat)} ₪</span><b data-f="total">לתשלום: ${fmt(v.total)} ₪</b></div></div>`;
+ document.getElementById('invJ').textContent='–';document.getElementById('invC').innerHTML='';const d=document.getElementById('invD');d.className='decision';d.textContent='';}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+document.getElementById('invGo').onclick=async()=>{const v=INV[invI],btn=document.getElementById('invGo');btn.disabled=true;invDraw();
+ const doc=document.getElementById('invDoc');doc.classList.add('scanning');
+ const j={supplier:v.sup,invoice_number:v.num,date:v.blur?null:v.date.split('/').reverse().join('-'),items:v.items.map(([a,q,p])=>({name:a,qty:q,unit_price:p})),subtotal:v.sub,vat:v.vat,total:v.total};
+ for(const f of ['supplier','invoice_number','date','items','subtotal','vat','total']){doc.querySelectorAll(`[data-f="${f}"]`).forEach(e=>e.classList.add('hl'));await wait(260);}
+ doc.classList.remove('scanning');document.getElementById('invJ').textContent=JSON.stringify(j,null,2);await wait(400);
+ const sumItems=v.items.reduce((a,[_,q,p])=>a+q*p,0);
+ const C=[
+  ['כל שדות החובה קיימים',v.num&&!v.blur?['ok','✓']:['no','✗ חסר מספר חשבונית ותאריך']],
+  ['סכום הפריטים = לפני מע"מ',sumItems===v.sub?['ok','✓ '+fmt(sumItems)]:['no','✗']],
+  ['לפני מע"מ × 18% = מע"מ',Math.abs(v.sub*0.18-v.vat)<0.01?['ok','✓']:['no','✗']],
+  ['לפני מע"מ + מע"מ = לתשלום',Math.abs(v.sub+v.vat-v.total)<0.01?['ok','✓']:['no',`✗ צריך ${fmt(v.sub+v.vat)}, כתוב ${fmt(v.total)}`]],
+  ['המספר לא קיים כבר בגיליון',v.dup?['no','✗ כבר נקלטה ב-14/10']:['ok','✓']],
+  ['סכום מעל 5,000 ₪?',v.total>5000?['wa','⚠ כן, נדרש אישור מנהלת']:['ok','לא']]
+ ];
+ const box=document.getElementById('invC');box.innerHTML=C.map(([t,[c,r]])=>`<div class="chk-r"><span>${t}</span><b class="${c}">${r}</b></div>`).join('');
+ const rows=box.querySelectorAll('.chk-r');for(const r of rows){r.classList.add('done');await wait(280);}
+ const bad=C.filter(c=>c[1][0]==='no').length,warn=C.filter(c=>c[1][0]==='wa').length;const d=document.getElementById('invD');
+ if(bad){d.className='decision show human';d.textContent=v.dup?'⛔ חשבונית כפולה: לא נקלטת. נשלחת הודעה לנציג.':'👤 לבדיקה ידנית: הנתונים לא עברו אימות. החשבונית נכנסת ללשונית "לבדיקה", עם הסבר.';}
+ else if(warn){d.className='decision show human';d.textContent='👤 תקינה, אבל הסכום גבוה: נקלטת עם הסטטוס "ממתין לאישור מנהלת".';}
+ else{d.className='decision show auto';d.textContent='✓ אוטומטי: נקלטת בגיליון עם הסטטוס "מאושר לתשלום".';}
+ btn.disabled=false;};
+invDraw();
+
+/* ---------- patterns ---------- */
+const PAT=[
+ ['👁','אישור לפני פעולה','<span class="c">Claude: טיוטה</span><i>→</i><span class="h">אדם מאשר</span><i>→</i><span>Make שולח</span>','כל פריט עובר דרך אדם. הכי בטוח, אבל גם הכי איטי. מתאים להתחלה, ולכל דבר שיוצא ללקוח בשם העסק.','טיוטות תשובה ללקוחות, בתחילת הדרך'],
+ ['💰','אישור מעל סף','<span class="c">Claude</span><i>→</i><span>מעל הסף?</span><i>→</i><span class="h">כן: אדם</span><span>לא: אוטומטי</span>','רק מה שעולה על סף שנקבע מראש (סכום, דחיפות) מגיע לאדם. כל השאר עובר לבד.','חשבוניות מעל 5,000 ₪, וזיכויים מעל 1,000 ₪'],
+ ['⚠️','רק חריגים','<span class="c">Claude + אימות</span><i>→</i><span>עבר?</span><i>→</i><span class="h">לא: אדם</span><span>כן: אוטומטי</span>','אדם רואה רק את מה שלא עבר אימות, או מה ש-Claude לא היה בטוח בו. מתאים כשהדיוק גבוה ויש בדיקות טובות.','חשבוניות שהחשבון שלהן לא מסתדר, וסיווג שחזר כ-other'],
+ ['🎲','בדיקה מדגמית','<span class="c">Claude</span><i>→</i><span>אוטומטי</span><i>→</i><span class="h">אדם בודק 5% אחר כך</span>','הכול רץ לבד, ואדם בודק מדגם בדיעבד כדי לוודא שהאיכות נשמרת. מתאים לתהליך בשל, שהטעויות בו זולות.','סיווג לידים, וסיכומי שיחות ל-CRM']
+];
+let patI=0;function patR(){document.getElementById('pat').innerHTML=PAT.map(([ic,n],i)=>`<button class="${i===patI?'on':''}" data-i="${i}"><span class="ic">${ic}</span><b>${n}</b></button>`).join('');
+ document.querySelectorAll('#pat button').forEach(b=>b.onclick=()=>{patI=+b.dataset.i;patR();});
+ document.getElementById('patF').innerHTML=PAT[patI][2];document.getElementById('patT').innerHTML=`<p style="margin:0 0 8px">${PAT[patI][3]}</p><b>דוגמאות:</b> <span class="muted">${PAT[patI][4]}</span>`;}
+patR();
+function recR(){const c=+rC.value,u=+rU.value,a=+rA.value;document.getElementById('vC').textContent=['זניח','נמוך','בינוני','גבוה','קריטי'][c-1];document.getElementById('vU').textContent=['לא אפשרי','קשה','בינוני','קל','מיידי'][u-1];document.getElementById('vA').textContent=a+'%';
+ const risk=c*(6-u)*(100-a)/10;let r;
+ if(c>=4&&u<=2)r=['👁 אישור לפני פעולה','טעות יקרה שקשה לבטל. אדם חייב לאשר כל פריט.',0];
+ else if(risk>=12)r=['💰 אישור מעל סף','מחיר הטעות משמעותי. אדם מאשר רק את הפריטים הגדולים או הרגישים.',1];
+ else if(a<93||risk>=4)r=['⚠️ רק חריגים','בדיקות טובות יעבירו לאדם רק את מה שלא תקין.',2];
+ else r=['🎲 בדיקה מדגמית','דיוק גבוה וטעות זולה. בדיקה מדגמית מספיקה.',3];
+ document.getElementById('rec').innerHTML=`המלצה: ${r[0]} <span style="font-weight:500">· ${r[1]}</span>`;}
+const rC=document.getElementById('rC'),rU=document.getElementById('rU'),rA=document.getElementById('rA');[rC,rU,rA].forEach(e=>e.oninput=recR);recR();
+
+/* ---------- approval queue ---------- */
+const DR=[
+ {who:'נועה כהן · availability · medium',orig:'האם שולחן אלון זמין בצבע אגוז ומה זמן האספקה?',d:'היי נועה, תודה שפנית! לגבי שולחן אלון בצבע אגוז, אבדוק את הזמינות ואחזור אלייך עוד היום. רהיטים גדולים מגיעים בתיאום טלפוני. עד איזה תאריך את צריכה אותו?\nצוות בית ועיצוב'},
+ {who:'דני לוי · other · high',orig:'כבר שבועיים אף אחד לא חוזר אליי לגבי הספה!! אם לא יחזרו היום אני קונה במקום אחר',d:'היי דני, אתה צודק לגמרי, ואנחנו מתנצלים. זה לא השירות שאנחנו רוצים לתת. נציג יתקשר אליך עוד היום כדי לעבור איתך על הספה התלת. מה השעה הכי נוחה לך?\nצוות בית ועיצוב'},
+ {who:'Maya Green · price_question · low',orig:'Hi, how much is shipping for 4 bar chairs to Haifa?',d:'היי מאיה, משלוח רגיל מגיע תוך 5-7 ימי עסקים, והוא חינם בהזמנה מעל 400 ש"ח. ארבעה כיסאות בר עוברים את הסכום הזה, כך שהמשלוח לחיפה בחינם!\nצוות בית ועיצוב'},
+ {who:'אבי מזרחי · price_question · low',orig:'יש הנחה לחיילים?',d:'היי אבי, כן! לחיילים יש 15% הנחה על כל האתר, עם הצגת תעודה.\nצוות בית ועיצוב'}
+];
+const NOTE=['','','שימו לב: מאיה כתבה באנגלית, והטיוטה בעברית. כדאי לתקן לאנגלית.','שימו לב: אין במדיניות הנחה לחיילים. Claude המציא אותה. צריך לדחות או לתקן.'];
+let qi=0,st={a:0,e:0,r:0,t:0},t0=Date.now();
+function qR(){const box=document.getElementById('draft');if(qi>=DR.length){box.innerHTML=`<b>✓ התור ריק</b><p class="muted">${st.e+st.r} מתוך 4 טיוטות דרשו התערבות. במקרה של מאיה, Claude לא התאים את שפת התשובה לשפת הפנייה. במקרה של אבי, הוא המציא הנחה. שני הדברים האלה הולכים להוראות: "ענה בשפת הפונה", ו"אל תציין הנחות שלא מופיעות במדיניות".</p><button class="btn ghost" id="qAgain">↺ מההתחלה</button>`;document.getElementById('qAgain').onclick=()=>{qi=0;st={a:0,e:0,r:0,t:0};document.getElementById('qlog').innerHTML='';qS();qR();};return;}
+ const d=DR[qi];t0=Date.now();box.innerHTML=`<div class="who"><span>${d.who}</span><span>${qi+1}/4</span></div><div class="orig"><b>הפנייה:</b> ${d.orig}</div><textarea id="qT">${d.d}</textarea>${NOTE[qi]?`<div class="muted" style="font-size:13.5px;margin-top:6px">${NOTE[qi]}</div>`:''}<div class="acts"><button class="btn ok" id="qA">✓ אישור ושליחה</button><button class="btn" id="qE">✎ שליחת הגרסה המתוקנת</button><button class="btn no" id="qX">✗ דחייה: טיפול ידני</button></div>`;
+ const act=(k,msg)=>{st[k]++;st.t+=Math.round((Date.now()-t0)/1000);const L=document.getElementById('qlog');const e=document.createElement('div');e.textContent=msg;L.prepend(e);qi++;qS();qR();};
+ document.getElementById('qA').onclick=()=>act('a',`✓ ${d.who.split(' · ')[0]}: Make שלח את הטיוטה, ועדכן status = "נשלח"`);
+ document.getElementById('qE').onclick=()=>{const changed=document.getElementById('qT').value.trim()!==d.d.trim();act(changed?'e':'a',changed?`✎ ${d.who.split(' · ')[0]}: נשלחה הגרסה המתוקנת. המקור והתיקון נשמרו לשיפור ההוראות`:`✓ ${d.who.split(' · ')[0]}: לא היה שינוי, ולכן נשלח כמו שהוא`);};
+ document.getElementById('qX').onclick=()=>act('r',`✗ ${d.who.split(' · ')[0]}: נדחה, ונפתחה משימה לנציג ב-CRM`);}
+function qS(){document.getElementById('sA').textContent=st.a;document.getElementById('sE').textContent=st.e;document.getElementById('sR').textContent=st.r;document.getElementById('sT').textContent=st.t;}
+qR();
+</script>
+</body>
+</html>

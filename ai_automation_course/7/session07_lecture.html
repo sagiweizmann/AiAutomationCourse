@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 7: אינטגרציה בין מערכות · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* system map */
+.sm{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+.sm svg{width:100%;height:auto;display:block;background:var(--surface-2);border-radius:16px}
+.sm .node{cursor:default;transition:.3s}
+.sm .node.dim{opacity:.25}
+.sm .edge{transition:.3s}
+.sm .edge.dim{opacity:.08}
+.dt{display:flex;flex-direction:column;gap:6px}
+.dt button{text-align:right;font:inherit;font-size:14.5px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 12px;cursor:pointer}
+.dt button.on{border-color:var(--accent)}
+.sot{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:15px}
+/* dedupe */
+.dd{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:16px}
+.tg{display:flex;flex-direction:column;gap:7px}
+.tg label{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:12px;border:2px solid var(--line);cursor:pointer;font-size:14.5px;background:var(--surface)}
+.tg label:has(input:checked){border-color:var(--p2);background:color-mix(in srgb,var(--p2) 8%,var(--surface))}
+.tg input{margin-top:5px;accent-color:var(--p2)}
+.tg small{display:block;color:var(--ink-2);font-size:12.5px}
+.inc td,.crm td{font-size:13.5px}
+.inc td.k{direction:ltr;text-align:right;font-family:"JetBrains Mono",monospace;font-size:12.5px}
+.crm-h{display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px}
+.crm-h b.n{font-family:"Secular One";font-size:24px}
+.crm tr.dup td{background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.crm td .act{font-size:12px;font-weight:800;border-radius:6px;padding:1px 7px}
+.act.c{background:color-mix(in srgb,var(--p2) 18%,transparent);color:var(--p2)}
+.act.u{background:color-mix(in srgb,var(--p5) 18%,transparent);color:var(--p5)}
+/* loop */
+.lp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:center}
+.lp-vis{position:relative;height:170px;border-radius:16px;background:var(--surface-2)}
+.lp-vis .box{position:absolute;top:50%;transform:translateY(-50%);width:110px;height:70px;border-radius:14px;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font-weight:800;text-align:center;font-size:14px}
+.lp-vis .a{right:20px}.lp-vis .b{left:20px}
+.lp-vis .pkt{position:absolute;top:44%;font-size:20px;transition:right .45s linear;right:130px}
+.lp-cnt{font-family:"Secular One";font-size:40px;line-height:1}
+.lp-cnt.bad{color:var(--bad)}.lp-cnt.ok{color:var(--good)}
+/* channels */
+.chn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.chn button{padding:14px 10px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font:inherit;color:inherit;cursor:pointer;text-align:center}
+.chn button.on{border-color:var(--accent)}
+.chn .ic{font-size:26px;display:block}
+.chn-v{margin-top:12px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.mock-msg{border-radius:14px;padding:14px;background:var(--surface-2);font-size:14.5px;min-height:150px}
+.mock-msg .hd{font-weight:800;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.mock-msg .bd{background:var(--surface);border-radius:10px;padding:10px 12px;border-inline-start:4px solid var(--c)}
+.mock-msg .btns{display:flex;gap:6px;margin-top:8px}
+.mock-msg .btns span{font-size:12.5px;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:3px 10px;background:var(--surface)}
+/* mcp */
+.mcp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.mcp svg{width:100%;height:auto;display:block}
+.mcp-chat{border-radius:14px;padding:12px;background:var(--surface-2);font-size:14.5px;display:grid;gap:8px;min-height:240px}
+.mcp-chat .u{background:var(--surface);border-radius:12px;padding:8px 12px;justify-self:start;max-width:90%}
+.mcp-chat .t{font-size:12.5px;font-weight:700;color:var(--p5);background:color-mix(in srgb,var(--p5) 10%,var(--surface));border-radius:8px;padding:4px 10px;justify-self:end;direction:ltr;font-family:"JetBrains Mono",monospace}
+.mcp-chat .c{background:color-mix(in srgb,var(--claude) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent);border-radius:12px;padding:8px 12px;justify-self:end;max-width:92%}
+.vs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vs2 .card{border-top:5px solid var(--c)}
+@media (max-width:860px){.sm,.dd,.lp,.chn-v,.mcp,.vs2{grid-template-columns:minmax(0,1fr)}.chn{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 7</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>אינטגרציה בין מערכות</h1>
+  <p class="sub">מחברים את התרחישים לכלים שהעסק עובד איתם: CRM, Google Workspace או Microsoft 365, Slack ו-WhatsApp. לומדים למנוע כפילויות, ומכירים את Connectors ו-MCP שמחברים את Claude ישירות למערכות.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session07_lecture.html" class="on">🎓 הרצאה</a><a href="session07_practice.html" class="">🛠️ תרגול</a><a href="session07_solution.html" class="">✅ פתרון</a><a href="session07_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות · סוגר את שלב 2</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:15</div><b>מפת המערכות</b><span>מקור אמת לכל סוג מידע</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:15–0:35</div><b>מניעת כפילויות</b><span>נרמול נתונים, Upsert ומזהים בין מערכות</span></div>
+    <div class="ag" style="--c:var(--p3)"><div class="t">0:35–1:00</div><b>ערוצים, Connectors ו-MCP</b><span>Slack, WhatsApp, מייל, ו-Claude שמחובר לכלים</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול</b><span>ליד שמגיע ל-CRM, ל-Slack וליומן, בלי כפילויות</span></div>
+  </div>
+</section>
+
+<section class="blk" id="map">
+  <div class="kicker">חלק 1 · מפת המערכות</div>
+  <h2>לכל סוג מידע יש בית אחד: מקור האמת</h2>
+  <p class="lead">בעסק קטן יש בקלות שמונה מערכות. כשאותו פרט (למשל טלפון של לקוח) נמצא בשלוש מהן, צריך להחליט איזו מהן היא <b>מקור האמת</b>, כלומר המקום שבו מעדכנים אותו. כל השאר רק מקבלות ממנה עותק. בחרו סוג מידע וראו איפה הוא גר ולאן הוא זורם.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>המערכות של "בית ועיצוב"</h3></div>
+    <div class="sim-body">
+      <div class="sm">
+        <div id="smSvg"></div>
+        <div><b>סוג מידע:</b><div class="dt mt" id="smDt"></div><div class="sot" id="smSot"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="dedupe">
+  <div class="kicker">חלק 2 · כפילויות</div>
+  <h2>אותה לקוחה, שלושה כרטיסים ב-CRM</h2>
+  <p class="lead">מיכל השאירה פרטים באתר, כתבה בוואטסאפ, ואחר כך מילאה טופס בפייסבוק, ובכל פעם בכתיבה קצת אחרת. אם התרחיש פשוט "יוצר איש קשר" בכל פעם, ב-CRM יהיו לה שלושה כרטיסים, והנציגים לא יראו את התמונה המלאה. הפתרון: <b>לנרמל</b> את הנתונים, ואז <b>לחפש לפני שיוצרים</b> (Upsert). הפעילו את הכללים וראו כמה כרטיסים נוצרים.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>5 לידים נכנסים ל-CRM</h3></div>
+    <div class="sim-body">
+      <div class="dd">
+        <div class="tg" id="ddT"></div>
+        <div>
+          <div class="tbl inc"><table id="ddIn"></table></div>
+          <div class="crm-h"><b>ה-CRM אחרי ההרצה</b><span>כרטיסים: <b class="n" id="ddN"></b></span></div>
+          <div class="tbl crm"><table id="ddOut"></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout tip"><b>ומה עם מזהים?</b>אחרי שנוצר איש קשר ב-CRM, שומרים את המזהה שלו (<code>crm_id</code>) גם בגיליון. כך בפעם הבאה מעדכנים לפי המזהה, ולא צריך לחפש לפי שם או מייל. כל מערכת נותנת מזהה משלה, ושמירת המזהים מחברת ביניהן.</div>
+</section>
+
+<section class="blk" id="loop">
+  <div class="kicker">חלק 2 · סנכרון דו-כיווני</div>
+  <h2>הלולאה האינסופית</h2>
+  <p class="lead">תרחיש A מעדכן את ה-CRM כשהגיליון משתנה. תרחיש B מעדכן את הגיליון כשה-CRM משתנה. נשמע מושלם, עד שמבינים ש-A מפעיל את B, ו-B מפעיל שוב את A, וכן הלאה. הפעילו את הסנכרון, ואחר כך הוסיפו הגנה.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>סנכרון בין גיליון ל-CRM</h3></div>
+    <div class="sim-body">
+      <div class="lp">
+        <div class="lp-vis" id="lpV"><div class="box a">📋 גיליון</div><div class="box b">🗂️ CRM</div><div class="pkt" id="lpP">✏️</div></div>
+        <div>
+          <label class="chk" style="display:flex;gap:8px;align-items:center;font-weight:700;cursor:pointer"><input type="checkbox" id="lpG"> <span>הגנה: כל עדכון של אוטומציה מסומן <code style="white-space:nowrap">updated_by = make</code>, והתרחיש השני מסנן אותו</span></label>
+          <div class="row mt"><button class="btn" id="lpGo">✏️ נציג משנה טלפון בגיליון</button></div>
+          <div style="margin-top:12px">עדכונים שבוצעו: <span class="lp-cnt" id="lpN">0</span></div>
+          <div class="muted" style="font-size:14.5px;margin-top:6px" id="lpM"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="channels">
+  <div class="kicker">חלק 3 · ערוצי תקשורת</div>
+  <h2>איפה ההודעה צריכה להגיע</h2>
+  <p class="lead">אותו אירוע, למשל ליד דחוף, נראה אחרת בכל ערוץ. בוחרים ערוץ לפי מי שצריך לפעול, וכמה מהר הוא צריך לפעול.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">השוואה</span><h3>ליד דחוף, ארבעה ערוצים</h3></div>
+    <div class="sim-body">
+      <div class="chn" id="chn"></div>
+      <div class="chn-v"><div class="mock-msg" id="chM"></div><div id="chT"></div></div>
+    </div>
+  </div>
+  <div class="callout warn"><b>WhatsApp ללקוחות דורש תכנון</b>כדי לשלוח הודעות אוטומטיות ללקוחות צריך את WhatsApp Business Platform (דרך Meta או ספק מורשה). את ההודעה הראשונה ללקוח, או הודעה אחרי שעבר חלון השירות מאז שהלקוח כתב, שולחים רק עם תבנית שעברה אישור מראש. את התנאים המדויקים בודקים מול הספק. לצוות פנימי, Slack או Teams פשוטים בהרבה.</div>
+</section>
+
+<section class="blk" id="mcp">
+  <div class="kicker">חלק 3 · Connectors ו-MCP</div>
+  <h2>Claude שמחובר ישירות לכלים</h2>
+  <p class="lead">עד עכשיו Make הוביל את התהליך, ו-Claude היה שלב אחד בתוכו. <b>MCP</b> (Model Context Protocol) הוא תקן פתוח ש-Anthropic פיתחה כדי לחבר מודלים לכלים ולמקורות מידע. דרכו Claude יכול לקרוא ולפעול במערכות בעצמו, לפי בקשה של אדם. ב-Claude אפשר להפעיל <b>Connectors</b> לכלים כמו Google Drive, Gmail, Slack ועוד, לפי מה שזמין בחשבון שלכם.</p>
+  <div class="mcp">
+    <div class="card"><svg viewBox="0 0 400 250" direction="ltr" style="direction:ltr" font-family="Heebo">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--ink-2)"/></marker></defs>
+      <rect x="20" y="95" width="100" height="60" rx="14" fill="color-mix(in srgb,var(--claude) 18%,var(--surface))" stroke="var(--claude)" stroke-width="2"/><text x="70" y="131" text-anchor="middle" font-size="16" font-weight="800" fill="var(--claude)">Claude</text>
+      <rect x="160" y="100" width="70" height="50" rx="12" fill="var(--surface)" stroke="var(--p5)" stroke-width="2"/><text x="195" y="130" text-anchor="middle" font-size="14" font-weight="800" fill="var(--p5)">MCP</text>
+      <g font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">
+       <rect x="280" y="15" width="105" height="38" rx="10" fill="var(--surface)" stroke="var(--line)"/><text x="332" y="39">Google Drive</text>
+       <rect x="280" y="70" width="105" height="38" rx="10" fill="var(--surface)" stroke="var(--line)"/><text x="332" y="94">Gmail / יומן</text>
+       <rect x="280" y="125" width="105" height="38" rx="10" fill="var(--surface)" stroke="var(--line)"/><text x="332" y="149">Slack</text>
+       <rect x="280" y="180" width="105" height="38" rx="10" fill="var(--surface)" stroke="var(--line)"/><text x="332" y="204">תרחישי Make</text></g>
+      <g stroke="var(--ink-2)" stroke-width="1.5" fill="none" marker-end="url(#ar)"><path d="M120 125 H158"/><path d="M230 120 L278 34"/><path d="M230 122 L278 89"/><path d="M230 128 L278 144"/><path d="M230 132 L278 199"/></g>
+    </svg><p class="muted" style="font-size:14px;margin:6px 0 0">MCP הוא "שקע" אחיד: כל כלי שתומך בו אפשר לחבר ל-Claude באותה דרך. גם Make מציעה דרך לחשוף תרחישים ל-Claude כ"כלים". כדאי לבדוק מה זמין בחשבון שלכם.</p></div>
+    <div><div class="mcp-chat" id="mcpC"></div><div class="row mt"><button class="btn" id="mcpGo">▶ הדגמה</button></div></div>
+  </div>
+  <div class="vs2 mt">
+    <div class="card" style="--c:var(--p2)"><h4>⚙️ Make מוביל</h4><p class="muted" style="margin:0">התהליך קבוע וקורה בכל פעם אותו דבר, גם כשאף אחד לא מסתכל. מתאים לתהליכים שחוזרים על עצמם: לידים, חשבוניות, התראות.</p></div>
+    <div class="card" style="--c:var(--claude)"><h4>✳️ Claude מוביל, דרך Connectors</h4><p class="muted" style="margin:0">אדם שואל, ו-Claude מחליט לבד באילו כלים להשתמש. מתאים לשאלות חד-פעמיות, לניתוח ולעבודה של מנהל עם הנתונים. במפגשים 9–10 נבנה סוכנים שעובדים כך.</p></div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 7 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- system map ---------- */
+const N={site:['🌐','אתר + טופס',60,45],gmail:['✉️','Gmail',60,135],wa:['💬','WhatsApp',60,225],make:['⚙️','Make',200,135],sheet:['📋','גיליון הזמנות',340,45],crm:['🗂️','CRM',340,135],slack:['#','Slack',340,225],acc:['🧾','הנהלת חשבונות',200,240]};
+const E=[['site','make'],['gmail','make'],['wa','make'],['make','sheet'],['make','crm'],['make','slack'],['make','acc'],['sheet','make'],['crm','make']];
+const DT=[
+ ['לקוח (שם, טלפון, מייל)','crm',['site','gmail','wa','make','crm','sheet','slack'],'<b>מקור האמת: CRM.</b> כל פרט של לקוח מעדכנים ב-CRM. הגיליון מקבל ממנו עותק לקריאה, ו-Slack מקבל התראות. כשנציג מגלה טלפון חדש, הוא מעדכן ב-CRM, לא בגיליון.'],
+ ['הזמנה וסטטוס משלוח','sheet',['site','make','sheet','crm','slack'],'<b>מקור האמת: גיליון ההזמנות</b> (בעסק גדול יותר: מערכת החנות). ה-CRM מקבל עותק של סטטוס ההזמנה, כדי שהנציג יראה אותו בכרטיס הלקוח.'],
+ ['חשבוניות ותשלומים','acc',['gmail','make','acc','sheet'],'<b>מקור האמת: הנהלת חשבונות.</b> זה כמו במפגש 6: Make קולט חשבוניות מהמייל, בודק אותן ורושם. כסף מתעדכן רק במקום אחד.'],
+ ['שיחות והודעות','crm',['gmail','wa','make','crm','slack'],'<b>מקור האמת: CRM</b>, בציר הזמן של כרטיס הלקוח. מיילים והודעות מקבלים סיכום של Claude ונרשמים כפעילות. Slack רק מתריע.']
+];
+let dI=0;
+function smR(){const d=DT[dI],act=new Set(d[2]);
+ let s=`<svg viewBox="0 0 400 300" direction="ltr" style="direction:ltr" font-family="Heebo">`;
+ E.forEach(([a,b])=>{const A=N[a],B=N[b],on=act.has(a)&&act.has(b);s+=`<line class="edge ${on?'':'dim'}" x1="${A[2]}" y1="${A[3]}" x2="${B[2]}" y2="${B[3]}" stroke="${on?'var(--accent)':'var(--ink-2)'}" stroke-width="${on?3:1.5}"/>`;});
+ Object.entries(N).forEach(([k,[ic,n,x,y]])=>{const on=act.has(k),sot=k===d[1];s+=`<g class="node ${on?'':'dim'}"><circle cx="${x}" cy="${y}" r="${sot?27:22}" fill="var(--surface)" stroke="${sot?'var(--good)':'var(--line)'}" stroke-width="${sot?4:2}"/><text x="${x}" y="${y+6}" text-anchor="middle" font-size="17">${ic}</text><text x="${x}" y="${y+(sot?42:37)}" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">${n}</text>${sot?`<text x="${x+22}" y="${y-20}" font-size="14">⭐</text>`:''}</g>`;});
+ document.getElementById('smSvg').innerHTML=s+'</svg>';
+ document.getElementById('smDt').innerHTML=DT.map((x,i)=>`<button class="${i===dI?'on':''}" data-i="${i}">${x[0]}</button>`).join('');
+ document.querySelectorAll('#smDt button').forEach(b=>b.onclick=()=>{dI=+b.dataset.i;smR();});
+ document.getElementById('smSot').innerHTML='⭐ '+d[3];}
+smR();
+
+/* ---------- dedupe ---------- */
+const LEADS=[['אתר','מיכל לוי','Michal.Levi@gmail.com','050-111-2233'],['וואטסאפ','מיכל','michal.levi@gmail.com ','+972501112233'],['פייסבוק','מיכל  לוי','michal.levi@Gmail.com','0501112233'],['אתר','דני כהן','dani@example.com','052-3334455'],['אתר','דני כהן','dani@example.com','052-3334455']];
+const RULES=[['search','חיפוש לפני יצירה (Upsert)','קודם מחפשים איש קשר קיים, ורק אם אין יוצרים חדש'],['lower','מייל באותיות קטנות','Michal ו-michal הם אותה כתובת'],['trim','ניקוי רווחים','"gmail.com " עם רווח בסוף'],['phone','נרמול טלפון','+972-50… ← 050…, רק ספרות']];
+const on=new Set();
+const normE=e=>{let x=e;if(on.has('trim'))x=x.trim();if(on.has('lower'))x=x.toLowerCase();return x;};
+const normP=p=>on.has('phone')?p.replace(/[^0-9]/g,'').replace(/^972/,'0'):p;
+function ddR(){document.getElementById('ddT').innerHTML=RULES.map(([k,t,d])=>`<label><input type="checkbox" data-k="${k}" ${on.has(k)?'checked':''}><span>${t}<small>${d}</small></span></label>`).join('');
+ document.querySelectorAll('#ddT input').forEach(c=>c.onchange=()=>{c.checked?on.add(c.dataset.k):on.delete(c.dataset.k);ddR();});
+ document.getElementById('ddIn').innerHTML='<tr><th>מקור</th><th>שם</th><th>מייל אחרי נרמול</th><th>טלפון אחרי נרמול</th></tr>'+LEADS.map(([s,n,e,p])=>`<tr><td>${s}</td><td>${n}</td><td class="k">${normE(e).replace(/ /g,'·')}</td><td class="k">${normP(p)}</td></tr>`).join('');
+ const crm=[];
+ LEADS.forEach(([s,n,e,p])=>{const E=normE(e),P=normP(p);let hit=null;if(on.has('search'))hit=crm.find(c=>c.e===E||c.p===P);
+  if(hit){hit.src.push(s);hit.act='u';if(n.trim().length>hit.n.trim().length)hit.n=n;}else crm.push({n,e:E,p:P,src:[s],act:'c'});});
+ const keyName=c=>c.n.replace(/\s+/g,' ').trim().split(' ')[0];const counts={};crm.forEach(c=>{counts[keyName(c)]=(counts[keyName(c)]||0)+1;});
+ document.getElementById('ddN').textContent=crm.length;document.getElementById('ddN').style.color=crm.length===2?'var(--good)':'var(--bad)';
+ document.getElementById('ddOut').innerHTML='<tr><th>שם</th><th>מייל</th><th>טלפון</th><th>מקורות</th></tr>'+crm.map(c=>`<tr class="${counts[keyName(c)]>1?'dup':''}"><td>${c.n} <span class="act ${c.src.length>1?'u':'c'}">${c.src.length>1?`נוצר + ${c.src.length-1} עדכונים`:'נוצר'}</span></td><td style="direction:ltr;text-align:right">${c.e.replace(/ /g,'·')}</td><td style="direction:ltr;text-align:right">${c.p}</td><td>${c.src.join(', ')}</td></tr>`).join('');}
+ddR();
+
+/* ---------- loop ---------- */
+let lpT=null;
+document.getElementById('lpGo').onclick=()=>{clearInterval(lpT);const g=document.getElementById('lpG').checked,P=document.getElementById('lpP'),N=document.getElementById('lpN'),M=document.getElementById('lpM'),btn=document.getElementById('lpGo');btn.disabled=true;
+ let n=0,side=0;N.className='lp-cnt';N.textContent=0;M.textContent='';const W=document.getElementById('lpV').clientWidth;
+ lpT=setInterval(()=>{n++;N.textContent=n;side=1-side;P.style.right=(side?W-170:130)+'px';
+  if(g&&n>=2){clearInterval(lpT);N.className='lp-cnt ok';M.textContent='✓ תרחיש A עדכן את ה-CRM עם updated_by = "make". תרחיש B ראה את הסימון, ולא החזיר את העדכון לגיליון. שני עדכונים, ואז עצירה.';btn.disabled=false;}
+  if(!g&&n>=14){clearInterval(lpT);N.className='lp-cnt bad';M.textContent='⛔ העדכונים ממשיכים בלי סוף. כל עדכון צורך פעולות ב-Make, ועלול לגרום לחסימה בגלל יותר מדי בקשות (429). בחיים האמיתיים זה יכול לשרוף את כל המכסה החודשית בתוך שעה.';btn.disabled=false;}
+ },420);};
+
+/* ---------- channels ---------- */
+const CH=[
+ ['#','Slack','--p1','<div class="hd"># leads-hot · Make</div><div class="bd" style="--c:var(--p1)"><b>🔥 ליד דחוף: דני לוי</b><br>ספה תלת · facebook<br>"כבר שבועיים אף אחד לא חוזר אליי..."<br><span class="muted">סיכום של Claude: מתוסכל, מאיים לעבור למתחרה</span><div class="btns"><span>📞 052-3334455</span><span>פתח ב-CRM</span></div></div>','<b>מתי:</b> התראות לצוות שצריך לפעול מהר. <b>יתרונות:</b> ערוץ לפי נושא, תגובות בשרשור, וקישורים ישירים. <b>ב-Make:</b> Slack ‹ Create a Message. פשוט מאוד להקים.'],
+ ['✉️','מייל','--p2','<div class="hd">אל: sales@beit-veitzuv · נושא: ליד דחוף - דני לוי</div><div class="bd" style="--c:var(--p2)">שלום צוות,<br>התקבל ליד דחוף. פרטים וסיכום מצורפים.<br>טיוטת התשובה מוכנה לאישור בגיליון.</div>','<b>מתי:</b> סיכומים, דוחות, ותקשורת רשמית עם לקוחות וספקים. <b>חסרון:</b> קל לפספס התראה דחופה בתוך תיבה מלאה.'],
+ ['💬','WhatsApp','--good','<div class="hd">WhatsApp Business · תבנית "follow_up_he"</div><div class="bd" style="--c:var(--good)">שלום דני, כאן בית ועיצוב 👋 נציג יחזור אליך היום לגבי הספה התלת. מתי נוח לך?</div>','<b>מתי:</b> ערוץ שהלקוחות בישראל באמת קוראים. <b>דורש:</b> חשבון WhatsApp Business Platform, תבניות שעברו אישור כשפונים ראשונים ללקוח, והסכמה של הלקוח לקבל הודעות. ב-Make יש מודולים ל-WhatsApp Business Cloud.'],
+ ['📅','יומן','--p4','<div class="hd">Google Calendar · היום 14:00</div><div class="bd" style="--c:var(--p4)"><b>📞 לחזור לדני לוי (ליד דחוף)</b><br>052-3334455 · ספה תלת<br>נוצר אוטומטית מ-Make</div>','<b>מתי:</b> כשהפעולה הבאה היא משימה עם שעה, כמו שיחה חוזרת או פגישה. <b>ב-Make:</b> Google Calendar ‹ Create an Event, או Microsoft 365 Calendar.']
+];
+let chI=0;function chR(){document.getElementById('chn').innerHTML=CH.map(([ic,n],i)=>`<button class="${i===chI?'on':''}" data-i="${i}"><span class="ic">${ic}</span><b>${n}</b></button>`).join('');
+ document.querySelectorAll('#chn button').forEach(b=>b.onclick=()=>{chI=+b.dataset.i;chR();});
+ document.getElementById('chM').innerHTML=CH[chI][3];document.getElementById('chT').innerHTML='<p style="margin:0">'+CH[chI][4]+'</p>';}
+chR();
+
+/* ---------- MCP demo ---------- */
+const MC=[['u','אילו לידים דחופים נכנסו היום, ומה מצבם?'],['t','sheets.read("לידים", urgency="high", date=today)'],['t','crm.get_contact("dani@example.com")'],['c','היום נכנסו 2 לידים דחופים:\n• דני לוי (ספה תלת): נציג עוד לא חזר אליו. ב-CRM אין פעילות מהיום.\n• רונית שגב (כיסאות בר): נציגה דיברה איתה ב-11:20.\nרוצה שאכין הודעת Slack לנציג התורן לגבי דני?'],['u','כן, שלח ל-#leads-hot'],['t','slack.post("#leads-hot", "…")'],['c','✓ נשלח ל-#leads-hot.']];
+document.getElementById('mcpGo').onclick=async()=>{const C=document.getElementById('mcpC');C.innerHTML='';const b=document.getElementById('mcpGo');b.disabled=true;
+ for(const [k,t] of MC){const d=document.createElement('div');d.className=k;d.style.whiteSpace='pre-line';d.textContent=k==='t'?'🔧 '+t:t;C.appendChild(d);await new Promise(r=>setTimeout(r,k==='t'?600:1100));}b.disabled=false;};
+document.getElementById('mcpC').innerHTML='<div class="muted">לחצו "הדגמה" כדי לראות את Claude משתמש בכלים מחוברים. (השמות של הכלים כאן להמחשה.)</div>';
+</script>
+</body>
+</html>

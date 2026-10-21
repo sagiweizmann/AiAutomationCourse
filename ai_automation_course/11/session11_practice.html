@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 11: תרגול: תוכנית הטמעה לבית ועיצוב · תרגול</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.biz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.biz .logo{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:linear-gradient(135deg,var(--p2),var(--claude))}
+.prog{position:sticky;top:52px;z-index:5;margin-top:16px}
+.prog .card{padding:10px 16px;display:flex;gap:14px;align-items:center}
+.prog .bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p2),var(--p5));transition:.4s}
+ol.steps-l li{margin-bottom:6px}
+.path{font-weight:700;background:var(--surface-2);border-radius:7px;padding:1px 8px}
+.flowmini{display:flex;gap:6px;flex-wrap:wrap;align-items:center;direction:ltr;justify-content:flex-end;margin:6px 0 10px}
+.flowmini span{padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;background:var(--surface-2);direction:rtl}
+.flowmini span.c{background:color-mix(in srgb,var(--claude) 18%,transparent);color:var(--claude)}
+.flowmini i{font-style:normal;color:var(--ink-2)}
+.inv input,.inv select{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:3px 6px;width:100%;box-sizing:border-box}
+.inv td{padding:6px 8px}
+.inv td:nth-child(n+2):nth-child(-n+4){width:96px}
+.inv .h{font-weight:800;text-align:center}
+.inv-sum{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.inv-sum span{background:var(--surface-2);border-radius:999px;padding:3px 12px;font-weight:700;font-size:14px}
+.ex code{overflow-wrap:anywhere}
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.team div{padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px}
+.team b{display:block}
+@media (max-width:860px){.team{grid-template-columns:repeat(2,minmax(0,1fr))}.inv td:nth-child(n+2):nth-child(-n+4){width:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 11</b><span class="kind-badge">🛠️ תרגול</span></div>
+  <h1>תרגול: תוכנית הטמעה לבית ועיצוב</h1>
+  <p class="sub">ממפים משימות, בוחרים פיילוט, כותבים מסמך פיילוט ומדיניות שימוש, מכינים את הצוות, ובונים לוח מדדים שבועי ב-Make.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session11_lecture.html" class="">🎓 הרצאה</a><a href="session11_practice.html" class="on">🛠️ תרגול</a><a href="session11_solution.html" class="">✅ פתרון</a><a href="session11_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="card biz"><div class="logo">🏢</div><div><b style="font-size:19px">מה צריך לתרגול</b><div class="muted">רשימת המשימות מהמשימה של מפגש 10, חשבון Claude, ו-Make עם הלוגים של נועם ממפגשים 9–10 (לתרגיל 6). אפשר לעבוד על הארגון שלכם, או על בית ועיצוב.</div></div></div>
+  <div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/7</span></div></div>
+</section>
+<section class="blk">
+<div class="card ex" id="ex1"><div class="ex-head"><span class="ex-num">1</span><h3>מיפוי משימות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">קל</span></div>
+
+<p>השתמשו ברשימה מהמשימה של מפגש 10, מהארגון שלכם או מבית ועיצוב. מלאו את הטבלה: כל שורה היא משימה חוזרת. הטבלה מחשבת את השעות בשבוע.</p>
+<div class="tbl inv"><table id="invT"><tr><th>משימה</th><th>פעמים בשבוע</th><th>דקות לפעם</th><th>כאב (1–5)</th><th>שעות בשבוע</th></tr></table></div>
+<div class="inv-sum" id="invS"></div>
+<p class="mt muted" style="font-size:14px">הטבלה נשמרת רק בדפדפן הזה. כדי להמשיך לתרגיל 2, העתיקו אותה עם הכפתור.</p>
+<button class="btn ghost sm" id="invCopy">📋 העתקת הטבלה כטקסט</button>
+<div class="deliver">טבלה של 5–8 משימות, עם שעות בשבוע</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex2"><div class="ex-head"><span class="ex-num">2</span><h3>בחירת פיילוט עם Claude</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span></div>
+
+<div class="copybox"><pre class="rtl">אני מתכנן הטמעה של AI ב"{שם הארגון}". אלה המשימות החוזרות שמיפיתי, עם תדירות, זמן וכאב:
+(הדביקו כאן את הטבלה מתרגיל 1)
+
+לכל משימה:
+1. הצע פתרון מתוך: Workflow, סוכן, Claude לעובד, Skill, או "לא מתאים ל-AI כרגע".
+2. דרג מ-1 עד 5: ערך, מאמץ, סיכון. נמק כל דירוג במשפט אחד.
+3. ציין אילו נתונים או מערכות צריך לחבר.
+בסוף, המלץ על פיילוט אחד והסבר למה דווקא הוא. אם לדעתך חסר מידע כדי להחליט, שאל אותי לפני ההמלצה.</pre></div>
+<p>השוו את ההמלצה של Claude לתחושה שלכם, ולמטריצת העדיפויות מההרצאה. אם אתם לא מסכימים, כתבו לו למה, ובקשו המלצה מחודשת. ההחלטה בסוף היא שלכם, ולא של Claude.</p>
+<div class="deliver">הפיילוט שבחרתם, וההסבר במשפט אחד למה דווקא הוא</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex3"><div class="ex-head"><span class="ex-num">3</span><h3>מסמך פיילוט של עמוד אחד</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 30 דקות</span><span class="pill">בינוני</span></div>
+
+<p>מלאו את המסמך עבור הפיילוט שבחרתם. בבית ועיצוב: נועם בצוות השירות.</p>
+<div class="copybox"><pre class="rtl">מסמך פיילוט: ___
+בעלים עסקי: ___ · בעלים טכני: ___
+הבעיה (במספרים): ___
+הפתרון (במשפט אחד): ___
+מי משתתף: ___ (כמה אנשים, מאיזה צוות)
+משך: ___ שבועות, מ-___ עד ___
+
+מדדים (מוצא ← יעד):
+  1. ___ : ___ ← ___
+  2. ___ : ___ ← ___
+  3. איכות / טעויות: ___ ← ___
+
+קריטריונים להחלטה בסוף:
+  להרחיב אם: ___
+  לתקן ולהמשיך אם: ___
+  לעצור אם: ___
+
+גבולות: מה הסוכן לא עושה, ומה דורש אישור של אדם: ___
+נתונים ופרטיות: אילו נתונים עוברים לאן: ___
+תוכנית חזרה: איך חוזרים לעבודה ידנית תוך שעה: ___
+סיכונים מרכזיים, ואיך מצמצמים אותם: ___</pre></div>
+<p>אחר כך, בשיחה חדשה, בקשו ביקורת:</p>
+<div class="copybox"><pre class="rtl">אתה יועץ הטמעה ספקן ומנוסה. קרא את מסמך הפיילוט הזה, ותן לי:
+1. שלושה דברים שחסרים או לא מדידים.
+2. הסיכון הכי גדול שלא כתבתי, ואיך הייתי מגלה אותו בשבוע הראשון.
+3. שאלה אחת שהמנכ"לית תשאל, ושאין לי עליה תשובה במסמך.
+אל תשכתב את המסמך. רק תבקר אותו.
+
+(הדביקו כאן את המסמך)</pre></div>
+<p>תקנו את המסמך לפי הביקורת. כדי לחשב את המספרים במדדים ובקריטריונים, השתמשו במחשבון ה-ROI מההרצאה.</p>
+<div class="deliver">מסמך פיילוט סופי, ושלושת השינויים שעשיתם בעקבות הביקורת</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex4"><div class="ex-head"><span class="ex-num">4</span><h3>מדיניות שימוש ב-AI</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">קל</span></div>
+
+<div class="copybox"><pre class="rtl">כתוב טיוטה של "מדיניות שימוש ב-AI" לחנות "בית ועיצוב": 12 עובדים, ללא מחלקת IT.
+עמוד אחד, בעברית פשוטה, עם הסעיפים:
+1. כלים מאושרים (Claude בתוכנית Team, Make) ולמה.
+2. אילו נתונים מותר להכניס, ואילו אסור (כרטיסי אשראי, תעודות זהות, מידע רפואי, סיסמאות).
+3. מה תמיד עובר בדיקה של אדם לפני שהוא יוצא ללקוח.
+4. מי מאשר כלי, Connector או אוטומציה חדשים.
+5. מה עושים כשה-AI טעה: איפה מדווחים, ותוך כמה זמן.
+6. שקיפות מול לקוחות: מתי אומרים שהתשובה נכתבה בעזרת AI.
+בסוף הוסף 3 דוגמאות של "מותר / אסור" מהעבודה היומיומית בחנות.</pre></div>
+<p>קראו את הטיוטה בעין ביקורתית: האם עובדת חדשה תבין אותה ביום הראשון? האם יש סעיף שאי אפשר לאכוף? קצרו, והתאימו לארגון שלכם.</p>
+<div class="callout warn"><b>לא ייעוץ משפטי</b>מדיניות כזו היא נקודת התחלה. בנושאי פרטיות והגנת מידע, כמו חוק הגנת הפרטיות ותקנות אבטחת מידע, בודקים מול יועץ משפטי או ממונה הגנת פרטיות.</div>
+<div class="deliver">מדיניות של עמוד אחד, מותאמת לארגון</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex5"><div class="ex-head"><span class="ex-num">5</span><h3>להכין את הצוות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span></div>
+
+<div class="team">
+<div><b>דנה</b>מנהלת השירות. בעד, אבל לחוצה מהזמן</div>
+<div><b>רותם</b>נציגה ותיקה. סקפטית: "ניסינו כבר בוט"</div>
+<div><b>אור</b>נציג חדש. מתלהב מטכנולוגיה</div>
+<div><b>שני</b>נציגה. חוששת שיחליפו אותה</div>
+</div>
+<p class="mt">בקשו מ-Claude את ההודעה ואת השאלות:</p>
+<div class="copybox"><pre class="rtl">נסח הודעת Slack לצוות השירות של "בית ועיצוב" (3 נציגות ומנהלת). ההודעה מכריזה על פיילוט של "נועם", סוכן שעונה ראשון על פניות לקוחות.
+הנקודות שחייבות להופיע:
+- למה עכשיו: (מהמספרים במסמך הפיילוט)
+- מה משתנה בשבועיים הראשונים: נועם כותב, ואתן מאשרות. שום דבר לא יוצא ללקוח בלי אישור שלכן.
+- מה לא משתנה: אף אחת לא מאבדת את התפקיד. הזמן שמתפנה הולך ל-___.
+- איך נותנים משוב: ערוץ #noam-feedback, ופגישה של 15 דקות כל יום חמישי.
+- מי השגרירה ואיך פונים אליה.
+טון: כן, חם ולא שיווקי. עד 150 מילים. בלי "מהפכה" ובלי "AI יחליף".
+אחרי ההודעה, כתוב 5 שאלות שהנציגות עשויות לשאול, עם תשובה קצרה וכנה לכל אחת.</pre></div>
+<ol class="steps-l">
+<li>מי מהצוות מתאים להיות השגרירה, ולמה? (רמז: לא בהכרח מי שהכי מתלהב.)</li>
+<li>תכננו הדרכה של שעה אחת על פניות אמיתיות: 3 פניות שנועם עונה עליהן טוב, ופנייה אחת שבה הוא טועה. למה חשוב להראות גם טעות?</li>
+</ol>
+<div class="deliver">ההודעה ל-Slack, 5 שאלות ותשובות, השגרירה שבחרתם, ותוכנית ההדרכה</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex6"><div class="ex-head"><span class="ex-num">6</span><h3>לוח מדדים שבועי ב-Make</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 30 דקות</span><span class="pill">מאתגר</span></div>
+
+<div class="flowmini"><span class="">Schedule: ראשון 8:30</span><i>→</i><span class="">Sheets: לוג סוכן (7 ימים)</span><i>→</i><span class="">Sheets: קריאות (7 ימים)</span><i>→</i><span class="">Text aggregator</span><i>→</i><span class="c">Claude: ניתוח</span><i>→</i><span class="">Parse JSON</span><i>→</i><span class="">Sheets: מדדים</span><i>→</i><span class="">Slack לדנה</span></div>
+<ol class="steps-l">
+<li>צרו תרחיש "מדדי נועם", שמתוזמן ליום ראשון בשעה 8:30.</li>
+<li>שני מודולי <span class="path">Search Rows</span>: מהלשונית "לוג סוכן" ומהלשונית "קריאות", עם תאריך אחרי <code>addDays(now; -7)</code>. אחרי כל אחד Text aggregator, ובסוף הודעה אחת ל-Claude.</li>
+<li>מודול Claude, עם ההוראות הבאות, ואחריו Parse JSON:</li>
+</ol>
+<div class="copybox"><pre class="rtl">אתה מנתח את הלוג השבועי של סוכן השירות "נועם". קיבלת שורות מהלשונית "לוג סוכן" ומהלשונית "קריאות".
+החזר JSON בלבד:
+{"handled": מספר הפניות שנועם סגר בלי נציג,
+ "escalated": מספר הפניות שהועברו לנציג,
+ "escalation_rate": אחוז, מספר שלם,
+ "top_topics": [שלושת הנושאים הנפוצים],
+ "issues": [עד 3 בעיות שחוזרות בלוג, למשל תשובה שגויה, כלי שנכשל או לקוח שחזר על שאלה],
+ "summary_he": "סיכום של 3 משפטים למנהלת השירות, עם המלצה אחת לשבוע הבא"}
+השתמש רק בנתונים שבלוג. אם חסר נתון, כתוב null. אל תעריך.</pre></div>
+<ol class="steps-l" start="4">
+<li>הוסיפו שורה ללשונית <b>"מדדים"</b>: תאריך, handled, escalated, escalation_rate, ומדד זמן שנחסך (handled כפול דקות לפנייה ידנית, חלקי 60).</li>
+<li>שלחו לדנה ב-Slack את <code>summary_he</code> ואת שלושת המספרים.</li>
+<li>בגיליון, צרו גרף קו של escalation_rate לפי שבוע. זה המדד שמראה אם נועם משתפר.</li>
+</ol>
+<div class="deliver">צילום מסך של התרחיש ושל הודעת ה-Slack, ושורה אחת בלשונית מדדים</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex7"><div class="ex-head"><span class="ex-num">7</span><h3>בונוס: Claude בכלי שכבר עובדים בו</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בונוס</span></div>
+
+<p>בחרו משימה אחת מהמיפוי בתרגיל 1, ונסו אותה עם Claude בתוך כלי שהארגון כבר משתמש בו: Slack, Excel או PowerPoint, או הדפדפן (Claude in Chrome), לפי מה שזמין לכם. מדדו את הזמן עם Claude ובלעדיו.</p>
+<p>שאלו את עצמכם: האם עובד שלא השתתף בקורס יצליח לעשות את זה לבד, אחרי הדרכה של 10 דקות? אם לא, מה חסר: הדרכה, Skill, או תבנית?</p>
+<div class="deliver">משימה · כלי · זמן לפני ואחרי · מה חסר כדי שכל הצוות ישתמש</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 11 · תרגול</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const DEF=[['מענה לפניות "איפה ההזמנה"',120,4,4],['ניסוח תשובות לתלונות',25,12,5],['הקלדת חשבוניות ספקים',30,6,3],['תיאורי מוצר חדשים',8,25,2],['דוח שבועי להנהלה',1,90,3],['',0,0,1]];
+let INV;try{INV=JSON.parse(localStorage.getItem('s11inv'))||DEF;}catch(e){INV=DEF;}
+const T=document.getElementById('invT');
+INV.forEach((r,i)=>{const tr=T.insertRow();tr.innerHTML=`<td><input data-i="${i}" data-k="0" value="${String(r[0]).replace(/"/g,'&quot;')}" placeholder="משימה"></td><td><input type="number" min="0" data-i="${i}" data-k="1" value="${r[1]}"></td><td><input type="number" min="0" data-i="${i}" data-k="2" value="${r[2]}"></td><td><select data-i="${i}" data-k="3">${[1,2,3,4,5].map(v=>`<option ${v==r[3]?'selected':''}>${v}</option>`).join('')}</select></td><td class="h"></td>`;});
+function inv(){let tot=0,top=null;[...T.rows].slice(1).forEach((tr,i)=>{const r=INV[i];const h=(+r[1]||0)*(+r[2]||0)/60;tr.cells[4].textContent=h?h.toFixed(1):'–';tot+=h;const sc=h*r[3];if(r[0]&&(!top||sc>top[1]))top=[r[0],sc];});
+ document.getElementById('invS').innerHTML=`<span>סה"כ: ${tot.toFixed(1)} שעות בשבוע</span><span>≈ ${Math.round(tot*4.3)} שעות בחודש</span>${top?`<span>שעות × כאב, הכי גבוה: ${top[0]}</span>`:''}`;
+ try{localStorage.setItem('s11inv',JSON.stringify(INV));}catch(e){}}
+T.querySelectorAll('input,select').forEach(x=>x.oninput=x.onchange=()=>{INV[+x.dataset.i][+x.dataset.k]=x.dataset.k==='0'?x.value:+x.value;inv();});inv();
+document.getElementById('invCopy').onclick=e=>{const t='משימה | פעמים בשבוע | דקות | כאב\n'+INV.filter(r=>r[0]).map(r=>r.join(' | ')).join('\n');navigator.clipboard&&navigator.clipboard.writeText(t).then(()=>{e.target.textContent='✓ הועתק';setTimeout(()=>e.target.textContent='📋 העתקת הטבלה כטקסט',1500);}).catch(()=>{});};
+const upd=()=>{const all=document.querySelectorAll('.done-ex'),d=[...all].filter(x=>x.checked).length;document.getElementById('pbar').style.width=d/all.length*100+'%';document.getElementById('ptxt').textContent=d+'/'+all.length;};
+document.querySelectorAll('.done-ex').forEach(c=>c.onchange=upd);
+</script>
+</body>
+</html>

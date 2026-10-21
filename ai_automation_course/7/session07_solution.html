@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 7: פתרון התרגול: ליד אחד, כל המערכות · פתרון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.sol{margin-top:16px}
+.why{margin-top:12px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p2) 9%,var(--surface));border-inline-start:4px solid var(--p2);font-size:15.5px}
+.why::before{content:"💡 למה זה עובד";display:block;font-weight:800;margin-bottom:2px}
+.mistake{margin-top:10px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p3) 8%,var(--surface));border-inline-start:4px solid var(--p3);font-size:15.5px}
+.mistake::before{content:"⚠️ טעויות נפוצות";display:block;font-weight:800;margin-bottom:2px}
+.mexp{direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;font-size:13.5px;background:var(--surface-2);padding:2px 8px;border-radius:6px;display:inline-block}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 7</b><span class="kind-badge">✅ פתרון</span></div>
+  <h1>פתרון התרגול: ליד אחד, כל המערכות</h1>
+  <p class="sub">טבלת מקורות האמת, ביטויי הנרמול, מבנה ה-Upsert, תוצאת בדיקת הכפילויות, והגדרות Slack והיומן.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session07_lecture.html" class="">🎓 הרצאה</a><a href="session07_practice.html" class="">🛠️ תרגול</a><a href="session07_solution.html" class="on">✅ פתרון</a><a href="session07_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+<div class="callout"><b>על הפתרון</b>שמות המודולים והשדות משתנים בין CRM-ים, ובין גרסאות של Make. העקרונות (נרמול, חיפוש לפני יצירה, שמירת מזהה ומניעת לולאות) זהים בכל הכלים.</div>
+<div class="card sol"><div class="ex-head"><span class="ex-num">1</span><h3>מקורות אמת</h3></div>
+<div class="tbl"><table>
+<tr><th>מידע</th><th>מקור האמת</th><th>מקבלים עותק</th></tr>
+<tr><td>שם ומייל של לקוח</td><td><b>CRM</b></td><td>גיליון הלידים, Slack (בהתראה)</td></tr>
+<tr><td>טלפון של לקוח</td><td><b>CRM</b></td><td>גיליון, יומן (באירוע)</td></tr>
+<tr><td>סטטוס הזמנה</td><td><b>גיליון ההזמנות</b></td><td>CRM (שדה לקריאה בלבד)</td></tr>
+<tr><td>סכום חשבונית ספק</td><td><b>הנהלת חשבונות</b> (בקורס: לשונית "חשבוניות")</td><td>—</td></tr>
+<tr><td>סיכום שיחה</td><td><b>CRM</b> (פעילות בכרטיס)</td><td>Slack, אם דחוף</td></tr>
+<tr><td>טיוטה ממתינה לאישור</td><td><b>גיליון הלידים</b> (ממשק האישור ממפגש 6)</td><td>—</td></tr>
+<tr><td>שורות ידע</td><td><b>לשונית "ידע"</b></td><td>Claude Project (העלאה תקופתית)</td></tr>
+</table></div>
+<div class="why">CRM הוא מקור האמת ללקוחות, כי זה הכלי שבו הנציגים עובדים, ויש בו היסטוריה מלאה. הגיליון מצוין לאישורים ולדוחות, אבל לא לניהול לקוחות לאורך זמן.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">2</span><h3>נרמול</h3></div>
+<p>עבור <span class="mexp">+972501112233</span>: הביטוי הפנימי מחזיר <span class="mexp">972501112233</span>, והחיצוני מחזיר <span class="mexp">0501112233</span>. גם <span class="mexp">050-111-2233</span> וגם <span class="mexp">0501112233</span> מחזירים את אותה תוצאה.</p>
+<p>עבור <span class="mexp">"michal.levi@Gmail.com "</span>: <span class="mexp">lower(trim(...))</span> מחזיר <span class="mexp">michal.levi@gmail.com</span>.</p>
+<div class="mistake">לנרמל רק במקום אחד. אם המייל ב-CRM נשמר לפני שהתחלנו לנרמל, החיפוש לא ימצא אותו. פעם אחת מנקים גם את הנתונים הקיימים ב-CRM, או מחפשים בנוסף לפי טלפון.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">3</span><h3>Upsert ב-CRM</h3></div>
+<div class="tbl"><table>
+<tr><th>מודול</th><th>הגדרה</th></tr>
+<tr><td>CRM · Search contacts</td><td>Filter: email = <span class="mexp">email_norm</span> · Limit 1</td></tr>
+<tr><td>Router ①</td><td>מסנן: Total number of bundles &gt; 0 (או "contact id exists") ‹ Update contact + Create activity/note</td></tr>
+<tr><td>Router ② Fallback</td><td>Create contact: firstname, email = email_norm, phone = phone_norm, lead source, ומאפיין מותאם "topic"</td></tr>
+<tr><td>Sheets · Update a Row</td><td>crm_id = המזהה שחזר מ-Create או מ-Search</td></tr>
+</table></div>
+<div class="why">Upsert מבטיח שלכל לקוח יש כרטיס אחד, וכל פנייה נוספת מצטרפת אליו כפעילות. הנציג רואה את כל ההיסטוריה במקום אחד, ולא שלושה כרטיסים חלקיים.</div>
+<div class="mistake">אם החיפוש לא מחזיר תוצאות, ייתכן שהמודולים שאחריו לא ירוצו, ואז גם מסלול ה-Fallback לא יפעל. בדקו בהרצה. אם זה קורה, הגדירו את מודול החיפוש כך שימשיך גם בלי תוצאות (בחלק מהמודולים יש לזה הגדרה), או השתמשו במודול "Get" או "Search" שמחזיר תוצאה ריקה.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">4</span><h3>בדיקת כפילויות</h3></div>
+<div class="tbl"><table>
+<tr><th>#</th><th>ליד</th><th>פעולה ב-CRM</th></tr>
+<tr><td>1</td><td>מיכל לוי · אתר</td><td>נוצר איש קשר חדש</td></tr>
+<tr><td>2</td><td>מיכל · וואטסאפ</td><td>עודכן: נוספה פעילות "יש בכחול כהה?"</td></tr>
+<tr><td>3</td><td>מיכל לוי · פייסבוק</td><td>עודכן: נוספה פעילות "מה זמן האספקה?"</td></tr>
+<tr><td>4</td><td>דני כהן · אתר</td><td>נוצר איש קשר חדש</td></tr>
+<tr><td>5</td><td>דני כהן · אתר</td><td>עודכן (כפילות זהה)</td></tr>
+</table></div>
+<p class="mt"><b>תוצאה: 2 אנשי קשר.</b> אם יצאו 3 או 4, הסיבה הנפוצה היא שהשורה <code>"michal.levi@gmail.com "</code> (עם רווח בסוף) או <code>Michal.Levi</code> (עם אותיות גדולות) לא נורמלו לפני החיפוש.</p></div><div class="card sol"><div class="ex-head"><span class="ex-num">5</span><h3>Slack ויומן</h3></div>
+<b>Slack · Text:</b>
+<pre class="rtl">🔥 *ליד דחוף: {{full_name}}*
+מוצר: {{interested_in}} · מקור: {{source}}
+{{summary_he}}
+📞 {{phone_norm}} · &lt;https://app.hubspot.com/contacts/…/record/0-1/{{crm_id}}|פתח ב-CRM&gt;</pre>
+<b>Google Calendar · Create an Event:</b> Summary: <span class="mexp">📞 לחזור ל-{{full_name}}</span> · Start: <span class="mexp">addHours(now; 1)</span> · End: <span class="mexp">addMinutes(addHours(now; 1); 15)</span>
+<div class="why">ההתראה כוללת כל מה שהנציג צריך כדי לפעול מיד: מי הלקוח, מה הבעיה, טלפון וקישור. האירוע ביומן מבטיח שגם אם ההתראה ב-Slack פוספסה, תהיה תזכורת.</div>
+<div class="mistake">הקישור ל-CRM תלוי במבנה הכתובות של הכלי והחשבון. את התבנית הנכונה מעתיקים מכרטיס איש קשר אמיתי בדפדפן. השעה ביומן תלויה באזור הזמן שמוגדר ב-Make וביומן, וצריך לוודא ששניהם Asia/Jerusalem.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">6</span><h3>Connectors</h3></div>
+<p>תשובה טיפוסית: Claude ניגש לגיליון דרך ה-Connector, מסכם את הלידים לפי נושא, ומציין מאיזה קובץ קרא. בחלק מהממשקים רואים גם אילו כלים הופעלו.</p>
+<div class="why"><b>מתי Connectors:</b> שאלות חד-פעמיות, ניתוח, ודוח למנהל ("מה קרה השבוע?"). <b>מתי תרחיש ב-Make:</b> תהליך שחוזר בכל פעם שמגיע ליד, ושחייב לרוץ גם בלי שאף אחד שואל. הם משלימים זה את זה: Make מכניס את הנתונים בצורה מסודרת, ו-Claude עם Connectors עוזר לאנשים להבין אותם.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">7</span><h3>סנכרון מוגן</h3></div>
+<p>ב-History רואים: עדכון ידני בגיליון ‹ תרחיש A רץ (עדכון ב-CRM, last_sync = make) ‹ תרחיש B רץ, אבל המסנן last_sync ≠ make עוצר אותו. <b>סה"כ 2 הרצות, ולא לולאה.</b></p>
+<div class="why">כל אחד מהתרחישים יודע לזהות שינוי שהוא עצמו גרם לו, ולא מגיב אליו. אם אפשר, עדיף לבחור כיוון סנכרון אחד, ממקור האמת לשאר המערכות. ככה הבעיה לא נוצרת בכלל.</div></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 7 · פתרון</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+</script>
+</body>
+</html>

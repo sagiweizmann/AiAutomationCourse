@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 11: פתרון התרגול: תוכנית הטמעה לבית ועיצוב · פתרון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.sol{margin-top:16px}
+.why{margin-top:12px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p2) 9%,var(--surface));border-inline-start:4px solid var(--p2);font-size:15.5px}
+.why::before{content:"💡 למה זה עובד";display:block;font-weight:800;margin-bottom:2px}
+.mistake{margin-top:10px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p3) 8%,var(--surface));border-inline-start:4px solid var(--p3);font-size:15.5px}
+.mistake::before{content:"⚠️ טעויות נפוצות";display:block;font-weight:800;margin-bottom:2px}
+.tbl td{font-size:14.5px;vertical-align:top}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 11</b><span class="kind-badge">✅ פתרון</span></div>
+  <h1>פתרון התרגול: תוכנית הטמעה לבית ועיצוב</h1>
+  <p class="sub">מיפוי ובחירה לדוגמה, מסמך פיילוט מלא לנועם, מדיניות שימוש מקוצרת, הכנת הצוות, ולוח המדדים השבועי.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session11_lecture.html" class="">🎓 הרצאה</a><a href="session11_practice.html" class="">🛠️ תרגול</a><a href="session11_solution.html" class="on">✅ פתרון</a><a href="session11_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+<div class="callout"><b>על הפתרון</b>הדוגמאות מותאמות לבית ועיצוב. בארגון שלכם המספרים, האנשים והמדיניות יהיו שונים. מה שבודקים הוא שהמבנה מלא: מדדים עם נקודת מוצא, קריטריונים שנקבעו מראש, תוכנית חזרה, ותוכנית לאנשים.</div>
+<div class="card sol"><div class="ex-head"><span class="ex-num">1</span><h3>מיפוי לדוגמה</h3></div>
+<div class="tbl"><table>
+<tr><th>משימה</th><th>פעמים בשבוע</th><th>דקות</th><th>כאב</th><th>שעות בשבוע</th></tr>
+<tr><td>מענה לפניות "איפה ההזמנה"</td><td>120</td><td>4</td><td>4</td><td>8.0</td></tr>
+<tr><td>ניסוח תשובות לתלונות</td><td>25</td><td>12</td><td>5</td><td>5.0</td></tr>
+<tr><td>הקלדת חשבוניות ספקים</td><td>30</td><td>6</td><td>3</td><td>3.0</td></tr>
+<tr><td>תיאורי מוצר חדשים</td><td>8</td><td>25</td><td>2</td><td>3.3</td></tr>
+<tr><td>דוח שבועי להנהלה</td><td>1</td><td>90</td><td>3</td><td>1.5</td></tr>
+</table></div>
+<p class="mt"><b>סה"כ כ-21 שעות בשבוע</b>, שזה יותר מחצי משרה. רוב הזמן הולך על שתי המשימות הראשונות, שתיהן בשירות.</p>
+<div class="mistake">להעריך "בערך" בלי לבדוק. 120 פניות בשבוע זה מספר מה-CRM או מתיבת המייל, ולא תחושה. ואם אין נתון, זה בדיוק מה שמודדים בשבועיים של מדידת המוצא.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">2</span><h3>הבחירה</h3></div>
+<p><b>הפיילוט: נועם בצוות השירות, רק לפניות על סטטוס הזמנה ומדיניות.</b> תלונות נשארות בינתיים אצל הנציגות, עם ה-Skill כעזר.</p>
+<div class="why">ערך גבוה: 8 שעות בשבוע, וזמן תגובה ללקוח. מאמץ נמוך: הכלים כבר בנויים ממפגשים 9–10. סיכון נמוך: בהתחלה נציגה מאשרת כל תשובה, ואין לנועם כלים שכותבים כסף. תלונות הן כאב גבוה יותר, אבל גם סיכון גבוה יותר מול לקוח כועס. לכן הן בשלב השני.</div>
+<div class="mistake">לבחור את הרעיון הכי מרשים, כמו סוכן שמבצע החזרים או תמחור דינמי. פיילוט ראשון צריך להצליח ולבנות אמון, לא להרשים.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">3</span><h3>מסמך פיילוט: נועם</h3></div>
+<div class="copybox"><pre class="rtl">מסמך פיילוט: נועם, מענה ראשוני בשירות
+בעלים עסקי: דנה (מנהלת השירות) · בעלים טכני: (מיישם האוטומציה)
+הבעיה: 120 פניות בשבוע על סטטוס ומדיניות, 8 שעות עבודה, וזמן תגובה ממוצע של 5 שעות
+הפתרון: נועם כותב תשובה עם בדיקת הזמנה ובסיס ידע. בשבועות 1–2 נציגה מאשרת כל תשובה, ומשבוע 3 רק תשובות שמסומנות "לא בטוח"
+מי משתתף: 3 נציגות ודנה. רק פניות מהטופס באתר
+משך: 6 שבועות (2 של מדידת מוצא, ו-4 של פיילוט)
+
+מדדים (מוצא ← יעד):
+  1. זמן תגובה ממוצע: 5 שעות ← פחות משעה
+  2. שעות נציגות על פניות סטטוס: 8 בשבוע ← 3 בשבוע
+  3. תשובות שנציגה תיקנה מהותית: — ← פחות מ-10%
+  4. שביעות רצון של נציגות (סקר 1–5): — ← 4 ומעלה
+
+קריטריונים להחלטה בסוף:
+  להרחיב (גם לוואטסאפ, ותלונות עם Skill) אם: מדדים 1, 3 ו-4 עמדו ביעד
+  לתקן ולהמשיך שבועיים אם: מדד 3 בין 10% ל-20%
+  לעצור אם: יותר מ-20% תיקונים, או תלונת לקוח על תשובה שגויה של נועם
+
+גבולות: אין החזרים, ביטולים או הבטחות. פגם, ביטול או לקוח כועס עוברים לנציגה
+נתונים ופרטיות: פרטי הזמנה (בלי אמצעי תשלום) עוברים ל-Claude דרך Make. לוגים נשמרים 90 יום
+תוכנית חזרה: מכבים את התרחיש ב-Make, והפניות חוזרות לתיבה הרגילה. בדקנו את זה מראש
+סיכונים: (1) נתוני הזמנה לא מעודכנים: בודקים מול הגיליון כל בוקר. (2) נציגות שמאשרות בלי לקרוא: בדיקה מדגמית של דנה, 10 תשובות בשבוע</pre></div>
+<div class="why">כל מדד הוא מספר, עם נקודת מוצא ויעד. הקריטריונים נקבעים <b>לפני</b> הפיילוט, כדי שההחלטה בסוף לא תהיה "נראה לנו שזה עבד". והתוכנית לחזרה לעבודה ידנית נבדקה מראש, ולא רק נכתבה.</div>
+<div class="mistake">מדדים בלי נקודת מוצא, כמו "לשפר את זמן התגובה". או רק מדדי חיסכון, בלי מדד איכות. פיילוט שחוסך זמן אבל מייצר תשובות שגויות הוא כישלון.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">4</span><h3>מדיניות שימוש מקוצרת</h3></div>
+<div class="copybox"><pre class="rtl">מדיניות שימוש ב-AI · בית ועיצוב
+1. כלים מאושרים: Claude (תוכנית Team, חשבון של החברה בלבד) ו-Make. כל כלי אחר צריך אישור.
+2. אסור להכניס: מספרי כרטיס אשראי, תעודות זהות, מידע רפואי, סיסמאות. מותר: פרטי הזמנה, תוכן פנייה, מסמכי החנות.
+3. כל מה שיוצא ללקוח (תשובה, מייל, הצעת מחיר) עובר עין אנושית, עד שתוחלט אחרת בכתב.
+4. כלי, Connector או אוטומציה חדשים: מבקשים מ-(מיישם האוטומציה), והבעלים של החנות מאשרים.
+5. ה-AI טעה? מדווחים ב-#noam-feedback באותו יום, עם צילום מסך. אם הטעות הגיעה ללקוח, מעדכנים גם את דנה.
+6. שקיפות: בצ'אט באתר כתוב שנועם הוא עוזר דיגיטלי, ושאפשר לבקש נציג בכל שלב.
+
+✅ מותר: "תנסח לי תשובה ללקוחה על עיכוב בהזמנה 1043"
+❌ אסור: להדביק צילום של כרטיס האשראי של לקוח כדי ש-Claude "יבדוק את התשלום"
+✅ מותר: לבקש מ-Claude סיכום של קובץ המלאי, מתוך החשבון של החברה
+❌ אסור: להעלות את רשימת הלקוחות לכלי AI בחשבון פרטי</pre></div>
+<div class="why">קצר, עם דוגמאות מהעבודה היומיומית, ועם כתובת ברורה לכל שאלה. מדיניות של 10 עמודים לא נקראת.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">5</span><h3>הכנת הצוות</h3></div>
+<p><b>השגרירה: רותם.</b> נציגה ותיקה וסקפטית, שהצוות סומך על שיקול הדעת שלה. אם היא משתכנעת אחרי שבדקה בעצמה, זה שווה יותר מכל הודעה של ההנהלה. אור יכול לעזור לה בצד הטכני.</p>
+<p><b>שתי שאלות שבטוח יישאלו:</b></p>
+<ul>
+<li><b>"זה יחליף אותנו?"</b> "המטרה היא שתפסיקו לענות 120 פעם בשבוע 'איפה ההזמנה', ותקדישו את הזמן ללקוחות שבאמת צריכים אתכן: תלונות, לקוחות עסקיים, ומעקב אחרי ביקורות. אף תפקיד לא מבוטל בפיילוט." (כותבים רק מה שבאמת נכון בארגון.)</li>
+<li><b>"ומה אם הוא טועה ללקוח?"</b> "בשבועיים הראשונים שום דבר לא יוצא בלי אישור שלכן. אחר כך רק תשובות שנועם בטוח בהן, ואתן בודקות מדגם."</li>
+</ul>
+<div class="why">בהדרכה מראים גם טעות, כדי ללמד מתי לא לסמוך על הכלי. מי שראה רק דוגמאות מושלמות יאשר בלי לקרוא. מי שראה טעות יודע מה לחפש.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">6</span><h3>לוח מדדים</h3></div>
+<p>הודעת Slack לדוגמה:</p>
+<div class="copybox"><pre class="rtl">📊 נועם · שבוע 2 של הפיילוט
+טופלו: 94 · הועברו לנציגה: 21 · שיעור העברה: 18%
+נושאים מובילים: סטטוס הזמנה, זמני משלוח, החזרות
+⚠️ חוזר השבוע: 3 פניות על הזמנות שלא נמצאו (המספר כלל רווח). כדאי להוסיף trim בכלי get_order_status.
+המלצה: לנרמל את מספר ההזמנה לפני החיפוש, ולבדוק שוב בשבוע הבא.</pre></div>
+<div class="why">ההודעה מגיעה אל דנה, בכלי שהיא כבר עובדת בו, עם שלושה מספרים והמלצה אחת. גרף שבועי של שיעור ההעברה לנציג מראה מגמה. מספר בודד לא אומר הרבה.</div>
+<div class="mistake">לתת ל-Claude "להעריך" מספרים כשהלוג חלקי. לכן בהוראות כתוב במפורש: "אם חסר נתון, כתוב null". אפשר גם לספור את השורות במודול של Make, ואז Claude כותב רק את הסיכום.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">7</span><h3>בונוס</h3></div>
+<p>הממצא הטיפוסי: המשימה עצמה מהירה יותר עם Claude, אבל עובד חדש לא יגיע לאותה תוצאה בלי <b>תבנית</b> או <b>Skill</b>. זה החלק שהופך הצלחה אישית להצלחה ארגונית: אורזים את מה שעובד, כדי שכל הצוות יוכל להשתמש בו.</p></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 11 · פתרון</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+</script>
+</body>
+</html>

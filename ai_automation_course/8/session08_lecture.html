@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 8: בסיסי ידע חכמים ו-RAG · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* before-after */
+.ba{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ba .card{position:relative}
+.ba .lbl{position:absolute;top:-10px;right:16px;font-size:12px;font-weight:800;color:#fff;border-radius:7px;padding:1px 9px}
+.bub{border-radius:14px;padding:10px 14px;font-size:15px;margin-top:8px}
+.bub.u{background:var(--surface-2)}
+.bub.c{background:color-mix(in srgb,var(--claude) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent)}
+.cite{display:inline-block;font-size:12px;font-weight:800;color:var(--p5);background:color-mix(in srgb,var(--p5) 12%,transparent);border-radius:6px;padding:0 6px;margin-inline-start:3px;cursor:help}
+/* chunking */
+.ck-ctrl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:12px}
+.sl{display:grid;grid-template-columns:110px minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:14.5px}
+.sl input{width:100%;accent-color:var(--accent)}
+.sl .v{font-weight:800;text-align:center}
+.doc{line-height:2.05;font-size:15px;padding:14px 16px;border-radius:14px;background:var(--surface-2)}
+.doc span.ch{border-radius:5px;padding:2px 0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.doc span.ov{text-decoration:underline wavy;text-decoration-color:var(--ink-2)}
+.ck-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ck-stats span{background:var(--surface-2);border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700}
+.ck-note{margin-top:8px;font-size:14.5px;font-weight:700}
+/* embeddings */
+.em{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+.em svg{width:100%;height:auto;display:block;background:var(--surface-2);border-radius:14px}
+.em .q{display:flex;flex-direction:column;gap:6px}
+.em .q button{text-align:right;font:inherit;font-size:14.5px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 12px;cursor:pointer}
+.em .q button.on{border-color:var(--claude)}
+.hits{margin-top:10px;display:grid;gap:6px}
+.hits div{display:grid;grid-template-columns:28px minmax(0,1fr) 54px;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface-2);font-size:14px}
+.hits b.r{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--claude);color:#fff;font-size:12.5px}
+.hits .sc{font-weight:800;direction:ltr;text-align:left}
+.kw{font-size:13.5px;margin-top:8px;padding:8px 12px;border-radius:10px;border:1px dashed var(--line)}
+/* rag pipeline */
+.rg-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;direction:ltr}
+.rg-steps div{padding:10px 8px;border-radius:12px;border:2px solid var(--line);text-align:center;font-size:13.5px;font-weight:700;transition:.3s;direction:rtl;background:var(--surface)}
+.rg-steps div.on{border-color:var(--claude);box-shadow:0 0 0 4px color-mix(in srgb,var(--claude) 20%,transparent)}
+.rg-steps div.done{border-color:color-mix(in srgb,var(--claude) 45%,var(--line))}
+.rg-steps .ic{font-size:20px;display:block}
+.rg-view{margin-top:12px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px}
+.prompt{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-size:13.5px;white-space:pre-wrap;min-height:220px;unicode-bidi:plaintext}
+.prompt .ctx{color:#fcd34d}
+.ans{border-radius:12px;padding:12px 14px;font-size:15px;min-height:220px;background:color-mix(in srgb,var(--claude) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent)}
+/* chooser */
+.ch3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ch3 .card{transition:.3s;opacity:.55}
+.ch3 .card.rec{opacity:1;border-color:var(--claude);box-shadow:0 0 0 3px color-mix(in srgb,var(--claude) 22%,transparent)}
+.ch3 h4{display:flex;justify-content:space-between}
+.ch3 ul{margin:6px 0 0;padding-inline-start:18px;font-size:14.5px}
+.chq{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.chq label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:4px}
+.chq select{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+@media (max-width:860px){.ba,.em,.rg-view,.ch3,.chq,.ck-ctrl{grid-template-columns:minmax(0,1fr)}.rg-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 8</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>בסיסי ידע חכמים ו-RAG</h1>
+  <p class="sub">מלמדים את Claude את הידע של העסק: איך מארגנים מסמכים, איך הוא מוצא את הקטע הנכון, ואיך עונים עם מקור במקום לנחש.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session08_lecture.html" class="on">🎓 הרצאה</a><a href="session08_practice.html" class="">🛠️ תרגול</a><a href="session08_solution.html" class="">✅ פתרון</a><a href="session08_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות · שלב 3: AI מתקדם</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--claude)"><div class="t">0:00–0:10</div><b>למה צריך בסיס ידע</b><span>מ"אבדוק ואחזור אלייך" לתשובה עם מקור</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:10–0:35</div><b>חלוקה לקטעים ו-Embeddings</b><span>איך מוצאים את הקטע הנכון</span></div>
+    <div class="ag" style="--c:var(--p5)"><div class="t">0:35–1:00</div><b>RAG ובחירת גישה</b><span>Projects, הכול בהקשר, או RAG</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול</b><span>בסיס ידע ב-Project, וחיפוש בידע מתוך Make</span></div>
+  </div>
+</section>
+
+<section class="blk" id="why">
+  <div class="kicker">חלק 1 · למה</div>
+  <h2>אותה שאלה, עם בסיס ידע ובלעדיו</h2>
+  <p class="lead">במפגש 5, Claude כתב "אבדוק ואחזור אלייך", כי הוא לא ידע מה יש במלאי. במקרה גרוע יותר הוא ממציא. בסיס ידע נותן לו גישה למידע של העסק, והוא עונה לפיו, ומציין מאיפה המידע הגיע.</p>
+  <div class="ba">
+    <div class="card"><span class="lbl" style="background:var(--p3)">בלי בסיס ידע</span><div class="bub u">יש את שולחן אלון 180 בצבע אגוז? כמה זמן אספקה?</div><div class="bub c">כן! שולחן אלון 180 זמין במגוון גוונים, כולל אגוז, ומגיע תוך 3–5 ימי עסקים.</div><div class="muted" style="font-size:14px;margin-top:8px">⚠️ נשמע מצוין, אבל הכול מומצא: זמן האספקה, הזמינות, וגם "מגוון גוונים".</div></div>
+    <div class="card"><span class="lbl" style="background:var(--good)">עם בסיס ידע</span><div class="bub u">יש את שולחן אלון 180 בצבע אגוז? כמה זמן אספקה?</div><div class="bub c">כן, שולחן אלון 180 מגיע בשני גוונים: טבעי ואגוז<span class="cite" title="קטלוג · TBL-OAK-180">1</span>. זמן הייצור הוא כ-10 ימי עסקים, ואחריו משלוח בתיאום טלפוני, כי מדובר ברהיט גדול<span class="cite" title="מדיניות · משלוחים">2</span>.</div><div class="muted" style="font-size:14px;margin-top:8px">✓ כל עובדה מגיעה ממקור: 1 = קטלוג, 2 = מדיניות המשלוחים. (העבירו את העכבר על המספרים.)</div></div>
+  </div>
+</section>
+
+<section class="blk" id="chunk">
+  <div class="kicker">חלק 2 · חלוקה לקטעים</div>
+  <h2>חותכים את הידע לקטעים</h2>
+  <p class="lead">כשבסיס הידע גדול, לא שולחים את כולו בכל שאלה. מחלקים אותו ל<b>קטעים</b> (chunks), ושולפים רק את הרלוונטיים. גודל הקטע משנה: קטע גדול מדי מכניס הרבה רעש, וקטע קטן מדי מאבד הקשר. <b>חפיפה</b> בין קטעים שומרת על משפטים שנחתכו באמצע.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>חלוקת מסמך המדיניות</h3></div>
+    <div class="sim-body">
+      <div class="ck-ctrl"><div class="sl"><span>גודל קטע (מילים)</span><input type="range" id="ckS" min="10" max="120" step="5" value="40"><span class="v" id="ckSv"></span></div><div class="sl"><span>חפיפה (מילים)</span><input type="range" id="ckO" min="0" max="20" value="5"><span class="v" id="ckOv"></span></div></div>
+      <div class="row" style="margin-bottom:10px"><button class="btn sm ghost" id="ckSec">חלוקה לפי כותרות (מומלץ)</button></div>
+      <div class="doc" id="ckDoc"></div>
+      <div class="ck-stats" id="ckSt"></div>
+      <div class="ck-note" id="ckN"></div>
+    </div>
+  </div>
+  <div class="callout tip"><b>הכלל המעשי</b>כשאפשר, מחלקים לפי המבנה הטבעי של המסמך: סעיף, שאלה ותשובה, או מוצר. כל קטע צריך להיות מובן גם כשקוראים אותו לבד, ולכן מוסיפים לו כותרת, למשל "מדיניות › החזרות".</div>
+</section>
+
+<section class="blk" id="embed">
+  <div class="kicker">חלק 2 · Embeddings</div>
+  <h2>חיפוש לפי משמעות, לא רק לפי מילים</h2>
+  <p class="lead"><b>Embedding</b> הופך טקסט לרשימה של מספרים (וקטור) שמייצגת את המשמעות שלו. לטקסטים עם משמעות דומה יש וקטורים קרובים, גם כשאין ביניהם אף מילה משותפת. <b>מסד נתונים וקטורי</b> שומר את הווקטורים של כל הקטעים, ומוצא מהר את הקרובים ביותר לשאלה. במפה כאן המרחק הומחש בשני ממדים. במציאות יש מאות ממדים.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>מפת המשמעות של בסיס הידע</h3></div>
+    <div class="sim-body">
+      <div class="em">
+        <div id="emMap"></div>
+        <div>
+          <b>בחרו שאלה של לקוח:</b>
+          <div class="q mt" id="emQ"></div>
+          <div class="hits" id="emH"></div>
+          <div class="kw" id="emK"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout claude"><b>Claude ו-Embeddings</b>ל-Anthropic אין כרגע מודל Embeddings משלה. בתיעוד שלה היא מפנה לספקים חיצוניים, ובעיקר ל-Voyage AI. בפועל, הרבה פלטפורמות (מסדי נתונים וקטוריים, Make, n8n) עושות את שלב ה-Embedding בשבילכם, ואתם רק מעלים מסמכים.</div>
+</section>
+
+<section class="blk" id="rag">
+  <div class="kicker">חלק 3 · RAG</div>
+  <h2>RAG: לחפש, ואז לענות</h2>
+  <p class="lead"><b>RAG</b> (Retrieval-Augmented Generation) הוא תהליך בחמישה שלבים. השאלה הופכת לווקטור, מוצאים את הקטעים הקרובים, מכניסים אותם לפרומפט, ו-Claude עונה רק לפיהם, עם ציון מקור.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">אנימציה</span><h3>שאלה אחת עוברת ב-RAG</h3></div>
+    <div class="sim-body">
+      <div class="row" style="margin-bottom:10px"><div class="seg" id="rgQ"></div><button class="btn" id="rgGo">▶ הרצה</button></div>
+      <div class="rg-steps" id="rgS"></div>
+      <div class="rg-view"><div><b style="font-size:13px;color:var(--ink-2)">הפרומפט ש-Claude מקבל</b><div class="prompt" id="rgP"></div></div><div><b style="font-size:13px;color:var(--ink-2)">התשובה</b><div class="ans" id="rgA"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="choose">
+  <div class="kicker">חלק 3 · בחירת גישה</div>
+  <h2>לא תמיד צריך RAG</h2>
+  <p class="lead">יש שלוש גישות, מהפשוטה למורכבת. ענו על שלוש השאלות, והגישה המתאימה תסומן.</p>
+  <div class="chq">
+    <div><label>כמה ידע יש?</label><select id="qSize"><option value="s">עד כ-20 עמודים</option><option value="m">עשרות עד מאות עמודים</option><option value="l">אלפי מסמכים</option></select></div>
+    <div><label>מי שואל?</label><select id="qWho"><option value="h">אנשי צוות, בצ'אט</option><option value="a">תהליך אוטומטי (Make)</option></select></div>
+    <div><label>כמה הידע משתנה?</label><select id="qUp"><option value="r">לעיתים רחוקות</option><option value="f">כל יום (מלאי, מחירים)</option></select></div>
+  </div>
+  <div class="ch3">
+    <div class="card" id="c1"><h4><span>📁 Claude Projects</span></h4><p class="muted" style="margin:0">מעלים מסמכים לפרויקט, והם זמינים בכל שיחה.</p><ul><li>בלי קוד, ומוכן בתוך דקות</li><li>מתאים לצוות שעובד בצ'אט</li><li>לא מחובר ישירות לתרחיש ב-Make</li></ul></div>
+    <div class="card" id="c2"><h4><span>📋 הכול בהקשר</span></h4><p class="muted" style="margin:0">כל הידע נכנס להוראות המערכת בכל קריאה ל-API.</p><ul><li>הכי פשוט באוטומציה</li><li>מתאים לידע קטן ויציב</li><li>יקר יותר כשהידע גדל. מטמון (Prompt caching) מוזיל את זה</li></ul></div>
+    <div class="card" id="c3"><h4><span>🔎 RAG</span></h4><p class="muted" style="margin:0">חלוקה לקטעים, חיפוש, ושליחה רק של הקטעים הרלוונטיים.</p><ul><li>מתאים לכל גודל של ידע</li><li>עדכון של קטע בודד, בלי לגעת בשאר</li><li>דורש יותר בנייה ובדיקות</li></ul></div>
+  </div>
+  <div class="callout"><b>RAG-lite לעסקים קטנים</b>בתרגול נבנה גרסה פשוטה: הידע נמצא בגיליון, עם עמודת "נושא". Claude מזהה את הנושא של השאלה, Make שולף את השורות של הנושא, ו-Claude עונה רק לפיהן. זה בלי וקטורים, אבל זה אותו עיקרון, והוא מספיק לעשרות עד מאות פריטי ידע.</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 8 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- chunking ---------- */
+const POLICY=`משלוחים: משלוח רגיל מגיע תוך 5-7 ימי עסקים, והוא חינם בהזמנה מעל 400 ש"ח. משלוח מהיר מגיע תוך 2-3 ימי עסקים בתוספת 49 ש"ח. רהיטים גדולים כמו ספות, ארונות ושולחנות אוכל מגיעים בתיאום טלפוני עם חברת ההובלה. החזרות: ניתן להחזיר מוצר שלא נפתח ולא הורכב תוך 14 יום מקבלתו. ההחזר הכספי יינתן לאמצעי התשלום המקורי תוך 10 ימי עסקים. מוצרים שהותאמו אישית בבד, מידה או צבע מיוחד אינם ניתנים להחזרה. מוצר פגום: יש לשלוח תמונה של הפגם תוך 7 ימים מהקבלה, ונחליף את המוצר ללא עלות או נזכה במלואו. אחריות: שנה על כל הרהיטים ושלוש שנים על מזרנים. שעות שירות: א'-ה' 9:00-18:00, ו' 9:00-13:00.`;
+const COLS=['--p1','--p2','--p3','--p4','--p5','--claude'];
+const W=POLICY.split(' ');let bySec=false;
+function ckR(){const s=+ckS.value,o=Math.min(+ckO.value,s-1);document.getElementById('ckSv').textContent=s;document.getElementById('ckOv').textContent=o;
+ let chunks=[];
+ if(bySec){const secs=POLICY.split(/(?=משלוחים:|החזרות:|מוצר פגום:|אחריות:|שעות שירות:)/);let i=0;secs.forEach(x=>{const n=x.trim().split(' ').length;chunks.push([i,i+n]);i+=n;});}
+ else{for(let i=0;i<W.length;i+=s-o){chunks.push([i,Math.min(W.length,i+s)]);if(i+s>=W.length)break;}}
+ const owner=W.map(()=>-1),ov=W.map(()=>0);chunks.forEach(([a,b],ci)=>{for(let k=a;k<b;k++){if(owner[k]===-1)owner[k]=ci;else ov[k]=1;}});
+ document.getElementById('ckDoc').innerHTML=W.map((w,k)=>`<span class="ch ${ov[k]?'ov':''}" style="background:color-mix(in srgb,var(${COLS[owner[k]%6]}) 22%,transparent)">${w}</span>`).join(' ');
+ const avg=Math.round(chunks.reduce((a,[x,y])=>a+y-x,0)/chunks.length);
+ document.getElementById('ckSt').innerHTML=`<span>${chunks.length} קטעים</span><span>ממוצע ${avg} מילים לקטע</span>${!bySec&&o?`<span>קו גלי = חפיפה</span>`:''}`;
+ const cut=!bySec&&chunks.some(([a,b])=>b<W.length&&!/[.:]$/.test(W[b-1]));
+ document.getElementById('ckN').textContent=bySec?'✓ כל קטע הוא נושא אחד שלם. כששואלים על החזרות, נשלף בדיוק סעיף ההחזרות.':s<=15?'⚠️ קטעים קטנים מדי: משפטים נחתכים, ו"14 יום" עלול להגיע בלי לדעת שמדובר בהחזרות.':s>=90?'⚠️ קטעים גדולים מדי: שאלה על החזרות תשלוף גם משלוחים ושעות שירות, וזה רעש מיותר.':cut?'הגודל סביר, אבל חלק מהקטעים נחתכים באמצע משפט. חפיפה עוזרת, וחלוקה לפי כותרות עדיפה.':'גודל סביר.';
+ document.getElementById('ckSec').classList.toggle('on',bySec);document.getElementById('ckSec').textContent=bySec?'חזרה לחלוקה לפי מספר מילים':'חלוקה לפי כותרות (מומלץ)';}
+const ckS=document.getElementById('ckS'),ckO=document.getElementById('ckO');[ckS,ckO].forEach(e=>e.oninput=()=>{bySec=false;ckR();});
+document.getElementById('ckSec').onclick=()=>{bySec=!bySec;ckR();};ckR();
+
+/* ---------- embeddings ---------- */
+const CH=[
+ ['ship','משלוחים: 5-7 ימים, חינם מעל 400',[70,60],'--p1'],
+ ['fast','משלוח מהיר: 2-3 ימים, 49 ש"ח',[105,45],'--p1'],
+ ['big','רהיטים גדולים: בתיאום טלפוני',[95,95],'--p1'],
+ ['ret','החזרות: 14 יום, לא נפתח',[300,70],'--p3'],
+ ['cust','מוצרים בהתאמה אישית: אין החזרה',[335,110],'--p3'],
+ ['def','מוצר פגום: תמונה תוך 7 ימים, החלפה',[260,180],'--p4'],
+ ['war','אחריות: שנה, ומזרנים 3 שנים',[300,225],'--p4'],
+ ['oak','שולחן אלון 180: טבעי ואגוז, ייצור 10 ימים',[90,230],'--p2'],
+ ['sofa','ספה תלת: 4 צבעי בד, 2,990 ש"ח',[135,260],'--p2'],
+ ['hours','שעות שירות וטלפון',[200,30],'--p5']
+];
+const QS=[['הספה הגיעה קרועה, מה עושים?',[270,195],'קרועה, ספה','def'],['תוך כמה זמן זה מגיע אליי?',[85,62],'זמן, מגיע','ship'],['השולחן קיים בגוון כהה?',[100,238],'גוון, כהה','oak'],['התחרטתי, אפשר לבטל ולקבל כסף?',[305,82],'התחרטתי, לבטל, כסף','ret']];
+let qI=0;
+function emR(){const q=QS[qI];const d=c=>Math.hypot(c[2][0]-q[1][0],c[2][1]-q[1][1]);const rk=[...CH].sort((a,b)=>d(a)-d(b)).slice(0,3);const sim=c=>Math.max(0,1-d(c)/300);
+ let s=`<svg viewBox="0 0 400 290" direction="ltr" style="direction:ltr" font-family="Heebo">`;
+ rk.forEach(c=>s+=`<line x1="${q[1][0]}" y1="${q[1][1]}" x2="${c[2][0]}" y2="${c[2][1]}" stroke="var(--claude)" stroke-width="2" stroke-dasharray="4 4"/>`);
+ CH.forEach(c=>{const top=rk.includes(c);s+=`<circle cx="${c[2][0]}" cy="${c[2][1]}" r="${top?9:6}" fill="var(${c[3]})" opacity="${top?1:.55}"/><text x="${c[2][0]}" y="${c[2][1]-12}" font-size="10.5" text-anchor="middle" fill="var(--ink-2)">${c[1].split(':')[0]}</text>`;});
+ s+=`<circle cx="${q[1][0]}" cy="${q[1][1]}" r="11" fill="var(--claude)" stroke="var(--surface)" stroke-width="3"/><text x="${q[1][0]}" y="${q[1][1]+4}" font-size="11" text-anchor="middle" fill="#fff">?</text>`;
+ s+=`<text x="12" y="280" font-size="11" fill="var(--ink-2)">משלוחים · מוצרים</text><text x="388" y="280" font-size="11" text-anchor="end" fill="var(--ink-2)">החזרות · פגמים · אחריות</text></svg>`;
+ document.getElementById('emMap').innerHTML=s;
+ document.getElementById('emQ').innerHTML=QS.map((x,i)=>`<button class="${i===qI?'on':''}" data-i="${i}">${x[0]}</button>`).join('');
+ document.querySelectorAll('#emQ button').forEach(b=>b.onclick=()=>{qI=+b.dataset.i;emR();});
+ document.getElementById('emH').innerHTML=rk.map((c,i)=>`<div><b class="r">${i+1}</b><span>${c[1]}</span><span class="sc">${sim(c).toFixed(2)}</span></div>`).join('');
+ const best=CH.find(c=>c[0]===q[3]);document.getElementById('emK').innerHTML=`<b>חיפוש לפי מילים:</b> המילים "${q[2]}" לא מופיעות בקטע "${best[1].split(':')[0]}". חיפוש רגיל היה מפספס אותו, וחיפוש לפי משמעות מצא אותו ראשון.`;}
+emR();
+
+/* ---------- RAG ---------- */
+const RQ=[
+ {q:'יש את שולחן אלון 180 באגוז? כמה זמן אספקה?',ctx:[['1','קטלוג › TBL-OAK-180','שולחן אלון 180 ס"מ. גוונים: טבעי, אגוז. זמן ייצור: 10 ימי עסקים. מחיר: 2,490 ש"ח.'],['2','מדיניות › משלוחים','רהיטים גדולים כמו ספות, ארונות ושולחנות אוכל מגיעים בתיאום טלפוני עם חברת ההובלה.'],['3','מדיניות › משלוחים','משלוח רגיל 5-7 ימי עסקים, חינם בהזמנה מעל 400 ש"ח.']],a:'כן! שולחן אלון 180 מגיע גם בגוון אגוז [1]. זמן הייצור הוא כ-10 ימי עסקים [1], ואחריו מתאמים איתך טלפונית את מועד ההובלה, כי זה רהיט גדול [2]. המשלוח בחינם, כי ההזמנה מעל 400 ש"ח [3].'},
+ {q:'יש לכם סניף בחיפה?',ctx:[['1','מדיניות › שעות שירות','א\'-ה\' 9:00-18:00, ו\' 9:00-13:00. טלפון 03-5551234.'],['2','מדיניות › משלוחים','משלוח רגיל 5-7 ימי עסקים, חינם בהזמנה מעל 400 ש"ח.'],['3','שאלות נפוצות › איסוף','אין אפשרות לאיסוף עצמי בשלב זה.']],a:'אין לי מידע על סניפים 🙂 אנחנו חנות מקוונת, ואנחנו שולחים לכל הארץ: משלוח רגיל מגיע תוך 5-7 ימי עסקים, וחינם מעל 400 ש"ח [2]. לשאלות נוספות אפשר להתקשר ל-03-5551234 [1].'}
+];
+const RS=[['❓','שאלה'],['🔢','Embedding'],['🔎','חיפוש (3 קטעים)'],['🧩','בניית הפרומפט'],['✳️','תשובה עם מקורות']];
+let rqI=0,rgT=null;
+function rgDraw(st){document.getElementById('rgS').innerHTML=RS.map(([ic,n],i)=>`<div class="${i===st?'on':''} ${i<st?'done':''}"><span class="ic">${ic}</span>${n}</div>`).join('');
+ const r=RQ[rqI],P=document.getElementById('rgP'),A=document.getElementById('rgA');
+ const sys='SYSTEM: ענה רק לפי הקטעים שבתוך <context>. אחרי כל עובדה, ציין את מספר הקטע בסוגריים מרובעים. אם אין בקטעים תשובה, אמור זאת והפנה לטלפון.\n\n';
+ if(st<0){P.textContent='';A.textContent='';return;}
+ if(st===0)P.textContent='USER: '+r.q;
+ if(st===1)P.textContent='USER: '+r.q+'\n\n→ embedding: [0.021, -0.338, 0.117, … 1024 מספרים]';
+ if(st===2)P.innerHTML=esc('USER: '+r.q+'\n\n→ חיפוש במסד הווקטורי:\n')+r.ctx.map(([n,s])=>`  ✓ קטע ${n}: ${s}`).join('\n');
+ if(st>=3)P.innerHTML=esc(sys)+'<span class="ctx">'+esc('<context>\n'+r.ctx.map(([n,s,t])=>`[${n}] (${s}) ${t}`).join('\n')+'\n</context>')+'</span>\n\n'+esc('USER: '+r.q);
+ A.innerHTML=st>=4?r.a.replace(/\[(\d)\]/g,(m,n)=>`<span class="cite" title="${r.ctx[n-1][1]}">${n}</span>`):'';}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function rgSeg(){document.getElementById('rgQ').innerHTML=RQ.map((x,i)=>`<button class="${i===rqI?'on':''}" data-i="${i}">${i?'שאלה שאין לה תשובה':'שאלה רגילה'}</button>`).join('');
+ document.querySelectorAll('#rgQ button').forEach(b=>b.onclick=()=>{rqI=+b.dataset.i;clearInterval(rgT);rgSeg();rgDraw(-1);});}
+document.getElementById('rgGo').onclick=()=>{clearInterval(rgT);let st=0;rgDraw(0);rgT=setInterval(()=>{st++;rgDraw(st);if(st>=4)clearInterval(rgT);},1200);};
+rgSeg();rgDraw(-1);
+
+/* ---------- chooser ---------- */
+function chR(){const s=qSize.value,w=qWho.value,u=qUp.value;let r;
+ if(w==='h'&&s!=='l')r='c1';else if(s==='s'&&u==='r')r='c2';else r='c3';
+ ['c1','c2','c3'].forEach(id=>document.getElementById(id).classList.toggle('rec',id===r));}
+const qSize=document.getElementById('qSize'),qWho=document.getElementById('qWho'),qUp=document.getElementById('qUp');[qSize,qWho,qUp].forEach(e=>e.onchange=chR);chR();
+</script>
+</body>
+</html>

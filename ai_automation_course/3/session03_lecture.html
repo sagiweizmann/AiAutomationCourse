@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 3: יסודות טכניים: JSON, API ו-Webhooks · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.en-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* json explorer */
+.jx2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.jtree{background:var(--code-bg);color:var(--code-ink);border-radius:16px;padding:16px 18px;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.85;direction:ltr;text-align:left;overflow-x:auto}
+.jtree .k{color:#a5b4fc;cursor:pointer;border-radius:4px;padding:0 2px}
+.jtree .k:hover{background:rgba(165,180,252,.18)}
+.jtree .k.sel{background:#a5b4fc;color:#16142a}
+.jtree .s{color:#fcd34d}.jtree .n{color:#5eead4}.jtree .b{color:#f9a8d4}.jtree .z{color:#94a3b8}
+.jtree .jr{white-space:pre}
+.jinfo{padding:18px;border-radius:16px;background:var(--surface-2)}
+.jpath{direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0 10px;word-break:break-all}
+.types{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.types span{font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.types span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chal{margin-top:12px;padding:12px 14px;border-radius:12px;border:2px dashed var(--accent)}
+.chal .res{font-weight:800;margin-top:4px}
+/* validator */
+.val{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.val textarea{width:100%;min-height:170px;border-radius:14px;border:2px solid var(--line);background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:13.5px;padding:12px 14px;direction:ltr;text-align:left;resize:vertical}
+.val textarea.ok{border-color:var(--good)}.val textarea.bad{border-color:var(--bad)}
+.vres{padding:14px 16px;border-radius:14px;background:var(--surface-2);font-size:15px}
+.vres b.ok{color:var(--good)}.vres b.bad{color:var(--bad)}
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:12px;align-items:stretch}
+.pg-col{display:flex;flex-direction:column;gap:10px}
+.pg label{font-size:13px;font-weight:700;color:var(--ink-2)}
+.pg select,.pg textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.pg textarea{font-family:"JetBrains Mono",monospace;font-size:13px;min-height:96px;direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-ink)}
+.raw{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;min-height:90px}
+.raw .m{color:#fcd34d;font-weight:700}.raw .h{color:#a5b4fc}
+.wire{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.wire .line{position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+.pkt{position:relative;z-index:1;font-size:26px;transition:transform .7s ease-in-out,opacity .3s;opacity:0}
+.node{font-size:13px;font-weight:800;color:var(--ink-2);text-align:center}
+.status{display:inline-flex;gap:8px;align-items:center;font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;direction:ltr}
+.status.s2{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.status.s4{background:color-mix(in srgb,var(--p4) 20%,transparent);color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+.status.s5{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.resp-expl{font-size:14px;color:var(--ink-2)}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;cursor:pointer}
+/* status codes */
+.codes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.code{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c)}
+.code b{font-family:"JetBrains Mono",monospace;font-size:20px;color:var(--c)}
+.code div{font-weight:700;margin:2px 0}
+.code span{font-size:13.5px;color:var(--ink-2)}
+/* oauth */
+.oa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.actor{padding:16px;border-radius:16px;border:2px solid var(--line);text-align:center;transition:.3s;background:var(--surface)}
+.actor .e{font-size:30px}
+.actor.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+.oa-step{padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:76px}
+.oa-step b{color:var(--accent)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* polling vs webhook */
+.pw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lane{padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.lane h4{display:flex;justify-content:space-between}
+.track{position:relative;height:120px;border-radius:12px;background:var(--surface-2);margin:10px 0;overflow:hidden}
+.track .srv,.track .cli{position:absolute;top:8px;bottom:8px;width:64px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800;text-align:center;background:var(--surface);border:1px solid var(--line)}
+.track .srv{right:8px}.track .cli{left:8px}
+.msg{position:absolute;top:50%;font-size:18px;transform:translateY(-50%);transition:left .6s linear}
+.lane .st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.lane .st div{padding:8px;border-radius:10px;background:var(--surface-2)}
+.lane .st b{display:block;font-family:"Secular One";font-size:20px}
+.lane .st span{font-size:12px;color:var(--ink-2)}
+/* claude api */
+.ca{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.ca label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-top:8px}
+.ca textarea,.ca select{width:100%;font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px 10px}
+.ca textarea{min-height:70px;resize:vertical}
+.ca .rq{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;min-height:120px}
+.ca .rq .hl{background:#fcd34d;color:#16142a;border-radius:4px;padding:0 3px}
+@media (max-width:860px){.jx2,.val,.ca,.pw,.keys{grid-template-columns:minmax(0,1fr)}.pg{grid-template-columns:minmax(0,1fr)}.wire{min-height:70px}.wire .line{top:0;bottom:0;left:50%;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line) 0 8px,transparent 8px 14px)}.codes{grid-template-columns:repeat(2,minmax(0,1fr))}.oa{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.codes{grid-template-columns:minmax(0,1fr)}.actor{padding:10px 6px}.actor .e{font-size:22px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 3</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>יסודות טכניים: JSON, API ו-Webhooks</h1>
+  <p class="sub">איך מערכות מדברות זו עם זו: באיזה פורמט הן מעבירות נתונים, איך שולחים בקשה ומבינים את התשובה, ואיך מתחברים ל-Claude דרך API.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session03_lecture.html" class="on">🎓 הרצאה</a><a href="session03_practice.html" class="">🛠️ תרגול</a><a href="session03_solution.html" class="">✅ פתרון</a><a href="session03_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:15</div><b>JSON</b><span>השפה שבה מערכות מעבירות נתונים</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:15–0:35</div><b>API ו-HTTP</b><span>בקשה, תשובה, שיטות וקודי סטטוס</span></div>
+    <div class="ag" style="--c:var(--p3)"><div class="t">0:35–1:00</div><b>אבטחה, Webhooks ו-Claude API</b><span>מפתחות, OAuth, ותקשורת יזומה</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול ב-Postman</b><span>APIs ציבוריים, Webhook וקריאה ל-Claude</span></div>
+  </div>
+</section>
+
+<section class="blk" id="json">
+  <div class="kicker">חלק 1 · JSON</div>
+  <h2>JSON: נתונים שגם אדם וגם מכונה יכולים לקרוא</h2>
+  <p class="lead">JSON בנוי מזוגות של <b>מפתח: ערך</b>. ערך יכול להיות טקסט, מספר, אמת או שקר, ריק (null), אובייקט (סוגריים מסולסלים) או מערך, כלומר רשימה (סוגריים מרובעים). ב-Make מגיעים לכל ערך לפי <b>הנתיב</b> שלו. לחצו על מפתח כדי לראות את הנתיב שלו.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>סייר JSON: הזמנה מ"בית ועיצוב"</h3></div>
+    <div class="sim-body">
+      <div class="jx2">
+        <div class="jtree" id="jtree"></div>
+        <div class="jinfo">
+          <b>הנתיב</b><div class="jpath" id="jpath">לחצו על מפתח</div>
+          <b>הערך</b><div class="jpath" id="jval">–</div>
+          <b>הסוג</b><div class="types" id="jtypes"></div>
+          <div class="chal"><b>אתגר:</b> <span id="chQ"></span><div class="res" id="chR"></div><button class="btn sm ghost" id="chN" style="margin-top:6px">אתגר הבא ←</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sim mt">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>בודק JSON: מצאו את הטעות</h3></div>
+    <div class="sim-body">
+      <div class="row" style="margin-bottom:10px"><button class="btn sm ghost" data-bad="0">פסיק חסר</button><button class="btn sm ghost" data-bad="1">גרש במקום מירכאות</button><button class="btn sm ghost" data-bad="2">פסיק מיותר בסוף</button><button class="btn sm ghost" data-bad="3">מפתח בלי מירכאות</button><button class="btn sm" data-bad="4">JSON תקין</button></div>
+      <div class="val"><textarea id="valIn" spellcheck="false"></textarea><div class="vres" id="valRes"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="api">
+  <div class="kicker">חלק 2 · API</div>
+  <h2>API: מלצר בין שתי מערכות</h2>
+  <p class="lead">API הוא הדרך המוסדרת שבה מערכת אחת מבקשת משהו ממערכת אחרת. כמו במסעדה, הלקוח (Make) לא נכנס למטבח (מסד הנתונים). הוא מוסר הזמנה למלצר (ה-API), והמלצר חוזר עם מנה (התשובה). כל בקשה כוללת <b>שיטה</b>, <b>כתובת</b>, <b>כותרות</b> (Headers) ולפעמים גם <b>גוף</b> (Body).</p>
+  <div class="tbl"><table>
+    <tr><th>שיטה</th><th>מה היא עושה</th><th>דוגמה ב"בית ועיצוב"</th></tr>
+    <tr><td><code>GET</code></td><td>קריאת נתונים</td><td>להביא את פרטי הזמנה 48213</td></tr>
+    <tr><td><code>POST</code></td><td>יצירת רשומה חדשה</td><td>ליצור הזמנה חדשה או ליד חדש</td></tr>
+    <tr><td><code>PUT / PATCH</code></td><td>עדכון רשומה קיימת</td><td>לשנות את סטטוס ההזמנה ל"נשלחה"</td></tr>
+    <tr><td><code>DELETE</code></td><td>מחיקה</td><td>לבטל הזמנה</td></tr>
+  </table></div>
+
+  <div class="sim mt">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>מגרש משחקים: ה-API של "בית ועיצוב"</h3></div>
+    <div class="sim-body">
+      <div class="pg">
+        <div class="pg-col">
+          <div><label>שיטה</label><select id="pgM"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select></div>
+          <div><label>כתובת (Endpoint)</label><select id="pgP"><option value="/orders">/orders · כל ההזמנות</option><option value="/orders/48213">/orders/48213 · הזמנה קיימת</option><option value="/orders/99999">/orders/99999 · הזמנה שלא קיימת</option></select></div>
+          <label class="chk"><input type="checkbox" id="pgK" checked> לשלוח מפתח API בכותרות</label>
+          <div><label>גוף הבקשה (POST / PUT)</label><textarea id="pgB" spellcheck="false">{
+  "customer": "נועה כהן",
+  "product": "שולחן אלון",
+  "total": 2490
+}</textarea></div>
+          <button class="btn" id="pgSend">שליחת הבקשה ←</button>
+          <div><label>כך נראית הבקשה בפועל</label><div class="raw" id="pgRaw"></div></div>
+        </div>
+        <div class="wire"><div class="line"></div><div class="node">Make<br>(לקוח)</div><div class="pkt" id="pkt">✉️</div><div class="node">API<br>(שרת)</div></div>
+        <div class="pg-col">
+          <label>התשובה</label>
+          <div><span class="status" id="pgS">–</span></div>
+          <div class="resp-expl" id="pgE">שלחו בקשה כדי לראות תשובה.</div>
+          <div class="raw" id="pgR" style="min-height:220px"></div>
+        </div>
+      </div>
+      <div class="muted mt" style="font-size:14px">נסו: בקשה בלי מפתח · הזמנה שלא קיימת · POST עם JSON שבור · POST בלי השדה customer · הרבה בקשות ברצף</div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="codes">
+  <div class="kicker">חלק 2 · קודי סטטוס</div>
+  <h2>הקוד בתשובה אומר מה קרה</h2>
+  <p class="lead">קודים שמתחילים ב-2 אומרים שהכול תקין. קודים שמתחילים ב-4 אומרים שהבעיה בבקשה שלנו. קודים שמתחילים ב-5 אומרים שהבעיה בשרת. באוטומציה, הקוד קובע מה התהליך עושה הלאה.</p>
+  <div class="codes">
+    <div class="code" style="--c:var(--good)"><b>200</b><div>OK</div><span>הבקשה הצליחה, והנתונים בגוף התשובה</span></div>
+    <div class="code" style="--c:var(--good)"><b>201</b><div>Created</div><span>נוצרה רשומה חדשה (בדרך כלל אחרי POST)</span></div>
+    <div class="code" style="--c:var(--p4)"><b>400</b><div>Bad Request</div><span>הבקשה לא תקינה: JSON שבור או שדה חסר</span></div>
+    <div class="code" style="--c:var(--p4)"><b>401</b><div>Unauthorized</div><span>אין מפתח, או שהמפתח לא נכון</span></div>
+    <div class="code" style="--c:var(--p4)"><b>403</b><div>Forbidden</div><span>מזוהים, אבל אין לכם הרשאה לפעולה הזו</span></div>
+    <div class="code" style="--c:var(--p4)"><b>404</b><div>Not Found</div><span>הכתובת או הרשומה לא קיימות</span></div>
+    <div class="code" style="--c:var(--p4)"><b>429</b><div>Too Many Requests</div><span>יותר מדי בקשות. מחכים ומנסים שוב</span></div>
+    <div class="code" style="--c:var(--bad)"><b>500</b><div>Server Error</div><span>תקלה בצד השרת. לרוב כדאי לנסות שוב מאוחר יותר</span></div>
+  </div>
+</section>
+
+<section class="blk" id="auth">
+  <div class="kicker">חלק 3 · אבטחה</div>
+  <h2>איך ה-API יודע מי אתם: מפתח API ו-OAuth</h2>
+  <div class="keys">
+    <div class="card"><h4>🔑 מפתח API</h4><p class="muted" style="margin:0">מחרוזת סודית שנשלחת בכותרת של כל בקשה. היא כמו מפתח לבניין: מי שמחזיק בה יכול להיכנס. Claude API עובד כך.</p><pre>x-api-key: sk-ant-•••••••••</pre></div>
+    <div class="card"><h4>🎫 OAuth</h4><p class="muted" style="margin:0">המשתמש מאשר לאפליקציה גישה מוגבלת לחשבון שלו, בלי למסור לה את הסיסמה. זה כמו מפתח שירות שמקבל החניון: מתניע את הרכב, אבל לא פותח את תא המטען. כך Make מתחבר ל-Gmail או ל-Google Sheets.</p></div>
+  </div>
+  <div class="sim mt">
+    <div class="sim-head"><span class="tag">אנימציה</span><h3>OAuth צעד אחרי צעד: Make מתחבר ל-Google Sheets</h3></div>
+    <div class="sim-body">
+      <div class="oa"><div class="actor" id="a0"><div class="e">🙋</div><b>אתם</b></div><div class="actor" id="a1"><div class="e">⚙️</div><b>Make</b></div><div class="actor" id="a2"><div class="e">🟩</div><b>Google</b></div></div>
+      <div class="oa-step" id="oaStep"></div>
+      <div class="dots" id="oaDots"></div>
+      <div class="row mt" style="justify-content:center"><button class="btn ghost" id="oaPrev">→ הקודם</button><button class="btn" id="oaNext">הבא ←</button></div>
+    </div>
+  </div>
+  <div class="callout warn"><b>מפתח API הוא כמו סיסמה</b>לא מדביקים אותו במסמך משותף, בצילום מסך או בקבוצת וואטסאפ. שומרים אותו במקום אחד מאובטח, מגדירים מגבלת הוצאה בחשבון, ואם הוא דלף, מבטלים אותו מיד ויוצרים חדש.</div>
+</section>
+
+<section class="blk" id="webhooks">
+  <div class="kicker">חלק 3 · Webhooks</div>
+  <h2>"יש משהו חדש?" מול "אני אודיע לך"</h2>
+  <p class="lead">יש שתי דרכים לדעת שקרה משהו חדש. <b>Polling</b>: שואלים את המערכת שוב ושוב אם יש משהו חדש. <b>Webhook</b>: המערכת שולחת הודעה לכתובת שלנו ברגע שמשהו קורה. הפעילו את שתי הדרכים ותראו את ההבדל.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>Polling מול Webhook: 5 לידים חדשים בדקה אחת</h3></div>
+    <div class="sim-body">
+      <div class="row" style="margin-bottom:12px"><button class="btn" id="pwGo">▶ הפעלה</button><span class="muted" id="pwClock">0 שניות</span></div>
+      <div class="pw">
+        <div class="lane"><h4><span>🔁 Polling (כל 15 שניות)</span></h4><div class="track" id="tP"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="pReq">0</b><span>בקשות</span></div><div><b id="pEmpty">0</b><span>תשובות ריקות</span></div><div><b id="pLat">0</b><span>המתנה ממוצעת (שנ')</span></div></div></div>
+        <div class="lane"><h4><span>⚡ Webhook</span></h4><div class="track" id="tW"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="wReq">0</b><span>הודעות</span></div><div><b id="wEmpty">0</b><span>תשובות ריקות</span></div><div><b id="wLat">0</b><span>המתנה ממוצעת (שנ')</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout tip"><b>מתי משתמשים במה?</b>כשהמערכת תומכת ב-Webhook, משתמשים בו: הוא מהיר יותר וחוסך פעולות (ב-Make משלמים לפי פעולות). כשהיא לא תומכת, Make בודק בעצמו כל כמה דקות, כלומר עושה Polling.</div>
+</section>
+
+<section class="blk" id="claudeapi">
+  <div class="kicker">חלק 3 · Claude API</div>
+  <h2>הקריאה הראשונה ל-Claude</h2>
+  <p class="lead">במפגש 1 עבדנו עם Claude בצ'אט. דרך ה-API, Make (או כל מערכת אחרת) שולח ל-Claude בקשה ומקבל תשובה בפורמט JSON, בלי שאדם יושב מול המסך. ערכו את השדות, צפו בבקשה שנבנית, ושלחו.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>בונה בקשות ל-Claude API</h3></div>
+    <div class="sim-body">
+      <div class="ca">
+        <div>
+          <label>model: איזה מודל (את השם המדויק לוקחים מהתיעוד)</label><select id="caM"><option value="claude-haiku-5-5">Haiku: מהיר וחסכוני</option><option value="claude-sonnet-5-5" selected>Sonnet: מאוזן</option><option value="claude-opus-5-5">Opus: הכי חזק</option></select>
+          <label>max_tokens: האורך המקסימלי של התשובה</label><select id="caT"><option>100</option><option selected>300</option><option>1000</option></select>
+          <label>system: הוראות קבועות (כמו הוראות של Project)</label><textarea id="caS">אתה מחלץ נתונים מפניות לקוחות של "בית ועיצוב". החזר JSON בלבד עם השדות customer_name, order_id, topic.</textarea>
+          <label>messages: ההודעה של המשתמש</label><textarea id="caU">שלום, אני אבי מזרחי. הספה שהזמנתי (הזמנה 51877) הגיעה עם קרע בבד.</textarea>
+          <button class="btn mt" id="caGo">שליחה ל-Claude ←</button>
+        </div>
+        <div>
+          <label>הבקשה (POST https://api.anthropic.com/v1/messages)</label><div class="rq" id="caReq"></div>
+          <label>התשובה</label><div class="rq" id="caRes">לחצו "שליחה"</div>
+          <div class="muted" style="font-size:13.5px;margin-top:6px" id="caNote"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout claude"><b>הנתיב שחשוב לזכור</b>הטקסט ש-Claude כתב נמצא ב-<code>content[0].text</code>. זה השדה שנמפה ב-Make במפגשים הבאים. ב-<code>usage</code> רואים כמה טוקנים נכנסו ויצאו, ולפיהם משלמים.</div>
+  <div class="callout warn"><b>שימו לב</b>הסימולציה מדמה את מבנה הבקשה והתשובה. בתרגול תשלחו בקשה אמיתית מ-Postman. את שם המודל ואת גרסת ה-API (הכותרת <code>anthropic-version</code>) בודקים בתיעוד העדכני של Anthropic.</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 3 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- JSON explorer ---------- */
+const ORDER={order_id:48213,status:"shipped",paid:true,coupon:null,customer:{name:"מיכל לוי",phone:"052-1234567",city:"חולון"},items:[{sku:"LMP-220",name:"מנורת עמידה מעץ",price:890,qty:1},{sku:"CSH-014",name:"כרית נוי",price:79,qty:2}],total:1048};
+function typeOf(v){return v===null?'null':Array.isArray(v)?'array':typeof v==='object'?'object':typeof v==='boolean'?'boolean':typeof v==='number'?'number':'string';}
+const TNAME={string:'טקסט (string)',number:'מספר (number)',boolean:'אמת/שקר (boolean)',null:'ריק (null)',object:'אובייקט (object)',array:'מערך (array)'};
+let rows=[];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function valHtml(v){const t=typeOf(v);return t==='string'?`<span class="s">"${esc(v)}"</span>`:t==='number'?`<span class="n">${v}</span>`:t==='boolean'?`<span class="b">${v}</span>`:`<span class="z">null</span>`;}
+function walk(v,path,ind,key,last){
+  const pad='  '.repeat(ind),kh=key!==null?`<span class="k" data-p="${path}">"${key}"</span>: `:'',comma=last?'':',';const t=typeOf(v);
+  if(t==='object'||t==='array'){const ks=t==='array'?v.map((_,i)=>i):Object.keys(v);rows.push(`<div class="jr">${pad}${kh}${t==='array'?'[':'{'}</div>`);
+    ks.forEach((k,i)=>{const np=t==='array'?`${path}[${k}]`:(path?path+'.'+k:k);walk(v[k],np,ind+1,t==='array'?null:k,i===ks.length-1);});
+    rows.push(`<div class="jr">${pad}${t==='array'?']':'}'}${comma}</div>`);}
+  else rows.push(`<div class="jr">${pad}${kh}${valHtml(v)}${comma}</div>`);
+}
+walk(ORDER,'',0,null,true);document.getElementById('jtree').innerHTML=rows.join('');
+function get(p){return p.split(/\.|\[|\]/).filter(Boolean).reduce((o,k)=>o==null?undefined:o[k],ORDER);}
+function sel(p){document.querySelectorAll('#jtree .k').forEach(k=>k.classList.toggle('sel',k.dataset.p===p));const v=get(p),t=typeOf(v);
+  document.getElementById('jpath').textContent=p;document.getElementById('jval').textContent=t==='object'||t==='array'?JSON.stringify(v).slice(0,80)+(JSON.stringify(v).length>80?'…':''):JSON.stringify(v);
+  document.getElementById('jtypes').innerHTML=Object.entries(TNAME).map(([k,n])=>`<span class="${k===t?'on':''}">${n}</span>`).join('');checkCh(p);}
+document.querySelectorAll('#jtree .k').forEach(k=>k.onclick=()=>sel(k.dataset.p));
+const CH=[['איפה העיר של הלקוחה?','customer.city'],['איפה המחיר של המוצר הראשון?','items[0].price'],['איפה השם של המוצר השני?','items[1].name'],['איזה שדה אומר אם ההזמנה שולמה?','paid'],['איפה רשימת המוצרים כולה?','items']];
+let chI=0;function chShow(){document.getElementById('chQ').textContent=CH[chI][0];document.getElementById('chR').textContent='';}
+function checkCh(p){const r=document.getElementById('chR');if(p===CH[chI][1]){r.textContent='✓ נכון! הנתיב: '+p;r.style.color='var(--good)';}else{r.textContent='עדיין לא. נסו מפתח אחר';r.style.color='var(--ink-2)';}}
+document.getElementById('chN').onclick=()=>{chI=(chI+1)%CH.length;chShow();};chShow();sel('customer.name');
+
+/* ---------- validator ---------- */
+const BAD=['{\n  "name": "מיכל לוי"\n  "phone": "052-1234567"\n}',"{\n  'name': 'מיכל לוי',\n  'phone': '052-1234567'\n}",'{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n}','{\n  name: "מיכל לוי",\n  "phone": "052-1234567"\n}','{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n  "vip": true,\n  "orders": [48213, 50912]\n}'];
+const HINT=['חסר פסיק בין שני זוגות של מפתח וערך.','ב-JSON כותבים רק מירכאות כפולות ("), לא גרשים.','אחרי הזוג האחרון לא שמים פסיק.','גם המפתח צריך להיות בתוך מירכאות כפולות.'];
+let badI=-1;
+function validate(){const ta=document.getElementById('valIn'),r=document.getElementById('valRes');try{const o=JSON.parse(ta.value);ta.className='ok';r.innerHTML=`<b class="ok">✓ JSON תקין</b><br>${Object.keys(o).length} מפתחות ברמה העליונה: <span class="en-inline">${Object.keys(o).join(', ')}</span>`;}
+ catch(e){ta.className='bad';r.innerHTML=`<b class="bad">✗ JSON לא תקין</b><br><span class="en-inline" style="font-size:13px">${esc(e.message)}</span>${badI>=0&&badI<4?`<br><br><b>רמז:</b> ${HINT[badI]}`:''}<br><br><span class="muted">תקנו את הטקסט, והבדיקה תתעדכן מיד.</span>`;}}
+document.querySelectorAll('[data-bad]').forEach(b=>b.onclick=()=>{badI=+b.dataset.bad;document.getElementById('valIn').value=BAD[badI];validate();});
+document.getElementById('valIn').oninput=validate;badI=0;document.getElementById('valIn').value=BAD[0];validate();
+
+/* ---------- API playground ---------- */
+let DB=[{id:48213,customer:"מיכל לוי",product:"מנורת עמידה מעץ",status:"shipped",total:890},{id:48190,customer:"יוסי כהן",product:"שטיח סלון",status:"delivered",total:640},{id:50912,customer:"רונית שגב",product:"3 כיסאות בר",status:"processing",total:1170}];
+let hits=[];
+function rawReq(){const m=pgM.value,p=pgP.value,k=pgK.checked,hasB=m==='POST'||m==='PUT';
+  let s=`<span class="m">${m}</span> ${p} HTTP/1.1\n<span class="h">Host:</span> api.beit-veitzuv.example\n`+(k?`<span class="h">x-api-key:</span> sk-live-••••••••\n`:'')+(hasB?`<span class="h">Content-Type:</span> application/json\n\n${esc(pgB.value)}`:'');document.getElementById('pgRaw').innerHTML=s;}
+const pgM=document.getElementById('pgM'),pgP=document.getElementById('pgP'),pgK=document.getElementById('pgK'),pgB=document.getElementById('pgB');
+[pgM,pgP,pgK,pgB].forEach(e=>e.oninput=rawReq);rawReq();
+function api(m,p,k,body){
+  const now=Date.now();hits=hits.filter(t=>now-t<10000);hits.push(now);
+  if(hits.length>8)return [429,{error:"rate limit exceeded, retry in 10 seconds"},'שלחתם יותר מ-8 בקשות ב-10 שניות. השרת מבקש לחכות. ב-Make מגדירים לזה ניסיון חוזר.'];
+  if(!k)return [401,{error:"missing or invalid API key"},'בלי מפתח השרת לא יודע מי אתם, ולכן הוא מסרב.'];
+  const id=p.split('/')[2];const rec=id?DB.find(o=>String(o.id)===id):null;
+  if(m==='GET'){if(!id)return [200,DB,'קיבלנו את כל ההזמנות כמערך של אובייקטים.'];return rec?[200,rec,'קיבלנו אובייקט אחד: ההזמנה המבוקשת.']:[404,{error:"order not found"},'אין הזמנה עם המספר הזה. באוטומציה צריך להחליט מה עושים במקרה כזה.'];}
+  if(m==='POST'){if(id)return [405,{error:"method not allowed"},'אי אפשר ליצור רשומה בכתובת של רשומה קיימת. POST שולחים ל-/orders.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין. בדקו פסיקים ומירכאות.']}
+    if(!b.customer)return [400,{error:"field 'customer' is required"},'חסר שדה חובה. ה-API מגדיר אילו שדות חייבים להופיע.'];
+    const n={id:Math.max(...DB.map(o=>o.id))+1,status:"new",...b};DB.push(n);return [201,n,'נוצרה הזמנה חדשה. השרת החזיר אותה, כולל המזהה החדש (id). נסו עכשיו GET ל-/orders.'];}
+  if(m==='PUT'){if(!id)return [405,{error:"method not allowed"},'בעדכון צריך לציין איזו רשומה מעדכנים, למשל /orders/48213.'];if(!rec)return [404,{error:"order not found"},'אי אפשר לעדכן הזמנה שלא קיימת.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין.']}Object.assign(rec,b);return [200,rec,'ההזמנה עודכנה. שדות שלא שלחנו נשארו כמו שהיו.'];}
+  if(m==='DELETE'){if(!id)return [405,{error:"method not allowed"},'מוחקים רשומה אחת, ולא את כל הרשימה.'];if(!rec)return [404,{error:"order not found"},'אין מה למחוק.'];DB=DB.filter(o=>o!==rec);return [204,null,'ההזמנה נמחקה. קוד 204 אומר שהפעולה הצליחה ואין תוכן להחזיר.'];}
+}
+document.getElementById('pgSend').onclick=()=>{const pk=document.getElementById('pkt'),btn=document.getElementById('pgSend');btn.disabled=true;
+  const vert=matchMedia('(max-width:860px)').matches;
+  pk.style.transition='none';pk.style.opacity=1;pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';pk.textContent='✉️';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{pk.style.transition='';pk.style.transform=vert?'translateY(26px)':'translateX(-42px)';}));
+  setTimeout(()=>{const [c,b,e]=api(pgM.value,pgP.value,pgK.checked,pgB.value);pk.textContent=c<300?'📦':'⛔';pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';
+   setTimeout(()=>{const s=document.getElementById('pgS');s.textContent=c+' '+({200:'OK',201:'Created',204:'No Content',400:'Bad Request',401:'Unauthorized',404:'Not Found',405:'Method Not Allowed',429:'Too Many Requests'}[c]);s.className='status s'+String(c)[0];
+    document.getElementById('pgE').textContent=e;document.getElementById('pgR').textContent=b===null?'(אין גוף בתשובה)':JSON.stringify(b,null,2);pk.style.opacity=0;btn.disabled=false;},700);},750);};
+
+/* ---------- OAuth ---------- */
+const OA=[[[0,1],'<b>1. מבקשים חיבור.</b> ב-Make לוחצים "Add connection" למודול של Google Sheets.'],[[1,2],'<b>2. Make מפנה ל-Google.</b> נפתח חלון התחברות של Google, ולא של Make. Make לא רואה את הסיסמה.'],[[0,2],'<b>3. אתם מאשרים הרשאות.</b> Google מציג מה Make מבקש, למשל "לקרוא ולערוך גיליונות", ואתם לוחצים "אישור".'],[[2,1],'<b>4. Google נותן ל-Make אסימון (Token).</b> האסימון הוא מפתח מוגבל: רק להרשאות שאישרתם, ואפשר לבטל אותו בכל רגע מהגדרות החשבון.'],[[1,2],'<b>5. Make עובד עם האסימון.</b> בכל קריאה לגיליון, Make שולח את האסימון. אם תבטלו את ההרשאה ב-Google, החיבור יפסיק לעבוד.']];
+let oaI=0;function oaR(){OA[oaI][0];[0,1,2].forEach(i=>document.getElementById('a'+i).classList.toggle('on',OA[oaI][0].includes(i)));document.getElementById('oaStep').innerHTML=OA[oaI][1];
+  document.getElementById('oaDots').innerHTML=OA.map((_,i)=>`<i class="${i===oaI?'on':''}"></i>`).join('');document.getElementById('oaPrev').disabled=oaI===0;document.getElementById('oaNext').disabled=oaI===OA.length-1;}
+document.getElementById('oaNext').onclick=()=>{oaI++;oaR()};document.getElementById('oaPrev').onclick=()=>{oaI--;oaR()};oaR();
+
+/* ---------- polling vs webhook ---------- */
+const EVENTS=[4,11,29,33,52];let pwT=null;
+function fly(track,dir,ico){const el=document.createElement('div');el.className='msg';el.textContent=ico;const W=track.clientWidth;el.style.left=(dir>0?80:W-100)+'px';track.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.left=(dir>0?W-100:80)+'px';}));setTimeout(()=>el.remove(),700);}
+document.getElementById('pwGo').onclick=()=>{clearInterval(pwT);let t=0;const tP=document.getElementById('tP'),tW=document.getElementById('tW');let pReq=0,pEmpty=0,pLat=[],wLat=[],pending=[];
+  ['pReq','pEmpty','pLat','wReq','wEmpty','wLat'].forEach(i=>document.getElementById(i).textContent=0);document.getElementById('pwGo').disabled=true;
+  pwT=setInterval(()=>{t++;document.getElementById('pwClock').textContent=t+' שניות';
+    if(EVENTS.includes(t)){pending.push(t);fly(tW,-1,'⚡');wLat.push(0);document.getElementById('wReq').textContent=wLat.length;}
+    if(t%15===0){pReq++;fly(tP,1,'❓');setTimeout(()=>{if(pending.length){pending.forEach(e=>pLat.push(t-e));pending=[];fly(tP,-1,'📦');}else{pEmpty++;fly(tP,-1,'∅');}
+      document.getElementById('pReq').textContent=pReq;document.getElementById('pEmpty').textContent=pEmpty;document.getElementById('pLat').textContent=pLat.length?Math.round(pLat.reduce((a,b)=>a+b,0)/pLat.length):0;},650);}
+    if(t>=60){clearInterval(pwT);document.getElementById('pwGo').disabled=false;}
+  },160);};
+
+/* ---------- Claude API ---------- */
+const caM=document.getElementById('caM'),caT=document.getElementById('caT'),caS=document.getElementById('caS'),caU=document.getElementById('caU');
+function caBody(){return {model:caM.value,max_tokens:+caT.value,system:caS.value,messages:[{role:"user",content:caU.value}]};}
+function caReq(){document.getElementById('caReq').innerHTML=`<span style="color:#a5b4fc">x-api-key:</span> sk-ant-••••••\n<span style="color:#a5b4fc">anthropic-version:</span> 2023-06-01\n<span style="color:#a5b4fc">content-type:</span> application/json\n\n`+esc(JSON.stringify(caBody(),null,2));}
+[caM,caT,caS,caU].forEach(e=>e.oninput=caReq);caReq();
+document.getElementById('caGo').onclick=()=>{const r=document.getElementById('caRes');r.textContent='⏳ Claude חושב...';
+  setTimeout(()=>{const u=caU.value;const name=(u.match(/אני ([֐-׿]+ [֐-׿]+)/)||[])[1]||null;const oid=(u.match(/\d{5}/)||[])[0]||null;
+   const topic=/קרע|שבור|פגם|פגום/.test(u)?'defect':/לא הגיע|משלוח|מתי/.test(u)?'delivery':'other';
+   const text=JSON.stringify({customer_name:name,order_id:oid,topic});const inT=Math.round((caS.value.length+u.length)/2.2)+12,outT=Math.round(text.length/2.4);
+   const res={id:"msg_01Xk…",type:"message",role:"assistant",model:caM.value,content:[{type:"text",text}],stop_reason:"end_turn",usage:{input_tokens:inT,output_tokens:outT}};
+   let s=esc(JSON.stringify(res,null,2));s=s.replace(/("text": )(".*?[^\\]")/,'$1<span class="hl">$2</span>');r.innerHTML=s;
+   document.getElementById('caNote').textContent='החלק המודגש הוא content[0].text: ה-JSON שביקשנו, כמחרוזת. ב-Make נפרק אותו לשדות (Parse JSON). מספרי הטוקנים כאן הם הערכה לצורך ההדגמה.';},900);};
+</script>
+</body>
+</html>

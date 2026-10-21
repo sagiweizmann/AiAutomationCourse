@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 2: סיכום מפגש 2: אפיון תהליכים עסקיים · סיכום</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.road{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:s}
+.road div{counter-increment:s;padding:16px 14px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative}
+.road div::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--c);color:#fff;font-weight:800;margin-bottom:8px}
+.road b{display:block}
+.road span{font-size:14px;color:var(--ink-2)}
+.gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gl div{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.gl b{display:block}
+.gl span{font-size:14.5px;color:var(--ink-2)}
+.who3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.who3 .card{border-top:5px solid var(--c)}
+.who3 b{font-size:18px;color:var(--c)}
+.who3 ul{margin:8px 0 0;padding-inline-start:18px;font-size:15px}
+.rules{counter-reset:r;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.rules li{counter-increment:r;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.rules li::before{content:counter(r);flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:800}
+.score{display:flex;align-items:center;gap:14px;margin-top:14px}
+.score b{font-family:"Secular One";font-size:30px}
+.nextup{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;border:0}
+.nextup .e{font-size:40px}
+.nextup small{color:#cfcaf5}
+.formula{direction:ltr;text-align:center;font-family:"JetBrains Mono",monospace;font-size:14.5px;padding:12px;border-radius:12px;background:var(--surface-2);margin-top:8px}
+@media (max-width:860px){.road{grid-template-columns:repeat(2,minmax(0,1fr))}.who3,.gl{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.road{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2</b><span class="kind-badge">📌 סיכום</span></div>
+  <h1>סיכום מפגש 2: אפיון תהליכים עסקיים</h1>
+  <p class="sub">הדרך מתהליך מבולגן להחלטה מנומקת: מה לאוטומט, איך זה ייראה, וכמה זה שווה.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session02_lecture.html" class="">🎓 הרצאה</a><a href="session02_practice.html" class="">🛠️ תרגול</a><a href="session02_solution.html" class="">✅ פתרון</a><a href="session02_summary.html" class="on">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="kicker">הדרך</div>
+  <h2>חמישה צעדים מתהליך להחלטה</h2>
+  <div class="road">
+    <div style="--c:var(--p1)"><b>ראיון</b><span>עוברים על מקרה אמיתי ואחרון עם מי שעושה את העבודה</span></div>
+    <div style="--c:var(--p2)"><b>As‑Is</b><span>רשימת שלבים עם זמנים, ותרשים זרימה</span></div>
+    <div style="--c:var(--p3)"><b>כאבים ומדדים</b><span>צווארי בקבוק, טעויות והמתנות, כולם במספרים</span></div>
+    <div style="--c:var(--p4)"><b>ניקוד ו-To‑Be</b><span>מה לאוטומט, ומי עושה מה</span></div>
+    <div style="--c:var(--p5)"><b>ROI ומסמך</b><span>כמה זה שווה, בעמוד אחד שמנהל מבין</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">חלוקת העבודה ב-To‑Be</div>
+  <h2>מי עושה מה באוטומציה</h2>
+  <div class="who3">
+    <div class="card" style="--c:var(--p2)"><b>⚙️ Make</b><ul><li>מקבל טריגרים (טופס, מייל, Webhook)</li><li>מעביר נתונים בין מערכות</li><li>תנאים פשוטים ותזמון</li><li>שולח הודעות ועדכונים</li></ul></div>
+    <div class="card" style="--c:var(--claude)"><b>✳️ Claude</b><ul><li>קורא טקסט חופשי ומחלץ ממנו פרטים</li><li>מסווג ומחיל כללים</li><li>מנסח תשובות</li><li>מסמן כשהוא לא בטוח</li></ul></div>
+    <div class="card" style="--c:var(--p5)"><b>👤 אדם</b><ul><li>החלטות כספיות ורגישות</li><li>מקרים לא ברורים וחריגים</li><li>שיחות רגשיות</li><li>בקרה ושיפור של התהליך</li></ul></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">נוסחאות</div>
+  <h2>החשבון שצריך לזכור</h2>
+  <div class="formula">hours_saved = occurrences × minutes ÷ 60 × automation%</div>
+  <div class="formula">net_monthly = hours_saved × hourly_cost − tools_cost</div>
+  <div class="formula">payback_months = build_cost ÷ net_monthly</div>
+  <div class="formula">ROI_12m = (net_monthly × 12 − build_cost) ÷ build_cost × 100%</div>
+</section>
+
+<section class="blk">
+  <div class="kicker">מילון מושגים</div>
+  <h2>מושגים מהמפגש</h2>
+  <div class="gl">
+    <div><b>תהליך עסקי</b><span>רצף קבוע של פעולות, מטריגר ועד תוצאה</span></div>
+    <div><b>טריגר</b><span>האירוע שמתחיל את התהליך: טופס, מייל, שעה ביום</span></div>
+    <div><b>As‑Is</b><span>התהליך כפי שהוא מתבצע היום בפועל</span></div>
+    <div><b>To‑Be</b><span>התהליך הרצוי אחרי השינוי</span></div>
+    <div><b>צוואר בקבוק</b><span>שלב שבו העבודה נתקעת ומעכבת את כל התהליך</span></div>
+    <div><b>Mermaid</b><span>שפה פשוטה לכתיבת תרשימים כטקסט. Claude כותב אותה היטב</span></div>
+    <div><b>מטריצת הזדמנויות</b><span>ערך מול קלות, כדי להחליט מה לאוטומט קודם</span></div>
+    <div><b>ROI</b><span>החזר על ההשקעה: כמה מרוויחים ביחס לכמה שמשקיעים</span></div>
+    <div><b>החזר השקעה (Payback)</b><span>כמה חודשים לוקח עד שהחיסכון מכסה את עלות הבנייה</span></div>
+    <div><b>מסמך אפיון</b><span>עמוד אחד עם התהליך, הכאבים, הפתרון, ה-ROI והסיכונים</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">כללי אצבע</div>
+  <h2>חמישה כללים לאפיון</h2>
+  <ol class="rules">
+    <li>שואלים על המקרה האחרון, לא על "איך זה עובד בדרך כלל".</li>
+    <li>סופרים גם שלבי המתנה. שם הלקוח מחכה, ושם נוצרות הפניות החוזרות.</li>
+    <li>לא עושים אוטומציה לבלגן. קודם מסדרים את התהליך, אחר כך בונים.</li>
+    <li>מתחילים מהזדמנות שקל לבנות ושיש לה ערך גבוה, ולא מהפרויקט הכי מרשים.</li>
+    <li>מציגים למנהל חיסכון נטו, אחרי עלות הכלים, ומוסיפים במילים את התועלות שקשה למדוד.</li>
+  </ol>
+</section>
+
+<section class="blk">
+  <div class="kicker">בדיקה עצמית</div>
+  <h2>6 שאלות: מה נשאר לכם מהמפגש?</h2>
+  <div class="card q" data-a="1"><b>1. מה כדאי לבקש בראיון עם מי שמבצע את התהליך?</b><div class="opts"><button class="opt">לתאר איך התהליך עובד באופן כללי</button><button class="opt">לעבור צעד אחרי צעד על מקרה אמיתי ואחרון</button><button class="opt">לכתוב את הנוהל הרשמי</button><button class="opt">לדרג את התהליך מ-1 עד 10</button></div><div class="fb"><b>הסבר:</b> במקרה אמיתי ואחרון מתגלים השלבים שלא כתובים בשום נוהל: הבדיקות, החריגים והעבודה הכפולה.</div></div><div class="card q" data-a="1"><b>2. למה ממפים As‑Is לפני שמתכננים To‑Be?</b><div class="opts"><button class="opt">כי כך כתוב בתקן</button><button class="opt">כדי לא להפוך לאוטומטי תהליך מבולגן, ולמדוד את המצב לפני השינוי</button><button class="opt">כי Make דורש את זה</button><button class="opt">אין סיבה מיוחדת</button></div><div class="fb"><b>הסבר:</b> בלי As‑Is אין נקודת השוואה לחישוב ROI, ויש סיכוי גבוה לבנות אוטומציה לתהליך שבכלל לא צריך להתקיים.</div></div><div class="card q" data-a="2"><b>3. איזו צורה בתרשים זרימה מייצגת החלטה?</b><div class="opts"><button class="opt">מלבן</button><button class="opt">אליפסה</button><button class="opt">מעוין</button><button class="opt">גליל</button></div><div class="fb"><b>הסבר:</b> מעוין הוא שאלה של כן או לא, ומכל מעוין יוצאים שני ענפים.</div></div><div class="card q" data-a="1"><b>4. איזו משימה היא המועמדת הטובה ביותר לאוטומציה מלאה?</b><div class="opts"><button class="opt">אישור זיכוי של 5,000 ש"ח</button><button class="opt">עדכון אותם פרטים בגיליון וב-CRM</button><button class="opt">שיחה עם לקוח כועס</button><button class="opt">החלטה על מדיניות החזרות</button></div><div class="fb"><b>הסבר:</b> זו משימה תדירה, עם חוקים ברורים ונתונים דיגיטליים, ומחיר הטעות בה נמוך.</div></div><div class="card q" data-a="1"><b>5. בנייה עולה 3,000 ש"ח, והחיסכון נטו הוא 750 ש"ח בחודש. מתי ההשקעה תחזיר את עצמה?</b><div class="opts"><button class="opt">חודש</button><button class="opt">4 חודשים</button><button class="opt">7.5 חודשים</button><button class="opt">שנה</button></div><div class="fb"><b>הסבר:</b> 3,000 ÷ 750 = 4 חודשים.</div></div><div class="card q" data-a="1"><b>6. למה Claude ולא Make בודק את הזכאות להחזרה?</b><div class="opts"><button class="opt">Make לא יודע לקרוא גיליון</button><button class="opt">הבדיקה דורשת הבנה של טקסט חופשי ושל כללים, וזה מה ש-Claude עושה טוב</button><button class="opt">Claude זול יותר</button><button class="opt">אין הבדל</button></div><div class="fb"><b>הסבר:</b> Make מצוין בהעברת נתונים ובתנאים פשוטים. Claude נכנס כשצריך להבין טקסט, להחיל כללים ולנסח. כשהוא לא בטוח, הבקשה עוברת לאדם.</div></div>
+  <div class="card score"><span>הציון שלכם:</span><b id="sc">0/6</b><span class="muted" id="scm">ענו על השאלות כדי לראות</span></div>
+</section>
+
+<section class="blk">
+  <div class="card nextup"><span class="e">🔌</span><div><small>במפגש הבא · מפגש 3</small><div style="font-family:'Secular One';font-size:22px">יסודות טכניים: JSON, API ו-Webhooks</div><small>נלמד איך מערכות מדברות זו עם זו, נבצע קריאות API ראשונות ב-Postman, ונשלח קריאה ראשונה ל-Claude API.</small></div></div>
+  <div class="callout tip"><b>משימה לפני המפגש הבא</b>פתחו חשבון חינמי ב-Postman, וחשבון ב-Claude Console (מפתח API ניצור יחד במפגש). שמרו את מסמך האפיון, כי נשתמש בו בהמשך.</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 2 · סיכום</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+document.addEventListener('quizchange',()=>{const a=document.querySelectorAll('.q.answered').length;let c=0;document.querySelectorAll('.q.answered').forEach(q=>{if(!q.querySelector('.opt.no'))c++;});
+document.getElementById('sc').textContent=c+'/6';document.getElementById('scm').textContent=a<6?`ענית על ${a} מתוך 6`:(c>=5?'מצוין! אתם מוכנים למפגש הבא':c>=3?'טוב. כדאי לחזור על החלקים שטעיתם בהם':'כדאי לעבור שוב על ההרצאה');});
+</script>
+</body>
+</html>

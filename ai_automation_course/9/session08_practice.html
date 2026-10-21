@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 8: תרגול: בסיס הידע של בית ועיצוב · תרגול</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.biz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.biz .logo{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:linear-gradient(135deg,var(--p2),var(--claude))}
+.prog{position:sticky;top:52px;z-index:5;margin-top:16px}
+.prog .card{padding:10px 16px;display:flex;gap:14px;align-items:center}
+.prog .bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p2),var(--p5));transition:.4s}
+ol.steps-l li{margin-bottom:6px}
+.path{font-weight:700;background:var(--surface-2);border-radius:7px;padding:1px 8px;white-space:nowrap}
+.flowmini{display:flex;gap:6px;flex-wrap:wrap;align-items:center;direction:ltr;justify-content:flex-end;margin:6px 0 10px}
+.flowmini span{padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;background:var(--surface-2);direction:rtl}
+.flowmini span.c{background:color-mix(in srgb,var(--claude) 18%,transparent);color:var(--claude)}
+.flowmini i{font-style:normal;color:var(--ink-2)}
+.files{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.files a{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink)}
+.files a span{font-size:24px}
+.files small{display:block;color:var(--ink-2);font-size:12.5px;direction:ltr;text-align:right}
+.evt td{font-size:14px}
+.evt select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:2px 4px}
+.ev-sum{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ev-sum span{background:var(--surface-2);border-radius:999px;padding:3px 12px;font-weight:700;font-size:14px}
+.ex code{word-break:break-all}
+@media (max-width:860px){.files{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 8</b><span class="kind-badge">🛠️ תרגול</span></div>
+  <h1>תרגול: בסיס הידע של בית ועיצוב</h1>
+  <p class="sub">מנקים ידע מבולגן, בונים עוזר ב-Claude Project שעונה עם מקורות, ומחברים חיפוש בידע לתרחיש ב-Make.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session08_lecture.html" class="">🎓 הרצאה</a><a href="session08_practice.html" class="on">🛠️ תרגול</a><a href="session08_solution.html" class="">✅ פתרון</a><a href="session08_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="card biz"><div class="logo">📚</div><div><b style="font-size:19px">מה צריך לתרגול</b><div class="muted">ארבעת קבצי הידע (בתרגיל 1, מתוך התיקייה materials), חשבון Claude, Make עם חיבור ל-Claude ול-Google Sheets, ו-Postman.</div></div></div>
+  <div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/7</span></div></div>
+</section>
+<section class="blk">
+<div class="card ex" id="ex1"><div class="ex-head"><span class="ex-num">1</span><h3>ניקוי ידע עם Claude</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">קל</span></div>
+
+<p>הורידו את קבצי הידע. הקובץ <code>faq_raw.txt</code> הוא הודעה מבולגנת של דנה. בקשו מ-Claude להפוך אותה לשורות ידע מסודרות, באותו פורמט כמו <code>kb_rows.csv</code>.</p>
+<div class="files">
+<a href="materials/policy.md" download><span>📜</span><div><b>מדיניות</b><small>policy.md</small></div></a>
+<a href="materials/catalog.csv" download><span>🛋️</span><div><b>קטלוג</b><small>catalog.csv</small></div></a>
+<a href="materials/faq_raw.txt" download><span>💬</span><div><b>שאלות נפוצות (גולמי)</b><small>faq_raw.txt</small></div></a>
+<a href="materials/kb_rows.csv" download><span>📋</span><div><b>שורות ידע</b><small>kb_rows.csv</small></div></a>
+</div>
+<div class="copybox mt"><pre class="rtl">לפניך הודעה לא מסודרת של נציגת שירות, עם שאלות נפוצות של לקוחות.
+הפוך אותה לטבלת CSV עם העמודות: id, topic, title, content, source, updated
+- id: מ-KB-16 והלאה
+- topic: אחד מ-shipping, returns, defect, warranty, contact, product, payments, general
+- כל שורה עוסקת בנושא אחד בלבד, ומובנת גם כשקוראים אותה לבד
+- content: עובדות בלבד, בניסוח קצר ומקצועי. בלי "מיכל אמרה" ובלי "אולי בעתיד"
+- source: "שאלות נפוצות" · updated: 2026-10-21
+אם יש בטקסט מידע לא ודאי או סותר, כתוב אותו ברשימה נפרדת אחרי הטבלה, תחת הכותרת "לבירור".</pre></div>
+<p>בדקו את התוצאה: האם כל שורה עוסקת בנושא אחד? האם יש פריטים ברשימת "לבירור"?</p>
+<div class="deliver">קובץ CSV עם שורות ה-FAQ הנקיות, ורשימת "לבירור"</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex2"><div class="ex-head"><span class="ex-num">2</span><h3>Claude Project עם מקורות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 30 דקות</span><span class="pill">בינוני</span></div>
+
+<ol class="steps-l">
+<li>צרו ב-Claude פרויקט חדש בשם <b>"ידע - בית ועיצוב"</b>.</li>
+<li>העלו לידע של הפרויקט את <code>policy.md</code>, את <code>catalog.csv</code> ואת ה-FAQ הנקי מתרגיל 1.</li>
+<li>הדביקו בהוראות הפרויקט:</li>
+</ol>
+<div class="copybox"><pre class="rtl">אתה "נועם", העוזר של צוות השירות של "בית ועיצוב".
+ענה רק לפי הקבצים בידע של הפרויקט: policy.md, catalog.csv ושאלות נפוצות.
+- אחרי כל עובדה, ציין את המקור בסוגריים, למשל (מדיניות › החזרות) או (קטלוג › SOF-3).
+- אם אין בקבצים תשובה, כתוב: "אין לי מידע על כך בבסיס הידע", והצע לפנות ל-03-5551234. אל תשלים מידע מהידע הכללי שלך.
+- לשאלות על חישוב (סכום, ימים), הראה את החישוב.
+- עד 80 מילים, בעברית פשוטה.</pre></div>
+<p>בדקו את העוזר עם 10 השאלות. לכל שאלה סמנו את התוצאה:</p>
+<div class="tbl evt"><table id="evT"><tr><th>#</th><th>שאלה</th><th>תוצאה</th><th>יש מקור?</th></tr></table></div>
+<div class="ev-sum" id="evS"></div>
+<div class="deliver">טבלת הבדיקה המלאה, ותיקון אחד שעשיתם בהוראות בעקבותיה</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex3"><div class="ex-head"><span class="ex-num">3</span><h3>בסיס ידע בגיליון</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">קל</span></div>
+
+<ol class="steps-l">
+<li>בגיליון של "בית ועיצוב" צרו לשונית בשם <b>"ידע"</b>, וייבאו אליה את <code>kb_rows.csv</code> (קובץ ‹ ייבוא ‹ הוספה לגיליון הנוכחי).</li>
+<li>הוסיפו מתחת את השורות מתרגיל 1 (KB-16 ואילך).</li>
+<li>ודאו שבעמודה <code>topic</code> יש רק ערכים מתוך 8 הנושאים.</li>
+</ol>
+<div class="deliver">לשונית "ידע" עם כל השורות</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex4"><div class="ex-head"><span class="ex-num">4</span><h3>RAG-lite ב-Make</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 35 דקות</span><span class="pill">מאתגר</span></div>
+
+<div class="flowmini"><span class="">Webhook (question)</span><i>→</i><span class="c">Claude: נושא</span><i>→</i><span class="">Sheets · Search Rows (topic)</span><i>→</i><span class="">Text aggregator</span><i>→</i><span class="c">Claude: תשובה עם מקורות</span><i>→</i><span class="">Parse JSON</span><i>→</i><span class="">Sheets · לוג</span></div>
+<ol class="steps-l">
+<li>צרו תרחיש "שאלות ידע", שמתחיל ב-Custom webhook שמקבל <code>{"question": "..."}</code>.</li>
+<li><b>Claude 1 (סיווג):</b> מודל קטן, עם ההוראות שבהמשך. אחריו Parse JSON.</li>
+<li><span class="path">Google Sheets ‹ Search Rows</span> בלשונית "ידע", עם התנאי topic = הנושא שחזר מ-Claude. הגבילו ל-10 תוצאות.</li>
+<li><span class="path">Tools ‹ Text aggregator</span>: בשדה Source module בחרו את Search Rows. בשדה Text כתבו: <code>[id] (source) content</code>, עם מיפוי. בשדה Row separator בחרו New row.</li>
+<li><b>Claude 2 (תשובה):</b> מודל בינוני, עם ההוראות שבהמשך. בהודעה של המשתמש: השאלה. אחריו Parse JSON.</li>
+<li>שמרו בלשונית "לוג שאלות": שאלה, נושא, תשובה, cited_ids, answerable ותאריך.</li>
+</ol>
+<b>Claude 1, הוראות מערכת:</b>
+<div class="copybox"><pre class="rtl">סווג את שאלת הלקוח לנושא אחד מהרשימה:
+shipping, returns, defect, warranty, contact, product, payments, general
+החזר JSON בלבד: {"topic": "...", "product_hint": "שם מוצר אם הוזכר, אחרת null"}</pre></div>
+<b>Claude 2, הוראות מערכת:</b>
+<div class="copybox"><pre class="rtl">אתה עוזר השירות של "בית ועיצוב". ענה על שאלת הלקוח רק לפי קטעי הידע שבתוך &lt;context&gt;.
+החזר JSON בלבד:
+{"answer": "תשובה בעברית, עד 70 מילים", "cited_ids": ["KB-.."], "answerable": true/false}
+- כל עובדה בתשובה חייבת להופיע בקטעים, ואת ה-id שלה כותבים ב-cited_ids.
+- אם אין בקטעים מספיק מידע: answerable = false, ו-answer = "אבדוק ואחזור אלייך".
+
+&lt;context&gt;
+{{טקסט מה-Text aggregator}}
+&lt;/context&gt;</pre></div>
+<details class="hint"><summary>מה עושים עם שאלה על מוצר?</summary>כש-topic = product, אפשר לחפש לפי <code>title</code> שמכיל את <code>product_hint</code>, במקום לפי topic. כך נשלפת רק השורה של המוצר הרלוונטי.</details>
+<div class="deliver">צילום מסך של התרחיש, ושלוש שורות מהלוג</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex5"><div class="ex-head"><span class="ex-num">5</span><h3>בדיקת עיגון במקורות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span></div>
+
+<p>שלחו לתרחיש את השאלות 1, 2, 4, 7 ו-10 מתרגיל 2. לכל תשובה בדקו:</p>
+<ol class="steps-l"><li>האם כל עובדה בתשובה מופיעה בשורות שב-<code>cited_ids</code>?</li><li>בשאלות שאין להן תשובה (מזרנים, קפריסין): האם <code>answerable = false</code>?</li><li>האם נשלפו שורות לא רלוונטיות, או שהנושא שזוהה לא נכון?</li></ol>
+<p>הוסיפו Router אחרי Parse JSON: כש-<code>answerable = false</code>, נשלחת התראה לנציג עם השאלה.</p>
+<div class="deliver">טבלה: שאלה · נושא · cited_ids · answerable · האם התשובה מעוגנת במקורות</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex6"><div class="ex-head"><span class="ex-num">6</span><h3>שמירה על ידע עדכני</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span></div>
+
+<p>ידע ישן הוא סוג של הזיה. צרו תרחיש שבועי בשם "ידע שהתיישן":</p>
+<ol class="steps-l"><li><span class="path">Google Sheets ‹ Search Rows</span> בלשונית "ידע", ואחריו מסנן: <code>parseDate(updated; YYYY-MM-DD)</code> לפני <code>addDays(now; -180)</code>.</li><li>Text aggregator של השורות שנמצאו, ומייל למיכל: "השורות הבאות לא עודכנו חצי שנה, אנא אשרי או עדכני".</li><li>תזמנו את התרחיש פעם בשבוע, ביום ראשון ב-9:00.</li></ol>
+<div class="deliver">צילום מסך של התרחיש ושל המייל (אילו שורות נמצאו?)</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex7"><div class="ex-head"><span class="ex-num">7</span><h3>בונוס: RAG וקטורי</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בונוס</span></div>
+
+<p>בקשו מ-Claude להסביר לכם, בהתאמה לבית ועיצוב, איך לבנות RAG עם מסד נתונים וקטורי:</p>
+<div class="copybox"><pre class="rtl">אני בונה בסיס ידע לחנות רהיטים, עם כ-15 שורות היום, ותוכנית לגדול ל-2,000 מסמכים.
+הסבר בעברית פשוטה:
+1. מתי כדאי לעבור מחיפוש לפי נושא בגיליון למסד נתונים וקטורי?
+2. אילו שלבים צריך להוסיף לתרחיש ב-Make (Embedding, אחסון, חיפוש)?
+3. מה החסרונות והעלויות?
+4. מה זה Prompt caching, ומתי זה חלופה טובה ל-RAG?
+ציין במפורש כל מקום שבו כדאי לבדוק בתיעוד העדכני של הכלים.</pre></div>
+<div class="deliver">סיכום של חצי עמוד: מתי בית ועיצוב תצטרך RAG וקטורי</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 8 · תרגול</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const QS=['יש את הספה התלת בכחול?', 'כמה עולה משלוח להזמנה של 300 ש"ח?', 'אפשר להחזיר ספה בבד שבחרתי במיוחד?', 'יש לכם מזרנים?', 'בכמה תשלומים אפשר לקנות את שולחן אלון 180?', 'הארון מגיע מורכב?', 'יש הנחה לסטודנטים?', 'כמה זמן לוקח משלוח רגיל לאילת?', 'שולחן אלון 220 נמצא במלאי?', 'אתם שולחים לקפריסין?'];
+const T=document.getElementById('evT');
+QS.forEach((q,i)=>{const r=T.insertRow();r.innerHTML=`<td>${i+1}</td><td>${q}</td><td><select><option value="">–</option><option value="ok">✓ נכון</option><option value="idk">🤷 אמר "אין מידע"</option><option value="bad">✗ שגוי או מומצא</option></select></td><td><select><option value="">–</option><option value="y">כן</option><option value="n">לא</option></select></td>`;});
+function ev(){const s=[...T.querySelectorAll('tr td:nth-child(3) select')].map(x=>x.value),c=[...T.querySelectorAll('tr td:nth-child(4) select')].map(x=>x.value);
+ const n=k=>s.filter(x=>x===k).length;document.getElementById('evS').innerHTML=`<span>✓ ${n('ok')}</span><span>🤷 ${n('idk')}</span><span>✗ ${n('bad')}</span><span>עם מקור: ${c.filter(x=>x==='y').length}/10</span>`;}
+T.querySelectorAll('select').forEach(x=>x.onchange=ev);ev();
+const upd=()=>{const all=document.querySelectorAll('.done-ex'),d=[...all].filter(x=>x.checked).length;document.getElementById('pbar').style.width=d/all.length*100+'%';document.getElementById('ptxt').textContent=d+'/'+all.length;};
+document.querySelectorAll('.done-ex').forEach(c=>c.onchange=upd);
+</script>
+</body>
+</html>

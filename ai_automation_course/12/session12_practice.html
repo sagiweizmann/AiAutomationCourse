@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 12: תרגול: מערך בדיקות וניטור לנועם · תרגול</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.biz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.biz .logo{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:linear-gradient(135deg,var(--p2),var(--claude))}
+.prog{position:sticky;top:52px;z-index:5;margin-top:16px}
+.prog .card{padding:10px 16px;display:flex;gap:14px;align-items:center}
+.prog .bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p2),var(--p5));transition:.4s}
+ol.steps-l li{margin-bottom:6px}
+.path{font-weight:700;background:var(--surface-2);border-radius:7px;padding:1px 8px}
+.flowmini{display:flex;gap:6px;flex-wrap:wrap;align-items:center;direction:ltr;justify-content:flex-end;margin:6px 0 10px}
+.flowmini span{padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700;background:var(--surface-2);direction:rtl}
+.flowmini span.c{background:color-mix(in srgb,var(--claude) 18%,transparent);color:var(--claude)}
+.flowmini i{font-style:normal;color:var(--ink-2)}
+.files{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;max-width:320px}
+.files a{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink)}
+.files a span{font-size:24px}
+.files small{display:block;color:var(--ink-2);font-size:12.5px;direction:ltr;text-align:right}
+.ex code{overflow-wrap:anywhere}
+.mexp{direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--surface-2);padding:2px 8px;border-radius:6px;display:inline-block;overflow-wrap:anywhere}
+.evt td{font-size:14px}
+.evt select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:2px 4px}
+.ev-sum{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ev-sum span{background:var(--surface-2);border-radius:999px;padding:3px 12px;font-weight:700;font-size:14px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 12</b><span class="kind-badge">🛠️ תרגול</span></div>
+  <h1>תרגול: מערך בדיקות וניטור לנועם</h1>
+  <p class="sub">בונים סט בדיקות ומריצים אותו אוטומטית ב-Make, מוסיפים Claude כשופט, תופסים רגרסיה, מגדירים לוג והתראות, חוסכים בעלויות, ומסתירים פרטים אישיים.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session12_lecture.html" class="">🎓 הרצאה</a><a href="session12_practice.html" class="on">🛠️ תרגול</a><a href="session12_solution.html" class="">✅ פתרון</a><a href="session12_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="card biz"><div class="logo">🛡️</div><div><b style="font-size:19px">מה צריך לתרגול</b><div class="muted">נועם ממפגשים 9–10 ב-Make, כולל הלוג. בנוסף: קובץ הבדיקות (בתרגיל 1), 15 הפניות מהמשימה של מפגש 11, חשבון Claude, וגישה לנתוני השימוש ב-Anthropic Console (לתרגיל 6).</div></div></div>
+  <div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/7</span></div></div>
+</section>
+<section class="blk">
+<div class="card ex" id="ex1"><div class="ex-head"><span class="ex-num">1</span><h3>סט הבדיקות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">קל</span></div>
+
+<div class="files"><a href="materials/test_set.csv" download><span>🧪</span><div><b>15 מקרי בדיקה</b><small>test_set.csv</small></div></a></div>
+<ol class="steps-l mt">
+<li>ייבאו את הקובץ ללשונית חדשה, <b>"בדיקות"</b>. העמודות: <code>id</code>, ‏<code>category</code>, ‏<code>message</code>, ‏<code>expected_tools</code>, ‏<code>must_include</code>, ‏<code>must_not_include</code>, ‏<code>expect_escalation</code>. בעמודות של הטקסט, הסימן <code>|</code> פירושו "אחד מאלה".</li>
+<li>עברו על 15 המקרים: איזה סוג פנייה חסר? הוסיפו לפחות 5 מקרים מהמשימה של מפגש 11, כלומר פניות אמיתיות. השתדלו לכסות כל קטגוריה, וגם מקרים שבהם נועם צריך <b>לא</b> לפעול.</li>
+<li>צרו לשונית <b>"תוצאות בדיקה"</b>: <code>run_id</code>, ‏<code>prompt_version</code>, ‏<code>test_id</code>, ‏<code>answer</code>, ‏<code>tools</code>, ‏<code>check_tools</code>, ‏<code>check_include</code>, ‏<code>check_exclude</code>, ‏<code>judge_score</code>, ‏<code>judge_reason</code>, ‏<code>pass</code>.</li>
+</ol>
+<div class="deliver">לשונית "בדיקות" עם 20 מקרים לפחות, ולשונית תוצאות ריקה</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex2"><div class="ex-head"><span class="ex-num">2</span><h3>מריץ בדיקות ב-Make</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 35 דקות</span><span class="pill">מאתגר</span></div>
+
+<div class="flowmini"><span class="">הפעלה ידנית</span><i>→</i><span class="">Sheets: כל הבדיקות</span><i>→</i><span class="">Iterator</span><i>→</i><span class="c">HTTP: נועם (webhook)</span><i>→</i><span class="">בדיקות כללים</span><i>→</i><span class="">Sheets: תוצאה</span></div>
+<ol class="steps-l">
+<li>צרו תרחיש <b>"הרצת בדיקות"</b>, שמופעל ידנית. בתחילתו, Set variable: <code>run_id = formatDate(now; YYYYMMDD-HHmm)</code>.</li>
+<li><span class="path">Search Rows</span> בלשונית "בדיקות", ואחריו כל שורה עוברת בנפרד (Make מעבד שורות כ-bundles, כמו שלמדנו במפגש 4).</li>
+<li><span class="path">HTTP › Make a request</span> ל-webhook של נועם (ממפגש 9), עם <code>{"message": message, "customer_email": "test@bayit.test"}</code>. ודאו שהתרחיש של נועם מחזיר תשובה עם Webhook response, שכוללת <code>answer</code> ו-<code>tools</code>.</li>
+<li>בדיקות כללים, עם Set variable לכל אחת:
+<ul>
+<li>check_include: <span class="mexp">if(must_include = ""; true; length(match(answer; "/" + must_include + "/")) &gt; 0)</span>. הפונקציה <code>match</code> ותחביר ה-regex משתנים בין גרסאות, ולכן בדקו בתיעוד של Make. חלופה פשוטה: <code>contains()</code> לכל ערך.</li>
+<li>check_exclude: אותו דבר, עם <code>must_not_include</code>, והפוך.</li>
+<li>check_tools: כל כלי ב-<code>expected_tools</code> מופיע ב-<code>tools</code>. אם expected ריק, tools צריך להיות ריק.</li>
+</ul></li>
+<li>שמרו שורה בלשונית "תוצאות בדיקה", עם prompt_version (מהתרחיש של נועם) ו-<code>pass</code> = שלוש הבדיקות.</li>
+</ol>
+<div class="callout warn"><b>בדיקה עם תופעות לוואי</b>T07, T09 ו-T13 פותחים קריאות אמיתיות. הוסיפו לנועם תנאי: כש-<code>customer_email</code> מסתיים ב-<code>@bayit.test</code>, ‏create_ticket כותב ללשונית "קריאות בדיקה", ולא שולח Slack. סביבת בדיקה לא צריכה להעיר את הנציגות.</div>
+<div class="deliver">הרצה מלאה: 20 שורות בלשונית התוצאות, ואחוז הבדיקות שעברו</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex3"><div class="ex-head"><span class="ex-num">3</span><h3>Claude כשופט, וכיול</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 25 דקות</span><span class="pill">מאתגר</span></div>
+
+<p>הוסיפו לתרחיש, אחרי בדיקות הכללים, מודול Claude עם ההוראות הבאות, ואחריו Parse JSON. כתבו את <code>score</code> ואת <code>reason</code> לשורת התוצאה. pass עכשיו דורש גם <code>score ≥ 4</code>.</p>
+<div class="copybox"><pre class="rtl">אתה בודק איכות של סוכן השירות "נועם" בחנות "בית ועיצוב".
+קיבלת: הודעת לקוח, התשובה של נועם, הכלים שהופעלו ותוצאותיהם, ומה התשובה הייתה אמורה לכלול.
+דרג לפי המחוון, והחזר JSON בלבד:
+{"grounded": true/false,      // כל עובדה בתשובה מופיעה בתוצאות הכלים
+ "promise_violation": true/false, // הבטיח החזר, ביטול, פיצוי או הנחה שלא בוצעו
+ "followed_expected": true/false, // עשה את מה שהיה אמור (לפי expected)
+ "tone": 1-5,                 // 5 = חם, קצר, ברור, בלי קלישאות
+ "score": 1-5,                // ציון כללי
+ "reason": "משפט אחד שמסביר את הציון"}
+כללי ציון: promise_violation = true תמיד מוביל ל-score של 2 לכל היותר. grounded = false מוביל ל-score של 3 לכל היותר.
+אם אין מספיק מידע כדי לשפוט, כתוב זאת ב-reason, ותן score 3.
+
+&lt;message&gt;{{message}}&lt;/message&gt;
+&lt;answer&gt;{{answer}}&lt;/answer&gt;
+&lt;tools&gt;{{tools + results}}&lt;/tools&gt;
+&lt;expected&gt;{{must_include / must_not_include / expect_escalation}}&lt;/expected&gt;</pre></div>
+<p><b>כיול:</b> שופט שלא בדקתם הוא רק דעה נוספת. דרגו בעצמכם 6 תשובות, לפני שאתם מסתכלים על הציון של השופט:</p>
+<div class="tbl evt"><table id="calT"><tr><th>בדיקה</th><th>הציון שלי</th><th>ציון השופט</th><th>פער</th></tr></table></div>
+<div class="ev-sum" id="calS"></div>
+<p class="mt">אם יש פער של 2 ומעלה במקרה מסוים, קראו את <code>reason</code>. האם המחוון לא ברור? האם השופט מחמיר או מקל בעניין מסוים? חדדו את המחוון, ובדקו שוב.</p>
+<div class="deliver">טבלת הכיול, ושינוי אחד שעשיתם במחוון</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex4"><div class="ex-head"><span class="ex-num">4</span><h3>תופסים רגרסיה</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span></div>
+
+<ol class="steps-l">
+<li>ודאו שבתרחיש של נועם יש משתנה <code>prompt_version</code>, למשל <code>v3</code>, שנכתב בכל שורת לוג ובכל תוצאה.</li>
+<li>שנו את הפרומפט כמו בהרצאה: הוסיפו "תמיד תרגיע את הלקוח ותציע לו פתרון מיידי", ושנו את הגרסה ל-<code>v4</code>.</li>
+<li>הריצו את סט הבדיקות. בגיליון, השוו בין הגרסאות בעזרת טבלת ציר (Pivot): אחוז ה-pass לכל prompt_version, ואילו בדיקות עברו ב-v3 ונכשלו ב-v4.</li>
+<li>תקנו את הניסוח (v5), והריצו שוב, עד שאין רגרסיות.</li>
+</ol>
+<div class="callout tip"><b>מהיום</b>אף שינוי בפרומפט, בכלים או במודל לא עולה בלי הרצה של סט הבדיקות. כתבו את זה ב-Runbook (תרגיל 7).</div>
+<div class="deliver">טבלת השוואה בין v3, ‏v4 ו-v5, והניסוח הסופי</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex5"><div class="ex-head"><span class="ex-num">5</span><h3>לוג מלא והתראות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 25 דקות</span><span class="pill">בינוני</span></div>
+
+<ol class="steps-l">
+<li>עדכנו את הלשונית "לוג סוכן" כך שיהיו בה כל השדות מההרצאה: <code>ts</code>, ‏<code>conv_id</code>, ‏<code>message</code>, ‏<code>tools</code>, ‏<code>answer</code>, ‏<code>escalated</code>, ‏<code>rounds</code>, ‏<code>input_tokens</code>, ‏<code>output_tokens</code>, ‏<code>cost_usd</code>, ‏<code>latency_s</code>, ‏<code>prompt_version</code>, ‏<code>model</code> ו-<code>error</code>. את הטוקנים לוקחים מנתוני השימוש (usage) שהמודול של Claude או הסוכן מחזירים. השם המדויק של השדה תלוי במודול.</li>
+<li><b>שגיאות:</b> בתרחיש של נועם, הוסיפו Error handler למודולים החשובים, כמו שלמדנו במפגש 6: כותבים שורה עם <code>error</code>, ושולחים התראה ל-Slack. ללקוח נשלחת תשובה גנרית: "נציג יחזור אלייך בקרוב".</li>
+<li><b>תרחיש "שומר"</b> שרץ כל שעה: Search Rows ללוג של השעה האחרונה, ואחריו Router עם שלושה מסלולים:
+<ul><li>יותר מ-3 שורות עם error ‹ 🔴 Slack</li><li>מספר השיחות גדול פי 3 מהממוצע השעתי שלכם ‹ 🟠 Slack</li><li>סכום cost_usd היום גדול מהתקציב היומי ‹ 🟠 Slack ומייל</li></ul></li>
+<li>בדקו כל התראה: שברו בכוונה את שם הלשונית "הזמנות" לכמה דקות, ושלחו 5 הודעות. האם ההתראה הגיעה? אחר כך תקנו את השם.</li>
+</ol>
+<div class="deliver">צילום מסך של התרחיש "שומר", ושל ההתראה שהגיעה בבדיקה</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex6"><div class="ex-head"><span class="ex-num">6</span><h3>עלויות: איפה הכסף?</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span></div>
+
+<ol class="steps-l">
+<li>במחשבון העלויות בהרצאה, הכניסו את המספרים האמיתיים מהלוג שלכם: שיחות ביום, ממוצע של rounds וטוקנים. האם התוצאה קרובה לעלות שמופיעה בחשבון ב-Anthropic Console?</li>
+<li>תנו ל-Claude לנתח את הלוג:</li>
+</ol>
+<div class="copybox"><pre class="rtl">הנה 50 השורות האחרונות מהלוג של סוכן השירות שלי (CSV): tools, rounds, input_tokens, output_tokens, cost_usd ו-escalated.
+1. מה העלות הממוצעת לשיחה, ומה החציון?
+2. אילו 5 שיחות הכי יקרות, ומה משותף להן?
+3. הצע 3 דרכים להוזיל, מסודרות לפי חיסכון צפוי. לכל אחת: מה לשנות, כמה בערך היא חוסכת לפי הנתונים, ומה הסיכון לאיכות.
+חשב רק מהנתונים. אם צריך הנחה, כתוב אותה במפורש.
+
+(הדביקו כאן את ה-CSV)</pre></div>
+<ol class="steps-l" start="3">
+<li>בחרו חיסכון אחד, יישמו אותו, ו<b>הריצו את סט הבדיקות</b>. חיסכון שגורם לרגרסיה הוא לא חיסכון. דוגמאות: לקצר את ההוראות, להעביר את הסיווג למודל קטן, להגביל את מספר תוצאות החיפוש, או להפעיל Prompt caching, אם המודול תומך בזה.</li>
+</ol>
+<div class="deliver">עלות לשיחה לפני ואחרי, ותוצאות סט הבדיקות אחרי השינוי</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div><div class="card ex" id="ex7"><div class="ex-head"><span class="ex-num">7</span><h3>פרטיות ו-Runbook</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span></div>
+
+<p><b>א. הסתרת פרטים אישיים ב-Make.</b> בתרחיש של נועם, לפני הסוכן, הוסיפו Set variable בשם <code>safe_message</code> ושלחו לסוכן אותו, ולא את ההודעה המקורית:</p>
+<p><span class="mexp">replace(replace(message; /(?:\d[ -]?){12,18}\d/g; "[CARD]"); /\b\d{9}\b/g; "[ID]")</span></p>
+<p>הריצו את T14 מסט הבדיקות. בדקו בלוג ש-<code>message</code> נשמר מוסתר, כי גם הלוג הוא מקום שבו המידע נשמר. התחביר של ה-regex ב-Make תלוי בגרסה, ולכן בדקו אותו עם Run once.</p>
+<p class="mt"><b>ב. Runbook.</b> השלימו את המסמך:</p>
+<div class="copybox"><pre class="rtl">Runbook: נועם · מה עושים כשמשהו נשבר
+מי בתורנות: ___ (מיישם) · גיבוי: ___ (דנה)
+
+🔴 נועם עונה תשובות שגויות או מסוכנות
+  1. מכבים: Make › תרחיש "נועם" › OFF. הפניות חוזרות לתיבה הרגילה, כי ___
+  2. מעדכנים את הצוות ב-#service: "נועם כבוי, עונים ידנית"
+  3. בלוג: מאיזו שעה, ומאיזו prompt_version? מה השתנה?
+  4. חוזרים לגרסה הקודמת: ___
+  5. מוסיפים את המקרה לסט הבדיקות, מריצים את הסט, ורק אז מדליקים
+
+🟠 התראת עלות או נפח
+  1. ___
+🟠 כלי נכשל (שגיאות)
+  1. ___
+📝 אחרי כל תקלה: 5 שורות בלשונית "תקלות": מה קרה, מתי התגלה, מה הנזק, מה תוקן, ומה ימנע את זה בפעם הבאה</pre></div>
+<p>תנו למישהו אחר בקבוצה "לכבות" את נועם לפי המסמך בלבד, בלי עזרה. איפה הוא נתקע?</p>
+<div class="deliver">T14 עובר, הלוג מוסתר, ו-Runbook שאדם אחר הצליח לפעול לפיו</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 12 · תרגול</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const C=['T03','T07','T08','T11','T12','T13'];const T=document.getElementById('calT');
+const opt=`<option value="">–</option>`+[1,2,3,4,5].map(v=>`<option>${v}</option>`).join('');
+C.forEach(c=>{const r=T.insertRow();r.innerHTML=`<td>${c}</td><td><select>${opt}</select></td><td><select>${opt}</select></td><td class="gap">–</td>`;});
+function cal(){let n=0,sum=0,big=0;[...T.rows].slice(1).forEach(r=>{const s=r.querySelectorAll('select'),a=+s[0].value,b=+s[1].value,g=r.querySelector('.gap');if(a&&b){const d=Math.abs(a-b);g.textContent=d?d:'✓';g.style.color=d>=2?'var(--bad)':'';n++;sum+=d;if(d>=2)big++;}else g.textContent='–';});
+ document.getElementById('calS').innerHTML=n?`<span>פער ממוצע: ${(sum/n).toFixed(1)}</span><span>פערים של 2 ומעלה: ${big}</span><span>${sum/n<=0.7&&!big?'✓ השופט מכויל טוב':'צריך לחדד את המחוון'}</span>`:'';}
+T.querySelectorAll('select').forEach(x=>x.onchange=cal);
+const upd=()=>{const all=document.querySelectorAll('.done-ex'),d=[...all].filter(x=>x.checked).length;document.getElementById('pbar').style.width=d/all.length*100+'%';document.getElementById('ptxt').textContent=d+'/'+all.length;};
+document.querySelectorAll('.done-ex').forEach(c=>c.onchange=upd);
+</script>
+</body>
+</html>

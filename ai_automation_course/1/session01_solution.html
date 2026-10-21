@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 1: פתרון התרגול: פרומפטים, פלט מובנה ו-Claude · פתרון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.sol{margin-top:16px}
+.why{margin-top:12px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p2) 9%,var(--surface));border-inline-start:4px solid var(--p2);font-size:15.5px}
+.why::before{content:"💡 למה זה עובד";display:block;font-weight:800;margin-bottom:2px}
+.mistake{margin-top:10px;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--p3) 8%,var(--surface));border-inline-start:4px solid var(--p3);font-size:15.5px}
+.mistake::before{content:"⚠️ טעויות נפוצות";display:block;font-weight:800;margin-bottom:2px}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.vs .material b{display:block;font-size:13px;margin-bottom:4px}
+.ans{font-weight:800}
+.ans.a{color:var(--good)}.ans.b{color:var(--p4)}.ans.c{color:var(--bad)}
+@media (max-width:700px){.vs{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 1</b><span class="kind-badge">✅ פתרון</span></div>
+  <h1>פתרון התרגול: פרומפטים, פלט מובנה ו-Claude</h1>
+  <p class="sub">פתרונות לדוגמה עם הסבר לכל תרגיל. יש יותר מתשובה נכונה אחת, וחשוב להבין למה הפתרון עובד.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session01_lecture.html" class="">🎓 הרצאה</a><a href="session01_practice.html" class="">🛠️ תרגול</a><a href="session01_solution.html" class="on">✅ פתרון</a><a href="session01_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+<div class="callout"><b>איך להשתמש בפתרון</b>נסו קודם לבד, ורק אחר כך השוו לפתרון. תשובות של Claude משתנות מהרצה להרצה, ולכן התשובות שלכם לא יהיו זהות לאלה שכאן. מה שחשוב הוא שהתשובה עומדת בדרישות.</div>
+<div class="card sol"><div class="ex-head"><span class="ex-num">1</span><h3>אבחון פרומפטים חלשים</h3></div>
+<div class="tbl"><table>
+<tr><th>פרומפט</th><th>מה חסר</th><th>הבעיה הצפויה</th></tr>
+<tr><td>א' · "תכתוב תשובה ללקוח שכועס"</td><td>תפקיד, הקשר, פורמט, דוגמה, מגבלות</td><td>תשובה כללית ("אנו מתנצלים...") בלי פרטים על ההזמנה, ואולי עם הבטחות שהעסק לא יכול לקיים</td></tr>
+<tr><td>ב' · "תסכם את השיחה הזו"</td><td>תפקיד, הקשר (למה צריך את הסיכום), פורמט, מגבלות</td><td>סיכום באורך אקראי שלא מתאים להכניס ל-CRM. חסרים בו שדות קבועים כמו בקשת הלקוח, התחייבויות וצעד הבא</td></tr>
+<tr><td>ג' · "אתה קופירייטר מעולה..."</td><td>הקשר (איזה שולחן, לאיזה קהל), פורמט, דוגמה, מגבלות</td><td>המודל ימציא חומרים, מידות ותכונות, כי אין לו את פרטי המוצר. זו הזיה קלאסית</td></tr>
+</table></div>
+<div class="why">ברוב הפרומפטים החלשים יש משימה, אבל אין בהם הקשר. בלי הקשר המודל ממלא את החסר בניחושים, ולכן התשובה כללית או לא נכונה.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">2</span><h3>שכתוב לפי 6 הרכיבים</h3></div>
+<div class="copybox"><pre class="rtl">תפקיד: אתה נציג שירות לקוחות בכיר בחנות הרהיטים המקוונת "בית ועיצוב". אתה רגוע, אמפתי ומדויק.
+
+הקשר: הלקוחה רונית שגב הזמינה 3 כיסאות בר (הזמנה 50912) לפני חודש. זו הפנייה השלישית שלה. לפי המערכת, הכיסאות יצאו מהמחסן אתמול וצפויים להגיע תוך 2-3 ימי עסקים. היא מאיימת לבטל ולהגיש תלונה.
+
+משימה: כתוב תשובה למייל שלה. התשובה צריכה להכיר בתסכול, לתת את המידע המעודכן, ולהציע צעד ממשי.
+
+פורמט: עד 100 מילים, 2 פסקאות קצרות, בגוף שני נקבה, חתימה "דנה, צוות השירות של בית ועיצוב".
+
+דוגמה לטון: "היי רון, אתה צודק לגמרי, וזה לא השירות שאנחנו רוצים לתת. בדקתי בעצמי ו..."
+
+מגבלות:
+- אל תבטיח תאריך הגעה מדויק. כתוב "צפויים להגיע תוך 2-3 ימי עסקים".
+- אל תציע פיצוי כספי או הנחה. אפשר להציע שמנהלת המשמרת תחזור אליה היום.
+- אל תתווכח עם האיום לבטל.
+- אל תשתמש בביטויים כמו "אנו מתנצלים על אי הנוחות".</pre></div>
+<div class="vs mt">
+<div class="material"><b>תשובה לפרומפט המקורי</b>שלום, אנו מתנצלים על אי הנוחות שנגרמה לך. אנו עושים כל שביכולתנו לטפל בפנייתך בהקדם. תודה על הסבלנות.</div>
+<div class="material"><b>תשובה לפרומפט המשופר</b>היי רונית, את צודקת לגמרי. שלוש פניות זה יותר מדי, וזה לא השירות שאנחנו רוצים לתת. בדקתי את הזמנה 50912: שלושת כיסאות הבר יצאו מהמחסן אתמול, והם צפויים להגיע אלייך תוך 2-3 ימי עסקים.
+
+כדי לוודא שהכול מסתדר, ביקשתי ממנהלת המשמרת שלנו לחזור אלייך היום עם פרטי המעקב.
+דנה, צוות השירות של בית ועיצוב</div></div>
+<div class="why">הסטטוס המעודכן בהקשר מאפשר לתת תשובה ממשית. המגבלות מונעות הבטחות שהעסק לא יכול לקיים. הדוגמה קובעת טון אנושי ולא בירוקרטי.</div>
+<div class="mistake">לשכוח לתת למודל את סטטוס ההזמנה. אז הוא ממציא אותו, או כותב תשובה ריקה. באוטומציה אמיתית את הסטטוס הזה Make ימשוך מגיליון ההזמנות.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">3</span><h3>ספריית פרומפטים: שתי תבניות לדוגמה</h3></div>
+<p class="muted">כאן מוצגות שתיים מתוך חמש התבניות. השלוש האחרות נבנות באותו אופן.</p>
+<h4>תבנית 2: סיכום שיחת טלפון ל-CRM</h4>
+<div class="copybox"><pre class="rtl">תפקיד: אתה עוזר שמסכם שיחות שירות עבור צוות "בית ועיצוב".
+הקשר: הסיכום נשמר בכרטיס הלקוח ב-CRM, והנציג הבא שיפתח את הכרטיס יקרא אותו.
+משימה: סכם את השיחה הבאה:
+{תמלול_שיחה}
+פורמט: בדיוק 4 שורות:
+בקשת הלקוח: ...
+מה סוכם: ...
+התחייבויות שלנו: ...
+צעד הבא ותאריך: ...
+דוגמה: "בקשת הלקוח: החלפת רגל שבורה בשולחן אלון"
+מגבלות: אל תוסיף מידע שלא נאמר בשיחה. אם משהו לא ברור, כתוב "לא צוין".</pre></div>
+<h4 class="mt">תבנית 3: תיאור מוצר לאתר</h4>
+<div class="copybox"><pre class="rtl">תפקיד: אתה קופירייטר של "בית ועיצוב", חנות עם סגנון חם, פשוט ונגיש.
+הקשר: התיאור יופיע בעמוד המוצר באתר. הקהל: {קהל_יעד}.
+משימה: כתוב תיאור למוצר {שם_מוצר}, מ{חומרים}, במידות {מידות}.
+פורמט: כותרת של עד 8 מילים, פסקה של 50-70 מילים, ו-3 נקודות של יתרונות.
+דוגמה לטון: "השולחן שכולם יתאספו סביבו."
+מגבלות: השתמש רק בפרטים שנתתי. אל תמציא חומרים, אחריות או מבצעים. בלי סופרלטיבים כמו "הכי טוב בעולם".</pre></div>
+<div class="why">המשתנים בסוגריים הם בדיוק המקומות שבהם Make ישתול נתונים בהמשך הקורס. תבנית טובה היום תהפוך לשלב בתהליך אוטומטי בעוד כמה מפגשים.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">4</span><h3>פלט מובנה: חילוץ JSON</h3></div>
+<div class="copybox"><pre class="rtl">אתה מערכת שמחלצת נתונים מפניות של לקוחות לחנות "בית ועיצוב".
+קרא את המייל, והחזר JSON בלבד, בלי שום טקסט לפניו או אחריו, בדיוק במבנה הזה:
+{
+  "customer_name": string | null,
+  "order_id": string | null,
+  "topic": "delivery" | "defect" | "product_question" | "other",
+  "urgency": "low" | "medium" | "high",
+  "sentiment": "positive" | "neutral" | "negative",
+  "phone": string | null,
+  "summary_he": string
+}
+כללים:
+- אם שדה לא מופיע במייל, החזר null. אל תנחש.
+- דחיפות: הערך high בשדה urgency כשיש איום לבטל, פנייה חוזרת או מוצר פגום.
+- סיכום: בשדה summary_he משפט אחד בעברית, עד 15 מילים.
+
+המייל:
+{תוכן_המייל}</pre></div>
+<div class="grid3 mt">
+<div><b>מייל 1: אבי</b><pre>{
+  "customer_name": "אבי מזרחי",
+  "order_id": "51877",
+  "topic": "defect",
+  "urgency": "high",
+  "sentiment": "neutral",
+  "phone": "054-9876543",
+  "summary_he": "ספה ירוקה הגיעה עם קרע בבד"
+}</pre></div>
+<div><b>מייל 2: נועה</b><pre>{
+  "customer_name": "נועה",
+  "order_id": null,
+  "topic": "product_question",
+  "urgency": "low",
+  "sentiment": "positive",
+  "phone": null,
+  "summary_he": "שואלת על שולחן אלון בצבע אגוז וזמן אספקה"
+}</pre></div>
+<div><b>מייל 3: רונית</b><pre>{
+  "customer_name": "רונית שגב",
+  "order_id": "50912",
+  "topic": "delivery",
+  "urgency": "high",
+  "sentiment": "negative",
+  "phone": null,
+  "summary_he": "פנייה שלישית על כיסאות בר שלא הגיעו, מאיימת לבטל"
+}</pre></div>
+</div>
+<div class="why">קבוצת ערכים סגורה, כמו delivery או defect, מאפשרת ל-Make לבנות מסלולים לפי הנושא. הכלל "אל תנחש, החזר null" מונע ממספר טלפון מומצא להגיע ל-CRM.</div>
+<div class="mistake">המודל מוסיף "הנה ה-JSON:" לפני הפלט, או עוטף אותו ב-```. זה שובר את הקריאה האוטומטית. פותרים את זה במשפט "JSON בלבד" בפרומפט. בהמשך הקורס נראה גם כלים ב-API שמבטיחים מבנה תקין.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">5</span><h3>מתאים ל-AI או לא?</h3></div>
+<div class="tbl"><table>
+<tr><th>משימה</th><th>החלטה</th><th>נימוק</th></tr>
+<tr><td>טיוטת תשובה ל-120 פניות בשבוע</td><td class="ans b">AI + אדם</td><td>AI מנסח מצוין וחוסך הרבה זמן. נציג מאשר לפני השליחה, לפחות בהתחלה</td></tr>
+<tr><td>אישור החזר של 2,400 ש"ח</td><td class="ans c">לא AI</td><td>החלטה כספית שאי אפשר לבטל. AI יכול להכין את הבקשה, אבל אדם מחליט</td></tr>
+<tr><td>סיווג פניות לפי נושא ודחיפות</td><td class="ans a">AI לבד</td><td>משימה חוזרת עם קטגוריות סגורות. טעות קלה בסיווג קל לתקן בהמשך</td></tr>
+<tr><td>סה"כ מע"מ ל-300 חשבוניות</td><td class="ans c">לא AI</td><td>חישוב מדויק עושים בגיליון או בכלי של Make. AI יכול לחלץ את הסכומים מהחשבוניות</td></tr>
+<tr><td>מחיר של מתחרה היום</td><td class="ans c">לא AI (לבד)</td><td>מידע עדכני שהמודל לא יודע. בלי חיבור למקור הוא עלול להמציא</td></tr>
+<tr><td>סיכום שיחת מכירה ל-CRM</td><td class="ans a">AI לבד</td><td>עם תבנית קבועה (תרגיל 3) זה עובד היטב. כדאי לבדוק דגימות מדי פעם</td></tr>
+</table></div>
+<div class="why">שתי השאלות שמכריעות: מה המחיר של טעות, והאם אפשר לבטל אותה. אם הטעות זולה וקל לבטל אותה, ה-AI עובד לבד. אם היא יקרה, אדם מאשר.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">6</span><h3>Claude Project: הוראות לדוגמה</h3></div>
+<div class="copybox"><pre class="rtl">אתה "נועם", נציג השירות הדיגיטלי של חנות הרהיטים המקוונת "בית ועיצוב".
+
+הקשר: אתה עונה ללקוחות על משלוחים, החזרות, מוצרים פגומים ואחריות. כל המידע נמצא במסמך "מדיניות שירות" שבידע של הפרויקט.
+
+משימה: ענה על שאלת הלקוח.
+
+פורמט: עד 70 מילים, בעברית, בגוף שני, חם ופשוט. כשיש מספרים (ימים, מחירים) כתוב אותם במדויק כפי שהם במסמך.
+
+דוגמה: "היי! משלוח רגיל מגיע תוך 5-7 ימי עסקים, והוא חינם בהזמנה מעל 400 ש"ח. רוצה שאבדוק משהו בהזמנה שלך?"
+
+מגבלות:
+- ענה רק לפי מסמך המדיניות. אם אין בו תשובה, כתוב: "אבדוק את זה ואחזור אלייך. אפשר גם להתקשר ל-03-5551234".
+- אל תבטיח פיצוי, הנחה או חריגה מהמדיניות.
+- לבקשת ביטול או תלונה, הפנה לטלפון או לוואטסאפ 050-5551234.</pre></div>
+<div class="tbl mt"><table>
+<tr><th>שאלה</th><th>תשובה נכונה לפי המסמך</th></tr>
+<tr><td>כריות ב-350 ש"ח, יש עלות משלוח?</td><td>כן. המשלוח חינם רק מעל 400 ש"ח (המסמך לא מציין את מחיר המשלוח הרגיל, אז העוזר לא אמור להמציא מחיר)</td></tr>
+<tr><td>כורסה בבד מיוחד, אפשר להחזיר?</td><td>לא. מוצר שהותאם אישית לא ניתן להחזרה</td></tr>
+<tr><td>יש סניף בחיפה?</td><td>אין מידע במסמך, ולכן: "אבדוק ואחזור אלייך..."</td></tr>
+<tr><td>שולחן שבור לפני 3 ימים?</td><td>לשלוח תמונה של הפגם (זה עדיין בתוך 7 ימים), והחנות תחליף את המוצר או תזכה במלואו</td></tr>
+</table></div>
+<div class="why">שאלה 1 היא המלכודת: המסמך לא אומר כמה עולה משלוח רגיל. עוזר טוב לא ממציא מחיר, אלא אומר שהמשלוח אינו חינם ומציע לבדוק. אם העוזר המציא מחיר, צריך לחזק את המגבלה בהוראות הפרויקט.</div></div><div class="card sol"><div class="ex-head"><span class="ex-num">7</span><h3>Artifact: מחשבון חיסכון</h3></div>
+<div class="copybox"><pre class="rtl">בנה לי Artifact: מחשבון חיסכון באוטומציה, בעברית ומימין לשמאל.
+שדות קלט: מספר פניות בשבוע, דקות לטיפול בפנייה, עלות שעת עבודה בש"ח, אחוז החיסכון מאוטומציה (סליידר).
+פלט: שעות שנחסכות בחודש ובשנה, וחיסכון בש"ח בחודש ובשנה, בכרטיסים גדולים.
+הוסף גרף עמודות פשוט שמשווה בין המצב היום למצב עם אוטומציה.
+ערכי ברירת מחדל: 120, 6, 60, 50%.</pre></div>
+<div class="grid4 mt">
+<div class="material"><b>שעות עבודה היום בשבוע</b>120 × 6 = 720 דקות = <b>12 שעות</b></div>
+<div class="material"><b>חיסכון בשבוע (50%)</b><b>6 שעות</b> = 360 ש"ח</div>
+<div class="material"><b>חיסכון בחודש (×4.33)</b>כ-<b>26 שעות</b> ≈ 1,560 ש"ח</div>
+<div class="material"><b>חיסכון בשנה (×52)</b><b>312 שעות</b> = 18,720 ש"ח</div>
+</div>
+<div class="why">את המספרים כדאי לבדוק בעצמכם, למשל במחשבון או בגיליון. זה בדיוק השיעור מחלק 2: AI בונה את הכלי, ואת החשבון מחשב הקוד שבתוך הכלי, לא המודל.</div></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 1 · פתרון</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 1: תרגול: פרומפטים, פלט מובנה ו-Claude · תרגול</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.biz{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.biz .logo{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:32px;background:linear-gradient(135deg,var(--p4),var(--p3))}
+.prog{position:sticky;top:52px;z-index:5;margin-top:16px}
+.prog .card{padding:10px 16px;display:flex;gap:14px;align-items:center}
+.prog .bar{flex:1;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p2),var(--p5));transition:.4s}
+.weak{display:grid;gap:10px}
+.weak .material{position:relative}
+.weak .material b{display:block;font-size:13px;color:var(--ink-2)}
+.fill{width:100%;min-height:90px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;padding:10px 12px;margin-top:8px;resize:vertical}
+.fit{display:grid;gap:8px}
+.fit .row{justify-content:space-between;padding:10px 14px;border-radius:12px;background:var(--surface-2)}
+.fit .seg{display:inline-flex;gap:4px;background:var(--surface);border-radius:10px;padding:3px}
+.fit .seg button{border:0;background:none;font:inherit;font-size:13.5px;font-weight:700;padding:4px 10px;border-radius:8px;cursor:pointer;color:var(--ink-2)}
+.fit .seg button.on{background:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 1</b><span class="kind-badge">🛠️ תרגול</span></div>
+  <h1>תרגול: פרומפטים, פלט מובנה ו-Claude</h1>
+  <p class="sub">שעתיים של עבודה מעשית ב-Claude. בסוף התרגול תהיה לכם ספריית פרומפטים ראשונה ופרויקט Claude שעובד.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session01_lecture.html" class="">🎓 הרצאה</a><a href="session01_practice.html" class="on">🛠️ תרגול</a><a href="session01_solution.html" class="">✅ פתרון</a><a href="session01_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="card biz"><div class="logo">🛋️</div><div><b style="font-size:19px">העסק שלנו בתרגול: "בית ועיצוב"</b><div class="muted">חנות מקוונת לרהיטים ולעיצוב הבית. יש לה צוות שירות של 3 נציגים, כ-120 פניות בשבוע, CRM, גיליון הזמנות וחשבון Make. במהלך הקורס נבנה לה אוטומציות, ובתרגולים נחזור אליה שוב ושוב.</div></div></div>
+  <div class="callout claude"><b>מה צריך לפני שמתחילים</b>חשבון Claude (גם חשבון חינמי מתאים לרוב התרגילים), דפדפן, ומסמך ריק (Google Docs או Word) לאיסוף התוצרים. את כל חומרי העזר אפשר להעתיק מהעמוד הזה.</div>
+  <div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/7</span></div></div>
+</section>
+
+<section class="blk">
+<div class="card ex" id="ex1"><div class="ex-head"><span class="ex-num">1</span><h3>אבחון פרומפטים חלשים</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">קל</span></div>
+
+<p>לפניכם שלושה פרומפטים אמיתיים שעובדים ב"בית ועיצוב" כתבו. לכל פרומפט, כתבו אילו מששת הרכיבים חסרים בו (תפקיד, הקשר, משימה, פורמט, דוגמה, מגבלות) ומה הבעיה הצפויה בתשובה.</p>
+<div class="weak">
+  <div class="material"><b>פרומפט א'</b>תכתוב תשובה ללקוח שכועס.</div>
+  <div class="material"><b>פרומפט ב'</b>תסכם את השיחה הזו.</div>
+  <div class="material"><b>פרומפט ג'</b>אתה קופירייטר מעולה. תכתוב תיאור מוצר לשולחן.</div>
+</div>
+<textarea class="fill" placeholder="כתבו כאן את האבחון שלכם, או במסמך התוצרים"></textarea>
+<div class="deliver">טבלה קצרה: פרומפט · רכיבים חסרים · בעיה צפויה</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex2"><div class="ex-head"><span class="ex-num">2</span><h3>שכתוב לפי 6 הרכיבים</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span></div>
+
+<p>בחרו את פרומפט א' ושכתבו אותו כך שיכלול את כל ששת הרכיבים. השתמשו בפנייה של רונית (המייל השלישי בתרגיל 4) בתור ההקשר. הריצו ב-Claude את הגרסה המקורית ואת הגרסה המשופרת, והשוו בין התשובות.</p>
+<div class="copybox"><pre class="rtl">תפקיד: אתה ...
+הקשר: ...
+משימה: ...
+פורמט: ...
+דוגמה: ...
+מגבלות: ...</pre></div>
+<details class="hint"><summary>רמז</summary>במגבלות כדאי לחשוב על שני דברים: מה אסור להבטיח ללקוחה שכועסת, ומתי צריך להעביר את הפנייה לאדם.</details>
+<div class="deliver">הפרומפט המשופר, שתי התשובות, ו-2–3 משפטים על ההבדל</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex3"><div class="ex-head"><span class="ex-num">3</span><h3>ספריית פרומפטים ל-5 משימות עסקיות</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 30 דקות</span><span class="pill">בינוני</span></div>
+
+<p>בנו תבנית פרומפט לכל אחת מחמש המשימות שבטבלה. כל תבנית צריכה לכלול את ששת הרכיבים, עם <code>{משתנים}</code> בסוגריים מסולסלים במקום הפרטים שמשתנים מפעם לפעם. בדקו כל תבנית ב-Claude לפחות פעם אחת.</p>
+<div class="tbl"><table>
+<tr><th>#</th><th>משימה</th><th>משתנים לדוגמה</th></tr>
+<tr><td>1</td><td>מענה לפנייה של לקוח</td><td>{שם_לקוח}, {תוכן_הפנייה}, {סטטוס_הזמנה}</td></tr>
+<tr><td>2</td><td>סיכום שיחת טלפון עם לקוח</td><td>{תמלול_שיחה}</td></tr>
+<tr><td>3</td><td>תיאור מוצר לאתר</td><td>{שם_מוצר}, {חומרים}, {מידות}, {קהל_יעד}</td></tr>
+<tr><td>4</td><td>מענה ראשוני לליד חדש</td><td>{שם}, {מוצר_שהתעניין_בו}, {מקור_הליד}</td></tr>
+<tr><td>5</td><td>פוסט לרשתות החברתיות</td><td>{מוצר}, {מבצע}, {פלטפורמה}</td></tr>
+</table></div>
+<div class="deliver">מסמך עם 5 תבניות פרומפט ודוגמה אחת של תוצאה לכל תבנית</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex4"><div class="ex-head"><span class="ex-num">4</span><h3>פלט מובנה: חילוץ JSON ממיילים</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 25 דקות</span><span class="pill">בינוני</span></div>
+
+<p>כתבו פרומפט אחד שמקבל מייל של לקוח ומחזיר <b>רק</b> JSON עם השדות האלה: <code>customer_name</code>, <code>order_id</code>, <code>topic</code> (אחד מ: delivery, defect, product_question, other), <code>urgency</code> (low, medium, high), <code>sentiment</code>, <code>phone</code>, <code>summary_he</code>. הריצו את אותו פרומפט על שלושת המיילים, וודאו שכל השדות מופיעים בכל אחד מהם (גם כשהערך הוא null).</p>
+<div class="copybox" style="margin-top:10px"><div class="material"><b style="display:block;font-size:13px;color:var(--ink-2)">מייל 1</b>שלום, אני אבי מזרחי. קיבלתי אתמול את הספה הירוקה (הזמנה 51877) ויש קרע בבד בצד שמאל. מצרף תמונה. מה עושים? 054-9876543</div></div><div class="copybox" style="margin-top:10px"><div class="material"><b style="display:block;font-size:13px;color:var(--ink-2)">מייל 2</b>היי! רציתי לשאול אם השולחן 'אלון' זמין גם בצבע אגוז ומה זמן האספקה. תודה, נועה</div></div><div class="copybox" style="margin-top:10px"><div class="material"><b style="display:block;font-size:13px;color:var(--ink-2)">מייל 3</b>זו הפעם השלישית שאני פונה!!! הזמנתי 3 כיסאות בר (הזמנה 50912) לפני חודש ושום דבר. אם עד מחר זה לא אצלי אני מבטלת ומגישה תלונה. רונית שגב</div></div>
+<details class="hint"><summary>רמז</summary>הוסיפו לפרומפט שני דברים: "אם שדה לא מופיע במייל, החזר null", ו"החזר JSON בלבד, בלי טקסט לפני או אחרי".</details>
+<div class="deliver">הפרומפט ושלושת קטעי ה-JSON</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex5"><div class="ex-head"><span class="ex-num">5</span><h3>מתאים ל-AI או לא?</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">קל</span></div>
+
+<p>לכל משימה, החליטו אם כדאי לתת אותה ל-AI לבד, ל-AI עם אישור של אדם, או לא ל-AI. נמקו כל החלטה במשפט אחד.</p>
+<div class="fit" id="fit"></div>
+<div class="deliver">שש החלטות ונימוק קצר לכל אחת</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex6"><div class="ex-head"><span class="ex-num">6</span><h3>Claude Project: עוזר שירות של בית ועיצוב</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 25 דקות</span><span class="pill">בינוני</span></div>
+
+<ol>
+<li>ב-Claude, צרו פרויקט חדש בשם <b>"שירות - בית ועיצוב"</b>.</li>
+<li>הוסיפו לידע של הפרויקט את מסמך המדיניות שבהמשך (אפשר לשמור אותו כקובץ טקסט, או להדביק אותו).</li>
+<li>כתבו הוראות לפרויקט עם כל ששת הרכיבים. חובה לכלול: לענות רק לפי המסמך, ולהגיד "אבדוק ואחזור אלייך" כשאין תשובה במסמך.</li>
+<li>בדקו את העוזר עם ארבע השאלות. רשמו לכל שאלה אם התשובה נכונה לפי המסמך.</li>
+</ol>
+<div class="copybox"><div class="material">מדיניות שירות - בית ועיצוב
+
+משלוחים: משלוח רגיל 5-7 ימי עסקים, חינם בהזמנה מעל 400 ש"ח. משלוח מהיר 2-3 ימי עסקים בתוספת 49 ש"ח. רהיטים גדולים (ספות, ארונות, שולחנות אוכל) מגיעים בתיאום טלפוני עם חברת ההובלה.
+
+החזרות: ניתן להחזיר מוצר שלא נפתח ולא הורכב תוך 14 יום מקבלתו. ההחזר הכספי יינתן לאמצעי התשלום המקורי תוך 10 ימי עסקים. מוצרים שהותאמו אישית (בד, מידה או צבע מיוחד) אינם ניתנים להחזרה.
+
+מוצר פגום: יש לשלוח תמונה של הפגם תוך 7 ימים מהקבלה. נחליף את המוצר ללא עלות או נזכה במלואו.
+
+אחריות: שנה על כל הרהיטים, 3 שנים על מזרנים.
+
+שעות שירות: א'-ה' 9:00-18:00, ו' 9:00-13:00. טלפון 03-5551234, וואטסאפ 050-5551234.</div></div>
+<div class="tbl mt"><table><tr><th>שאלת בדיקה</th><th>מה בודקים</th></tr>
+<tr><td>הזמנתי כריות נוי ב-350 ש"ח, אני צריכה לשלם על משלוח?</td><td>שימוש נכון בסף המשלוח החינמי</td></tr>
+<tr><td>הזמנתי כורסה בבד מיוחד ואני רוצה להחזיר. אפשר?</td><td>מוצר מותאם אישית</td></tr>
+<tr><td>יש לכם סניף בחיפה?</td><td>שאלה שאין לה תשובה במסמך</td></tr>
+<tr><td>השולחן הגיע שבור לפני 3 ימים, מה עושים?</td><td>מוצר פגום, בתוך 7 ימים</td></tr>
+</table></div>
+<div class="deliver">צילום מסך של הוראות הפרויקט, וטבלת בדיקה של 4 השאלות</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+<div class="card ex" id="ex7"><div class="ex-head"><span class="ex-num">7</span><h3>Artifact: מחשבון חיסכון באוטומציה</h3></div>
+<div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בונוס</span></div>
+
+<p>בקשו מ-Claude לבנות Artifact: מחשבון אינטראקטיבי שמחשב כמה זמן וכסף חוסכת אוטומציה. המחשבון צריך לקבל: כמה פניות יש בשבוע, כמה דקות לוקח לטפל בפנייה, עלות שעת עבודה, ואיזה אחוז מהעבודה האוטומציה חוסכת. הוא צריך להציג חיסכון חודשי ושנתי בשעות ובשקלים.</p>
+<p>הריצו את המחשבון על הנתונים של "בית ועיצוב": 120 פניות בשבוע, 6 דקות לפנייה, 60 ש"ח לשעה, 50% חיסכון.</p>
+<details class="hint"><summary>רמז</summary>אם התוצאה לא ברורה, בקשו מ-Claude שינוי בשפה פשוטה, למשל "תוסיף גרף" או "תעשה את זה בעברית מימין לשמאל".</details>
+<div class="deliver">קישור ל-Artifact או צילום מסך, והתוצאה של בית ועיצוב</div>
+<label class="row muted" style="margin-top:10px;font-size:14px;cursor:pointer"><input type="checkbox" class="done-ex"> סיימתי את התרגיל</label></div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 1 · תרגול</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+const FIT=['לכתוב טיוטת תשובה ל-120 פניות בשבוע','לאשר החזר כספי של 2,400 ש"ח ללקוח','לסווג פניות לפי נושא ודחיפות','לחשב סה"כ מע"מ ל-300 חשבוניות','לענות מה המחיר של המתחרה היום','לסכם שיחת מכירה לתוך ה-CRM'];
+document.getElementById('fit').innerHTML=FIT.map((t,i)=>`<div class="row"><span>${t}</span><span class="seg" data-i="${i}"><button>AI לבד</button><button>AI + אדם</button><button>לא AI</button></span></div>`).join('');
+document.querySelectorAll('#fit .seg').forEach(s=>s.querySelectorAll('button').forEach(b=>b.onclick=()=>{s.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));}));
+const upd=()=>{const all=document.querySelectorAll('.done-ex'),d=[...all].filter(x=>x.checked).length;document.getElementById('pbar').style.width=d/all.length*100+'%';document.getElementById('ptxt').textContent=d+'/'+all.length;};
+document.querySelectorAll('.done-ex').forEach(c=>c.onchange=upd);
+</script>
+</body>
+</html>

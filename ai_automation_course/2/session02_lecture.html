@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 2: אפיון תהליכים עסקיים · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* anatomy */
+.anat{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.anat-flow{display:flex;flex-direction:column;gap:8px}
+.af{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);cursor:pointer;transition:.2s;font:inherit;color:inherit;text-align:right}
+.af:hover,.af.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.af .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);flex:none}
+.af small{display:block;color:var(--ink-2);font-size:12.5px}
+.anat-info{position:sticky;top:70px;padding:18px;border-radius:16px;background:var(--surface-2);min-height:180px}
+.anat-info .t{font-family:"Secular One";font-size:22px;color:var(--c)}
+/* process sim */
+.ps-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.ps-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.ps-stats div{padding:10px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ps-stats b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ps-stats span{font-size:13px;color:var(--ink-2)}
+.steps{display:flex;flex-direction:column;gap:0;position:relative}
+.st{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);transition:.3s;position:relative}
+.st+.st{margin-top:22px}
+.st+.st::before{content:"";position:absolute;top:-22px;right:35px;width:2px;height:20px;background:var(--line)}
+.st .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st b{display:block}
+.st small{color:var(--ink-2);font-size:13px}
+.st .min{font-weight:800;font-size:14px;padding:3px 10px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.st.active{border-color:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 22%,transparent);transform:scale(1.01)}
+.st.done{opacity:.55}
+.st.pain::after{content:"⚠️ צוואר בקבוק";position:absolute;top:-11px;left:14px;font-size:11.5px;font-weight:800;background:var(--p3);color:#fff;border-radius:7px;padding:1px 8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+.cmp{margin-top:14px;display:grid;gap:8px}
+.cmp .r{display:grid;grid-template-columns:90px minmax(0,1fr) 120px;white-space:nowrap;gap:10px;align-items:center;font-size:14px}
+.cmp .bw{height:16px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.cmp .bw i{display:block;height:100%;border-radius:6px;transition:width .6s}
+/* symbols */
+.syms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.sym{padding:12px 8px;border-radius:14px;border:2px solid var(--line);background:var(--surface);text-align:center;cursor:pointer;font:inherit;color:inherit;transition:.2s}
+.sym:hover,.sym.on{border-color:var(--accent)}
+.sym svg{width:100%;height:56px;display:block}
+.sym b{font-size:14px}
+.sym-info{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:70px}
+/* matrix */
+.mx{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.mx svg{width:100%;height:auto;display:block}
+.mx .dot{cursor:pointer;transition:.4s}
+.sl{display:grid;grid-template-columns:120px minmax(0,1fr) 48px;gap:10px;align-items:center;font-size:14.5px;margin-bottom:8px}
+.sl input{width:100%;accent-color:var(--accent)}
+.sl .v{font-weight:800;text-align:center;direction:ltr}
+.verdict{margin-top:10px;padding:12px 14px;border-radius:12px;font-weight:700;background:color-mix(in srgb,var(--vc) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 40%,transparent)}
+.task-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.task-list button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer}
+.task-list button.on{background:var(--ink);color:var(--bg)}
+/* roi */
+.roi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}
+.roi-in .sl{grid-template-columns:150px minmax(0,1fr) 64px}
+.roi-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.roi-out div{padding:12px;border-radius:14px;background:var(--surface-2)}
+.roi-out b{display:block;font-family:"Secular One";font-size:24px;line-height:1.2;unicode-bidi:plaintext;text-align:right}
+.roi-out span{font-size:13px;color:var(--ink-2)}
+.roi svg{width:100%;height:auto;display:block}
+.formula{direction:ltr;text-align:center;font-family:"JetBrains Mono",monospace;font-size:14px;padding:10px;border-radius:12px;background:var(--surface-2);margin-top:10px}
+/* doc template */
+.doc-t{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;counter-reset:d}
+.doc-t div{counter-increment:d;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14.5px}
+.doc-t div::before{content:counter(d) ". ";font-weight:800;color:var(--accent)}
+.doc-t b{font-size:15.5px}
+.qs-int{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.qs-int div{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:15px}
+.qs-int div b{display:block;font-size:13px;color:var(--accent)}
+@media (max-width:820px){.anat,.mx,.roi{grid-template-columns:minmax(0,1fr)}.syms{grid-template-columns:repeat(3,minmax(0,1fr))}.doc-t,.qs-int{grid-template-columns:minmax(0,1fr)}.anat-info{position:static}}
+@media (max-width:480px){.roi-in .sl,.sl{grid-template-columns:96px minmax(0,1fr) 52px}.ps-stats b{font-size:21px}.st{grid-template-columns:38px minmax(0,1fr);}.st .min{grid-column:2;justify-self:start}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>אפיון תהליכים עסקיים</h1>
+  <p class="sub">לפני שבונים אוטומציה צריך להבין את התהליך: מה קורה היום, איפה הוא נתקע, מה כדאי להפוך לאוטומטי, וכמה זה שווה.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session02_lecture.html" class="on">🎓 הרצאה</a><a href="session02_practice.html" class="">🛠️ תרגול</a><a href="session02_solution.html" class="">✅ פתרון</a><a href="session02_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:15</div><b>מהו תהליך עסקי</b><span>האנטומיה של תהליך, ושאלות לראיון</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:15–0:40</div><b>As‑Is ו-To‑Be</b><span>מיפוי התהליך היום, תכנון התהליך הרצוי, ותרשימי זרימה</span></div>
+    <div class="ag" style="--c:var(--p3)"><div class="t">0:40–1:00</div><b>מה לאוטומט ובכמה</b><span>מטריצת הזדמנויות וחישוב ROI</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול: תהליך ההחזרות</b><span>ראיון, מיפוי, ניקוד, ROI ומסמך אפיון</span></div>
+  </div>
+</section>
+
+<section class="blk" id="anatomy">
+  <div class="kicker">חלק 1 · מהו תהליך</div>
+  <h2>לכל תהליך יש התחלה, שלבים ותוצאה</h2>
+  <p class="lead">תהליך עסקי הוא רצף קבוע של פעולות שמתחיל באירוע מסוים ונגמר בתוצאה. כדי שאוטומציה תוכל להפעיל אותו, צריך להכיר את כל החלקים שלו. לחצו על כל חלק כדי לראות אותו בתהליך הטיפול בליד של "בית ועיצוב".</p>
+  <div class="anat">
+    <div class="anat-flow" id="anatFlow"></div>
+    <div class="anat-info" id="anatInfo"></div>
+  </div>
+</section>
+
+<section class="blk" id="asis">
+  <div class="kicker">חלק 2 · As‑Is מול To‑Be</div>
+  <h2>קודם מבינים מה קורה היום, ורק אחר כך משנים</h2>
+  <p class="lead"><b>As‑Is</b> הוא התהליך כפי שהוא קורה היום בפועל, כולל הדברים שעושים "על הדרך". <b>To‑Be</b> הוא התהליך כפי שנרצה שייראה אחרי השינוי. לחצו על הפעלה וצפו בליד אחד שעובר בתהליך.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>ליד חדש מהאתר: מהטופס ועד התשובה</h3></div>
+    <div class="sim-body">
+      <div class="ps-top">
+        <div class="seg" id="psSeg"><button class="on" data-m="asis">As‑Is · היום</button><button data-m="tobe">To‑Be · עם אוטומציה</button></div>
+        <div class="row"><button class="btn" id="psPlay">▶ הפעלה</button><button class="btn ghost" id="psReset">↺ איפוס</button></div>
+      </div>
+      <div class="ps-stats">
+        <div><b id="psHands">0</b><span>דקות עבודה של נציג</span></div>
+        <div><b id="psWait">0</b><span>זמן עד שהלקוח מקבל תשובה</span></div>
+        <div><b id="psManual">0</b><span>שלבים ידניים</span></div>
+      </div>
+      <div class="steps" id="psSteps"></div>
+      <div class="legend"><span><i style="background:var(--p3)"></i>עבודה ידנית</span><span><i style="background:var(--p4)"></i>המתנה</span><span><i style="background:var(--p2)"></i>אוטומטי (Make)</span><span><i style="background:var(--claude)"></i>Claude</span><span><i style="background:var(--p5)"></i>אישור של אדם</span></div>
+      <div class="cmp" id="psCmp"></div>
+    </div>
+  </div>
+  <div class="callout warn"><b>לא עושים אוטומציה לבלגן</b>אם התהליך היום לא ברור, אוטומציה רק תעשה את אותו בלגן מהר יותר. לכן קודם ממפים את ה-As‑Is, מסדרים אותו, ורק אז מתכננים את ה-To‑Be.</div>
+</section>
+
+<section class="blk" id="symbols">
+  <div class="kicker">חלק 2 · תרשים זרימה</div>
+  <h2>חמש צורות שמספיקות כדי לשרטט כמעט כל תהליך</h2>
+  <div class="syms" id="syms"></div>
+  <div class="sym-info" id="symInfo"></div>
+  <div class="callout claude"><b>טיפ: Claude משרטט בשבילכם</b>תארו ל-Claude את שלבי התהליך, ובקשו ממנו "תרשים זרימה בקוד Mermaid". את הקוד אפשר להדביק ב-draw.io (דרך Arrange ‹ Insert ‹ Mermaid) או ב-mermaid.live, ולקבל תרשים שאפשר לערוך. נתרגל את זה היום.</div>
+</section>
+
+<section class="blk" id="matrix">
+  <div class="kicker">חלק 3 · מה כדאי להפוך לאוטומטי</div>
+  <h2>מטריצת ההזדמנויות: ערך מול קלות</h2>
+  <p class="lead">לא כל משימה מתאימה לאוטומציה. בודקים שני דברים: כמה זמן המשימה גוזלת (ערך), וכמה קל להפוך אותה לאוטומטית (חוקים ברורים, נתונים דיגיטליים, ומחיר טעות נמוך). בחרו משימה, או הזיזו את הסליידרים ובנו משימה משלכם.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>ניקוד הזדמנויות לאוטומציה</h3></div>
+    <div class="sim-body">
+      <div class="task-list" id="taskList"></div>
+      <div class="mx">
+        <div id="mxSvg"></div>
+        <div>
+          <div class="sl"><span>פעמים בחודש</span><input type="range" id="sFreq" min="1" max="400" value="120"><span class="v" id="vFreq"></span></div>
+          <div class="sl"><span>דקות בכל פעם</span><input type="range" id="sMin" min="1" max="60" value="6"><span class="v" id="vMin"></span></div>
+          <div class="sl"><span>חוקים ברורים</span><input type="range" id="sRule" min="1" max="5" value="4"><span class="v" id="vRule"></span></div>
+          <div class="sl"><span>נתונים דיגיטליים</span><input type="range" id="sDig" min="1" max="5" value="5"><span class="v" id="vDig"></span></div>
+          <div class="sl"><span>מחיר טעות</span><input type="range" id="sErr" min="1" max="5" value="2"><span class="v" id="vErr"></span></div>
+          <div class="muted" style="font-size:14px" id="mxHours"></div>
+          <div class="verdict" id="mxVerdict"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="roi">
+  <div class="kicker">חלק 3 · ROI</div>
+  <h2>כמה האוטומציה שווה, ומתי היא מחזירה את עצמה</h2>
+  <p class="lead">ROI (החזר על ההשקעה) עונה על השאלה שכל מנהל ישאל: "כמה זה יעלה לנו, וכמה זה יחסוך?". משווים בין עלות הבנייה ועלות הכלים, לבין שעות העבודה שנחסכות.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">מחשבון</span><h3>מחשבון ROI לאוטומציה</h3></div>
+    <div class="sim-body">
+      <div class="roi">
+        <div class="roi-in" id="roiIn"></div>
+        <div>
+          <div class="roi-out">
+            <div><b id="oSave"></b><span>חיסכון נטו בחודש</span></div>
+            <div><b id="oHours"></b><span>שעות שנחסכות בחודש</span></div>
+            <div><b id="oPay"></b><span>החזר ההשקעה</span></div>
+            <div><b id="oRoi"></b><span>ROI אחרי 12 חודשים</span></div>
+          </div>
+          <div id="roiChart"></div>
+        </div>
+      </div>
+      <div class="formula">ROI = (12-month net savings − build cost) ÷ build cost × 100%</div>
+    </div>
+  </div>
+  <div class="callout tip"><b>מה לא נכנס למחשבון, אבל כדאי להזכיר למנהל</b>פחות טעויות, תשובה מהירה יותר ללקוח (ולכן יותר מכירות), ועובדים שמתפנים לעבודה חשובה יותר. קשה לכמת את הדברים האלה, ולכן כותבים אותם במסמך במילים.</div>
+</section>
+
+<section class="blk" id="interview">
+  <div class="kicker">חלק 4 · איך אוספים את המידע</div>
+  <h2>הראיון: 8 שאלות שכדאי לשאול את מי שעושה את העבודה</h2>
+  <div class="qs-int">
+    <div><b>התחלה</b>מה מתחיל את התהליך? מאיפה מגיעה הבקשה?</div>
+    <div><b>שלבים</b>תעבור/י איתי צעד אחרי צעד על המקרה האחרון שטיפלת בו.</div>
+    <div><b>מערכות</b>באילו מערכות, קבצים או אתרים את/ה משתמש/ת בכל שלב?</div>
+    <div><b>זמנים</b>כמה זמן לוקח כל שלב? כמה פעמים בחודש זה קורה?</div>
+    <div><b>החלטות</b>איפה צריך להחליט משהו? לפי אילו כללים?</div>
+    <div><b>חריגים</b>מה קורה כשמשהו לא מסתדר? כמה זה נפוץ?</div>
+    <div><b>כאבים</b>מה הכי מעצבן אותך בתהליך? איפה יש טעויות?</div>
+    <div><b>הצלחה</b>איך נראה תהליך מושלם מבחינתך?</div>
+  </div>
+  <div class="callout"><b>הטריק החשוב</b>מבקשים לעבור על מקרה אמיתי ואחרון, ולא "איך זה עובד בדרך כלל". כך מגלים את השלבים שאף אחד לא כתב בנוהל.</div>
+</section>
+
+<section class="blk" id="doc">
+  <div class="kicker">חלק 4 · התוצר</div>
+  <h2>מסמך האפיון: עמוד אחד שכולם מבינים</h2>
+  <div class="doc-t">
+    <div><b>שם התהליך ובעלים</b><br>מי אחראי, ומי משתתף</div>
+    <div><b>טריגר ותוצאה</b><br>מה מתחיל את התהליך, ואיך יודעים שהוא הסתיים</div>
+    <div><b>As‑Is</b><br>תרשים זרימה ורשימת שלבים עם זמנים</div>
+    <div><b>כאבים ומדדים</b><br>צווארי בקבוק, טעויות, זמני המתנה</div>
+    <div><b>To‑Be</b><br>תרשים התהליך החדש: מה עושה Make, מה עושה Claude ומה עושה אדם</div>
+    <div><b>מערכות ונתונים</b><br>אילו מערכות מתחברות ואילו שדות עוברים ביניהן</div>
+    <div><b>ROI</b><br>עלות, חיסכון, החזר השקעה ותועלות שקשה לכמת</div>
+    <div><b>סיכונים ונקודות אישור</b><br>איפה אדם חייב לאשר, ומה עושים כשמשהו נכשל</div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 2 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- anatomy ---------- */
+const AN=[
+ ['trigger','⚡','טריגר','האירוע שמתחיל את התהליך','--p1','ליד ממלא טופס "צור קשר" באתר.'],
+ ['input','📥','קלט','המידע שנכנס לתהליך','--p2','שם, טלפון, מייל, המוצר שהתעניין בו והודעה חופשית.'],
+ ['steps','🔁','שלבים','הפעולות לפי הסדר','--p4','להעתיק לגיליון, לבדוק מלאי, לכתוב תשובה, להזין ל-CRM, לקבוע מעקב.'],
+ ['decision','◆','החלטות','נקודות שבהן התהליך מתפצל','--p3','המוצר במלאי? אם כן, מציעים מועד אספקה. אם לא, מציעים מוצר דומה.'],
+ ['actors','👥','משתתפים','מי עושה כל שלב','--p5','נציג שירות, מנהל מלאי, ולפעמים מנהלת המכירות.'],
+ ['systems','🗄️','מערכות','איפה הנתונים נמצאים','--claude','אתר, תיבת מייל, גיליון הזמנות, גיליון מלאי, CRM ויומן.'],
+ ['output','🎯','תוצאה','איך יודעים שהתהליך הסתיים','--good','הליד קיבל תשובה אישית, והוא רשום ב-CRM עם משימת מעקב.']
+];
+function anRender(sel){
+  document.getElementById('anatFlow').innerHTML=AN.map(([k,ic,n,d,c])=>`<button class="af ${k===sel?'on':''}" data-k="${k}" style="--c:var(${c})"><span class="ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></button>`).join('');
+  document.querySelectorAll('.af').forEach(b=>b.onclick=()=>anRender(b.dataset.k));
+  const a=AN.find(x=>x[0]===sel);
+  document.getElementById('anatInfo').innerHTML=`<div class="t" style="--c:var(${a[4]})">${a[1]} ${a[2]}</div><p class="muted" style="margin:4px 0 10px">${a[3]}</p><b>בתהליך הליד של בית ועיצוב:</b><p style="margin:4px 0 0">${a[5]}</p>`;
+}
+anRender('trigger');
+
+/* ---------- process sim ---------- */
+const PS={
+ asis:[
+  ['⚡','ליד ממלא טופס באתר','הטופס נשלח לתיבת המייל הכללית',0,0,'--p1'],
+  ['⏳','ממתין בתיבת המייל','עד שנציג מתפנה לקרוא',0,240,'--p4',1],
+  ['✍️','נציג מעתיק את הפרטים לגיליון','העתק-הדבק של 6 שדות',4,4,'--p3'],
+  ['📦','נציג בודק מלאי','פותח את גיליון המלאי ומחפש את המוצר',3,3,'--p3'],
+  ['✉️','נציג כותב תשובה','כל נציג כותב בסגנון אחר',6,6,'--p3',1],
+  ['🗂️','נציג מזין את הליד ל-CRM','שוב אותם פרטים, במערכת אחרת',3,3,'--p3'],
+  ['📅','נציג קובע תזכורת למעקב ביומן','לפעמים נשכח',2,2,'--p3']
+ ],
+ tobe:[
+  ['⚡','ליד ממלא טופס באתר','Make מקבל את הנתונים מיד (Webhook)',0,0,'--p1'],
+  ['⚙️','Make שומר לגיליון ול-CRM','בלי העתקה, ובלי טעויות הקלדה',0,1,'--p2'],
+  ['📦','Make בודק מלאי בגיליון','לפי מזהה המוצר',0,1,'--p2'],
+  ['✳️','Claude מנסח תשובה אישית','לפי הוראות קבועות, מצב המלאי וההודעה של הליד',0,1,'--claude'],
+  ['👍','נציג מאשר בלחיצה','קורא, מתקן אם צריך ושולח',1,5,'--p5'],
+  ['⚙️','Make שולח מייל ופותח משימת מעקב','משימה ב-CRM לעוד 3 ימים',0,1,'--p2']
+ ]
+};
+let psMode='asis',psTimer=null,psDone={asis:null,tobe:null};
+const fmtT=m=>m>=60?`${Math.floor(m/60)} ש' ${m%60?m%60+" ד'":''}`.trim():`${m} ד'`;
+function psDraw(upto=-1){
+  const st=PS[psMode];
+  document.getElementById('psSteps').innerHTML=st.map(([ic,t,d,h,w,c,pain],i)=>`<div class="st ${i===upto?'active':''} ${i<upto?'done':''} ${pain&&psMode==='asis'?'pain':''}" style="--c:var(${c})"><span class="ic">${ic}</span><span><b>${t}</b><small>${d}</small></span><span class="min">${w>h&&h===0&&c==='--p4'?'⏳ '+fmtT(w):h?'👤 '+h+" ד'":'⚙️ אוטומטי'}</span></div>`).join('');
+  let hands=0,wait=0,man=0;st.slice(0,upto+1).forEach(([,, ,h,w,c])=>{hands+=h;wait+=w;if(c==='--p3'||c==='--p5')man++;});
+  document.getElementById('psHands').textContent=hands;document.getElementById('psWait').textContent=fmtT(wait);document.getElementById('psManual').textContent=man;
+  if(upto===st.length-1){psDone[psMode]={hands,wait,man};psCmp();}
+}
+function psCmp(){
+  const a=psDone.asis,b=psDone.tobe;if(!a||!b){document.getElementById('psCmp').innerHTML=(a||b)?'<div class="muted" style="font-size:14px">הפעילו גם את המצב השני כדי לראות השוואה.</div>':'';return;}
+  const row=(n,x,y,mx,u,f)=>`<div class="r"><b>${n}</b><span class="bw"><i style="width:${x/mx*100}%;background:var(--p3)"></i></span><span>As‑Is: ${f(x)}</span></div><div class="r"><span></span><span class="bw"><i style="width:${Math.max(1,y/mx*100)}%;background:var(--p2)"></i></span><span>To‑Be: ${f(y)}</span></div>`;
+  document.getElementById('psCmp').innerHTML=row('עבודת נציג',a.hands,b.hands,a.hands,'',x=>x+" ד'")+row('זמן תגובה',a.wait,b.wait,a.wait,'',fmtT);
+}
+function psPlay(){clearInterval(psTimer);let i=0;psDraw(0);document.getElementById('psPlay').disabled=true;
+  psTimer=setInterval(()=>{i++;if(i>=PS[psMode].length){clearInterval(psTimer);document.getElementById('psPlay').disabled=false;return;}psDraw(i);},1100);}
+document.getElementById('psPlay').onclick=psPlay;
+document.getElementById('psReset').onclick=()=>{clearInterval(psTimer);document.getElementById('psPlay').disabled=false;psDraw(-1);};
+document.querySelectorAll('#psSeg button').forEach(b=>b.onclick=()=>{clearInterval(psTimer);document.getElementById('psPlay').disabled=false;psMode=b.dataset.m;document.querySelectorAll('#psSeg button').forEach(x=>x.classList.toggle('on',x===b));psDraw(-1);});
+psDraw(-1);
+
+/* ---------- symbols ---------- */
+const SY=[
+ ['התחלה / סיום','<ellipse cx="60" cy="28" rx="50" ry="20"/>','אליפסה מסמנת איפה התהליך מתחיל ואיפה הוא נגמר.','"ליד ממלא טופס" או "הליד קיבל תשובה".'],
+ ['פעולה','<rect x="12" y="8" width="96" height="40" rx="4"/>','מלבן הוא שלב שבו מישהו (או משהו) עושה פעולה.','"לבדוק מלאי", "לכתוב תשובה".'],
+ ['החלטה','<polygon points="60,4 108,28 60,52 12,28"/>','מעוין הוא שאלה של כן או לא, והתהליך מתפצל ממנו לשני כיוונים.','"המוצר במלאי?"'],
+ ['קלט / פלט','<polygon points="26,8 108,8 94,48 12,48"/>','מקבילית היא מידע שנכנס לתהליך או יוצא ממנו.','"פרטי הטופס", "מייל ללקוח".'],
+ ['מאגר נתונים','<path d="M20 14 a40 9 0 0 0 80 0 v28 a40 9 0 0 1 -80 0z M20 14 a40 9 0 0 1 80 0"/>','גליל הוא מקום שבו הנתונים נשמרים: גיליון, CRM, מסד נתונים.','"גיליון המלאי", "CRM".']
+];
+function syR(i){document.getElementById('syms').innerHTML=SY.map(([n,s],j)=>`<button class="sym ${j===i?'on':''}" data-i="${j}"><svg viewBox="0 0 120 56" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(${['--p1','--p2','--p3','--p4','--p5'][j]})">${s}</svg><b>${n}</b></button>`).join('');
+ document.querySelectorAll('.sym').forEach(b=>b.onclick=()=>syR(+b.dataset.i));
+ document.getElementById('symInfo').innerHTML=`<b>${SY[i][0]}:</b> ${SY[i][2]}<br><span class="muted">דוגמה מהתהליך שלנו: ${SY[i][3]}</span>`;}
+syR(0);
+
+/* ---------- matrix ---------- */
+const TASKS=[
+ ['מענה ל"מה הסטטוס של ההזמנה?"',220,4,5,5,1],
+ ['העתקת לידים לגיליון ול-CRM',120,7,5,5,2],
+ ['סיכום שיחות מכירה',80,8,3,4,2],
+ ['אישור החזר כספי גדול',10,10,2,4,5],
+ ['שיחה עם לקוח כועס',30,15,1,2,4],
+ ['הכנת דוח מכירות שבועי',4,90,4,5,2]
+];
+function score(f,m,r,d,e){const hours=f*m/60;const val=Math.min(1,Math.log10(1+hours)/Math.log10(1+60));const ease=(r+d+(6-e)-3)/12;return {hours,val,ease};}
+function quad(s){return s.val>=.5&&s.ease>=.5?['לאוטומט עכשיו','--good','ערך גבוה וקל לבנות. מכאן מתחילים.']:s.val>=.5?['פרויקט גדול','--p4','שווה הרבה, אבל צריך תכנון, ולרוב גם אישור של אדם.']:s.ease>=.5?['ניצחון קטן','--p5','קל לבנות, אבל החיסכון קטן. טוב כתרגול או כתוספת.']:['לא כרגע','--p3','קשה לבנות וחוסך מעט. משאירים לאדם.'];}
+let mxSel=1;
+function mxDraw(){
+  const W=420,H=320,P=44;const X=v=>P+v*(W-2*P),Y=e=>H-P-e*(H-2*P);
+  const cur=score(+sFreq.value,+sMin.value,+sRule.value,+sDig.value,+sErr.value);
+  let dots=TASKS.map((t,i)=>{const s=score(t[1],t[2],t[3],t[4],t[5]);return i===mxSel?'':`<circle class="dot" cx="${X(s.val)}" cy="${Y(s.ease)}" r="7" fill="var(--ink-2)" opacity=".35" data-i="${i}"/>`;}).join('');
+  const q=quad(cur);
+  document.getElementById('mxSvg').innerHTML=`<svg viewBox="0 0 ${W} ${H}" direction="ltr" style="direction:ltr" font-family="Heebo">
+   <rect x="${X(.5)}" y="${Y(1)}" width="${X(1)-X(.5)}" height="${Y(.5)-Y(1)}" fill="var(--good)" opacity=".10"/>
+   <rect x="${X(.5)}" y="${Y(.5)}" width="${X(1)-X(.5)}" height="${Y(0)-Y(.5)}" fill="var(--p4)" opacity=".10"/>
+   <rect x="${X(0)}" y="${Y(1)}" width="${X(.5)-X(0)}" height="${Y(.5)-Y(1)}" fill="var(--p5)" opacity=".08"/>
+   <rect x="${X(0)}" y="${Y(.5)}" width="${X(.5)-X(0)}" height="${Y(0)-Y(.5)}" fill="var(--p3)" opacity=".07"/>
+   <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(0)}" stroke="var(--ink-2)"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(1)}" stroke="var(--ink-2)"/>
+   <line x1="${X(.5)}" y1="${Y(0)}" x2="${X(.5)}" y2="${Y(1)}" stroke="var(--line)" stroke-dasharray="4 4"/><line x1="${X(0)}" y1="${Y(.5)}" x2="${X(1)}" y2="${Y(.5)}" stroke="var(--line)" stroke-dasharray="4 4"/>
+   <g font-size="12.5" font-weight="700" text-anchor="middle">
+    <text x="${X(.75)}" y="${Y(.95)}" fill="var(--good)">לאוטומט עכשיו</text><text x="${X(.75)}" y="${Y(.05)}" fill="var(--p4)">פרויקט גדול</text>
+    <text x="${X(.25)}" y="${Y(.95)}" fill="var(--p5)">ניצחון קטן</text><text x="${X(.25)}" y="${Y(.05)}" fill="var(--p3)">לא כרגע</text></g>
+   <text x="${X(.5)}" y="${H-10}" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">ערך (שעות עבודה בחודש)</text><text x="${X(0)}" y="${H-10}" font-size="11" fill="var(--ink-2)">נמוך</text><text x="${X(1)}" y="${H-10}" text-anchor="end" font-size="11" fill="var(--ink-2)">גבוה</text>
+   <text x="14" y="${Y(.5)}" text-anchor="middle" font-size="12.5" fill="var(--ink-2)" transform="rotate(-90 14 ${Y(.5)})">קלות האוטומציה</text><text x="${X(0)-6}" y="${Y(1)+4}" text-anchor="end" font-size="11" fill="var(--ink-2)">קל</text><text x="${X(0)-6}" y="${Y(0)}" text-anchor="end" font-size="11" fill="var(--ink-2)">קשה</text>
+   ${dots}
+   <circle cx="${X(cur.val)}" cy="${Y(cur.ease)}" r="11" fill="var(${q[1]})" stroke="var(--surface)" stroke-width="3" style="transition:.4s"/>
+  </svg>`;
+  document.querySelectorAll('#mxSvg .dot').forEach(d=>d.onclick=()=>pickTask(+d.dataset.i));
+  [['Freq',''],['Min',''],['Rule','/5'],['Dig','/5'],['Err','/5']].forEach(([k,s])=>document.getElementById('v'+k).textContent=document.getElementById('s'+k).value+s);
+  document.getElementById('mxHours').textContent=`זה ${cur.hours.toFixed(1)} שעות עבודה בחודש.`;
+  const v=document.getElementById('mxVerdict');v.style.setProperty('--vc',`var(${q[1]})`);v.innerHTML=`${q[0]}: <span style="font-weight:500">${q[2]}</span>`;
+}
+function pickTask(i){mxSel=i;const t=TASKS[i];[['Freq',1],['Min',2],['Rule',3],['Dig',4],['Err',5]].forEach(([k,j])=>document.getElementById('s'+k).value=t[j]);
+  document.querySelectorAll('#taskList button').forEach((b,j)=>b.classList.toggle('on',j===i));mxDraw();}
+document.getElementById('taskList').innerHTML=TASKS.map((t,i)=>`<button>${t[0]}</button>`).join('');
+document.querySelectorAll('#taskList button').forEach((b,i)=>b.onclick=()=>pickTask(i));
+['sFreq','sMin','sRule','sDig','sErr'].forEach(id=>document.getElementById(id).oninput=()=>{mxSel=-1;document.querySelectorAll('#taskList button').forEach(b=>b.classList.remove('on'));mxDraw();});
+pickTask(1);
+
+/* ---------- ROI ---------- */
+const RI=[['n','פעמים בחודש',10,500,10,120],['m','דקות בכל פעם',1,60,1,18],['c','עלות שעת עבודה (₪)',30,200,5,60],['p','אחוז שנחסך',10,100,5,80],['b','שעות בנייה',2,80,1,16],['bc','עלות שעת בנייה (₪)',50,400,10,150],['t','כלים בחודש (₪)',0,500,10,100]];
+document.getElementById('roiIn').innerHTML=RI.map(([k,n,a,b,s,v])=>`<div class="sl"><span>${n}</span><input type="range" id="r_${k}" min="${a}" max="${b}" step="${s}" value="${v}"><span class="v" id="rv_${k}">${v}</span></div>`).join('');
+const nf=x=>Math.round(x).toLocaleString('he-IL');
+function roiCalc(){
+  const g=k=>+document.getElementById('r_'+k).value;RI.forEach(([k])=>document.getElementById('rv_'+k).textContent=g(k));
+  const hours=g('n')*g('m')/60*g('p')/100, gross=hours*g('c'), net=gross-g('t'), build=g('b')*g('bc');
+  const pay=net>0?build/net:Infinity, roi=net>0?(net*12-build)/build*100:-100;
+  document.getElementById('oSave').textContent='₪'+nf(net);document.getElementById('oHours').textContent=hours.toFixed(1);
+  document.getElementById('oPay').textContent=net<=0?'לא מחזיר':pay<1?'פחות מחודש':pay.toFixed(1)+' חודשים';
+  document.getElementById('oRoi').textContent=nf(roi)+'%';
+  const W=480,H=210,P=36,cum=[...Array(13)].map((_,i)=>-build+net*i);const mx=Math.max(...cum,0),mn=Math.min(...cum,0),rng=(mx-mn)||1;
+  const Y=v=>P/2+(mx-v)/rng*(H-P-P/2),bw=(W-P)/13;
+  let bars=cum.map((v,i)=>`<rect x="${W-P/2-(i+1)*bw+3}" y="${Math.min(Y(v),Y(0))}" width="${bw-6}" height="${Math.max(1,Math.abs(Y(v)-Y(0)))}" rx="3" fill="var(${v<0?'--p3':'--p2'})"/><text x="${W-P/2-(i+.5)*bw}" y="${H-6}" font-size="10.5" text-anchor="middle" fill="var(--ink-2)">${i}</text>`).join('');
+  const be=net>0&&pay<=12?`<line x1="${W-P/2-pay*bw-bw/2}" x2="${W-P/2-pay*bw-bw/2}" y1="${P/2}" y2="${H-P}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${W-P/2-pay*bw-bw/2-4}" y="${P/2+10}" font-size="11.5" text-anchor="end" fill="var(--ink)">נקודת איזון</text>`:'';
+  document.getElementById('roiChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" direction="ltr" style="direction:ltr" font-family="Heebo"><line x1="${P/2}" x2="${W-P/2}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink-2)"/>${bars}${be}<text x="${W-P/2}" y="12" font-size="11.5" text-anchor="end" fill="var(--ink-2)">רווח מצטבר לפי חודש (₪), חודש 0 = עלות הבנייה</text></svg>`;
+}
+RI.forEach(([k])=>document.getElementById('r_'+k).oninput=roiCalc);roiCalc();
+</script>
+</body>
+</html>

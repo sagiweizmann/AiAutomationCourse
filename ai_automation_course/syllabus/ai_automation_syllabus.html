@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סילבוס: מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#f6f5fb; --surface:#ffffff; --surface-2:#f0eef8; --ink:#16142a; --ink-2:#55526e; --line:#e2dfee;
+  --p1:#6d5dfc; --p2:#0ea5a4; --p3:#e2486f; --p4:#f59e0b; --p5:#2563eb;
+  --accent:#6d5dfc; --accent-2:#22d3ee; --glow:rgba(109,93,252,.25);
+  --hero-a:#120f2e; --hero-b:#2a1d6b; --hero-ink:#f3f1ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);
+  --radius:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0c1a; --surface:#16142a; --surface-2:#1e1b38; --ink:#eeecff; --ink-2:#a7a3c7; --line:#2c2950;
+    --p1:#8b7dff; --p2:#2dd4bf; --p3:#fb7194; --p4:#fbbf24; --p5:#60a5fa;
+    --accent:#8b7dff; --glow:rgba(139,125,255,.3);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a; --surface:#16142a; --surface-2:#1e1b38; --ink:#eeecff; --ink-2:#a7a3c7; --line:#2c2950;
+  --p1:#8b7dff; --p2:#2dd4bf; --p3:#fb7194; --p4:#fbbf24; --p5:#60a5fa;
+  --accent:#8b7dff; --glow:rgba(139,125,255,.3);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+.en{direction:ltr;unicode-bidi:isolate}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:var(--hero-ink);background:
+  radial-gradient(900px 500px at 85% -10%,rgba(34,211,238,.25),transparent 60%),
+  radial-gradient(700px 500px at 0% 110%,rgba(226,72,111,.25),transparent 60%),
+  linear-gradient(135deg,var(--hero-a),var(--hero-b));padding:56px 0 64px}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(to bottom,black,transparent)}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:center}
+.badge{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:6px 14px;border-radius:999px;font-size:14px;backdrop-filter:blur(6px)}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 10px #22d3ee;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hero h1{font-size:clamp(30px,4.6vw,52px);margin:18px 0 14px}
+.hero h1 .grad{background:linear-gradient(90deg,#a99bff,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:18px;color:#cfcaf5;max-width:560px;margin:0 0 26px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:440px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 10px;text-align:center}
+.stat b{display:block;font-family:"Secular One";font-size:30px;line-height:1.1;color:#fff}
+.stat span{font-size:13px;color:#bdb7ea}
+.hero-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:15px;padding:11px 20px;border-radius:12px;display:inline-flex;gap:8px;align-items:center;text-decoration:none}
+.btn-main{background:linear-gradient(90deg,#7c6cff,#22d3ee);color:#0d0c1a;box-shadow:0 8px 24px rgba(124,108,255,.35)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.flow-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:14px;backdrop-filter:blur(8px)}
+.flow-card svg{width:100%;height:auto;display:block}
+.flow-cap{font-size:13px;color:#bdb7ea;text-align:center;margin-top:6px}
+.link{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+.pkt{animation:none}
+
+
+
+section{padding:56px 0 8px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.5px}
+.sec-head{margin-bottom:22px}
+.sec-head h2{font-size:clamp(26px,3.4vw,34px)}
+.sec-head p{margin:6px 0 0;color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;padding:22px 26px;margin:0;list-style:none;counter-reset:g}
+.goals li{counter-increment:g;display:flex;gap:12px;align-items:center;font-weight:500}
+.goals li::before{content:counter(g);flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--accent);font-weight:800;font-size:14px}
+.phases{display:grid;gap:18px}
+.phase{overflow:hidden}
+.ph-head{display:flex;align-items:center;gap:14px;padding:16px 22px;background:color-mix(in srgb,var(--c) 10%,var(--surface));border-bottom:1px solid var(--line)}
+.ph-num{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--c);color:#fff;font-family:"Secular One";font-size:20px;flex:none}
+.ph-head h3{font-size:21px}
+.ph-meta{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{border-radius:999px;padding:3px 11px;font-size:13px;font-weight:700;background:var(--surface);color:var(--c);border:1px solid color-mix(in srgb,var(--c) 35%,transparent)}
+.mods{padding:6px 22px 14px}
+.mod{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:18px;padding:14px 0;border-bottom:1px dashed var(--line)}
+.mod:last-child{border-bottom:0}
+.mod-t{font-weight:700;font-size:16px}
+.mod-t small{display:block;font-weight:500;color:var(--ink-2);font-size:13px;margin-top:2px}
+.topics{display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start}
+.topic.claude{background:color-mix(in srgb,#d97757 16%,var(--surface));color:var(--ink);border:1px solid color-mix(in srgb,#d97757 45%,transparent);font-weight:500}
+.topic.claude::before{content:"✳ ";color:#d97757}
+.claude-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cl{padding:18px}
+.cl .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,#d97757 16%,var(--surface));color:#d97757;margin-bottom:10px}
+.cl b{display:block;font-size:16.5px;margin-bottom:4px}
+.cl span{font-size:14.5px;color:var(--ink-2)}
+.cl small{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;color:#c2643f}
+.legend-c{font-size:14px;color:var(--ink-2);margin:-8px 0 16px}
+.topic{font-size:14px;padding:4px 11px;border-radius:9px;background:var(--surface-2);color:var(--ink)}
+.bar{display:flex;height:12px;border-radius:99px;overflow:hidden;margin:0 0 22px;border:1px solid var(--line)}
+.bar div{background:var(--c)}
+footer{padding:48px 0 36px;text-align:center;color:var(--ink-2);font-size:14px}
+@media (max-width:980px){.hero-grid{grid-template-columns:minmax(0,1fr)}.claude-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){
+ body{font-size:15.5px}.wrap{padding:0 16px}
+ .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .goals{grid-template-columns:minmax(0,1fr);padding:18px}
+ .mod{grid-template-columns:minmax(0,1fr);gap:8px}
+ .claude-grid{grid-template-columns:minmax(0,1fr)}
+ .ph-head{flex-wrap:wrap;padding:14px 16px}.mods{padding:4px 16px 10px}
+ .ph-meta{margin-inline-start:0;width:100%}
+}
+@media print{.hero-actions{display:none!important}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:24px 0}.card{box-shadow:none;break-inside:avoid}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge"><span class="dot"></span>סילבוס הכשרה מקצועית · מבוסס Claude</span>
+      <h1>מיישם אוטומציה עסקית מתקדמת <span class="grad">באמצעות כלי AI</span></h1>
+      <p class="lead">בקורס המשתתפים לומדים לתכנן, לפתח, להטמיע ולתחזק תהליכים עסקיים אוטומטיים שמבוססים על AI. הכלי המרכזי בקורס הוא Claude. בסוף הקורס כל משתתף מציג מערכת אוטומציה פעילה שבנה בעצמו.</p>
+      <div class="stats">
+        <div class="stat"><b>45</b><span>שעות</span></div>
+        <div class="stat"><b>15</b><span>מפגשים</span></div>
+        
+        <div class="stat"><b>11</b><span>מודולים</span></div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-main" href="#topics">לנושאי הקורס</a>
+        <button class="btn btn-ghost" onclick="window.print()">הדפסה / PDF</button><button class="btn btn-ghost" id="themeBtn">🌓 מצב תצוגה</button>
+      </div>
+    </div>
+    <div class="flow-card" aria-hidden="true">
+      <svg viewBox="0 0 420 300" direction="ltr" style="direction:ltr">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g fill="none" stroke="url(#g1)" stroke-width="2.5">
+          <path class="link" d="M92 70 C150 70 150 150 196 150"/>
+          <path class="link" d="M92 230 C150 230 150 150 196 150"/>
+          <path class="link" d="M286 150 C320 150 320 70 340 70"/>
+          <path class="link" d="M286 150 C320 150 320 230 340 230"/>
+        </g>
+        <circle r="5" fill="#22d3ee" filter="url(#glow)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M92 70 C150 70 150 150 196 150"/></circle>
+        <circle r="5" fill="#fb7194" filter="url(#glow)"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M92 230 C150 230 150 150 196 150"/></circle>
+        <circle r="5" fill="#fbbf24" filter="url(#glow)"><animateMotion dur="2s" begin=".6s" repeatCount="indefinite" path="M286 150 C320 150 320 70 340 70"/></circle>
+        <circle r="5" fill="#2dd4bf" filter="url(#glow)"><animateMotion dur="2s" begin="1.6s" repeatCount="indefinite" path="M286 150 C320 150 320 230 340 230"/></circle>
+        <g font-family="Heebo" text-anchor="middle">
+          <rect x="12" y="44" width="80" height="52" rx="14" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.25)"/>
+          <text x="52" y="66" fill="#fff" font-size="15" font-weight="700">טופס</text><text x="52" y="84" fill="#bdb7ea" font-size="11">טריגר</text>
+          <rect x="12" y="204" width="80" height="52" rx="14" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.25)"/>
+          <text x="52" y="226" fill="#fff" font-size="15" font-weight="700">מייל</text><text x="52" y="244" fill="#bdb7ea" font-size="11">Webhook</text>
+          <rect x="196" y="112" width="90" height="76" rx="20" fill="url(#g1)" filter="url(#glow)"/>
+          <text x="241" y="148" fill="#0d0c1a" font-size="20" font-weight="800">Claude</text><text x="241" y="168" fill="#0d0c1a" font-size="11.5" font-weight="700">סוכן חכם</text>
+          <rect x="340" y="44" width="72" height="52" rx="14" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.25)"/>
+          <text x="376" y="66" fill="#fff" font-size="15" font-weight="700">CRM</text><text x="376" y="84" fill="#bdb7ea" font-size="11">עדכון ליד</text>
+          <rect x="340" y="204" width="72" height="52" rx="14" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.25)"/>
+          <text x="376" y="226" fill="#fff" font-size="15" font-weight="700">Slack</text><text x="376" y="244" fill="#bdb7ea" font-size="11">התראה</text>
+        </g>
+      </svg>
+      <div class="flow-cap">כזו מערכת תבנו בקורס: קלט, עיבוד ב-Claude, ופעולה במערכות הארגון</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+<section id="goals">
+  <div class="sec-head"><div class="kicker">מטרות</div><h2>מה המשתתפים יידעו בסוף ההכשרה</h2></div>
+  <ol class="card goals"><li>לאפיין תהליכים עסקיים בארגון</li><li>לזהות משימות הניתנות לאוטומציה</li><li>לבנות סוכני AI לביצוע משימות מורכבות</li><li>לפתח תהליכי Workflow חכמים</li><li>לבצע אינטגרציה בין מערכות מידע</li><li>להתחבר לשירותי API ולבצע תקשורת בין מערכות</li><li>להשתמש בפלטפורמות אוטומציה מובילות</li><li>לשלב AI במכירות, שירות, שיווק ותפעול</li><li>לבנות בסיסי ידע חכמים (Knowledge Base)</li><li>להטמיע פתרונות AI בארגונים</li><li>לבצע בדיקות, שיפור ביצועים ותחזוקת מערכות</li><li>להציג פרויקט גמר עם מערכת אוטומציה פעילה</li></ol>
+</section>
+<section id="claude">
+  <div class="sec-head"><div class="kicker">הכלי המרכזי</div><h2>מיישמים את האוטומציה עם Claude</h2><p>לאורך כל הקורס Claude הוא מנוע ה-AI: מהצ'אט ועד סוכנים שמחוברים למערכות הארגון. Make משמש לחיבור בין המערכות ולתזמון.</p></div>
+  <div class="claude-grid"><div class="card cl"><div class="ic">💬</div><b>Claude בצ'אט</b><span>ניסוח פרומפטים, אפיון תהליכים ובניית אבות טיפוס מהירים</span><br><small>מודולים 1–2</small></div><div class="card cl"><div class="ic">📁</div><b>Projects ו-Artifacts</b><span>מרחב עבודה עם מסמכי הארגון, וכלים קטנים שאפשר לשתף</span><br><small>מודולים 1, 7</small></div><div class="card cl"><div class="ic">🔌</div><b>Claude API</b><span>שילוב Claude בתוך תהליכי Make: סיווג, חילוץ, סיכום ופלט מובנה</span><br><small>מודולים 3, 5</small></div><div class="card cl"><div class="ic">🔗</div><b>Connectors ו-MCP</b><span>חיבור Claude ל-CRM, למייל, ל-Slack ולמערכות הארגון</span><br><small>מודולים 6, 8</small></div><div class="card cl"><div class="ic">🤖</div><b>סוכנים ו-Skills</b><span>בניית סוכנים שמשתמשים בכלים, ונהלים עסקיים שנשמרים כ-Skills</span><br><small>מודול 8</small></div><div class="card cl"><div class="ic">🏢</div><b>Claude בארגון</b><span>הטמעה במקום שבו העובדים כבר נמצאים: Slack, Microsoft 365 ו-Chrome</span><br><small>מודול 9</small></div></div>
+</section>
+<section id="topics">
+  <div class="sec-head"><div class="kicker">נושאי הקורס</div><h2>11 מודולים בחמישה שלבים</h2><p>45 שעות: 15 מפגשים של 3 שעות.</p></div>
+  <div class="legend-c"><span class="topic claude">Claude</span> נושאים שבהם עובדים עם Claude</div>
+  <div class="bar"><div style="--c:var(--p1);width:20.000%" title="בסיס: 9 שעות"></div><div style="--c:var(--p2);width:26.667%" title="בניית תהליכים: 12 שעות"></div><div style="--c:var(--p3);width:20.000%" title="AI מתקדם: 9 שעות"></div><div style="--c:var(--p4);width:13.333%" title="יישום והטמעה: 6 שעות"></div><div style="--c:var(--p5);width:20.000%" title="פרויקט גמר: 9 שעות"></div></div>
+  <div class="phases"><div class="card phase" style="--c:var(--p1)"><div class="ph-head"><span class="ph-num">1</span><h3>בסיס</h3><div class="ph-meta"><span class="pill">9 שעות</span><span class="pill">מפגשים 1–3</span></div></div><div class="mods"><div class="mod"><div class="mod-t">1. מבוא ל-AI ול-Claude<small>מפגש 1</small></div><div class="topics"><span class=topic>מהו מודל שפה (LLM)</span><span class=topic>יכולות ומגבלות</span><span class=topic>הנדסת פרומפטים</span><span class=topic>פלט מובנה</span><span class="topic claude">עבודה עם Claude: Projects ו-Artifacts</span></div></div><div class="mod"><div class="mod-t">2. אפיון תהליכים<small>מפגש 2</small></div><div class="topics"><span class=topic>מיפוי As-Is ו-To-Be</span><span class=topic>תרשימי זרימה</span><span class=topic>זיהוי משימות לאוטומציה</span><span class=topic>חישוב ROI</span></div></div><div class="mod"><div class="mod-t">3. יסודות טכניים<small>מפגש 3</small></div><div class="topics"><span class=topic>JSON ומבני נתונים</span><span class=topic>HTTP ו-REST API</span><span class=topic>מפתחות API ו-OAuth</span><span class=topic>Webhooks</span><span class="topic claude">Claude API: קריאה ראשונה</span></div></div></div></div><div class="card phase" style="--c:var(--p2)"><div class="ph-head"><span class="ph-num">2</span><h3>בניית תהליכים</h3><div class="ph-meta"><span class="pill">12 שעות</span><span class="pill">מפגשים 4–7</span></div></div><div class="mods"><div class="mod"><div class="mod-t">4. פלטפורמות אוטומציה<small>מפגש 4</small></div><div class="topics"><span class=topic>טריגרים ופעולות ב-Make</span><span class=topic>מיפוי שדות</span><span class=topic>תנאים ולולאות</span><span class=topic>טיפול בשגיאות</span><span class=topic>היכרות עם Zapier ו-n8n</span></div></div><div class="mod"><div class="mod-t">5. Workflows חכמים<small>מפגשים 5–6</small></div><div class="topics"><span class="topic claude">Claude בתוך תהליך ב-Make</span><span class=topic>סיווג, חילוץ וסיכום</span><span class=topic>פלט JSON</span><span class=topic>עיבוד מסמכים</span><span class=topic>אישור אנושי (Human-in-the-loop)</span></div></div><div class="mod"><div class="mod-t">6. אינטגרציה בין מערכות<small>מפגש 7</small></div><div class="topics"><span class="topic claude">Connectors ו-MCP: חיבור Claude למערכות</span><span class=topic>CRM</span><span class=topic>Google Workspace ו-Microsoft 365</span><span class=topic>ערוצי תקשורת (Slack, WhatsApp)</span><span class=topic>מניעת כפילויות</span></div></div></div></div><div class="card phase" style="--c:var(--p3)"><div class="ph-head"><span class="ph-num">3</span><h3>AI מתקדם</h3><div class="ph-meta"><span class="pill">9 שעות</span><span class="pill">מפגשים 8–10</span></div></div><div class="mods"><div class="mod"><div class="mod-t">7. בסיסי ידע חכמים<small>מפגש 8</small></div><div class="topics"><span class=topic>איסוף וניקוי ידע</span><span class=topic>Embeddings ומסד וקטורי</span><span class=topic>RAG</span><span class="topic claude">בסיס ידע ב-Claude Projects</span><span class=topic>ציטוט מקורות</span></div></div><div class="mod"><div class="mod-t">8. סוכני AI<small>מפגשים 9–10</small></div><div class="topics"><span class=topic>סוכן לעומת Workflow</span><span class="topic claude">סוכנים עם Claude: כלים ו-Skills</span><span class="topic claude">Claude Agent SDK</span><span class=topic>MCP</span><span class=topic>זיכרון</span><span class=topic>הרשאות ו-Prompt Injection</span></div></div></div></div><div class="card phase" style="--c:var(--p4)"><div class="ph-head"><span class="ph-num">4</span><h3>יישום והטמעה</h3><div class="ph-meta"><span class="pill">6 שעות</span><span class="pill">מפגשים 11–12</span></div></div><div class="mods"><div class="mod"><div class="mod-t">9. AI בארגון והטמעה<small>מפגש 11</small></div><div class="topics"><span class=topic>מכירות</span><span class=topic>שירות</span><span class=topic>שיווק</span><span class=topic>תפעול</span><span class=topic>ניהול שינוי ופיילוט</span><span class="topic claude">Claude בארגון: Slack, Microsoft 365 ו-Chrome</span></div></div><div class="mod"><div class="mod-t">10. בדיקות ותחזוקה<small>מפגש 12</small></div><div class="topics"><span class=topic>תרחישי בדיקה</span><span class=topic>לוגים והתראות</span><span class=topic>עלויות</span><span class=topic>פרטיות ואבטחה</span></div></div></div></div><div class="card phase" style="--c:var(--p5)"><div class="ph-head"><span class="ph-num">5</span><h3>פרויקט גמר</h3><div class="ph-meta"><span class="pill">9 שעות</span><span class="pill">מפגשים 13–15</span></div></div><div class="mods"><div class="mod"><div class="mod-t">11. פרויקט גמר<small>מפגשים 13–15</small></div><div class="topics"><span class=topic>אפיון וארכיטקטורה</span><span class=topic>בניית אב טיפוס</span><span class=topic>בדיקות וניטור</span><span class=topic>הצגה בפני ועדה</span></div></div></div></div></div>
+</section>
+</main>
+<footer>סילבוס: מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · 45 שעות · 15 מפגשים</footer>
+<script>
+document.getElementById("themeBtn").onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=d?"light":"dark";};
+</script>
+</body>
+</html>

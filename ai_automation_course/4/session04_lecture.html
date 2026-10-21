@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 4: פלטפורמות אוטומציה: Make · הרצאה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+@media (max-width:900px){.grid3,.grid4,.agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.grid2,.grid3,.grid4,.agenda{grid-template-columns:minmax(0,1fr)}.card{padding:16px}.sim-body{padding:14px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card,.sim{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* canvas */
+.cv-wrap{background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--ink) 12%,transparent) 1px,transparent 0) 0 0/18px 18px,var(--surface-2);border-radius:16px;padding:8px;position:relative}
+.cv-wrap svg{width:100%;height:auto;display:block}
+.mod circle{transition:.25s}
+.mod.on circle.ring{stroke-width:5}
+.mod.err circle.main{fill:var(--bad)}
+.mod.ok circle.ring{stroke:var(--good)}
+.mod.skip{opacity:.35}
+.cv-ctrl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.cv-ctrl label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:4px}
+.cv-ctrl select{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.log{margin-top:12px;background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-size:14px;min-height:120px;max-height:260px;overflow:auto}
+.log div{padding:2px 0;animation:fade .3s}
+@keyframes fade{from{opacity:0}}
+.log .g{color:#86efac}.log .r{color:#fca5a5}.log .y{color:#fcd34d}.log .b{color:#a5b4fc}
+.ops{display:flex;gap:10px;align-items:center;font-weight:800;margin-top:10px}
+.ops span{background:var(--surface-2);border-radius:999px;padding:3px 12px}
+.minfo{margin-top:12px;padding:12px 16px;border-radius:14px;background:var(--surface-2);min-height:64px;font-size:15px}
+/* mapping */
+.mp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}
+.bundle{display:flex;flex-direction:column;gap:6px}
+.fld{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 12px;border-radius:10px;border:2px solid var(--line);background:var(--surface);cursor:pointer;font:inherit;color:inherit;text-align:right;transition:.2s}
+.fld code{background:none;padding:0;font-size:13px;color:var(--p1)}
+.fld small{color:var(--ink-2);font-size:12.5px;direction:ltr;unicode-bidi:isolate;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fld.sel{border-color:var(--p1);box-shadow:0 0 0 3px var(--glow)}
+.cols{display:flex;flex-direction:column;gap:6px}
+.col{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px;align-items:center;padding:6px 8px;border-radius:10px;border:2px dashed var(--line);cursor:pointer;transition:.2s;background:var(--surface)}
+.col:hover{border-color:var(--p1)}
+.col b{font-size:14.5px}
+.col .slot{min-height:30px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;gap:6px;padding:3px 8px;font-size:13px;direction:ltr;justify-content:flex-end;flex-wrap:wrap}
+.col .chip{background:color-mix(in srgb,var(--p1) 18%,transparent);color:var(--p1);border-radius:6px;padding:1px 7px;font-family:"JetBrains Mono",monospace;font-weight:700}
+.col.good{border-style:solid;border-color:var(--good)}
+.col.bad{border-style:solid;border-color:var(--bad)}
+.fn{display:flex;gap:6px;align-items:center;font-size:13px;margin-top:4px}
+.result{margin-top:12px}
+.result table{font-size:13.5px}
+/* filter */
+.ft-ctrl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ft-ctrl select,.ft-ctrl input{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.leads tr{transition:.25s}
+.leads tr.pass td{background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.leads tr.fail td{opacity:.5}
+.route-res{font-weight:800;margin-top:10px}
+/* iterator */
+.it{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch;direction:ltr}
+.it-box{padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);text-align:center;min-height:150px;direction:rtl}
+.it-box h4{font-size:15px}
+.it-box .ico{font-size:24px}
+.bchip{display:block;margin:5px auto;padding:3px 8px;border-radius:8px;font-size:13px;background:color-mix(in srgb,var(--c) 20%,transparent);border:1px solid var(--c);opacity:0;transform:translateY(6px);transition:.4s;max-width:100%}
+.bchip.show{opacity:1;transform:none}
+.agg-out{font-size:14px;font-weight:700;margin-top:6px;min-height:40px}
+/* compare */
+.cmp td:first-child{font-weight:700}
+.badge3{display:inline-block;font-size:12px;font-weight:800;border-radius:6px;padding:1px 7px;background:var(--surface-2)}
+@media (max-width:860px){.mp,.cv-ctrl{grid-template-columns:minmax(0,1fr)}.ft-ctrl{grid-template-columns:minmax(0,1fr)}.it{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 4</b><span class="kind-badge">🎓 הרצאה</span></div>
+  <h1>פלטפורמות אוטומציה: Make</h1>
+  <p class="sub">בונים את התרחיש הראשון: טריגר, מודולים, מיפוי שדות, נתבים ומסננים, לולאות, וטיפול בשגיאות. בסוף משווים בין Make, Zapier ו-n8n.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="session04_lecture.html" class="on">🎓 הרצאה</a><a href="session04_practice.html" class="">🛠️ תרגול</a><a href="session04_solution.html" class="">✅ פתרון</a><a href="session04_summary.html" class="">📌 סיכום</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk" id="agenda">
+  <div class="kicker">מבנה המפגש · 3 שעות</div>
+  <h2>מה נעשה היום</h2>
+  <div class="agenda">
+    <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:15</div><b>האנטומיה של תרחיש</b><span>מודולים, Bundles ופעולות</span></div>
+    <div class="ag" style="--c:var(--p2)"><div class="t">0:15–0:35</div><b>מיפוי, נתבים ומסננים</b><span>איך נתונים עוברים ואיך התהליך מתפצל</span></div>
+    <div class="ag" style="--c:var(--p3)"><div class="t">0:35–1:00</div><b>לולאות ושגיאות</b><span>Iterator, Aggregator ו-Error handlers, ואז השוואה לפלטפורמות אחרות</span></div>
+    <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול ב-Make</b><span>תרחיש לידים מלא, מקצה לקצה</span></div>
+  </div>
+</section>
+
+<section class="blk" id="scenario">
+  <div class="kicker">חלק 1 · תרחיש</div>
+  <h2>תרחיש (Scenario): שרשרת של מודולים</h2>
+  <p class="lead">ב-Make כל אוטומציה היא <b>תרחיש</b>. התרחיש מתחיל במודול <b>טריגר</b>, וממשיך במודולים של <b>פעולות</b>. כל פריט מידע שעובר בתרחיש נקרא <b>Bundle</b>, וכל הרצה של מודול נספרת כ<b>פעולה</b> (Operation), שעליה משלמים. בחרו ליד, בחרו מה יקרה בשגיאה, והריצו.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>התרחיש: ליד חדש מהאתר</h3></div>
+    <div class="sim-body">
+      <div class="cv-wrap" id="cv"></div>
+      <div class="minfo" id="minfo">לחצו על מודול כדי לקרוא מה הוא עושה.</div>
+      <div class="cv-ctrl">
+        <div><label>הליד שנכנס</label><select id="cvLead"><option value="0">נועה: יש טלפון ומייל תקין</option><option value="1">דני: אין טלפון</option><option value="2">שירה: יש טלפון, אבל המייל שבור (noa@@mail)</option></select></div>
+        <div><label>טיפול בשגיאה במודול "מייל ללקוח"</label><select id="cvErr"><option value="none">ללא טיפול</option><option value="ignore">Ignore: להתעלם</option><option value="resume">Resume: להמשיך עם ערך חלופי</option><option value="break">Break: לשמור להשלמה ולנסות שוב</option><option value="rollback">Rollback: לעצור ולבטל</option></select></div>
+      </div>
+      <div class="row mt"><button class="btn" id="cvRun">▶ Run once</button><button class="btn ghost" id="cvClr">ניקוי יומן</button></div>
+      <div class="ops"><span>פעולות בהרצה: <b id="opsRun">0</b></span><span>סה"כ: <b id="opsTot">0</b></span></div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="mapping">
+  <div class="kicker">חלק 2 · מיפוי</div>
+  <h2>מיפוי (Mapping): איזה נתון נכנס לאיזו עמודה</h2>
+  <p class="lead">כל מודול מקבל נתונים מהמודולים שלפניו. מיפוי הוא החיבור בין <b>שדה בפלט</b> של מודול קודם לבין <b>שדה בקלט</b> של המודול הנוכחי. לחצו על שדה מהליד, ואז על העמודה בגיליון שהוא צריך להיכנס אליה.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>מיפוי ליד לשורה ב-Google Sheets</h3></div>
+    <div class="sim-body">
+      <div class="mp">
+        <div><b>פלט ה-Webhook (Bundle 1)</b><div class="bundle mt" id="bundle"></div></div>
+        <div><b>Google Sheets · Add a Row</b><div class="cols mt" id="cols"></div>
+          <label class="fn"><input type="checkbox" id="fnDate"> לעטוף את התאריך ב-<code>formatDate(…; "DD/MM/YYYY HH:mm")</code></label>
+          <label class="fn"><input type="checkbox" id="fnTrim"> לנקות רווחים מהשם עם <code>trim(…)</code></label>
+        </div>
+      </div>
+      <div class="row mt"><button class="btn" id="mpRun">▶ הרצה</button><button class="btn ghost" id="mpAuto">מיפוי נכון אוטומטי</button><button class="btn ghost" id="mpReset">↺ איפוס</button></div>
+      <div class="result tbl" id="mpRes"></div>
+      <div class="muted" style="font-size:14px;margin-top:8px" id="mpMsg"></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="router">
+  <div class="kicker">חלק 2 · נתב ומסננים</div>
+  <h2>Router ו-Filter: לפצל את התהליך לפי תנאים</h2>
+  <p class="lead"><b>Router</b> מפצל את התרחיש לכמה מסלולים. על החיבור לכל מסלול יש <b>Filter</b>, תנאי שקובע אילו Bundles יעברו בו. בנו תנאי וראו אילו לידים עוברים.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">סימולציה</span><h3>בודק מסננים</h3></div>
+    <div class="sim-body">
+      <div class="row" style="margin-bottom:10px"><button class="btn sm ghost" data-pre="0">מקור = facebook</button><button class="btn sm ghost" data-pre="1">הודעה מכילה "מחיר"</button><button class="btn sm ghost" data-pre="2">טלפון קיים</button><button class="btn sm ghost" data-pre="3">טלפון לא קיים</button></div>
+      <div class="ft-ctrl">
+        <select id="ftF"><option value="source">source (מקור)</option><option value="interested_in">interested_in (מוצר)</option><option value="phone">phone (טלפון)</option><option value="message">message (הודעה)</option></select>
+        <select id="ftO"><option value="eq">שווה ל (Equal to)</option><option value="has">מכיל (Contains)</option><option value="ex">קיים (Exists)</option><option value="nex">לא קיים (Does not exist)</option></select>
+        <input id="ftV" value="facebook" placeholder="ערך">
+      </div>
+      <div class="tbl mt leads"><table id="ldT"></table></div>
+      <div class="route-res" id="ftRes"></div>
+    </div>
+  </div>
+  <div class="callout tip"><b>מסלול ברירת מחדל (Fallback)</b>ב-Router אפשר לסמן מסלול אחד כמסלול ברירת מחדל. Bundle שלא עבר אף מסנן ילך אליו, וכך אף ליד לא "נעלם" בלי טיפול.</div>
+</section>
+
+<section class="blk" id="iterator">
+  <div class="kicker">חלק 3 · לולאות</div>
+  <h2>Iterator ו-Aggregator: לפרק ולחבר</h2>
+  <p class="lead">כשמגיעה הזמנה עם כמה מוצרים, <b>Iterator</b> מפרק את המערך כך שכל מוצר הופך ל-Bundle נפרד, וכל מודול אחריו רץ פעם אחת לכל מוצר. <b>Aggregator</b> עושה את ההפך: הוא אוסף כמה Bundles לתוצאה אחת, למשל שורת סיכום.</p>
+  <div class="sim">
+    <div class="sim-head"><span class="tag">אנימציה</span><h3>הזמנה עם 3 מוצרים</h3></div>
+    <div class="sim-body">
+      <div class="it" id="it">
+        <div class="it-box"><div class="ico">🛒</div><h4>Webhook</h4><small class="muted">Bundle אחד עם items[3]</small><div id="itA"></div></div>
+        <div class="it-box"><div class="ico">✂️</div><h4>Iterator</h4><small class="muted">מפרק את items</small><div id="itB"></div></div>
+        <div class="it-box"><div class="ico">📄</div><h4>Sheets · Add a Row</h4><small class="muted">רץ פעם לכל מוצר</small><div id="itC"></div></div>
+        <div class="it-box"><div class="ico">🧺</div><h4>Text aggregator</h4><small class="muted">מחבר לשורת סיכום</small><div class="agg-out" id="itD"></div></div>
+      </div>
+      <div class="row mt"><button class="btn" id="itGo">▶ הפעלה</button><span class="ops"><span>פעולות: <b id="itOps">0</b></span></span></div>
+    </div>
+  </div>
+  <div class="callout warn"><b>לולאות עולות פעולות</b>הזמנה עם 3 מוצרים מפעילה את המודולים שאחרי ה-Iterator שלוש פעמים. כשמתכננים תרחיש, מחשבים כמה פעולות הוא יצרוך בחודש, לפי הכמות הממוצעת של פריטים.</div>
+</section>
+
+<section class="blk" id="errors">
+  <div class="kicker">חלק 3 · טיפול בשגיאות</div>
+  <h2>חמש דרכים לטפל בשגיאה</h2>
+  <p class="lead">כשמודול נכשל, אפשר לחבר אליו <b>Error handler</b> (קליק ימני על המודול ‹ Add error handler). ההחלטה תלויה בשאלה אם ניסיון חוזר יכול לעזור, ומה המחיר של פספוס.</p>
+  <div class="tbl"><table>
+    <tr><th>Handler</th><th>מה קורה</th><th>מתי להשתמש</th></tr>
+    <tr><td><b>Ignore</b></td><td>מתעלם מהשגיאה, וההרצה נחשבת הצלחה</td><td>שלב לא חשוב, כמו לוג או הודעה שלא קריטית</td></tr>
+    <tr><td><b>Resume</b></td><td>ממשיך עם ערך חלופי שאתם מגדירים</td><td>כשיש ברירת מחדל סבירה, למשל "לא נמצא"</td></tr>
+    <tr><td><b>Break</b></td><td>שומר את ההרצה ב-Incomplete executions, ואפשר להגדיר לה ניסיונות חוזרים אוטומטיים</td><td>תקלות זמניות (429, 500, ניתוק). זה הנפוץ ביותר</td></tr>
+    <tr><td><b>Rollback</b></td><td>עוצר ומבטל פעולות במודולים שתומכים בזה</td><td>כשעדיף "הכול או כלום"</td></tr>
+    <tr><td><b>Commit</b></td><td>עוצר, אבל שומר את מה שכבר בוצע</td><td>כשמה שכבר נעשה תקין וצריך להישאר</td></tr>
+  </table></div>
+  <div class="callout claude"><b>טיפ: Claude כמנתח שגיאות</b>כשמודול נכשל, העתיקו את הודעת השגיאה ואת ה-Bundle (בלי מפתחות!) ל-Claude, ובקשו: "הסבר את השגיאה ב-Make בעברית פשוטה, והצע איך לתקן ואיזה Error handler מתאים". זה חוסך הרבה זמן חיפוש.</div>
+</section>
+
+<section class="blk" id="compare">
+  <div class="kicker">חלק 4 · השוואה</div>
+  <h2>Make, Zapier ו-n8n: אותו רעיון, דגשים שונים</h2>
+  <div class="tbl cmp"><table>
+    <tr><th></th><th>Make</th><th>Zapier</th><th>n8n</th></tr>
+    <tr><td>ממשק</td><td>קנבס ויזואלי עם עיגולים</td><td>רשימה של צעדים מלמעלה למטה</td><td>קנבס של צמתים</td></tr>
+    <tr><td>עקומת למידה</td><td>בינונית</td><td>הכי קלה</td><td>גבוהה יותר (מתאים לבעלי רקע טכני)</td></tr>
+    <tr><td>לוגיקה מורכבת</td><td>חזקה: נתבים, לולאות, טיפול בשגיאות</td><td>בסיסית עד בינונית</td><td>חזקה מאוד, כולל קוד</td></tr>
+    <tr><td>אירוח</td><td>ענן</td><td>ענן</td><td>ענן, או התקנה על שרת שלכם</td></tr>
+    <tr><td>חיוב</td><td>לפי פעולות</td><td>לפי משימות</td><td>לפי הרצות (בענן), או חינם בהתקנה עצמית</td></tr>
+    <tr><td>מתאים ל</td><td>עסקים קטנים ובינוניים שצריכים גמישות</td><td>אוטומציות פשוטות ומהירות</td><td>צוותים טכניים, ומי שצריך שהנתונים יישארו אצלו</td></tr>
+  </table></div>
+  <p class="muted" style="font-size:14px">מודלי התמחור ותוכניות המחיר משתנים מדי פעם, ולכן בודקים אותם באתרי הכלים לפני שממליצים ללקוח. כל שלושת הכלים יודעים לעבוד עם Claude דרך API.</p>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 4 · הרצאה</footer>
+<script>
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');const s=document.getElementById('quizScore');if(s){const n=document.querySelectorAll('.q.answered').length,c=document.querySelectorAll('.q.answered .opt.ok:not(.no)').length;}document.dispatchEvent(new Event('quizchange'));});});
+
+
+/* ---------- canvas ---------- */
+const MODS={
+ wh:{x:70,y:130,c:'#e2486f',ico:'⚡',n:'Webhook',d:'<b>Custom webhook (טריגר).</b> כתובת שמקבלת את הליד מהטופס באתר, ומתחילה את התרחיש ברגע שמגיע ליד.'},
+ rt:{x:215,y:130,c:'#8b8b9c',ico:'⑂',n:'Router',d:'<b>Router.</b> מפצל את התרחיש לשני מסלולים. ב-Make הוא לא נספר כפעולה.'},
+ sh:{x:400,y:65,c:'#0f9d58',ico:'▦',n:'Sheets',d:'<b>Google Sheets · Add a Row.</b> מוסיף את הליד כשורה בגיליון "לידים חמים".'},
+ gm:{x:560,y:65,c:'#d93025',ico:'✉',n:'מייל ללקוח',d:'<b>Gmail · Send an email.</b> שולח לליד מייל אישור. כאן אפשר לחבר Error handler.'},
+ rp:{x:400,y:200,c:'#d93025',ico:'✉',n:'מייל לנציג',d:'<b>Gmail · Send an email.</b> מבקש מהנציג להשיג טלפון מהליד.'},
+ eh:{x:700,y:65,c:'#6d5dfc',ico:'🛡',n:'Handler',d:'<b>Error handler.</b> נכנס לפעולה רק אם המודול שלפניו נכשל.'}
+};
+function cvDraw(state={}){
+  const line=(a,b,f)=>`<path d="M${MODS[a].x} ${MODS[a].y} C ${(MODS[a].x+MODS[b].x)/2} ${MODS[a].y}, ${(MODS[a].x+MODS[b].x)/2} ${MODS[b].y}, ${MODS[b].x} ${MODS[b].y}" stroke="var(--line)" stroke-width="4" fill="none" stroke-dasharray="${f?'2 7':'0'}" stroke-linecap="round"/>`;
+  const flt=(x,y,t)=>`<g><circle cx="${x}" cy="${y}" r="9" fill="var(--surface)" stroke="var(--p4)" stroke-width="2"/><text x="${x}" y="${y+4}" font-size="10" text-anchor="middle" fill="var(--p4)">⧩</text><text x="${x}" y="${y-14}" font-size="11.5" text-anchor="middle" fill="var(--ink-2)">${t}</text></g>`;
+  const showEh=document.getElementById('cvErr')&&document.getElementById('cvErr').value!=='none';
+  let s=`<svg viewBox="0 0 770 260" direction="ltr" style="direction:ltr" font-family="Heebo">`+line('wh','rt')+line('rt','sh')+line('sh','gm')+line('rt','rp')+(showEh?line('gm','eh',1):'')+flt(300,82,'יש טלפון')+flt(300,180,'אין טלפון');
+  Object.entries(MODS).forEach(([k,m])=>{if(k==='eh'&&!showEh)return;const st=state[k]||'';s+=`<g class="mod ${st}" data-k="${k}" style="cursor:pointer"><circle class="ring" cx="${m.x}" cy="${m.y}" r="36" fill="none" stroke="${st==='on'?'var(--accent)':'transparent'}" stroke-width="4"/><circle class="main" cx="${m.x}" cy="${m.y}" r="29" fill="${m.c}"/><text x="${m.x}" y="${m.y+8}" text-anchor="middle" font-size="22" fill="#fff">${m.ico}</text><text x="${m.x}" y="${m.y+52}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${m.n}</text>${st==='ok'?`<text x="${m.x+24}" y="${m.y-22}" font-size="15">✅</text>`:st==='err'?`<text x="${m.x+24}" y="${m.y-22}" font-size="15">⛔</text>`:''}</g>`;});
+  s+=`<circle id="dot" r="9" fill="#fcd34d" stroke="#16142a" stroke-width="2" style="cx:${dotPos?dotPos[0]:MODS.wh.x}px;cy:${dotPos?dotPos[1]:MODS.wh.y}px;transition:cx .45s,cy .45s" opacity="${dotPos?1:0}"/></svg>`;
+  document.getElementById('cv').innerHTML=s;
+  document.querySelectorAll('#cv .mod').forEach(g=>g.onclick=()=>document.getElementById('minfo').innerHTML=MODS[g.dataset.k].d);
+}
+const LEADS=[{n:'נועה כהן',phone:'050-1112233',email:'noa@example.com'},{n:'דני לוי',phone:null,email:'dani@example.com'},{n:'שירה בן',phone:'052-9988776',email:'noa@@mail'}];
+let opsTot=0,busy=false;const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function log(t,c=''){const d=document.createElement('div');d.className=c;d.textContent=t;const L=document.getElementById('log');L.appendChild(d);L.scrollTop=L.scrollHeight;}
+let dotPos=null;async function moveDot(k){const d=document.getElementById('dot');d.setAttribute('opacity',1);d.getBoundingClientRect();dotPos=[MODS[k].x,MODS[k].y];d.style.cx=dotPos[0]+'px';d.style.cy=dotPos[1]+'px';await wait(480);}
+document.getElementById('cvRun').onclick=async()=>{if(busy)return;busy=true;const L=LEADS[+cvLead.value],eh=cvErr.value;let st={},ops=0;const set=(k,v)=>{st[k]=v;cvDraw(st);};
+  const opInc=()=>{ops++;opsTot++;document.getElementById('opsRun').textContent=ops;document.getElementById('opsTot').textContent=opsTot;};
+  document.getElementById('opsRun').textContent=0;dotPos=null;cvDraw();log(`— הרצה חדשה: ליד של ${L.n} —`,'b');
+  set('wh','on');await moveDot('wh');opInc();set('wh','ok');log('⚡ Webhook: התקבל Bundle אחד','g');
+  await moveDot('rt');set('rt','ok');log('⑂ Router: בודק את המסננים (בלי לספור פעולה)');
+  if(!L.phone){set('sh','skip');set('gm','skip');log('⧩ מסנן "יש טלפון": לא עבר','y');log('⧩ מסנן "אין טלפון": עבר','g');await moveDot('rp');opInc();set('rp','ok');log('✉ מייל לנציג: "השג טלפון מדני לוי"','g');log(`✓ ההרצה הסתיימה בהצלחה · ${ops} פעולות`,'g');busy=false;return;}
+  set('rp','skip');log('⧩ מסנן "יש טלפון": עבר','g');await moveDot('sh');opInc();set('sh','ok');log('▦ Sheets: נוספה שורה לגיליון "לידים חמים"','g');
+  await moveDot('gm');opInc();
+  if(L.email.includes('@@')){set('gm','err');log('⛔ Gmail: Invalid email address "noa@@mail"','r');
+    if(eh==='none'){log('✗ ההרצה נעצרה עם שגיאה. אחרי כמה שגיאות ברצף Make עלול לכבות את התרחיש.','r');}
+    else{await moveDot('eh');set('eh','ok');
+      if(eh==='ignore')log('🛡 Ignore: השגיאה הוסתרה, וההרצה סומנה כהצלחה. ⚠️ הליד בגיליון, אבל לא קיבל מייל, ואף אחד לא יודע את זה.','y');
+      if(eh==='resume')log('🛡 Resume: ממשיכים עם email_status = "failed". אפשר לסנן לפי זה בהמשך ולהעביר לנציג.','g');
+      if(eh==='break')log('🛡 Break: ההרצה נשמרה ב-Incomplete executions. אחרי שתתקנו את המייל אפשר להריץ אותה שוב, בלי לאבד את הליד.','g');
+      if(eh==='rollback')log('🛡 Rollback: ההרצה נעצרה. שימו לב: Google Sheets לא תומך בביטול, ולכן השורה נשארה בגיליון.','y');}
+  } else {set('gm','ok');log('✉ מייל ללקוח: נשלח אישור לנועה','g');log(`✓ ההרצה הסתיימה בהצלחה · ${ops} פעולות`,'g');}
+  busy=false;};
+document.getElementById('cvClr').onclick=()=>{document.getElementById('log').innerHTML='';};
+const cvLead=document.getElementById('cvLead'),cvErr=document.getElementById('cvErr');cvErr.onchange=()=>cvDraw();cvDraw();
+
+/* ---------- mapping ---------- */
+const BUN=[['created_at','2026-10-21T10:15:00Z'],['full_name','  נועה כהן '],['phone','050-1112233'],['email','noa@example.com'],['interested_in','שולחן אלון'],['source','website'],['message','האם יש בצבע אגוז?']];
+const COLS=[['תאריך','created_at'],['שם','full_name'],['טלפון','phone'],['מייל','email'],['מוצר','interested_in'],['מקור','source'],['הודעה','message']];
+let map={},selF=null;
+function mpDraw(){
+  document.getElementById('bundle').innerHTML=BUN.map(([k,v])=>`<button class="fld ${selF===k?'sel':''}" data-k="${k}"><code>${k}</code><small>${v.trim()}</small></button>`).join('');
+  document.querySelectorAll('.fld').forEach(b=>b.onclick=()=>{selF=b.dataset.k;mpDraw();});
+  document.getElementById('cols').innerHTML=COLS.map(([c],i)=>`<div class="col" data-i="${i}"><b>${c}</b><span class="slot">${map[i]?`<span class="chip">${map[i]}</span>`:'<span class="muted" style="font-family:Heebo">לחצו כדי למפות</span>'}</span></div>`).join('');
+  document.querySelectorAll('.col').forEach(c=>c.onclick=()=>{if(!selF)return;map[c.dataset.i]=selF;selF=null;mpDraw();});
+}
+function fmt(k,v){if(k==='created_at'&&document.getElementById('fnDate').checked){const d=new Date(v);const p=n=>String(n).padStart(2,'0');return `${p(d.getUTCDate())}/${p(d.getUTCMonth()+1)}/${d.getUTCFullYear()} ${p(d.getUTCHours()+3)}:${p(d.getUTCMinutes())}`;}if(k==='full_name'&&document.getElementById('fnTrim').checked)return v.trim();return v;}
+document.getElementById('mpRun').onclick=()=>{const vals=COLS.map((_,i)=>{const k=map[i];if(!k)return'';return fmt(k,BUN.find(b=>b[0]===k)[1]);});
+  document.getElementById('mpRes').innerHTML='<table><tr>'+COLS.map(c=>`<th>${c[0]}</th>`).join('')+'</tr><tr>'+vals.map(v=>`<td style="white-space:pre">${v.replace(/ /g,'·')}</td>`).join('')+'</tr></table>';
+  let good=0;document.querySelectorAll('.col').forEach((c,i)=>{const ok=map[i]===COLS[i][1];if(ok)good++;c.classList.toggle('good',ok);c.classList.toggle('bad',!!map[i]&&!ok);});
+  const notes=[];if(good<7)notes.push(`${good} מתוך 7 עמודות מופו נכון.`);else notes.push('✓ כל העמודות מופו נכון.');
+  if(map[0]==='created_at'&&!document.getElementById('fnDate').checked)notes.push('התאריך נראה כמו מחרוזת טכנית (ISO, בשעון UTC). formatDate הופך אותו לתאריך קריא בשעון ישראל.');
+  if(map[1]==='full_name'&&!document.getElementById('fnTrim').checked)notes.push('שימו לב לרווחים (·) לפני השם ואחריו. trim מנקה אותם, וכך חיפוש לפי שם לא ייכשל.');
+  document.getElementById('mpMsg').textContent=notes.join(' ');};
+document.getElementById('mpAuto').onclick=()=>{COLS.forEach((c,i)=>map[i]=c[1]);mpDraw();};
+document.getElementById('mpReset').onclick=()=>{map={};selF=null;document.getElementById('mpRes').innerHTML='';document.getElementById('mpMsg').textContent='';mpDraw();};
+mpDraw();
+
+/* ---------- filter ---------- */
+const LD=[{full_name:'נועה כהן',source:'website',interested_in:'שולחן אלון',phone:'050-1112233',message:'יש בצבע אגוז?'},{full_name:'דני לוי',source:'facebook',interested_in:'ספה תלת',phone:null,message:'מה המחיר עם משלוח?'},{full_name:'שירה בן',source:'instagram',interested_in:'מנורת עמידה',phone:'052-9988776',message:'אפשר איסוף עצמי?'},{full_name:'אבי מזרחי',source:'facebook',interested_in:'שולחן אלון',phone:'054-9876543',message:'מחיר לשניים?'},{full_name:'רונית שגב',source:'website',interested_in:'כיסא בר',phone:null,message:'זמן אספקה?'},{full_name:'יוסי כהן',source:'google',interested_in:'שטיח סלון',phone:'050-7654321',message:'יש מבצע?'}];
+const PRE=[['source','eq','facebook'],['message','has','מחיר'],['phone','ex',''],['phone','nex','']];
+const ftF=document.getElementById('ftF'),ftO=document.getElementById('ftO'),ftV=document.getElementById('ftV');
+function ftRun(){const f=ftF.value,o=ftO.value,v=ftV.value.trim();ftV.disabled=o==='ex'||o==='nex';
+  const pass=l=>{const x=l[f];if(o==='ex')return x!==null&&x!=='';if(o==='nex')return x===null||x==='';if(x==null)return false;if(o==='eq')return x===v;return x.includes(v);};
+  document.getElementById('ldT').innerHTML='<tr><th>שם</th><th>source</th><th>interested_in</th><th>phone</th><th>message</th></tr>'+LD.map(l=>`<tr class="${pass(l)?'pass':'fail'}"><td>${pass(l)?'✓ ':''}${l.full_name}</td><td>${l.source}</td><td>${l.interested_in}</td><td>${l.phone??'<span class="muted">null</span>'}</td><td>${l.message}</td></tr>`).join('');
+  const n=LD.filter(pass).length;document.getElementById('ftRes').textContent=`${n} מתוך ${LD.length} לידים עוברים במסלול הזה. ${LD.length-n} ממשיכים למסלולים אחרים, או למסלול ברירת המחדל.`;}
+[ftF,ftO,ftV].forEach(e=>e.oninput=ftRun);
+document.querySelectorAll('[data-pre]').forEach(b=>b.onclick=()=>{const p=PRE[+b.dataset.pre];ftF.value=p[0];ftO.value=p[1];ftV.value=p[2];ftRun();});ftRun();
+
+/* ---------- iterator ---------- */
+const ITEMS=[['כיסא בר',3,'--p1'],['כרית נוי',2,'--p2'],['מנורת עמידה',1,'--p3']];
+document.getElementById('itGo').onclick=async()=>{const b=document.getElementById('itGo');b.disabled=true;let ops=0;const o=()=>{ops++;document.getElementById('itOps').textContent=ops;};
+  ['itA','itB','itC'].forEach(i=>document.getElementById(i).innerHTML='');document.getElementById('itD').textContent='';document.getElementById('itOps').textContent=0;
+  const chip=(id,t,c)=>{const e=document.createElement('span');e.className='bchip';e.style.setProperty('--c',`var(${c})`);e.textContent=t;document.getElementById(id).appendChild(e);requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add('show')));};
+  chip('itA','items: [3]','--p4');o();await wait(700);o();
+  for(const [n,q,c] of ITEMS){chip('itB',`${n} ×${q}`,c);await wait(450);}
+  for(const [n,q,c] of ITEMS){chip('itC',`שורה: ${n}`,c);o();await wait(500);}
+  await wait(300);o();document.getElementById('itD').textContent=ITEMS.map(([n,q])=>`${n} ×${q}`).join(', ');b.disabled=false;};
+</script>
+</body>
+</html>
