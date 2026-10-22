@@ -272,6 +272,30 @@ body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-
 .xb pre{font-size:22px;padding:10px 16px;margin:0;line-height:1.5;justify-self:stretch}
 .xb code{font-size:.9em}
 .xb.what{--c:var(--p1)}.xb.ana{--c:var(--p2)}.xb.exm{--c:var(--p4)}.xb.why{--c:var(--claude)}
+/* setup section */
+.setup .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
+.setup .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
+.setup .callout{font-size:22px}
+.setup .tbl table{font-size:22px}
+.setup .tbl td:first-child{white-space:nowrap}
+.setup .check li{font-size:22px}
+.appmock{direction:ltr;display:grid;grid-template-columns:170px minmax(0,1fr);height:300px;border:2px dashed var(--line);border-radius:16px;overflow:hidden;background:var(--surface);font-family:Heebo,sans-serif}
+.am-side{position:relative;background:var(--surface-2);padding:12px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.am-btn{border:1px solid var(--line);border-radius:9px;padding:5px 8px;background:var(--surface);font-weight:700}
+.am-item{font-weight:700;display:flex;align-items:center;gap:6px}
+.am-lbl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.am-l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent)}.am-l.s{width:60%}
+.am-acct{margin-top:auto;display:flex;align-items:center;gap:6px;font-weight:700}
+.am-main{position:relative;padding:16px;display:flex;flex-direction:column;gap:10px}
+.am-bub{height:30px;border-radius:12px;width:70%}
+.am-bub.u{align-self:flex-end;width:45%;background:color-mix(in srgb,var(--accent) 25%,transparent)}
+.am-bub.c{background:color-mix(in srgb,var(--claude) 22%,transparent)}.am-bub.s{width:50%}
+.am-input{margin-top:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px;background:var(--bg)}
+.am-plus{font-weight:800;font-size:20px}.am-ph{flex:1;color:var(--ink-2)}
+.am-model{display:flex;align-items:center;gap:4px;font-weight:700}
+.am-send{width:28px;height:28px;border-radius:8px;background:var(--claude);color:#fff;display:grid;place-items:center;font-weight:800}
+.am-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--p4);color:#1b1834;font-weight:800;font-size:13px;display:inline-grid;place-items:center}
+.am-side>.am-n{position:absolute;top:6px;right:6px}
 /* JSON parts 2-4: same reading sizes */
 .slide[data-title^="JSON:"] .lbl{font-size:22px;padding:9px 14px}
 .slide[data-title^="JSON:"] .lbl code{font-size:22px;min-width:96px}
@@ -477,7 +501,7 @@ body.ov-on #ov{display:block}
   <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
     <li>ברוכים הבאים. הציגו את עצמכם בשני משפטים: מי אתם, ולמה AI ואוטומציה.</li>
-    <li>לוגיסטיקה: הפסקות ב-0:55 וב-2:00. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
+    <li>לוגיסטיקה: הפסקות ב-1:05 וב-2:00. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
     <li>מה צריך: מחשב, דפדפן, וחשבון Claude. גם חשבון חינמי מתאים לרוב התרגילים.</li>
   </ul></aside>
 </section>
@@ -505,7 +529,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="1" data-title="דיון פתיחה">
+<section class="slide" data-min="3" data-block="1" data-title="דיון פתיחה">
   <div class="s-kicker">💬 דיון פתיחה</div>
   <h2>לפני שמתחילים: מה אתם כבר יודעים?</h2>
   <div class="s-body mid">
@@ -523,14 +547,14 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="1" data-title="סדר היום">
+<section class="slide" data-min="1" data-block="1" data-title="סדר היום">
   <div class="s-kicker">מבנה המפגש · 3 שעות</div>
   <h2>סדר היום</h2>
   <div class="s-body">
     <div class="agenda c5" style="grid-template-columns:repeat(5,minmax(0,1fr))">
-      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:55</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, ניבוי המילה הבאה, טמפרטורה, טוקנים וחלון הקשר</span></div>
-      <div class="ag" style="--c:var(--ink-2)"><div class="t">0:55–1:05</div><b>☕ הפסקה</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--p2)"><div class="t">1:05–2:00</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 4 תרגילים</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–1:05</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, טמפרטורה, טוקנים וחלון הקשר, והתקנת Claude Desktop</span></div>
+      <div class="ag" style="--c:var(--ink-2)"><div class="t">1:05–1:15</div><b>☕ הפסקה</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">1:15–2:00</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 3 תרגילים</span></div>
       <div class="ag" style="--c:var(--ink-2)"><div class="t">2:00–2:10</div><b>☕ הפסקה</b><span>10 דקות</span></div>
       <div class="ag" style="--c:var(--claude)"><div class="t">2:10–3:00</div><b>בלוק 3: JSON ו-Claude</b><span>פלט מובנה, Projects ו-Artifacts, תרגול וסיכום</span></div>
     </div>
@@ -538,7 +562,7 @@ body.ov-on #ov{display:block}
     <div class="legend"><span>📖 מושג חדש: הסבר פשוט לפני שמשתמשים במונח</span><span>🎮 סימולציה: משחקים יחד</span><span>🧪 נסו עכשיו: 2–3 דקות ב-Claude</span><span>🛠️ תרגיל: עבודה עצמית עם טיימר</span><span>❓ בדיקה: שאלות חזרה</span><span>💬 דיון</span></div>
   </div>
   <aside class="notes"><ul>
-    <li>הראו את המבנה: שלושה בלוקים של כ-50 דקות, עם שתי הפסקות של 10 דקות.</li>
+    <li>הראו את המבנה: שלושה בלוקים של 45–65 דקות, עם שתי הפסקות של 10 דקות. ההתקנה בסוף בלוק 1, כדי שמי שלא מסיים ישלים בהפסקה.</li>
     <li>יותר מחצי מהזמן הוא עבודה מעשית: סימולציות, "נסו עכשיו" ותרגילים.</li>
     <li>הסבירו את המקרא. משתתפים חדשים נרגעים כשהם יודעים שכל מונח יוסבר.</li>
   </ul></aside>
@@ -567,11 +591,11 @@ body.ov-on #ov{display:block}
 <section class="slide divider" data-min="1" data-block="1" data-title="בלוק 1: פתיחה">
   <div class="num">1</div>
   <h2>איך מודל שפה עובד</h2>
-  <p class="sub">מה זה AI ומה זה מודל, איך המודל בוחר את המילה הבאה, ומה זה טוקנים וחלון הקשר.</p>
+  <p class="sub">מה זה AI ומה זה מודל, איך המודל בוחר את המילה הבאה, מה זה טוקנים וחלון הקשר, ובסוף מתקינים את Claude Desktop.</p>
   <div class="blocks">
-    <div class="here"><div class="t">0:00–0:55</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div><div class="t">0:55–1:05</div><b>☕</b>הפסקה</div>
-    <div><div class="t">1:05–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div class="here"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
+    <div><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
     <div><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
     <div><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
@@ -649,7 +673,7 @@ body.ov-on #ov{display:block}
     <div class="xb why"><b><i>🎯</i>למה זה חשוב בקורס</b><p>Claude הוא הכלי המרכזי בכל 15 המפגשים. היום עובדים בצ'אט, ובהמשך נחבר אותו ישירות למערכות של העסק.</p></div>
   </div>
   <aside class="notes"><ul>
-    <li>ודאו שכולם מחוברים ל-claude.ai עכשיו. מי שאין לו חשבון פותח אחד עכשיו, תוך כדי.</li>
+    <li>מי שכבר יש לו חשבון מתחבר ל-claude.ai עכשיו. מי שאין לו עובד עם השכן: בסוף הבלוק כולם יוצרים חשבון ומתקינים את Claude Desktop.</li>
     <li>אם שואלים "מה ההבדל מ-ChatGPT": אותו סוג טכנולוגיה, חברות שונות. בקורס עובדים עם Claude.</li>
   </ul></aside>
 </section>
@@ -755,15 +779,15 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="1" data-title="נסו עכשיו: אותה שאלה 3 פעמים">
-  <div class="s-kicker">🧪 נסו עכשיו · 3 דקות</div>
+<section class="slide" data-min="3" data-block="1" data-title="נסו עכשיו: אותה שאלה 3 פעמים">
+  <div class="s-kicker">🧪 נסו עכשיו · 2 דקות</div>
   <h2>אותה שאלה, שלוש תשובות</h2>
   <div class="s-body">
     <div class="c2">
       <div class="card"><b>1. בקשה יצירתית</b><pre class="rtl" style="margin-top:8px;font-size:20px">תן לי שם אחד לחנות רהיטים מקוונת.</pre><p class="muted" style="margin:8px 0 0;font-size:17px">שלחו, ואז לחצו על "נסה שוב" (Retry) פעמיים. השוו את שלוש התשובות.</p></div>
       <div class="card"><b>2. שאלה עם תשובה אחת נכונה</b><pre class="rtl" style="margin-top:8px;font-size:20px">מה בירת יפן? ענה במילה אחת.</pre><p class="muted" style="margin:8px 0 0;font-size:17px">גם כאן: שלחו ונסו שוב פעמיים. מה השתנה הפעם?</p></div>
     </div>
-    <div class="timer" data-sec="180"></div>
+    <div class="timer" data-sec="120"></div>
     <div class="callout"><b>שאלה לדיון</b>באיזו בקשה הגיוון הוא יתרון, ובאיזו הוא היה בעיה?</div>
   </div>
   <aside class="notes"><ul>
@@ -865,7 +889,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="1" data-title="בדיקה 1א">
+<section class="slide" data-min="2" data-block="1" data-title="בדיקה 1א">
   <div class="s-kicker">❓ בדיקה</div>
   <h2>עצירה קצרה: איך מודל שפה עובד?</h2>
   <div class="qs">
@@ -875,7 +899,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>תנו לכיתה להצביע לפני שלוחצים. אם רוב הכיתה טועה בשאלה מסוימת, חזרו לשקף הרלוונטי לדקה.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="1" data-title="בדיקה 1ב">
+<section class="slide" data-min="2" data-block="1" data-title="בדיקה 1ב">
   <div class="s-kicker">❓ בדיקה</div>
   <h2>עוד שתיים לפני ההפסקה</h2>
   <div class="qs">
@@ -899,12 +923,176 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>אחרי ההפסקה: אם המודל רק מנבא, איפה זה מסוכן? ואיך כותבים לו כדי שיעבוד טוב?</li></ul></aside>
 </section>
 
+<!-- ===== Setup: account + Claude Desktop (end of block 1) ===== -->
+<section class="slide" data-min="2" data-block="1" data-title="מה זה Claude Desktop?">
+  <div class="s-kicker"><span class="tag-new">📖 מושג חדש</span>🛠️ התקנה · לפני ההפסקה</div>
+  <h2>מה זה Claude Desktop?<span class="en-term">Claude Desktop</span></h2>
+  <div class="xp">
+    <div class="xb what"><b><i>💡</i>מה זה</b><p>האפליקציה של Claude שמתקינים על המחשב (Mac או Windows). זה אותו Claude ואותו חשבון כמו באתר claude.ai, רק בחלון משלו.</p></div>
+    <div class="xb ana"><b><i>🏠</i>משל מהחיים</b><p>כמו WhatsApp באפליקציה למחשב לעומת WhatsApp בדפדפן: אותו שירות, אבל הוא פתוח בחלון משלו ולא הולך לאיבוד בין הלשוניות.</p></div>
+    <div class="xb exm"><b><i>🔬</i>דוגמה קטנה</b><p>ב-Mac אפשר לפתוח את Claude מכל תוכנה בלחיצה כפולה על מקש Option, ולשאול שאלה בלי לחפש את הלשונית.</p></div>
+    <div class="xb why"><b><i>🎯</i>למה זה חשוב בקורס</b><p>בהמשך הקורס נחבר את Claude לקבצים ולכלים במחשב. חלק מהחיבורים האלה עובדים רק באפליקציה, ולכן מתקינים אותה כבר היום.</p></div>
+  </div>
+  <aside class="notes"><ul>
+    <li>15 הדקות האחרונות של הבלוק: יוצרים חשבון ומתקינים את Claude Desktop. מי שלא מסיים, משלים בהפסקה.</li>
+    <li>מי שאין לו הרשאה להתקין במחשב (למשל מחשב עבודה) עובד בדפדפן ב-claude.ai. זה אותו חשבון, וכל התרגילים של היום עובדים שם.</li>
+    <li>"חיבורים לכלים במחשב" = הרחבות מקומיות (Desktop extensions), שעובדות רק ב-Claude Desktop וב-Claude Code. אין צורך להיכנס לזה עכשיו.</li>
+    <li><b>מקורות (נבדקו באוקטובר 2026):</b> support.claude.com: Install Claude Desktop · Log in to your Claude account · Verify your phone number · Upload files to Claude · Change the model, effort, and thinking settings · How can I create and manage projects? · Customizing your appearance settings · How to use Claude in your preferred language · Account management FAQs · Use quick entry with Claude Desktop on Mac · When to use desktop and web connectors. privacy.claude.com: How do I change my model improvement privacy settings? · claude.com/download. הממשק משתנה מדי פעם, אז כדאי לעבור על השלבים פעם אחת לפני השיעור.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="3" data-block="1" data-title="יוצרים חשבון Claude">
+  <div class="s-kicker">🛠️ התקנה · שלב 1 מתוך 4</div>
+  <h2>יוצרים חשבון Claude</h2>
+  <div class="s-body">
+    <div class="c2" style="align-items:start;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <ol class="steps">
+        <li>נכנסים בדפדפן ל-<span class="en">claude.ai</span></li>
+        <li>בוחרים <span class="en">Continue with Google</span>, או כותבים מייל ולוחצים <span class="en">Continue with email</span></li>
+        <li>במייל: פותחים את הקישור שקיבלתם מ-Claude</li>
+        <li>מאמתים טלפון: מקבלים קוד ב-SMS ומקלידים אותו</li>
+        <li>ממשיכים בתוכנית החינמית. יש גם תוכניות בתשלום עם יותר שימוש, אבל היום לא צריך</li>
+      </ol>
+      <div style="display:grid;gap:12px">
+        <div class="callout warn"><b>את המייל אי אפשר לשנות</b>בחרו כתובת שתשתמשו בה לאורך זמן.</div>
+        <div class="callout warn"><b>צריך טלפון שמקבל SMS</b>מספר וירטואלי, מספר מאפליקציה או קו נייח לא יעבדו.</div>
+        <div class="callout"><b>גיל 18 ומעלה</b>זה תנאי השימוש של Claude.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>מי שכבר יש לו חשבון: עוזר לשכן, או מדלג לשקף הבא ומתקין.</li>
+    <li>אימות טלפון חובה לכל משתמש חדש, ואי אפשר לדלג עליו. מספר אחד יכול לאמת עד שלושה חשבונות.</li>
+    <li>מי שנרשם עם Google מדלג על שלב 3.</li>
+    <li>אל תזכירו מחירים: הם משתנים. מספיק לומר שיש תוכנית חינמית עם מגבלת שימוש שמתאפסת כל כמה שעות, ותוכניות בתשלום.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="2" data-block="1" data-title="מורידים ומתקינים">
+  <div class="s-kicker">🛠️ התקנה · שלב 2 מתוך 4</div>
+  <h2>מורידים ומתקינים את Claude Desktop</h2>
+  <div class="s-body">
+    <div class="c2" style="align-items:stretch">
+      <div class="card"><b style="font-size:26px">🍎 Mac</b><div class="muted" style="font-size:22px">macOS 13 (Ventura) ומעלה</div>
+        <ol class="steps" style="margin-top:12px">
+          <li>נכנסים ל-<span class="en">claude.ai/download</span> ולוחצים <span class="en">Download</span> תחת macOS</li>
+          <li>פותחים את הקובץ שירד ומשלימים את ההתקנה</li>
+          <li>מפעילים את Claude מתיקיית <span class="en">Applications</span></li>
+        </ol></div>
+      <div class="card"><b style="font-size:26px">🪟 Windows</b><div class="muted" style="font-size:22px">Windows 10 ומעלה</div>
+        <ol class="steps" style="margin-top:12px">
+          <li>נכנסים ל-<span class="en">claude.ai/download</span> ולוחצים <span class="en">Download</span> תחת Windows</li>
+          <li>פותחים את הקובץ שירד ומשלימים את ההתקנה</li>
+          <li>מפעילים את Claude מתפריט <span class="en">Start</span></li>
+        </ol></div>
+    </div>
+    <div class="callout tip"><b>מחשב Windows עם מעבד ARM?</b>בעמוד ההורדה יש קובץ נפרד: <span class="en">Windows (arm64)</span>.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הכתובת claude.ai/download מעבירה לעמוד ההורדות הרשמי. ב-Windows יש גם גרסה ב-Microsoft Store.</li>
+    <li>יש גם גרסת בטא ללינוקס (Ubuntu ו-Debian), עם הוראות בעמוד ההורדה.</li>
+    <li>מי שמחשב העבודה שלו לא מאפשר התקנה: עובד בדפדפן ומתקין בבית.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="2" data-block="1" data-title="התחברות וסיור קצר">
+  <div class="s-kicker">🛠️ התקנה · שלב 3 מתוך 4</div>
+  <h2>מתחברים, ועושים סיור קצר</h2>
+  <div class="s-body">
+    <div class="c2" style="align-items:center;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)">
+      <div>
+        <div class="appmock" role="img" aria-label="המחשה של חלון Claude Desktop">
+          <div class="am-side"><span class="am-n">1</span><div class="am-btn">+ New chat</div><div class="am-item"><span class="am-n">2</span>Projects</div><div class="am-lbl"><span class="am-n">3</span> Recents</div><div class="am-l"></div><div class="am-l"></div><div class="am-l s"></div><div class="am-acct"><span class="am-n">6</span>●&nbsp;Name</div></div>
+          <div class="am-main"><div class="am-bub u"></div><div class="am-bub c"></div><div class="am-bub c s"></div>
+            <div class="am-input"><span class="am-n">4</span><span class="am-plus">+</span><span class="am-ph">Reply to Claude…</span><span class="am-model"><span class="am-n">5</span>Model ▾</span><span class="am-send">↑</span></div></div>
+        </div>
+        <div class="muted" style="font-size:22px;text-align:center;margin-top:6px">המחשה בלבד. המסך האמיתי נראה אחרת</div>
+      </div>
+      <div style="display:grid;gap:10px">
+      <div class="callout" style="padding:10px 16px"><b>מתחברים</b>באותו מייל או חשבון Google שנרשמתם איתו</div>
+      <ol class="steps">
+        <li><b>שיחה חדשה:</b> כפתור בראש סרגל הצד</li>
+        <li><b>Projects:</b> בסרגל הצד. נשתמש בהם בבלוק 3</li>
+        <li><b>היסטוריה:</b> השיחות הקודמות מופיעות בסרגל הצד</li>
+        <li><b>צירוף קובץ:</b> כפתור <span class="en">+</span> בתיבת הכתיבה, או גוררים קובץ לחלון</li>
+        <li><b>בחירת מודל:</b> בתפריט שליד כפתור השליחה</li>
+        <li><b>הגדרות:</b> לוחצים על השם בפינה למטה ← <span class="en">Settings</span></li>
+      </ol>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הממשק של Claude באנגלית (אין עדיין ממשק בעברית), ולכן הסרגל בצד שמאל. Claude עצמו עונה בעברית כשכותבים לו בעברית.</li>
+    <li>השמות בסרגל הצד משתנים בין גרסאות (למשל Recents או Chats). הראו על המסך שלכם איפה הם אצלכם.</li>
+    <li>בחירת המודל: לא חובה לשנות היום. ברירת המחדל מתאימה לכל התרגילים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="2" data-block="1" data-title="הגדרות מומלצות">
+  <div class="s-kicker">🛠️ התקנה · שלב 4 מתוך 4</div>
+  <h2>הגדרות מומלצות לקורס</h2>
+  <div class="tbl"><table>
+    <tr><th>איפה</th><th>מה לעשות</th></tr>
+    <tr><td><span class="en">Settings › General</span></td><td>בודקים שהשם נכון. ב-<span class="en">Instructions for Claude</span> אפשר לכתוב למשל: "ענה בעברית, בפשטות"</td></tr>
+    <tr><td><span class="en">Settings › Appearance</span></td><td>בוחרים מצב בהיר, כהה, או כמו המחשב (<span class="en">Match System</span>)</td></tr>
+    <tr><td><span class="en">Settings › Privacy</span></td><td>מחליטים על <span class="en">Help Improve our AI models</span>. כשהוא כבוי, השיחות לא משמשות לאימון. מומלץ לכבות אם תעבדו עם מידע אמיתי של עסק</td></tr>
+    <tr><td>שפת הממשק</td><td>אין עדיין עברית, אז משאירים אנגלית. Claude עונה בשפה שבה כותבים לו</td></tr>
+  </table></div>
+  <aside class="notes"><ul>
+    <li>מגיעים להגדרות דרך השם או ראשי התיבות בפינה השמאלית התחתונה ← Settings. בדפדפן אפשר גם להיכנס ישר ל-claude.ai/settings.</li>
+    <li>הגדרת הפרטיות: זו החלטה אישית, ואל תכריחו אף אחד. הסבירו מה היא עושה: כשהיא כבויה, Anthropic לא משתמשת בשיחות חדשות כדי לאמן מודלים. שיחות במצב Incognito לא משמשות לאימון בכל מקרה.</li>
+    <li>Instructions for Claude חלות על כל השיחות בחשבון. הן לא מחליפות את הוראות הפרויקט שנכתוב בבלוק 3.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="3" data-block="1" data-title="בדקו שהכול עובד">
+  <div class="s-kicker">✅ נקודת בדיקה</div>
+  <h2>בדקו שהכול עובד</h2>
+  <div class="s-body">
+    <div class="c2" style="align-items:start">
+      <div style="display:grid;gap:12px">
+        <b style="font-size:22px">שלחו ב-Claude Desktop את הודעת הבדיקה:</b>
+        <div class="copybox"><pre class="rtl" style="font-size:22px">שלום Claude! אני משתתף בקורס אוטומציה עסקית. הסבר לי במשפט אחד מה זה מודל שפה.</pre></div>
+        <div class="timer" data-sec="180"></div>
+      </div>
+      <ul class="check">
+        <li>האפליקציה פתוחה, ואתם מחוברים לחשבון</li>
+        <li>שלחתם את ההודעה וקיבלתם תשובה בעברית</li>
+        <li>השיחה מופיעה בסרגל הצד</li>
+        <li>בדקתם את הגדרת הפרטיות</li>
+      </ul>
+    </div>
+    <div class="callout tip"><b>לא הסתדר?</b>עובדים בינתיים בדפדפן ב-claude.ai, ומשלימים את ההתקנה בהפסקה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הפעילו את הטיימר. אפשר ללחוץ על השורות ברשימה כדי לסמן אותן תוך כדי.</li>
+    <li>בקשו מכולם להרים יד כשהם מקבלים תשובה. מי שלא הרים יד אחרי 3 דקות: בשקף הבא יש פתרונות לתקלות נפוצות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide setup" data-min="1" data-block="1" data-title="תקלות נפוצות">
+  <div class="s-kicker"><span class="lock">🔒 למדריך</span>תקלות נפוצות</div>
+  <h2>כשמשהו לא עובד</h2>
+  <div class="tbl"><table>
+    <tr><th>הבעיה</th><th>מה עושים</th></tr>
+    <tr><td>אין הרשאה להתקין במחשב העבודה</td><td>עובדים בדפדפן ב-<span class="en">claude.ai</span>, עם אותו חשבון. מתקינים בבית</td></tr>
+    <tr><td>קוד ה-SMS לא מגיע</td><td>מחכים כמה דקות. אחרי 5 דקות לוחצים <span class="en">Try again</span> ובודקים את המספר. לא עזר? מספר אחר</td></tr>
+    <tr><td>"המספר כבר בשימוש"</td><td>המספר כבר אימת שלושה חשבונות. צריך מספר אחר</td></tr>
+    <tr><td>מערכת הפעלה ישנה מדי</td><td>צריך macOS 13 או Windows 10 ומעלה. אחרת עובדים בדפדפן</td></tr>
+    <tr><td>קישור ההתחברות נפתח במכשיר אחר</td><td>הקישור מציג קוד. מקלידים אותו במכשיר שבו ביקשתם את המייל</td></tr>
+  </table></div>
+  <aside class="notes"><ul>
+    <li>הגרסה בדפדפן היא תמיד הגיבוי: אותו חשבון, וכל התרגילים של היום עובדים בה.</li>
+    <li>אל תתקעו את הכיתה בגלל משתתף אחד. רשמו מי נתקע, וטפלו בו בהפסקה.</li>
+  </ul></aside>
+</section>
+
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה ראשונה">
-  <div class="kind-badge">☕ הפסקה · 0:55–1:05</div>
+  <div class="kind-badge">☕ הפסקה · 1:05–1:15</div>
   <h2 style="margin-top:14px">הפסקה של 10 דקות</h2>
   <div class="timer" data-sec="600" data-auto="1"></div>
   <div class="nextup">אחרי ההפסקה · בלוק 2: מגבלות, הזיות והנדסת פרומפטים</div>
-  <aside class="notes"><ul><li>הטיימר מתחיל לבד כשנכנסים לשקף, ושעת החזרה מחושבת לפי השעון של המחשב. אפשר לעצור או לאפס.</li><li>בקשו מכל מי שעוד אין לו חשבון Claude לפתוח אחד בהפסקה. מבלוק 2 עובדים בו הרבה.</li></ul></aside>
+  <aside class="notes"><ul><li>הטיימר מתחיל לבד כשנכנסים לשקף, ושעת החזרה מחושבת לפי השעון של המחשב. אפשר לעצור או לאפס.</li><li>מי שלא סיים ליצור חשבון או להתקין את Claude Desktop משלים עכשיו, בהפסקה. מבלוק 2 עובדים ב-Claude הרבה, ובינתיים אפשר לעבוד בדפדפן.</li></ul></aside>
 </section>
 
 <!-- ============================== BLOCK 2 ============================== -->
@@ -913,16 +1101,16 @@ body.ov-on #ov{display:block}
   <h2>מגבלות והנדסת פרומפטים</h2>
   <p class="sub">במה AI מצוין ואיפה הוא טועה, מתי אדם חייב לאשר, ואיך כותבים פרומפט שעובד.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–0:55</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">0:55–1:05</div><b>☕</b>הפסקה</div>
-    <div class="here"><div class="t">1:05–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div class="done"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
+    <div class="here"><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
     <div><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
     <div><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
-  <aside class="notes"><ul><li>חיבור לבלוק הקודם: "המודל מנבא ולא יודע". עכשיו נראה מה המשמעות המעשית של זה בעסק.</li><li>בבלוק הזה יש ארבעה תרגילים קצרים. ודאו שכולם מחוברים ל-Claude.</li></ul></aside>
+  <aside class="notes"><ul><li>חיבור לבלוק הקודם: "המודל מנבא ולא יודע". עכשיו נראה מה המשמעות המעשית של זה בעסק.</li><li>בבלוק הזה יש שלושה תרגילים קצרים (תרגיל 3 עבר לבית). ודאו שכולם מחוברים ל-Claude.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="2" data-title="במה AI מצוין">
+<section class="slide" data-min="1" data-block="2" data-title="במה AI מצוין">
   <div class="s-kicker">חלק 2 · יכולות</div>
   <h2>במה AI מצוין</h2>
   <div class="s-body mid">
@@ -940,7 +1128,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="2" data-title="איפה להיזהר">
+<section class="slide" data-min="1" data-block="2" data-title="איפה להיזהר">
   <div class="s-kicker">חלק 2 · מגבלות</div>
   <h2>איפה צריך להיזהר</h2>
   <div class="s-body mid">
@@ -1041,7 +1229,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>דוגמאות למערכות כאלה: Salesforce, HubSpot, monday CRM, Pipedrive. לא חשוב איזו. העיקרון זהה.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="2" data-title="שתי שאלות שמכריעות">
+<section class="slide" data-min="1" data-block="2" data-title="שתי שאלות שמכריעות">
   <div class="s-kicker">חלק 2 · כלל החלטה</div>
   <h2>AI לבד, AI עם אדם, או בלי AI?</h2>
   <p class="s-lead">שתי שאלות מכריעות: כמה עולה טעות, ואפשר לבטל אותה?</p>
@@ -1062,13 +1250,13 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="2" data-title="תרגיל 5: מתאים ל-AI?">
-  <div class="exh"><span class="ex-num">5</span><h2 class="grow">תרגיל: מתאים ל-AI או לא?</h2><span class="pill">⏱ 4 דקות</span><span class="pill">קל</span><div class="timer" data-sec="240"></div></div>
+<section class="slide" data-min="3" data-block="2" data-title="תרגיל 5: מתאים ל-AI?">
+  <div class="exh"><span class="ex-num">5</span><h2 class="grow">תרגיל: מתאים ל-AI או לא?</h2><span class="pill">⏱ 3 דקות</span><span class="pill">קל</span><div class="timer" data-sec="180"></div></div>
   <p class="s-lead" style="margin-top:10px">לכל משימה, בחרו: AI לבד, AI עם אישור של אדם, או לא AI. נמקו במשפט אחד.</p>
   <div class="fitl" id="fit"></div>
   <div class="deliver mt">שש החלטות ונימוק קצר לכל אחת</div>
   <aside class="notes"><ul>
-    <li>עבודה בזוגות: 3 דקות, ואז דקה שבה הכיתה מצביעה על כל שורה.</li>
+    <li>עבודה בזוגות: 2 דקות, ואז דקה שבה הכיתה מצביעה על כל שורה.</li>
     <li>אפשר ללחוץ על הכפתורים בשקף בזמן ההצבעה, כדי לסמן את בחירת הרוב.</li>
     <li>הפתרון בשקף הבא, מוסתר עד שתלחצו.</li>
   </ul></aside>
@@ -1094,7 +1282,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="2" data-title="פרומפט = תדריך">
+<section class="slide" data-min="1" data-block="2" data-title="פרומפט = תדריך">
   <div class="s-kicker">חלק 3 · הנדסת פרומפטים</div>
   <h2>פרומפט טוב הוא תדריך לעובד חדש וחכם</h2>
   <div class="s-body mid">
@@ -1214,8 +1402,8 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>שימו לב לפרומפט ג': יש לו תפקיד, ועדיין הוא חלש. תפקיד לבד לא מחליף הקשר.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="7" data-block="2" data-title="תרגיל 2: שכתוב">
-  <div class="exh"><span class="ex-num">2</span><h2 class="grow">תרגיל: שכתוב לפי 6 הרכיבים</h2><span class="pill">⏱ 7 דקות</span><span class="pill">בינוני</span><div class="timer" data-sec="420"></div></div>
+<section class="slide" data-min="6" data-block="2" data-title="תרגיל 2: שכתוב">
+  <div class="exh"><span class="ex-num">2</span><h2 class="grow">תרגיל: שכתוב לפי 6 הרכיבים</h2><span class="pill">⏱ 6 דקות</span><span class="pill">בינוני</span><div class="timer" data-sec="360"></div></div>
   <p class="s-lead" style="margin-top:10px">שכתבו את פרומפט א' עם כל ששת הרכיבים. הריצו ב-Claude את המקורי ואת המשופר, והשוו.</p>
   <div class="s-body">
     <div class="c2">
@@ -1281,9 +1469,9 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>שמות המשתנים עם קו תחתון ובלי רווחים, כדי שיהיה ברור איפה השם מתחיל ונגמר. נראה את אותו הרגל בשמות השדות ב-JSON.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="2" data-title="תרגיל 3: ספריית פרומפטים">
-  <div class="exh"><span class="ex-num">3</span><h2 class="grow">תרגיל: ספריית פרומפטים</h2><span class="pill">⏱ 4 דקות בכיתה</span><span class="pill">השאר בבית</span><div class="timer" data-sec="240"></div></div>
-  <p class="s-lead" style="margin-top:10px">בנו תבנית עם ששת הרכיבים ועם <code>{משתנים}</code>. בכיתה: תבנית אחת לבחירתכם. בבית: כל החמש, ובדקו כל אחת ב-Claude.</p>
+<section class="slide" data-min="1" data-block="2" data-title="תרגיל 3: ספריית פרומפטים (לבית)">
+  <div class="exh"><span class="ex-num">3</span><h2 class="grow">תרגיל לבית: ספריית פרומפטים</h2><span class="pill">📝 משימה לבית</span><span class="pill">כ-30 דקות</span></div>
+  <p class="s-lead" style="margin-top:10px">בנו לכל משימה תבנית עם ששת הרכיבים ועם <code>{משתנים}</code>, ובדקו כל אחת ב-Claude.</p>
   <div class="tbl"><table>
     <tr><th>#</th><th>משימה</th><th>משתנים לדוגמה</th></tr>
     <tr><td>1</td><td>מענה לפנייה של לקוח</td><td>{שם_לקוח}, {תוכן_הפנייה}, {סטטוס_הזמנה}</td></tr>
@@ -1294,8 +1482,8 @@ body.ov-on #ov{display:block}
   </table></div>
   <aside class="notes"><ul>
     <li>"ליד" = לקוח פוטנציאלי שהשאיר פרטים ועוד לא קנה. הסבירו אם שואלים.</li>
-    <li>המלצה: מי שסיים את תרגיל 2 בוחר תבנית 2 או 3, כי הן שונות ממה שכבר עשו.</li>
-    <li>התוצר הסופי (5 תבניות + דוגמה לכל אחת) הוא חלק מהמשימה לבית.</li>
+    <li>התרגיל עבר לבית כדי לפנות זמן להתקנה בבלוק 1. הציגו את הטבלה בדקה, והסבירו שזה ההמשך הישיר של תרגיל 2.</li>
+    <li>התוצר (5 תבניות ודוגמה לכל אחת) הוא חלק מהמשימה לבית. הפתרון בשקף הבא, אם רוצים להראות דוגמה.</li>
   </ul></aside>
 </section>
 
@@ -1326,7 +1514,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>בתבנית 3, המגבלה "השתמש רק בפרטים שנתתי" היא התשובה לפרומפט ג' מתרגיל 1, שבו המודל המציא חומרים ומידות.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="2" data-title="בדיקה 2א">
+<section class="slide" data-min="1" data-block="2" data-title="בדיקה 2א">
   <div class="s-kicker">❓ בדיקה</div>
   <h2>מגבלות ופרומפטים</h2>
   <div class="qs">
@@ -1374,9 +1562,9 @@ body.ov-on #ov{display:block}
   <h2>פלט מובנה ו-Claude בפועל</h2>
   <p class="sub">מה זה JSON ולמה אוטומציה צריכה אותו, Projects ו-Artifacts, ואיך כל זה מתחבר לשאר הקורס.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–0:55</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">0:55–1:05</div><b>☕</b>הפסקה</div>
-    <div class="done"><div class="t">1:05–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div class="done"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
+    <div class="done"><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
     <div class="done"><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
     <div class="here"><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
@@ -1857,8 +2045,8 @@ body.ov-on #ov{display:block}
     <div><b>AI · בינה מלאכותית</b><span>תוכנה שעושה דברים שפעם רק בני אדם ידעו</span></div>
     <div><b>מודל</b><span>תוכנה שלמדה מדוגמאות ומחזירה פלט לקלט</span></div>
     <div><b>LLM · מודל שפה גדול</b><span>מודל שלמד מטקסט ומנבא את הטוקן הבא</span></div>
-    <div><b>Claude</b><span>מודל השפה של Anthropic, והכלי המרכזי בקורס</span></div>
-    <div><b>צ'אטבוט</b><span>תוכנה שמנהלת שיחה בכתב</span></div>
+    <div><b>Claude · צ'אטבוט</b><span>מודל השפה של Anthropic. צ'אטבוט: תוכנה שמנהלת שיחה</span></div>
+    <div><b>Claude Desktop</b><span>האפליקציה של Claude למחשב (Mac / Windows)</span></div>
     <div><b>פרומפט</b><span>ההוראות שנותנים למודל. כמו תדריך לעובד חדש</span></div>
     <div><b>הסתברות</b><span>כמה משהו סביר, מ-0% עד 100%</span></div>
     <div><b>טמפרטורה</b><span>כמה גיוון בתשובות. נמוכה: עקבית. גבוהה: יצירתית</span></div>
@@ -1962,7 +2150,7 @@ body.ov-on #ov{display:block}
       <div class="card" style="border-color:var(--p2)"><b style="font-size:22px">📝 משימה לבית</b>
         <ol class="steps" style="margin-top:10px">
           <li>בחרו תהליך שחוזר על עצמו בעבודה שלכם (טיפול בליד, הנפקת חשבונית, קליטת עובד) ורשמו את השלבים שלו בנקודות</li>
-          <li>השלימו את תרגיל 3: חמש תבניות פרומפט</li>
+          <li>תרגיל 3: חמש תבניות פרומפט, כל אחת בדוקה ב-Claude</li>
           <li>בונוס: מחשבון החיסכון (תרגיל 7)</li>
         </ol></div>
     </div>
@@ -2149,6 +2337,9 @@ $$('.reveal').forEach(r=>{const b=r.querySelector('.rv-btn');if(b)b.onclick=()=>
 
 /* ---------- copy buttons (from the course pages) ---------- */
 $$('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;const ok=()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)};(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(ok).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){}ta.remove();})};box.appendChild(b);});
+
+/* ---------- checklists ---------- */
+$$('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
 
 /* ---------- quiz ---------- */
 $$('.q').forEach(q=>{const ans=+q.dataset.a;const o=q.querySelectorAll('.opt');o.forEach((b,i)=>b.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');b.classList.add(i===ans?'ok':'no');o[ans].classList.add('ok');});});
