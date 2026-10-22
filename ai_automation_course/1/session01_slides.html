@@ -256,15 +256,31 @@ body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-
 .slide .material{font-size:16.5px}
 .tag-new{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:800;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--bc,var(--accent)) 14%,var(--surface));color:var(--bc,var(--accent))}
 .en-term{font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:500;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:2px 10px;margin-inline-start:12px;vertical-align:middle;direction:ltr;unicode-bidi:isolate;display:inline-block}
-/* explainer */
-.xp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:16px;flex:1;min-height:0}
-.xb{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-height:0}
-.xb::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c)}
-.xb>b{display:flex;gap:8px;align-items:center;font-size:15px;font-weight:800;color:var(--c)}
-.xb>b i{font-style:normal;font-size:20px}
-.xb p{margin:8px 0 0;font-size:24px;line-height:1.5}
-.xb pre{font-size:14px;padding:10px 14px;margin-top:8px;line-height:1.5}
+/* explainer: definition hero + three stacked rows */
+.xp{display:flex;flex-direction:column;justify-content:center;flex:1;min-height:0;gap:0}
+.xb{--c:var(--accent);position:relative;flex-shrink:0}
+.xb>b{display:flex;gap:10px;align-items:center;font-size:22px;font-weight:800;color:var(--c);line-height:1.3}
+.xb>b i{font-style:normal;font-size:26px}
+.xb p{margin:0;font-size:25px;line-height:1.5}
+.xb.what{background:color-mix(in srgb,var(--c) 9%,transparent);border-inline-start:8px solid var(--c);border-radius:6px 0 0 6px;padding:16px 26px;margin-bottom:14px}
+.xb.what>b{display:none}
+.xb.what p{font-size:35px;line-height:1.42;font-weight:500}
+.xb:not(.what){display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:24px;row-gap:8px;align-items:start;padding:11px 4px;border-top:1px solid var(--line)}
+.xb:not(.what):last-child{border-bottom:1px solid var(--line)}
+.xb:not(.what)>b{grid-column:1;grid-row:1/span 4;padding-top:3px}
+.xb:not(.what)>:not(b){grid-column:2}
+.xb pre{font-size:22px;padding:10px 16px;margin:0;line-height:1.5;justify-self:stretch}
+.xb code{font-size:.9em}
 .xb.what{--c:var(--p1)}.xb.ana{--c:var(--p2)}.xb.exm{--c:var(--p4)}.xb.why{--c:var(--claude)}
+/* JSON parts 2-4: same reading sizes */
+.slide[data-title^="JSON:"] .lbl{font-size:22px;padding:9px 14px}
+.slide[data-title^="JSON:"] .lbl code{font-size:22px;min-width:96px}
+.slide[data-title^="JSON:"] .tbl table{font-size:22px}
+.slide[data-title^="JSON:"] .types td:nth-child(2){font-size:22px}
+.slide[data-title^="JSON:"] th,.slide[data-title^="JSON:"] td{padding:7px 12px}
+.slide[data-title^="JSON:"] .callout{font-size:22px}
+.slide[data-title^="JSON:"] .contact .fld{font-size:22px;padding:7px 2px}
+.slide[data-title^="JSON:"] .anat{font-size:23px}
 /* hero / divider / break */
 .slide.hero,.slide.divider,.slide.brk{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;justify-content:center}
 .slide.hero::after,.slide.divider::after,.slide.brk::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 320px at 90% -10%,rgba(34,211,238,.25),transparent 60%),radial-gradient(640px 320px at 0% 115%,rgba(226,72,111,.22),transparent 60%);pointer-events:none}
@@ -986,7 +1002,7 @@ body.ov-on #ov{display:block}
   <div class="s-kicker"><span class="tag-new">📖 מושג חדש</span></div>
   <h2>מה זה "תאריך עדכון הידע"?<span class="en-term">Knowledge cutoff</span></h2>
   <div class="xp">
-    <div class="xb what"><b><i>💡</i>מה זה</b><p>המודל למד מטקסטים שנאספו עד תאריך מסוים. מה שקרה אחרי התאריך הזה, הוא לא יודע, אלא אם נותנים לו מקור עדכני (מסמך, חיפוש באינטרנט, מערכת).</p></div>
+    <div class="xb what"><b><i>💡</i>מה זה</b><p>המודל למד מטקסטים עד תאריך מסוים. מה שקרה אחר כך הוא לא יודע, אלא אם נותנים לו מקור עדכני: מסמך, חיפוש או מערכת.</p></div>
     <div class="xb ana"><b><i>🏠</i>משל מהחיים</b><p>חבר שחזר משנה בתחנת מחקר באנטארקטיקה. הוא חכם כמו קודם, אבל לא יודע מה קרה השנה.</p></div>
     <div class="xb exm"><b><i>🔬</i>דוגמה קטנה</b><p>"מה המחיר של המתחרה היום?" "מה הסטטוס של הזמנה 48213?" את זה המודל לא יכול לדעת לבד.</p></div>
     <div class="xb why"><b><i>🎯</i>למה זה חשוב בקורס</b><p>מחירים, מלאי וסטטוס הזמנה תמיד מגיעים מהמערכות של העסק. בהמשך הקורס נלמד לחבר את Claude אליהן.</p></div>
@@ -1398,7 +1414,7 @@ body.ov-on #ov{display:block}
   <div class="xp">
     <div class="xb what"><b><i>💡</i>מה זה</b><p>דרך מוסכמת לכתוב מידע כטקסט, כך שגם אדם וגם מחשב יכולים לקרוא אותו. כל פרט מקבל שם, ולידו הערך שלו.</p></div>
     <div class="xb ana"><b><i>🏠</i>משל מהחיים</b><p>טופס מודפס: ליד כל שדה יש כותרת ("שם", "טלפון"), ומי שקורא יודע בדיוק איפה לחפש כל פרט.</p></div>
-    <div class="xb exm"><b><i>🔬</i>דוגמה קטנה</b><pre>{ "name": "מיכל לוי", "city": "חיפה" }</pre><p style="font-size:17px">"השם הוא מיכל לוי, והעיר היא חיפה", בשפה שמחשב מבין.</p></div>
+    <div class="xb exm"><b><i>🔬</i>דוגמה קטנה</b><pre>{ "name": "מיכל לוי", "city": "חיפה" }</pre><p>"השם הוא מיכל לוי, והעיר היא חיפה", בשפה שמחשב מבין.</p></div>
     <div class="xb why"><b><i>🎯</i>למה זה חשוב בקורס</b><p>זו השפה שבה Claude ימסור ל-Make את התשובה. כמעט כל מערכת מדברת JSON. במפגש 3 נעמיק.</p></div>
   </div>
   <aside class="notes"><ul>
@@ -1451,14 +1467,14 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">JSON · חלק 4 מתוך 4</div>
   <h2>דוגמה מהחיים: כרטיס איש קשר בטלפון</h2>
   <div class="s-body mid">
-    <div class="c2" style="align-items:center">
+    <div class="c2" style="align-items:center;grid-template-columns:360px minmax(0,1fr)">
       <div class="contact"><div class="av">מל</div><div class="nm">מיכל לוי</div>
         <div class="fld"><span>נייד</span><b class="en">052-1234567</b></div>
         <div class="fld"><span>עבודה</span><b class="en">03-5550000</b></div>
         <div class="fld"><span>יום הולדת</span><b class="en">1990-05-14</b></div>
         <div class="fld"><span>מועדף</span><b>⭐ כן</b></div>
         <div class="fld" style="border:0"><span>מייל</span><b class="muted">(ריק)</b></div></div>
-      <div class="anat" style="font-size:19px;line-height:1.75"><span class="p">{</span><br>&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"מיכל לוי"</span>,<br>&nbsp;&nbsp;<span class="k">"phones"</span>: <span class="p">[</span><span class="s">"052-1234567"</span>, <span class="s">"03-5550000"</span><span class="p">]</span>,<br>&nbsp;&nbsp;<span class="k">"birthday"</span>: <span class="s">"1990-05-14"</span>,<br>&nbsp;&nbsp;<span class="k">"favorite"</span>: <span class="n">true</span>,<br>&nbsp;&nbsp;<span class="k">"email"</span>: <span class="n">null</span><br><span class="p">}</span></div>
+      <div class="anat" style="line-height:1.7"><span class="p">{</span><br>&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"מיכל לוי"</span>,<br>&nbsp;&nbsp;<span class="k">"phones"</span>: <span class="p">[</span><span class="s">"052-1234567"</span>, <span class="s">"03-5550000"</span><span class="p">]</span>,<br>&nbsp;&nbsp;<span class="k">"birthday"</span>: <span class="s">"1990-05-14"</span>,<br>&nbsp;&nbsp;<span class="k">"favorite"</span>: <span class="n">true</span>,<br>&nbsp;&nbsp;<span class="k">"email"</span>: <span class="n">null</span><br><span class="p">}</span></div>
     </div>
   </div>
   <aside class="notes"><ul>
