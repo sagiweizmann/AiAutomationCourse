@@ -521,7 +521,7 @@ body.ov-on #ov{display:block}
   <h1>מבוא ל-AI ול-Claude</h1>
   <p class="sub">איך מודל שפה "חושב", במה הוא טוב ואיפה הוא טועה, איך כותבים פרומפט שעובד, ולמה אוטומציה צריכה פלט מובנה.</p>
   <div class="hero-meta"><span class="kind-badge">⏱ כ-3 שעות</span><span class="kind-badge">3 בלוקים · 2 הפסקות</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
-  <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
+  <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · P: מסך מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
     <li>ברוכים הבאים. הציגו את עצמכם בשני משפטים: מי אתם, ולמה AI ואוטומציה.</li>
     <li>לוגיסטיקה: הפסקות ב-1:14 וב-2:09. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
@@ -2289,6 +2289,7 @@ body.ov-on #ov{display:block}
   <button id="bOv" title="סקירה (O)" aria-label="סקירה">▦</button>
   <button id="bFs" title="מסך מלא (F)" aria-label="מסך מלא">⛶</button>
   <button id="bTheme" title="מצב בהיר/כהה (D)" aria-label="מצב תצוגה">🌓</button>
+  <button id="bPv" title="מסך מרצה בחלון נפרד (P)" aria-label="מסך מרצה">🖥</button>
 </div>
 <aside id="notes" aria-live="polite"></aside>
 <div id="ov" aria-label="סקירת שקפים"><h3>סקירת שקפים</h3><div class="ovg" id="ovg"></div></div>
@@ -2328,7 +2329,7 @@ addEventListener('resize',fit);
 /* ---------- navigation ---------- */
 let cur=-1;
 const help=$('#help');let helpT;
-function toast(t){help.textContent=t;help.classList.add('show');clearTimeout(helpT);helpT=setTimeout(()=>help.classList.remove('show'),1400);}
+function toast(t,ms){help.textContent=t;help.classList.add('show');clearTimeout(helpT);helpT=setTimeout(()=>help.classList.remove('show'),ms||1400);}
 function go(i){
   i=Math.max(0,Math.min(N-1,i|0));
   if(i===cur)return;
@@ -2339,6 +2340,7 @@ function go(i){
   const h='#'+(cur+1);
   if(location.hash!==h){try{history.replaceState(null,'',h)}catch(e){location.hash=h}}
   renderNotes();
+  pvState();
   s.dispatchEvent(new CustomEvent('enter'));
   if(document.activeElement&&document.activeElement!==document.body&&!s.contains(document.activeElement)&&!$('#ctrl').contains(document.activeElement))document.activeElement.blur();
 }
@@ -2389,7 +2391,7 @@ function toggleFs(){try{if(document.fullscreenElement)document.exitFullscreen();
 document.addEventListener('fullscreenchange',()=>{$('#bFs').classList.toggle('on',!!document.fullscreenElement);setTimeout(fit,50);});
 
 /* ---------- controls ---------- */
-$('#bPrev').onclick=prev;$('#bNext').onclick=next;$('#bNotes').onclick=toggleNotes;$('#bOv').onclick=toggleOv;$('#bFs').onclick=toggleFs;$('#bTheme').onclick=toggleTheme;
+$('#bPrev').onclick=prev;$('#bNext').onclick=next;$('#bNotes').onclick=toggleNotes;$('#bOv').onclick=toggleOv;$('#bFs').onclick=toggleFs;$('#bTheme').onclick=toggleTheme;$('#bPv').onclick=openPresenter;
 
 /* ---------- keyboard (RTL: left = forward) ---------- */
 addEventListener('keydown',e=>{
@@ -2413,6 +2415,7 @@ addEventListener('keydown',e=>{
     case 'KeyO':e.preventDefault();toggleOv();return;
     case 'KeyF':e.preventDefault();toggleFs();return;
     case 'KeyD':case 'KeyT':e.preventDefault();toggleTheme();return;
+    case 'KeyP':e.preventDefault();openPresenter();return;
   }
 });
 
@@ -2446,8 +2449,190 @@ $$('.timer').forEach(el=>{
   if(el.dataset.auto){const s=el.closest('.slide');s.addEventListener('enter',()=>{if(!started)start();});}
 });
 
+/* ---------- presenter view (popup for a second screen) ----------
+   The deck opens a blank named window, writes its document once, and from then on
+   both sides talk only through postMessage. That keeps working on file:// URLs,
+   where every page load gets its own opaque origin, and lets a reloaded deck
+   re-adopt the existing popup from its heartbeat (e.source). */
+const PV_NAME='session01-presenter';
+const DECK_ID=Math.random().toString(36).slice(2);
+let pw=null;
+function pvMark(){const b=$('#bPv');if(b)b.classList.toggle('on',!!pw);}
+function pvPost(m){
+  if(!pw)return;
+  try{if(pw.closed){pw=null;pvMark();return;}pw.postMessage(m,'*');}catch(e){pw=null;pvMark();}
+}
+function pvClone(el){const c=el.cloneNode(true);c.classList.add('on');c.querySelectorAll('.notes').forEach(x=>x.remove());return c.outerHTML;}
+function pvState(){
+  if(!pw||cur<0)return;
+  const s=slides[cur],nx=slides[cur+1],m=+s.dataset.min||0,n=s.querySelector('.notes');
+  pvPost({s1d:'state',deck:DECK_ID,idx:cur,n:N,title:s.dataset.title,min:m,start:s._start,total:TOTAL,
+    block:BLK[s.dataset.block]||'',notes:n?n.innerHTML:'',cur:pvClone(s),next:nx?pvClone(nx):'',
+    nextTitle:nx?nx.dataset.title:'',nextMin:nx?(+nx.dataset.min||0):0,hidden:!!s.querySelector('.reveal:not(.shown)')});
+  pvMark();
+}
+const PV_CSS=`
+.pv [hidden]{display:none!important}
+#pv-root{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:14px 18px;background:var(--bg);color:var(--ink)}
+.pv-top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pv-tt{display:flex;gap:12px;align-items:center;min-width:0;flex:1 1 320px}
+#pv-title{font-family:"Secular One";font-weight:400;font-size:30px;line-height:1.2}
+#pv-count{font-size:20px;direction:ltr;flex:none}
+.pv-clocks{display:flex;gap:10px;flex-wrap:wrap}
+.pv-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 14px;text-align:center;min-width:120px}
+.pv-box small{display:block;font-size:15px;color:var(--ink-2)}
+.pv-box b{display:block;font-family:"Secular One";font-weight:400;font-size:32px;direction:ltr;line-height:1.2}
+.pv-box.warn{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--surface))}
+.pv-box.warn b{color:var(--bad)}
+.pv-box.ok b{color:var(--good)}
+.pv-tbtn{display:flex;gap:4px;justify-content:center;margin-top:2px}
+.pv button{font:inherit;font-size:16px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:3px 12px;cursor:pointer}
+.pv button:hover{border-color:var(--accent)}
+.pv-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,32%);gap:16px;min-height:0}
+.pv-notes-wrap{display:flex;flex-direction:column;min-height:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 24px}
+.pv-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:17px;color:var(--ink-2);margin-bottom:8px}
+#pv-notes{flex:1;min-height:0;overflow:auto;font-size:var(--nfs,30px);line-height:1.5;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#pv-pace{direction:rtl;unicode-bidi:plaintext;font-size:26px}
+#pv-notes ul{margin:0;padding-inline-start:1.1em;display:grid;gap:.5em}
+#pv-notes b{color:var(--accent)}
+.pv-side{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.pv-side small{font-size:16px;color:var(--ink-2)}
+.pv-side small b{color:var(--ink)}
+.pv-thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:10px;border:2px solid var(--accent);background:var(--bg);flex:none}
+.pv-thumb.nx{border-color:var(--line);width:78%}
+.pv-stage{position:absolute;top:0;right:0;width:1280px;height:720px;transform-origin:top right;pointer-events:none}
+.pv-stage .slide{box-shadow:none}
+.pv-bot{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pv-bot .sp{flex:1}
+.pv-bot .lbl2{font-size:16px;color:var(--ink-2)}
+#pv-prev,#pv-nextb{font-size:22px;padding:8px 22px}
+#pv-fs{font-weight:800;direction:ltr;min-width:2.2em;text-align:center}
+#pv-disc{position:fixed;inset:0;background:rgba(10,9,22,.88);display:grid;place-items:center;z-index:9;color:#fff;text-align:center;padding:20px}
+#pv-disc b{font-family:"Secular One";font-size:42px;font-weight:400}
+#pv-disc p{font-size:24px;margin:8px 0 0}
+@media (max-width:900px){.pv-main{grid-template-columns:minmax(0,1fr)}.pv-side{display:none}}
+`;
+/* Runs inside the popup (serialized with toString). Only talks to the deck via postMessage. */
+function pvMain(){
+  const $=s=>document.querySelector(s);
+  let deckId=null,lastAck=0,curIdx=-1,slideT0=Date.now(),st=null,talk={run:false,acc:0,t0:0},fs=30;
+  try{const v=+localStorage.getItem('s1pv-font');if(v>=18&&v<=60)fs=v;}catch(e){}
+  const pad=n=>String(n).padStart(2,'0');
+  const fmtS=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+pad(m):m)+':'+pad(x);};
+  const fmtM=m=>Math.floor(m/60)+':'+pad(m%60);
+  const send=m=>{try{if(window.opener&&!window.opener.closed)window.opener.postMessage(m,'*');}catch(e){}};
+  const cmd=c=>send({s1p:'cmd',cmd:c});
+  function setFont(v){fs=Math.max(18,Math.min(60,v));document.documentElement.style.setProperty('--nfs',fs+'px');$('#pv-fs').textContent=fs;try{localStorage.setItem('s1pv-font',String(fs));}catch(e){}}
+  const talkSec=()=>(talk.acc+(talk.run?Date.now()-talk.t0:0))/1000;
+  function fitThumbs(){document.querySelectorAll('.pv-thumb').forEach(t=>{const s=t.querySelector('.pv-stage');if(s)s.style.transform='scale('+(t.clientWidth/1280)+')';});}
+  function thumb(el,html){el.innerHTML=html?'<div class="pv-stage">'+html+'</div>':'';fitThumbs();}
+  function render(d){
+    if(d.idx!==curIdx){curIdx=d.idx;slideT0=Date.now();$('#pv-notes').scrollTop=0;}
+    st=d;deckId=d.deck;
+    document.title='מסך מרצה · '+(d.idx+1)+'/'+d.n;
+    $('#pv-title').textContent=d.title;
+    $('#pv-count').textContent=(d.idx+1)+' / '+d.n;
+    $('#pv-plan').textContent=d.block+' · מתוכנן '+fmtM(d.start)+'–'+fmtM(d.start+d.min)+' · סה"כ '+d.total+' דק\'';
+    $('#pv-notes').innerHTML=d.notes||'<p class="muted">אין הערות לשקף הזה.</p>';
+    $('#pv-hidden').hidden=!d.hidden;
+    thumb($('#pv-cur'),d.cur);
+    thumb($('#pv-next'),d.next);
+    $('#pv-nexttitle').textContent=d.next?d.nextTitle+' ('+d.nextMin+' דק\')':'זה השקף האחרון';
+    $('#pv-next').hidden=!d.next;
+    tick();
+  }
+  function tick(){
+    const now=new Date();
+    $('#pv-clock').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+    const ts=talkSec();
+    $('#pv-talk').textContent=fmtS(ts);
+    $('#pv-tgo').textContent=talk.run?'⏸':'▶';
+    if(st){
+      const el=(Date.now()-slideT0)/1000,plan=st.min*60;
+      $('#pv-slide').textContent=fmtS(el);
+      $('#pv-slideplan').textContent='מתוך '+st.min+' דק\'';
+      $('#pv-slidebox').classList.toggle('warn',plan>0&&el>plan);
+      const pb=$('#pv-pacebox');
+      if(talk.run||talk.acc>0){
+        const diff=Math.round(ts/60-st.start);
+        $('#pv-pace').textContent=diff===0?'בזמן':(diff>0?'באיחור '+diff+' דק\'':'לפני הזמן '+(-diff)+' דק\'');
+        pb.classList.toggle('warn',diff>=3);pb.classList.toggle('ok',diff<=0);
+      }else{$('#pv-pace').textContent='—';pb.classList.remove('warn','ok');}
+    }
+    const disc=!window.opener||window.opener.closed||Date.now()-lastAck>3000;
+    $('#pv-disc').hidden=!disc;
+  }
+  addEventListener('message',e=>{
+    if(!window.opener||e.source!==window.opener)return;
+    const d=e.data;if(!d||!d.s1d)return;
+    if(d.s1d==='bye'){lastAck=0;tick();return;}
+    lastAck=Date.now();
+    if(d.s1d==='state')render(d);else tick();
+  });
+  addEventListener('keydown',e=>{
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    const k=e.key;
+    if(k==='ArrowLeft'||k==='PageDown'||k===' '){e.preventDefault();if(e.shiftKey&&k===' ')cmd('prev');else cmd('next');}
+    else if(k==='ArrowRight'||k==='PageUp'){e.preventDefault();cmd('prev');}
+    else if(k==='Home'){e.preventDefault();cmd('home');}
+    else if(k==='End'){e.preventDefault();cmd('end');}
+    else if(k==='+'||k==='='){e.preventDefault();setFont(fs+2);}
+    else if(k==='-'||k==='_'){e.preventDefault();setFont(fs-2);}
+  });
+  $('#pv-prev').onclick=()=>cmd('prev');
+  $('#pv-nextb').onclick=()=>cmd('next');
+  $('#pv-fup').onclick=()=>setFont(fs+2);
+  $('#pv-fdn').onclick=()=>setFont(fs-2);
+  $('#pv-tgo').onclick=()=>{if(talk.run){talk.acc+=Date.now()-talk.t0;talk.run=false;}else{talk.t0=Date.now();talk.run=true;}tick();};
+  $('#pv-trs').onclick=()=>{talk={run:false,acc:0,t0:0};tick();};
+  addEventListener('resize',fitThumbs);
+  setFont(fs);
+  window.__pvTest={talkSec:()=>talkSec(),fs:()=>fs,idx:()=>curIdx,connected:()=>!$('#pv-disc').hidden?false:true};
+  const hello=()=>send({s1p:'hello',idx:curIdx,deck:deckId});
+  hello();
+  setInterval(()=>{hello();tick();},1000);
+  tick();
+}
+function pvDoc(){
+  const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+  const fl=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  return '<!DOCTYPE html><html lang="he" dir="rtl" data-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>מסך מרצה · מפגש 1</title>'+
+  (fl?'<link rel="stylesheet" href="'+fl.href+'">':'')+'<style>'+css+'</style><style>'+PV_CSS+'</style></head><body class="pv">'+
+  '<div id="pv-root"><header class="pv-top"><div class="pv-tt"><span id="pv-count" class="pill"></span><b id="pv-title">מתחבר…</b></div>'+
+  '<div class="pv-clocks"><div class="pv-box"><small>השעה</small><b id="pv-clock"></b></div>'+
+  '<div class="pv-box" id="pv-slidebox"><small>בשקף הזה</small><b id="pv-slide">0:00</b><small id="pv-slideplan"></small></div>'+
+  '<div class="pv-box"><small>זמן ההרצאה</small><b id="pv-talk">0:00</b><div class="pv-tbtn"><button id="pv-tgo" title="התחלה/עצירה">▶</button><button id="pv-trs" title="איפוס">↺</button></div></div>'+
+  '<div class="pv-box" id="pv-pacebox"><small>מול התכנון</small><b id="pv-pace">—</b></div></div></header>'+
+  '<main class="pv-main"><section class="pv-notes-wrap"><div class="pv-meta"><span id="pv-plan"></span><span id="pv-hidden" class="lock" hidden>🔒 פתרון מוסתר בשקף</span></div><div id="pv-notes"></div></section>'+
+  '<aside class="pv-side"><small>עכשיו על המסך</small><div class="pv-thumb" id="pv-cur"></div><small>השקף הבא: <b id="pv-nexttitle"></b></small><div class="pv-thumb nx" id="pv-next"></div></aside></main>'+
+  '<footer class="pv-bot"><button id="pv-prev">→ הקודם</button><button id="pv-nextb">הבא ←</button><span class="sp"></span><span class="lbl2">גודל הטקסט</span><button id="pv-fdn" title="הקטנה (-)">A−</button><span id="pv-fs"></span><button id="pv-fup" title="הגדלה (+)">A+</button></footer>'+
+  '<div id="pv-disc" hidden><div><b>המצגת מנותקת</b><p>לחצו P בחלון המצגת כדי להתחבר מחדש.</p></div></div></div>'+
+  '<script>('+pvMain.toString()+')();<\/script></body></html>';
+}
+function openPresenter(){
+  if(pw&&!pw.closed){try{pw.focus();}catch(e){}pvState();return;}
+  let w=null;
+  try{w=window.open('',PV_NAME,'width=1280,height=800');}catch(e){}
+  if(!w){toast('הדפדפן חסם את החלון. אפשרו חלונות קופצים לקובץ הזה ולחצו P שוב',5000);return;}
+  let fresh=false;
+  try{fresh=!w.document.getElementById('pv-root');}catch(e){fresh=false;}
+  if(fresh){w.document.open();w.document.write(pvDoc());w.document.close();}
+  pw=w;pvState();
+  try{w.focus();}catch(e){}
+}
+addEventListener('message',e=>{
+  const d=e.data;if(!d||!d.s1p||!e.source)return;
+  if(e.source!==pw){pw=e.source;pvMark();}
+  if(d.s1p==='hello'){if(d.deck!==DECK_ID||d.idx!==cur)pvState();else pvPost({s1d:'ack'});}
+  else if(d.s1p==='cmd'){
+    if(d.cmd==='next')next();else if(d.cmd==='prev')prev();else if(d.cmd==='home')go(0);else if(d.cmd==='end')go(N-1);
+    pvState();
+  }
+});
+addEventListener('pagehide',()=>pvPost({s1d:'bye'}));
+
 /* ---------- reveal ---------- */
-$$('.reveal').forEach(r=>{const b=r.querySelector('.rv-btn');if(b)b.onclick=()=>r.classList.add('shown');});
+$$('.reveal').forEach(r=>{const b=r.querySelector('.rv-btn');if(b)b.onclick=()=>{r.classList.add('shown');pvState();};});
 
 /* ---------- copy buttons (from the course pages) ---------- */
 $$('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;const ok=()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)};(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(ok).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){}ta.remove();})};box.appendChild(b);});
