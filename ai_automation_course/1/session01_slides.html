@@ -272,6 +272,29 @@ body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-
 .xb pre{font-size:22px;padding:10px 16px;margin:0;line-height:1.5;justify-self:stretch}
 .xb code{font-size:.9em}
 .xb.what{--c:var(--p1)}.xb.ana{--c:var(--p2)}.xb.exm{--c:var(--p4)}.xb.why{--c:var(--claude)}
+/* opening: goals, roadmap, deal, routine */
+.goals{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.goals>div{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:23px;line-height:1.4}
+.goals i{font-style:normal;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--bc) 16%,var(--surface));font-size:24px}
+.slide .goals+.callout{font-size:23px}
+.road{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+.road>div{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.road>div.here{border:2px solid var(--bc);box-shadow:0 0 0 4px var(--glow)}
+.road .rn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:22px}
+.road b{font-family:"Secular One";font-weight:400;font-size:27px;margin-top:6px}
+.road small{font-size:22px;color:var(--ink-2)}
+.road ul{margin:10px 0 0;padding-inline-start:20px;font-size:23px;line-height:1.45;display:grid;gap:4px}
+.road em{margin-top:auto;padding-top:8px;font-style:normal;font-weight:800;font-size:22px;color:var(--bc)}
+.deal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.dl{border-radius:18px;padding:16px 22px;border:1px solid var(--line);background:var(--surface)}
+.dl.give{border-top:6px solid var(--p5)}.dl.do{border-top:6px solid var(--claude);background:color-mix(in srgb,var(--claude) 7%,var(--surface))}
+.dl>b{font-family:"Secular One";font-weight:400;font-size:26px}
+.dl ul{margin:8px 0 0;padding-inline-start:22px;font-size:22px;line-height:1.45;display:grid;gap:4px}
+.routine{display:grid;gap:12px}
+.routine>div{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+.routine .rn{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:23px}
+.routine p{margin:0;flex:1;font-size:26px;line-height:1.4}
+.routine .tm{flex:none;font-weight:800;font-size:23px;color:var(--bc);background:color-mix(in srgb,var(--bc) 12%,var(--surface));border-radius:999px;padding:4px 14px}
 /* setup section */
 .setup .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
 .setup .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
@@ -497,12 +520,103 @@ body.ov-on #ov{display:block}
   <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 1 מתוך 15</b></div>
   <h1>מבוא ל-AI ול-Claude</h1>
   <p class="sub">איך מודל שפה "חושב", במה הוא טוב ואיפה הוא טועה, איך כותבים פרומפט שעובד, ולמה אוטומציה צריכה פלט מובנה.</p>
-  <div class="hero-meta"><span class="kind-badge">⏱ 3 שעות</span><span class="kind-badge">3 בלוקים · 2 הפסקות</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
+  <div class="hero-meta"><span class="kind-badge">⏱ כ-3 שעות</span><span class="kind-badge">3 בלוקים · 2 הפסקות</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
   <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
     <li>ברוכים הבאים. הציגו את עצמכם בשני משפטים: מי אתם, ולמה AI ואוטומציה.</li>
-    <li>לוגיסטיקה: הפסקות ב-1:05 וב-2:00. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
+    <li>לוגיסטיקה: הפסקות ב-1:14 וב-2:09. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
     <li>מה צריך: מחשב, דפדפן, וחשבון Claude. גם חשבון חינמי מתאים לרוב התרגילים.</li>
+  </ul></aside>
+</section>
+
+<!-- ===== Opening: course goals + student responsibility ===== -->
+<section class="slide" data-min="2" data-block="1" data-title="מטרות הקורס">
+  <div class="s-kicker">על הקורס</div>
+  <h2>מטרות הקורס: בסוף הקורס תדעו…</h2>
+  <div class="s-body mid">
+    <div class="goals">
+      <div><i>🔍</i>לנתח תהליך עסקי ולזהות מה כדאי להפוך לאוטומטי</div>
+      <div><i>⚙️</i>לבנות תהליכים אוטומטיים, עם Claude בתור "המוח" שלהם</div>
+      <div><i>🔗</i>לחבר בין המערכות של העסק: מייל, גיליונות, מערכת לקוחות וצ'אט ארגוני</div>
+      <div><i>🤖</i>לבנות עוזרים חכמים שעונים מתוך הידע של העסק ומבצעים משימות בעצמם</div>
+      <div><i>💼</i>לשלב AI במכירות, בשירות, בשיווק ובתפעול</div>
+      <div><i>🛡️</i>לבדוק, לתחזק ולהטמיע פתרון AI בארגון אמיתי</div>
+    </div>
+    <div class="callout tip"><b>והיעד הסופי</b>בסוף הקורס כל אחד מכם מציג מערכת אוטומציה פעילה שבנה בעצמו.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטרות לקוחות מהסילבוס, בניסוח פשוט. לא צריך להבין עכשיו את כל המילים: כל מונח יוסבר כשנגיע אליו.</li>
+    <li>הדגישו את המילה "לבנות". זה קורס מעשי: בסופו יש מערכת שעובדת, לא רק ידע.</li>
+    <li>שאלה לכיתה: "איזו מהמטרות האלה הכי רלוונטית לעבודה שלכם היום?" שמעו 2–3 תשובות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="המסלול: 15 מפגשים">
+  <div class="s-kicker">על הקורס</div>
+  <h2>המסלול: 15 מפגשים בחמישה שלבים</h2>
+  <div class="s-body mid">
+    <div class="road">
+      <div class="here"><span class="rn">1</span><b>בסיס</b><small>מפגשים 1–3<br>9 שעות</small><ul><li>מבוא ל-AI</li><li>אפיון תהליכים</li><li>יסודות טכניים</li></ul><em>📍 אנחנו כאן</em></div>
+      <div><span class="rn">2</span><b>בניית תהליכים</b><small>מפגשים 4–7<br>12 שעות</small><ul><li>פלטפורמות אוטומציה</li><li>תהליכים חכמים עם Claude</li><li>חיבור בין מערכות</li></ul></div>
+      <div><span class="rn">3</span><b>AI מתקדם</b><small>מפגשים 8–10<br>9 שעות</small><ul><li>בסיסי ידע חכמים</li><li>סוכני AI</li></ul></div>
+      <div><span class="rn">4</span><b>יישום והטמעה</b><small>מפגשים 11–12<br>6 שעות</small><ul><li>AI בארגון</li><li>בדיקות ותחזוקה</li></ul></div>
+      <div><span class="rn">5</span><b>פרויקט גמר</b><small>מפגשים 13–15<br>9 שעות</small><ul><li>אפיון ובנייה</li><li>הצגה בפני ועדה</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>מבנה השלבים והשעות לקוח מהסילבוס: 45 שעות, 15 מפגשים, 11 נושאים בחמישה שלבים.</li>
+    <li>הנקודה החשובה: כל שלב נבנה על הקודם. מי שמדלג על התרגול בשלב 1 ירגיש את זה כבר בשלב 2.</li>
+    <li>אל תסבירו כאן מה זה "סוכני AI" או "בסיסי ידע". זו רק מפה. נגיע לכל דבר בזמנו.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="1" data-title="העסקה שלנו">
+  <div class="s-kicker">לפני שמתחילים</div>
+  <h2>העסקה שלנו: מי אחראי על מה</h2>
+  <div class="s-body">
+    <div class="deal">
+      <div class="dl give"><b>🎓 מה אנחנו נותנים בכיתה</b>
+        <ul>
+          <li>הבסיס: הסברים, הדגמות וסימולציות</li>
+          <li>תרגול מודרך, עם פתרונות</li>
+          <li>חומרים מסודרים לכל מפגש: מצגת, דף סיכום, תרגול ופתרון</li>
+          <li>מענה לשאלות, בכיתה ובין המפגשים</li>
+        </ul></div>
+      <div class="dl do"><b>💪 מה אתם עושים בבית</b>
+        <ul>
+          <li>עוברים על החומר אחרי כל מפגש: דף הסיכום והמצגת</li>
+          <li>פותחים את Claude ואת Make, ועושים בעצמכם את התרגילים והמשימות לבית</li>
+          <li>מנסים, טועים ומתקנים, עד שזה עובד</li>
+          <li>מגיעים למפגש הבא עם שאלות</li>
+        </ul></div>
+    </div>
+    <div class="callout warn" style="font-size:24px"><b>השורה התחתונה</b>אוטומציה לומדים בידיים. מי שרק מקשיב בכיתה יבין את הרעיונות, אבל לא יידע לבנות. ההתקדמות שלכם תלויה בתרגול שלכם.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה השקף הכי חשוב בפתיחה. עצרו, דברו לאט, ותסתכלו לכיתה בעיניים. אל תתנצלו ואל תרככו: זו עובדה, לא איום.</li>
+    <li>משל שעובד טוב: חדר כושר. המאמן מראה איך עושים את התרגיל, אבל השריר נבנה רק כשאתם מרימים את המשקולת בעצמכם.</li>
+    <li>אמרו במפורש: "אני כאן כדי לתת לכם את הבסיס ולעזור כשנתקעים. את הבנייה עצמה אתם עושים."</li>
+    <li>"מענה לשאלות בין המפגשים": התאימו לערוץ שלכם בפועל (קבוצת וואטסאפ, מייל או פורום). אם אין ערוץ כזה, מחקו את השורה.</li>
+    <li>שאלה לכיתה: "מי כבר יודע מתי השבוע יהיו לו שעה או שעתיים לתרגל?" בקשו מכולם לשריין את הזמן ביומן עכשיו, לפני שממשיכים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="השגרה אחרי כל מפגש">
+  <div class="s-kicker">לפני שמתחילים</div>
+  <h2>השגרה אחרי כל מפגש</h2>
+  <div class="s-body mid">
+    <div class="routine">
+      <div><span class="rn">1</span><p><b>למחרת:</b> עוברים על דף הסיכום ועל המצגת</p><span class="tm">20–30 דק'</span></div>
+      <div><span class="rn">2</span><p><b>עד המפגש הבא:</b> מסיימים את התרגילים ואת המשימה לבית, בעצמכם</p><span class="tm">1–2 שעות</span></div>
+      <div><span class="rn">3</span><p><b>בונוס:</b> מנסים אוטומציה קטנה אחת משלכם, על משימה אמיתית מהעבודה</p><span class="tm">30 דק'</span></div>
+      <div><span class="rn">4</span><p><b>לפני המפגש:</b> רושמים את השאלות שעלו</p><span class="tm">5 דק'</span></div>
+    </div>
+    <p class="muted" style="font-size:22px;margin:0">בסך הכול כשעתיים עד שלוש בין מפגש למפגש. ההערכות הן המלצה שלנו, לא חלק מהסילבוס.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>הסילבוס לא קובע זמן תרגול בבית. ההערכות כאן הן המלצה, ואפשר להתאים אותן לקצב של הקבוצה.</li>
+    <li>הדגישו את שלב 3: אוטומציה על משימה אמיתית מהעבודה היא מה שהופך ידע ליכולת, וממנה גם צומח רעיון לפרויקט הגמר.</li>
+    <li>שאלה לכיתה: "מה עלול לעצור אתכם מלתרגל, ומה תעשו כדי שזה לא יקרה?"</li>
   </ul></aside>
 </section>
 
@@ -548,21 +662,21 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide" data-min="1" data-block="1" data-title="סדר היום">
-  <div class="s-kicker">מבנה המפגש · 3 שעות</div>
+  <div class="s-kicker">מבנה המפגש · כ-3 שעות</div>
   <h2>סדר היום</h2>
   <div class="s-body">
     <div class="agenda c5" style="grid-template-columns:repeat(5,minmax(0,1fr))">
-      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–1:05</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, טמפרטורה, טוקנים וחלון הקשר, והתקנת Claude Desktop</span></div>
-      <div class="ag" style="--c:var(--ink-2)"><div class="t">1:05–1:15</div><b>☕ הפסקה</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--p2)"><div class="t">1:15–2:00</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 3 תרגילים</span></div>
-      <div class="ag" style="--c:var(--ink-2)"><div class="t">2:00–2:10</div><b>☕ הפסקה</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--claude)"><div class="t">2:10–3:00</div><b>בלוק 3: JSON ו-Claude</b><span>פלט מובנה, Projects ו-Artifacts, תרגול וסיכום</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–1:14</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, טמפרטורה, טוקנים וחלון הקשר, והתקנת Claude Desktop</span></div>
+      <div class="ag" style="--c:var(--ink-2)"><div class="t">1:14–1:24</div><b>☕ הפסקה</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">1:24–2:09</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 3 תרגילים</span></div>
+      <div class="ag" style="--c:var(--ink-2)"><div class="t">2:09–2:19</div><b>☕ הפסקה</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">2:19–3:09</div><b>בלוק 3: JSON ו-Claude</b><span>פלט מובנה, Projects ו-Artifacts, תרגול וסיכום</span></div>
     </div>
     <b class="mt" style="display:block">איך לקרוא את השקפים</b>
     <div class="legend"><span>📖 מושג חדש: הסבר פשוט לפני שמשתמשים במונח</span><span>🎮 סימולציה: משחקים יחד</span><span>🧪 נסו עכשיו: 2–3 דקות ב-Claude</span><span>🛠️ תרגיל: עבודה עצמית עם טיימר</span><span>❓ בדיקה: שאלות חזרה</span><span>💬 דיון</span></div>
   </div>
   <aside class="notes"><ul>
-    <li>הראו את המבנה: שלושה בלוקים של 45–65 דקות, עם שתי הפסקות של 10 דקות. ההתקנה בסוף בלוק 1, כדי שמי שלא מסיים ישלים בהפסקה.</li>
+    <li>הראו את המבנה: שלושה בלוקים של 45–75 דקות, עם שתי הפסקות של 10 דקות, ובסך הכול כ-3 שעות ו-10 דקות. ההתקנה בסוף בלוק 1, כדי שמי שלא מסיים ישלים בהפסקה.</li>
     <li>יותר מחצי מהזמן הוא עבודה מעשית: סימולציות, "נסו עכשיו" ותרגילים.</li>
     <li>הסבירו את המקרא. משתתפים חדשים נרגעים כשהם יודעים שכל מונח יוסבר.</li>
   </ul></aside>
@@ -593,11 +707,11 @@ body.ov-on #ov{display:block}
   <h2>איך מודל שפה עובד</h2>
   <p class="sub">מה זה AI ומה זה מודל, איך המודל בוחר את המילה הבאה, מה זה טוקנים וחלון הקשר, ובסוף מתקינים את Claude Desktop.</p>
   <div class="blocks">
-    <div class="here"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
-    <div><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
-    <div><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="here"><div class="t">0:00–1:14</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div><div class="t">1:14–1:24</div><b>☕</b>הפסקה</div>
+    <div><div class="t">1:24–2:09</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div><div class="t">2:09–2:19</div><b>☕</b>הפסקה</div>
+    <div><div class="t">2:19–3:09</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>אנחנו כאן. בבלוק הזה עוד לא עובדים בכלי. בונים את ההבנה שכל השאר נשען עליה.</li></ul></aside>
 </section>
@@ -1088,7 +1202,7 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה ראשונה">
-  <div class="kind-badge">☕ הפסקה · 1:05–1:15</div>
+  <div class="kind-badge">☕ הפסקה · 1:14–1:24</div>
   <h2 style="margin-top:14px">הפסקה של 10 דקות</h2>
   <div class="timer" data-sec="600" data-auto="1"></div>
   <div class="nextup">אחרי ההפסקה · בלוק 2: מגבלות, הזיות והנדסת פרומפטים</div>
@@ -1101,11 +1215,11 @@ body.ov-on #ov{display:block}
   <h2>מגבלות והנדסת פרומפטים</h2>
   <p class="sub">במה AI מצוין ואיפה הוא טועה, מתי אדם חייב לאשר, ואיך כותבים פרומפט שעובד.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
-    <div class="here"><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
-    <div><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="done"><div class="t">0:00–1:14</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:14–1:24</div><b>☕</b>הפסקה</div>
+    <div class="here"><div class="t">1:24–2:09</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div><div class="t">2:09–2:19</div><b>☕</b>הפסקה</div>
+    <div><div class="t">2:19–3:09</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>חיבור לבלוק הקודם: "המודל מנבא ולא יודע". עכשיו נראה מה המשמעות המעשית של זה בעסק.</li><li>בבלוק הזה יש שלושה תרגילים קצרים (תרגיל 3 עבר לבית). ודאו שכולם מחוברים ל-Claude.</li></ul></aside>
 </section>
@@ -1549,7 +1663,7 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה שנייה">
-  <div class="kind-badge">☕ הפסקה · 2:00–2:10</div>
+  <div class="kind-badge">☕ הפסקה · 2:09–2:19</div>
   <h2 style="margin-top:14px">הפסקה של 10 דקות</h2>
   <div class="timer" data-sec="600" data-auto="1"></div>
   <div class="nextup">אחרי ההפסקה · בלוק 3: JSON, פלט מובנה ו-Claude Projects</div>
@@ -1562,11 +1676,11 @@ body.ov-on #ov{display:block}
   <h2>פלט מובנה ו-Claude בפועל</h2>
   <p class="sub">מה זה JSON ולמה אוטומציה צריכה אותו, Projects ו-Artifacts, ואיך כל זה מתחבר לשאר הקורס.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–1:05</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">1:05–1:15</div><b>☕</b>הפסקה</div>
-    <div class="done"><div class="t">1:15–2:00</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div class="done"><div class="t">2:00–2:10</div><b>☕</b>הפסקה</div>
-    <div class="here"><div class="t">2:10–3:00</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="done"><div class="t">0:00–1:14</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:14–1:24</div><b>☕</b>הפסקה</div>
+    <div class="done"><div class="t">1:24–2:09</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div class="done"><div class="t">2:09–2:19</div><b>☕</b>הפסקה</div>
+    <div class="here"><div class="t">2:19–3:09</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>עד עכשיו התשובות של Claude היו בשביל בני אדם. בבלוק הזה הן הופכות לנתונים שמערכת יכולה להמשיך לעבוד איתם.</li></ul></aside>
 </section>
