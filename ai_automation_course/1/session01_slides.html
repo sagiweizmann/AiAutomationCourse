@@ -303,6 +303,17 @@ body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-
 .ex22 .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
 .ex22 .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
 .ex22 .s-body>b,.ex22 .s-body b{font-size:22px}
+/* student site link + QR */
+.hw22 .pts.sm{font-size:22px}
+.hw22 .pts.sm li::before{margin-top:11px}
+.sitebox{display:grid;grid-template-columns:400px minmax(0,1fr);gap:40px;align-items:center}
+.qrbig{width:400px;height:400px;background:#fff;border-radius:22px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.qrbig svg,.qrsmall svg{display:block;width:100%;height:100%}
+.siteinfo .scan{font-size:24px;margin:0 0 8px;color:var(--ink-2)}
+.siteurl{display:inline-block;direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;font-weight:500;font-size:30px;color:var(--accent);text-decoration:none;border-bottom:3px solid color-mix(in srgb,var(--accent) 40%,transparent);line-height:1.4;overflow-wrap:anywhere}
+.siteurl.sm{font-size:22px;border-bottom-width:2px}
+.siteline{display:flex;gap:16px;align-items:center;font-size:22px;margin-top:6px}
+.qrsmall{flex:none;width:112px;height:112px;background:#fff;border-radius:12px;padding:5px;border:1px solid var(--line)}
 /* setup section */
 .setup .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
 .setup .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
@@ -532,7 +543,7 @@ body.ov-on #ov{display:block}
   <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · P: מסך מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
     <li>ברוכים הבאים. הציגו את עצמכם בשני משפטים: מי אתם, ולמה AI ואוטומציה.</li>
-    <li>לוגיסטיקה: הפסקות ב-1:26 וב-2:35. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
+    <li>לוגיסטיקה: הפסקות ב-1:28 וב-2:37. חומרי המפגש (הרצאה, תרגול, פתרון וסיכום) זמינים אחרי השיעור.</li>
     <li>מה צריך: מחשב, דפדפן, וחשבון Claude. גם חשבון חינמי מתאים לרוב התרגילים.</li>
   </ul></aside>
 </section>
@@ -627,6 +638,31 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
+<section class="slide" data-min="2" data-block="1" data-title="כל החומר במקום אחד">
+  <div class="s-kicker">לפני שמתחילים</div>
+  <h2>כל החומר במקום אחד</h2>
+  <div class="s-body mid">
+    <div class="sitebox">
+      <div class="qrbig"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="קוד QR לאתר הקורס" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h2m1 0h2m1 0h1m1 0h4m2 0h7M4 5.5h1m5 0h1m1 0h4m4 0h3m3 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h6m2 0h2m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m2 0h4m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m5 0h3m1 0h1m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m2 0h1m1 0h2m6 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h3m1 0h1m1 0h2m1 0h2m1 0h1M4 12.5h1m1 0h2m1 0h3m6 0h1m1 0h4m2 0h1m2 0h1m1 0h2M4 13.5h6m2 0h1m2 0h2m1 0h1m1 0h1m2 0h6m3 0h1M7 14.5h1m2 0h2m1 0h2m2 0h2m1 0h3m2 0h4m1 0h2M5 15.5h1m1 0h1m5 0h1m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1m3 0h1M7 16.5h1m1 0h2m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h2M4 17.5h1m2 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h4m1 0h1m3 0h3M5 18.5h1m2 0h3m3 0h1m2 0h2m1 0h1m1 0h3m1 0h2m2 0h3M4 19.5h2m1 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m8 0h1M4 20.5h2m1 0h1m1 0h2m1 0h1m3 0h4m2 0h4m1 0h3m1 0h1M5 21.5h1m6 0h2m1 0h1m3 0h1m1 0h1m2 0h1m2 0h1m1 0h3M4 22.5h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h6m2 0h1m1 0h3m1 0h1M8 23.5h2m1 0h3m1 0h2m2 0h4m1 0h1m1 0h1m3 0h1M5 24.5h1m1 0h2m1 0h1m2 0h1m3 0h1m1 0h12M12 25.5h2m1 0h3m2 0h3m1 0h1m3 0h5M4 26.5h7m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h2m1 0h1M4 27.5h1m5 0h1m1 0h1m2 0h1m4 0h1m1 0h1m1 0h1m3 0h2m1 0h2M4 28.5h1m1 0h3m1 0h1m4 0h1m2 0h1m2 0h1m2 0h5m1 0h3M4 29.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h4m3 0h1m1 0h3m2 0h1M4 30.5h1m1 0h3m1 0h1m1 0h2m2 0h2m2 0h1m3 0h1m2 0h1m2 0h1m1 0h1M4 31.5h1m5 0h1m2 0h5m1 0h2m3 0h1m1 0h2m1 0h1m1 0h1M4 32.5h7m1 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1"/></svg></div>
+      <div class="siteinfo">
+        <p class="scan">סרקו עכשיו עם הטלפון, ושמרו כסימנייה:</p>
+        <a class="siteurl" href="https://weizmann.ai/ai-automation-course/" target="_blank" rel="noopener">weizmann.ai/ai-automation-course</a>
+        <ul class="pts" style="margin-top:18px">
+          <li>🛠️ כל התרגילים של המפגש, עם כפתורי העתקה</li>
+          <li>📌 דף הסיכום ושאלות לבדיקה עצמית</li>
+          <li>📖 מילון המושגים</li>
+          <li>✅ ההכנה: חשבון Claude ובדיקה שהכול עובד</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>בקשו מכולם לסרוק את הקוד עכשיו, לפתוח את האתר ולשמור אותו כסימנייה (או להוסיף למסך הבית בטלפון). תנו לזה שתי דקות, ואל תמשיכו עד שרוב הכיתה פתחה את האתר.</li>
+    <li>חיבור לשקף הקודם: זה המקום שבו עושים את "השגרה אחרי כל מפגש". הסימונים "סיימתי" נשמרים בדפדפן של כל אחד.</li>
+    <li>מי שאין לו מצלמה שסורקת: הכתובת מופיעה על המסך, וגם בשקף האחרון של המפגש.</li>
+  </ul></aside>
+</section>
+
 <section class="slide" data-min="2" data-block="1" data-title="מה נבנה בקורס">
   <div class="s-kicker">על הקורס</div>
   <h2>בסוף הקורס תבנו מערכת כזאת בעצמכם</h2>
@@ -673,17 +709,17 @@ body.ov-on #ov{display:block}
   <h2>סדר היום</h2>
   <div class="s-body">
     <div class="agenda c5" style="grid-template-columns:repeat(5,minmax(0,1fr))">
-      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–1:26</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, טמפרטורה, טוקנים וחלון הקשר, והתקנת Claude Desktop</span></div>
-      <div class="ag" style="--c:var(--ink-2)"><div class="t">1:26–1:36</div><b>☕ הפסקה</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--p2)"><div class="t">1:36–2:35</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 5 תרגילים</span></div>
-      <div class="ag" style="--c:var(--ink-2)"><div class="t">2:35–2:45</div><b>☕ הפסקה</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--claude)"><div class="t">2:45–3:52</div><b>בלוק 3: JSON ו-Claude</b><span>פלט מובנה, Projects ו-Artifacts, תרגול וסיכום</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–1:28</div><b>בלוק 1: איך מודל שפה עובד</b><span>AI, מודל, טמפרטורה, טוקנים וחלון הקשר, והתקנת Claude Desktop</span></div>
+      <div class="ag" style="--c:var(--ink-2)"><div class="t">1:28–1:38</div><b>☕ הפסקה</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">1:38–2:37</div><b>בלוק 2: מגבלות ופרומפטים</b><span>הזיות, אישור אנושי, 6 רכיבים של פרומפט טוב, 5 תרגילים</span></div>
+      <div class="ag" style="--c:var(--ink-2)"><div class="t">2:37–2:47</div><b>☕ הפסקה</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">2:47–3:54</div><b>בלוק 3: JSON ו-Claude</b><span>פלט מובנה, Projects ו-Artifacts, תרגול וסיכום</span></div>
     </div>
     <b class="mt" style="display:block">איך לקרוא את השקפים</b>
     <div class="legend"><span>📖 מושג חדש: הסבר פשוט לפני שמשתמשים במונח</span><span>🎮 סימולציה: משחקים יחד</span><span>🧪 נסו עכשיו: 2–3 דקות ב-Claude</span><span>🛠️ תרגיל: עבודה עצמית עם טיימר</span><span>❓ בדיקה: שאלות חזרה</span><span>💬 דיון</span></div>
   </div>
   <aside class="notes"><ul>
-    <li>הראו את המבנה: שלושה בלוקים של 60–90 דקות, עם שתי הפסקות של 10 דקות, ובסך הכול כ-3 שעות ו-50 דקות. ההתקנה בסוף בלוק 1, כדי שמי שלא מסיים ישלים בהפסקה.</li>
+    <li>הראו את המבנה: שלושה בלוקים של 60–90 דקות, עם שתי הפסקות של 10 דקות, ובסך הכול כ-3 שעות ו-55 דקות. ההתקנה בסוף בלוק 1, כדי שמי שלא מסיים ישלים בהפסקה.</li>
     <li>יותר מחצי מהזמן הוא עבודה מעשית: סימולציות, "נסו עכשיו" ותרגילים.</li>
     <li>הסבירו את המקרא. משתתפים חדשים נרגעים כשהם יודעים שכל מונח יוסבר.</li>
   </ul></aside>
@@ -714,11 +750,11 @@ body.ov-on #ov{display:block}
   <h2>איך מודל שפה עובד</h2>
   <p class="sub">מה זה AI ומה זה מודל, איך המודל בוחר את המילה הבאה, מה זה טוקנים וחלון הקשר, ובסוף מתקינים את Claude Desktop.</p>
   <div class="blocks">
-    <div class="here"><div class="t">0:00–1:26</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div><div class="t">1:26–1:36</div><b>☕</b>הפסקה</div>
-    <div><div class="t">1:36–2:35</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div><div class="t">2:35–2:45</div><b>☕</b>הפסקה</div>
-    <div><div class="t">2:45–3:52</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="here"><div class="t">0:00–1:28</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div><div class="t">1:28–1:38</div><b>☕</b>הפסקה</div>
+    <div><div class="t">1:38–2:37</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div><div class="t">2:37–2:47</div><b>☕</b>הפסקה</div>
+    <div><div class="t">2:47–3:54</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>אנחנו כאן. בבלוק הזה עוד לא עובדים בכלי. בונים את ההבנה שכל השאר נשען עליה.</li></ul></aside>
 </section>
@@ -862,6 +898,7 @@ body.ov-on #ov{display:block}
 3. לצערנו, המוצר...</pre></div>
     </div>
     <div class="deliver">3 ניחושים לכל פתיחה, וכמה מהם Claude "ניחש" כמוכם</div>
+    <div class="callout tip"><b>כל התרגילים גם באתר</b>עם כפתורי העתקה ורשימת בדיקה לכל תרגיל: <a class="en" href="https://weizmann.ai/ai-automation-course/session01/" target="_blank" rel="noopener">weizmann.ai/ai-automation-course/session01</a></div>
   </div>
   <aside class="notes"><ul>
     <li>עבודה אישית. 2 דקות לכתוב ניחושים על דף, ורק אחר כך לשלוח ל-Claude. אל תתנו לשלוח לפני שכתבו.</li>
@@ -1279,7 +1316,7 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה ראשונה">
-  <div class="kind-badge">☕ הפסקה · 1:26–1:36</div>
+  <div class="kind-badge">☕ הפסקה · 1:28–1:38</div>
   <h2 style="margin-top:14px">הפסקה של 10 דקות</h2>
   <div class="timer" data-sec="600" data-auto="1"></div>
   <div class="nextup">אחרי ההפסקה · בלוק 2: מגבלות, הזיות והנדסת פרומפטים</div>
@@ -1292,11 +1329,11 @@ body.ov-on #ov{display:block}
   <h2>מגבלות והנדסת פרומפטים</h2>
   <p class="sub">במה AI מצוין ואיפה הוא טועה, מתי אדם חייב לאשר, ואיך כותבים פרומפט שעובד.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–1:26</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">1:26–1:36</div><b>☕</b>הפסקה</div>
-    <div class="here"><div class="t">1:36–2:35</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div><div class="t">2:35–2:45</div><b>☕</b>הפסקה</div>
-    <div><div class="t">2:45–3:52</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="done"><div class="t">0:00–1:28</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:28–1:38</div><b>☕</b>הפסקה</div>
+    <div class="here"><div class="t">1:38–2:37</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div><div class="t">2:37–2:47</div><b>☕</b>הפסקה</div>
+    <div><div class="t">2:47–3:54</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>חיבור לבלוק הקודם: "המודל מנבא ולא יודע". עכשיו נראה מה המשמעות המעשית של זה בעסק.</li><li>בבלוק הזה יש חמישה תרגילים קצרים (תרגיל 3 עבר לבית). ודאו שכולם מחוברים ל-Claude.</li></ul></aside>
 </section>
@@ -1806,7 +1843,7 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה שנייה">
-  <div class="kind-badge">☕ הפסקה · 2:35–2:45</div>
+  <div class="kind-badge">☕ הפסקה · 2:37–2:47</div>
   <h2 style="margin-top:14px">הפסקה של 10 דקות</h2>
   <div class="timer" data-sec="600" data-auto="1"></div>
   <div class="nextup">אחרי ההפסקה · בלוק 3: JSON, פלט מובנה ו-Claude Projects</div>
@@ -1819,11 +1856,11 @@ body.ov-on #ov{display:block}
   <h2>פלט מובנה ו-Claude בפועל</h2>
   <p class="sub">מה זה JSON ולמה אוטומציה צריכה אותו, Projects ו-Artifacts, ואיך כל זה מתחבר לשאר הקורס.</p>
   <div class="blocks">
-    <div class="done"><div class="t">0:00–1:26</div><b>בלוק 1</b>איך מודל שפה עובד</div>
-    <div class="done"><div class="t">1:26–1:36</div><b>☕</b>הפסקה</div>
-    <div class="done"><div class="t">1:36–2:35</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
-    <div class="done"><div class="t">2:35–2:45</div><b>☕</b>הפסקה</div>
-    <div class="here"><div class="t">2:45–3:52</div><b>בלוק 3</b>JSON ו-Claude</div>
+    <div class="done"><div class="t">0:00–1:28</div><b>בלוק 1</b>איך מודל שפה עובד</div>
+    <div class="done"><div class="t">1:28–1:38</div><b>☕</b>הפסקה</div>
+    <div class="done"><div class="t">1:38–2:37</div><b>בלוק 2</b>מגבלות ופרומפטים</div>
+    <div class="done"><div class="t">2:37–2:47</div><b>☕</b>הפסקה</div>
+    <div class="here"><div class="t">2:47–3:54</div><b>בלוק 3</b>JSON ו-Claude</div>
   </div>
   <aside class="notes"><ul><li>עד עכשיו התשובות של Claude היו בשביל בני אדם. בבלוק הזה הן הופכות לנתונים שמערכת יכולה להמשיך לעבוד איתם.</li></ul></aside>
 </section>
@@ -2478,7 +2515,7 @@ The message:</pre></div>
   <aside class="notes"><ul><li>1,560 ש"ח בחודש הוא בדיוק התוצאה של מחשבון החיסכון מתרגיל 7. מי שיעשה את הבונוס, יגיע למפגש 2 עם המספר ביד.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="1" data-block="3" data-title="מפגש 2 ומשימה לבית">
+<section class="slide setup hw22" data-min="1" data-block="3" data-title="מפגש 2 ומשימה לבית">
   <div class="s-kicker">🗺️ במפגש הבא</div>
   <h2>מפגש 2: אפיון תהליכים עסקיים</h2>
   <div class="s-body">
@@ -2497,6 +2534,7 @@ The message:</pre></div>
           <li>בונוס: מחשבון החיסכון (תרגיל 7)</li>
         </ol></div>
     </div>
+    <div class="siteline"><div class="qrsmall"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="קוד QR לאתר הקורס" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h2m1 0h2m1 0h1m1 0h4m2 0h7M4 5.5h1m5 0h1m1 0h4m4 0h3m3 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h6m2 0h2m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m2 0h4m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m5 0h3m1 0h1m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m2 0h1m1 0h2m6 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h3m1 0h1m1 0h2m1 0h2m1 0h1M4 12.5h1m1 0h2m1 0h3m6 0h1m1 0h4m2 0h1m2 0h1m1 0h2M4 13.5h6m2 0h1m2 0h2m1 0h1m1 0h1m2 0h6m3 0h1M7 14.5h1m2 0h2m1 0h2m2 0h2m1 0h3m2 0h4m1 0h2M5 15.5h1m1 0h1m5 0h1m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1m3 0h1M7 16.5h1m1 0h2m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h1m1 0h2M4 17.5h1m2 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h4m1 0h1m3 0h3M5 18.5h1m2 0h3m3 0h1m2 0h2m1 0h1m1 0h3m1 0h2m2 0h3M4 19.5h2m1 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m8 0h1M4 20.5h2m1 0h1m1 0h2m1 0h1m3 0h4m2 0h4m1 0h3m1 0h1M5 21.5h1m6 0h2m1 0h1m3 0h1m1 0h1m2 0h1m2 0h1m1 0h3M4 22.5h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h6m2 0h1m1 0h3m1 0h1M8 23.5h2m1 0h3m1 0h2m2 0h4m1 0h1m1 0h1m3 0h1M5 24.5h1m1 0h2m1 0h1m2 0h1m3 0h1m1 0h12M12 25.5h2m1 0h3m2 0h3m1 0h1m3 0h5M4 26.5h7m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h2m1 0h1M4 27.5h1m5 0h1m1 0h1m2 0h1m4 0h1m1 0h1m1 0h1m3 0h2m1 0h2M4 28.5h1m1 0h3m1 0h1m4 0h1m2 0h1m2 0h1m2 0h5m1 0h3M4 29.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h4m3 0h1m1 0h3m2 0h1M4 30.5h1m1 0h3m1 0h1m1 0h2m2 0h2m2 0h1m3 0h1m2 0h1m2 0h1m1 0h1M4 31.5h1m5 0h1m2 0h5m1 0h2m3 0h1m1 0h2m1 0h1m1 0h1M4 32.5h7m1 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1"/></svg></div><div><b>כל החומר והתרגילים באתר:</b> <a class="siteurl sm" href="https://weizmann.ai/ai-automation-course/" target="_blank" rel="noopener">weizmann.ai/ai-automation-course</a></div></div>
   </div>
   <aside class="notes"><ul><li>"ליד" כבר הוסבר בתרגיל 3: לקוח פוטנציאלי שהשאיר פרטים.</li><li>הזכירו שדפי הסיכום, התרגול והפתרון זמינים, כולל שאלות לבדיקה עצמית.</li></ul></aside>
 </section>
