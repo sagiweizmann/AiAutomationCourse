@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מדריך · יצירת משתמש ב-Make</title>
+<meta name="description" content="מדריך מלא בעברית, עם צילומי מסך, ליצירת משתמש חדש (הרשמה) בפלטפורמת האוטומציה Make: בחירת שיטת הרשמה, מילוי הטופס, בחירת אזור אירוח ואימות האימייל.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+/* תמונות מדריך */
+figure.shot{margin:16px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{padding:9px 14px;font-size:14px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
+figure.shot.narrow{max-width:420px}
+figure.shot.narrow img{background:#f3f2f7}
+.fieldlist{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.fieldlist li{padding:12px 14px;border-radius:12px;background:var(--surface-2)}
+.fieldlist b{color:var(--accent)}
+.fieldlist .en{font-weight:700}
+</style>
+</head>
+<body data-page="guide-make-signup">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:#bdb7ea">אתר הקורס</a> <span>›</span> <b>מדריך: יצירת משתמש ב-Make</b></div>
+  <h1>יצירת משתמש חדש ב-Make</h1>
+  <p class="sub">מדריך צעד-אחר-צעד בעברית, עם צילומי מסך מהאתר הרשמי, להרשמה חינמית לפלטפורמת האוטומציה <span class="en">Make</span>. בסוף יהיה לכם חשבון פעיל ומוכן למפגש 4.</p>
+</div></header>
+
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="../session01/index.html">🛠️ מפגש 1: תרגול</a>
+  <a href="make-signup.html" class="on">🧩 הרשמה ל-Make</a>
+  <a href="../session01/glossary.html">📖 מילון</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+
+<main class="wrap">
+
+<section class="blk">
+  <div class="kicker">לפני שמתחילים</div>
+  <h2>מה זה Make ולמה צריך חשבון</h2>
+  <div class="card">
+    <p style="margin-top:0"><span class="en">Make</span> (בעבר <span class="en">Integromat</span>) היא פלטפורמה ויזואלית לבניית אוטומציות: מחברים אפליקציות ושירותים זה לזה וגוררים בלוקים כדי לבנות תהליך שרץ לבד. בקורס נשתמש בה החל ממפגש 4. כדי להתנסות ולתרגל צריך קודם חשבון משתמש — וההרשמה חינמית.</p>
+    <div class="callout tip"><b>מה צריך מראש</b>כתובת אימייל פעילה שאתם יכולים לפתוח עכשיו (לאימות), דפדפן, וכ-5 דקות. אין צורך בכרטיס אשראי לתוכנית החינמית.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 1</div>
+  <h2>כניסה לאתר ולחיצה על ההרשמה</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>פתחו דפדפן וגשו לכתובת <code>make.com</code></li>
+      <li>בפינה העליונה לחצו על הכפתור הסגול <span class="en">Get started free</span> (או היכנסו ישירות לכתובת <code>make.com/en/register</code>)</li>
+    </ol>
+    <figure class="shot">
+      <img src="../assets/make/00-get-started.png" alt="שורת התפריט העליונה באתר Make עם הכפתור Get started free בפינה">
+      <figcaption>הכפתור <span class="en">Get started free</span> נמצא בפינה העליונה של <span class="en">make.com</span>.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 2</div>
+  <h2>בחירת דרך ההרשמה</h2>
+  <div class="card">
+    <p style="margin-top:0">במסך ההרשמה (<span class="en">Sign up</span>) יש שתי דרכים להירשם:</p>
+    <ul class="fieldlist">
+      <li><b>הרשמה מהירה עם חשבון קיים</b> — <span class="en">Google</span>, <span class="en">Apple</span>, <span class="en">GitHub</span> או <span class="en">Facebook</span>. לוחצים, מאשרים, ונכנסים בלי לזכור סיסמה נוספת.</li>
+      <li><b>הרשמה עם אימייל</b> — לוחצים על <span class="en">Sign up with your work email</span> וממלאים טופס קצר.</li>
+    </ul>
+    <figure class="shot narrow">
+      <img src="../assets/make/01-signup-options.png" alt="מסך ההרשמה של Make עם כפתורי Google, Apple, GitHub, Facebook והרשמה באימייל">
+      <figcaption>מסך הבחירה. להרשמה עם <span class="en">Google</span> לחצו על הכפתור העליון; אחרת בחרו <span class="en">Sign up with your work email</span>.</figcaption>
+    </figure>
+    <div class="callout"><b>מה מומלץ לקורס</b>אם יש לכם חשבון <span class="en">Google</span> — זו הדרך הכי מהירה ואין צורך באימות אימייל נפרד. מי שמעדיף — ההרשמה באימייל עובדת מצוין גם היא, ואותה נסביר בהמשך.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 3</div>
+  <h2>מילוי טופס ההרשמה (באימייל)</h2>
+  <div class="card">
+    <p style="margin-top:0">אחרי לחיצה על <span class="en">Sign up with your work email</span> נפתח טופס עם השדות הבאים:</p>
+    <figure class="shot narrow">
+      <img src="../assets/make/02-email-form.png" alt="טופס ההרשמה של Make: אימייל, שם מלא, סיסמה, אזור אירוח ומדינה">
+      <figcaption>טופס ההרשמה המלא. שימו לב במיוחד לשדה <span class="en">Hosting Region</span>.</figcaption>
+    </figure>
+    <ul class="fieldlist">
+      <li><b><span class="en">Work Email</span> — אימייל</b><br>כתובת האימייל שלכם. לכאן יישלח קישור אימות, אז הזינו כתובת שאתם יכולים לפתוח עכשיו.</li>
+      <li><b><span class="en">Full Name</span> — שם מלא</b><br>השם שלכם (יוצג בחשבון ובהזמנות לצוות).</li>
+      <li><b><span class="en">Password</span> — סיסמה</b><br>בחרו סיסמה חזקה (לפחות 8 תווים, מומלץ אותיות גדולות/קטנות, מספר וסימן). הקליקו על אייקון העין כדי לראות מה הקלדתם.</li>
+      <li><b><span class="en">Hosting Region</span> — אזור אירוח</b><br>היכן יאוחסנו הנתונים שלכם: <span class="en">EU</span> (אירופה) או <span class="en">US</span> (ארה״ב). <b>הבחירה קבועה ולא ניתנת לשינוי לאחר ההרשמה.</b> מישראל בדרך כלל נוח לבחור <span class="en">EU</span>.</li>
+      <li><b><span class="en">Country</span> — מדינה</b><br>המדינה שלכם. לרוב Make מזהה אוטומטית <span class="en">Israel</span>.</li>
+    </ul>
+    <div class="callout warn"><b>שימו לב — אזור האירוח קבוע</b>בניגוד לשאר הפרטים, את <span class="en">Hosting Region</span> אי אפשר לשנות אחרי שנרשמתם. אם חשוב לכם אזור מסוים (למשל בגלל חיבור לשירות אחר שמאוחסן ב-US), בחרו אותו עכשיו. אם אין העדפה — <span class="en">EU</span> בחירה טובה.</div>
+    <ol class="steps mt">
+      <li>מלאו את כל השדות</li>
+      <li>לחצו על הכפתור הסגול <span class="en">Sign up for free</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 4</div>
+  <h2>אימות האימייל</h2>
+  <div class="card">
+    <p style="margin-top:0">אחרי השליחה, Make שולח אליכם מייל אימות. (מי שנרשם עם <span class="en">Google</span> מדלג על השלב הזה.)</p>
+    <ol class="steps">
+      <li>פתחו את תיבת הדואר שהזנתם</li>
+      <li>חפשו מייל מ-<span class="en">Make</span> בנושא אימות (<span class="en">Confirm your email</span>). אם אינו בתיבה — בדקו בתיקיית הספאם/קידומי מכירות</li>
+      <li>לחצו על כפתור/קישור האימות שבמייל</li>
+    </ol>
+    <div class="callout tip"><b>לא הגיע מייל?</b>המתינו דקה, רעננו, ובדקו ספאם. במסך האימות של Make יש גם כפתור <span class="en">Resend</span> לשליחה חוזרת. ודאו שלא הייתה שגיאת כתיב בכתובת.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 5</div>
+  <h2>כניסה ראשונה — החשבון מוכן</h2>
+  <div class="card">
+    <p style="margin-top:0">אחרי האימות אתם נכנסים אל לוח הבקרה של Make. Make עשוי לשאול כמה שאלות קצרות (למה אתם מתכננים להשתמש בכלי) — אפשר לענות או לדלג. אחרי זה תגיעו למסך הראשי שבו בונים תרחישים (<span class="en">Scenarios</span>).</p>
+    <div class="callout claude"><b>זהו — יש לכם משתמש פעיל ב-Make 🎉</b>שמרו את פרטי ההתחברות. במפגש 4 נתחבר לחשבון הזה ונבנה את התרחיש הראשון.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">תקלות נפוצות</div>
+  <h2>אם משהו נתקע</h2>
+  <div class="card">
+    <ul class="fieldlist">
+      <li><b>הכפתור <span class="en">Sign up</span> לא מגיב</b><br>ודאו שכל שדות החובה (עם הכוכבית <span class="en">*</span>) מלאים, ושהסיסמה עומדת בדרישות.</li>
+      <li><b>"האימייל כבר רשום"</b><br>כבר יש לכם חשבון. עברו למסך <span class="en">Sign in</span> והתחברו, או השתמשו ב-<span class="en">Forgot password</span>.</li>
+      <li><b>בחרתי אזור אירוח לא נכון</b><br>אי אפשר לשנות אזור לחשבון קיים. אם זה קריטי — צרו חשבון חדש עם אימייל אחר ובחרו את האזור הנכון.</li>
+      <li><b>לא בטוחים איזה אזור לבחור</b><br>לקורס אין הבדל מעשי. <span class="en">EU</span> בחירה טובה ובטוחה מישראל.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="next">
+    <a href="../index.html"><div class="card"><span style="font-size:26px">🏠</span><div><small>חזרה</small><div style="font-family:'Secular One';font-size:20px">לכל המפגשים</div></div></div></a>
+    <a href="../session01/summary.html"><div class="card"><span style="font-size:26px">📌</span><div><small>המשך</small><div style="font-family:'Secular One';font-size:20px">סיכום מפגש 1</div></div></div></a>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מדריך: יצירת משתמש ב-Make</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
