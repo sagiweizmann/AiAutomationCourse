@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>מפגש 2 · מצגת · אפיון תהליכים עסקיים</title>
+<title>מפגש 2 · מצגת · אפיון ויסודות טכניים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -529,7 +529,7 @@ body.ov-on #ov{display:block}
   .card,.sim{box-shadow:none}
 }
 </style>
-<style>/* --- session 2 widget styles (from the lecture page) --- */
+<style>/* --- session 2 + 3 widget styles (from lecture pages) --- */
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -612,44 +612,125 @@ body.ov-on #ov{display:block}
 .qs-int div b{display:block;font-size:13px;color:var(--accent)}
 @media (max-width:820px){.anat,.mx,.roi{grid-template-columns:minmax(0,1fr)}.syms{grid-template-columns:repeat(3,minmax(0,1fr))}.doc-t,.qs-int{grid-template-columns:minmax(0,1fr)}.anat-info{position:static}}
 @media (max-width:480px){.roi-in .sl,.sl{grid-template-columns:96px minmax(0,1fr) 52px}.ps-stats b{font-size:21px}.st{grid-template-columns:38px minmax(0,1fr);}.st .min{grid-column:2;justify-self:start}}
+.en-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* json explorer */
+.jx2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.jtree{background:var(--code-bg);color:var(--code-ink);border-radius:16px;padding:16px 18px;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.85;direction:ltr;text-align:left;overflow-x:auto}
+.jtree .k{color:#a5b4fc;cursor:pointer;border-radius:4px;padding:0 2px}
+.jtree .k:hover{background:rgba(165,180,252,.18)}
+.jtree .k.sel{background:#a5b4fc;color:#16142a}
+.jtree .s{color:#fcd34d}.jtree .n{color:#5eead4}.jtree .b{color:#f9a8d4}.jtree .z{color:#94a3b8}
+.jtree .jr{white-space:pre}
+.jinfo{padding:18px;border-radius:16px;background:var(--surface-2)}
+.jpath{direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0 10px;word-break:break-all}
+.types{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.types span{font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.types span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chal{margin-top:12px;padding:12px 14px;border-radius:12px;border:2px dashed var(--accent)}
+.chal .res{font-weight:800;margin-top:4px}
+/* validator */
+.val{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.val textarea{width:100%;min-height:170px;border-radius:14px;border:2px solid var(--line);background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:13.5px;padding:12px 14px;direction:ltr;text-align:left;resize:vertical}
+.val textarea.ok{border-color:var(--good)}.val textarea.bad{border-color:var(--bad)}
+.vres{padding:14px 16px;border-radius:14px;background:var(--surface-2);font-size:15px}
+.vres b.ok{color:var(--good)}.vres b.bad{color:var(--bad)}
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:12px;align-items:stretch}
+.pg-col{display:flex;flex-direction:column;gap:10px}
+.pg label{font-size:13px;font-weight:700;color:var(--ink-2)}
+.pg select,.pg textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.pg textarea{font-family:"JetBrains Mono",monospace;font-size:13px;min-height:96px;direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-ink)}
+.raw{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;min-height:90px}
+.raw .m{color:#fcd34d;font-weight:700}.raw .h{color:#a5b4fc}
+.wire{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.wire .line{position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+.pkt{position:relative;z-index:1;font-size:26px;transition:transform .7s ease-in-out,opacity .3s;opacity:0}
+.node{font-size:13px;font-weight:800;color:var(--ink-2);text-align:center}
+.status{display:inline-flex;gap:8px;align-items:center;font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;direction:ltr}
+.status.s2{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.status.s4{background:color-mix(in srgb,var(--p4) 20%,transparent);color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+.status.s5{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.resp-expl{font-size:14px;color:var(--ink-2)}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;cursor:pointer}
+/* status codes */
+.codes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.code{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c)}
+.code b{font-family:"JetBrains Mono",monospace;font-size:20px;color:var(--c)}
+.code div{font-weight:700;margin:2px 0}
+.code span{font-size:13.5px;color:var(--ink-2)}
+/* oauth */
+.oa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.actor{padding:16px;border-radius:16px;border:2px solid var(--line);text-align:center;transition:.3s;background:var(--surface)}
+.actor .e{font-size:30px}
+.actor.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+.oa-step{padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:76px}
+.oa-step b{color:var(--accent)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* polling vs webhook */
+.pw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lane{padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.lane h4{display:flex;justify-content:space-between}
+.track{position:relative;height:120px;border-radius:12px;background:var(--surface-2);margin:10px 0;overflow:hidden}
+.track .srv,.track .cli{position:absolute;top:8px;bottom:8px;width:64px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800;text-align:center;background:var(--surface);border:1px solid var(--line)}
+.track .srv{right:8px}.track .cli{left:8px}
+.msg{position:absolute;top:50%;font-size:18px;transform:translateY(-50%);transition:left .6s linear}
+.lane .st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.lane .st div{padding:8px;border-radius:10px;background:var(--surface-2)}
+.lane .st b{display:block;font-family:"Secular One";font-size:20px}
+.lane .st span{font-size:12px;color:var(--ink-2)}
+/* claude api */
+.ca{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.ca label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-top:8px}
+.ca textarea,.ca select{width:100%;font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px 10px}
+.ca textarea{min-height:70px;resize:vertical}
+.ca .rq{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;min-height:120px}
+.ca .rq .hl{background:#fcd34d;color:#16142a;border-radius:4px;padding:0 3px}
+@media (max-width:860px){.jx2,.val,.ca,.pw,.keys{grid-template-columns:minmax(0,1fr)}.pg{grid-template-columns:minmax(0,1fr)}.wire{min-height:70px}.wire .line{top:0;bottom:0;left:50%;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line) 0 8px,transparent 8px 14px)}.codes{grid-template-columns:repeat(2,minmax(0,1fr))}.oa{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.codes{grid-template-columns:minmax(0,1fr)}.actor{padding:10px 6px}.actor .e{font-size:22px}}
 /* --- compact interactive widgets so they fit a 720px slide --- */
 .slide.w{padding:14px 44px 18px}
 .slide.w>.s-kicker{margin-bottom:0}
 .slide.w>h2{font-size:21px;margin:2px 0 6px;line-height:1.2}
 .slide.w>.s-body{margin-top:0}
 .slide.w .sim-head{display:none}
-.slide .sim-head{padding:9px 16px}
-.slide .sim-head h3{font-size:16px}
+.slide .sim-head{padding:9px 16px}.slide .sim-head h3{font-size:16px}
 .slide .sim-body{padding:10px 16px 12px}
-.slide .anat{gap:14px}
-.slide .anat-flow{gap:5px}
-.slide .af{padding:6px 12px}
-.slide .af .ic{width:26px;height:26px}
-.slide .af small{font-size:11.5px}
-.slide .ps-top{gap:8px}
-.slide .ps-stats{margin:6px 0;gap:8px}
-.slide .ps-stats div{padding:5px}
-.slide .ps-stats b{font-size:17px}
-.slide .ps-stats span{font-size:11.5px}
+.slide .anat{gap:14px}.slide .anat-flow{gap:5px}.slide .af{padding:6px 12px}.slide .af .ic{width:26px;height:26px}.slide .af small{font-size:11.5px}
+.slide .ps-top{gap:8px}.slide .ps-stats{margin:6px 0;gap:8px}.slide .ps-stats div{padding:5px}.slide .ps-stats b{font-size:17px}.slide .ps-stats span{font-size:11.5px}
 .slide .steps .st{padding:4px 11px;grid-template-columns:30px minmax(0,1fr) auto}
 .slide .steps .st .ic{width:30px;height:30px;font-size:14px;border-radius:9px}
-.slide .steps .st+.st{margin-top:6px}
-.slide .steps .st+.st::before{top:-6px;height:5px;right:28px}
-.slide .steps .st b{font-size:13.5px;line-height:1.2}
-.slide .steps .st small{font-size:11px}
-.slide .steps .st .min{font-size:11px;padding:2px 7px}
-.slide .steps .st.pain::after{font-size:10px;top:-8px}
-.slide .legend{margin-top:6px;font-size:11px;gap:9px}
-.slide .cmp{margin-top:6px}
-.slide .cmp .r{font-size:12px}
-.slide .syms .sym svg{height:42px}
-.slide .syms .sym{padding:8px 6px}
-.slide .mx{gap:14px}
-.slide .mx .sl,.slide .roi-in .sl{margin-bottom:5px;font-size:13px}
-.slide .roi{gap:14px}
-.slide .roi-out{gap:8px;margin-bottom:8px}
-.slide .roi-out div{padding:7px 10px}
-.slide .roi-out b{font-size:19px}
+.slide .steps .st+.st{margin-top:6px}.slide .steps .st+.st::before{top:-6px;height:5px;right:28px}
+.slide .steps .st b{font-size:13.5px;line-height:1.2}.slide .steps .st small{font-size:11px}.slide .steps .st .min{font-size:11px;padding:2px 7px}.slide .steps .st.pain::after{font-size:10px;top:-8px}
+.slide .legend{margin-top:6px;font-size:11px;gap:9px}.slide .cmp{margin-top:6px}.slide .cmp .r{font-size:12px}
+.slide .syms .sym svg{height:42px}.slide .syms .sym{padding:8px 6px}
+.slide .mx{gap:14px}.slide .mx .sl,.slide .roi-in .sl{margin-bottom:5px;font-size:13px}
+.slide .roi{gap:14px}.slide .roi-out{gap:8px;margin-bottom:8px}.slide .roi-out div{padding:7px 10px}.slide .roi-out b{font-size:19px}
+/* session 3 widgets compaction */
+.slide .jx2{gap:12px}
+.slide .jtree{font-size:11px;line-height:1.55;padding:12px 14px}
+.slide .jinfo{padding:12px 14px}
+.slide .jpath{font-size:13px;padding:6px 10px;margin:4px 0 8px}
+.slide .chal{padding:9px 12px;margin-top:8px}
+.slide .val textarea{min-height:120px;font-size:12px}
+.slide .vres{padding:10px 12px;font-size:13.5px}
+.slide .pg{gap:10px;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .pg textarea{min-height:64px;font-size:12px}
+.slide .pg .raw{min-height:62px;font-size:11.5px;padding:8px 10px}
+.slide .pg label{font-size:12px}
+.slide .pg select{padding:5px 8px}
+.slide .codes{gap:8px}.slide .code{padding:9px 11px}.slide .code b{font-size:17px}.slide .code span{font-size:12px}
+.slide .keys{gap:12px}
+.slide .oa{gap:10px;margin-bottom:10px}.slide .actor{padding:9px}.slide .actor .e{font-size:24px}
+.slide .oa-step{min-height:56px;padding:10px 14px;font-size:14.5px}
+.slide .pw .track{height:84px}.slide .lane{padding:11px}.slide .lane .st b{font-size:16px}
+.slide .ca{gap:14px}
+.slide .ca label{margin-top:5px;font-size:12px}
+.slide .ca textarea{min-height:48px;font-size:13px}
+.slide .ca select{padding:5px 8px}
+.slide .ca .rq{min-height:84px;font-size:11.5px;padding:9px 11px}
 </style>
 </head>
 <body>
@@ -657,16 +738,16 @@ body.ov-on #ov{display:block}
 <div id="deck"><div id="stage">
 
 <!-- ============================== OPENING ============================== -->
-<section class="slide hero" data-min="2" data-block="1" data-title="פתיחה">
+<section class="slide hero" data-min="3" data-block="1" data-title="פתיחה">
   <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2 מתוך 15</b></div>
-  <h1>אפיון תהליכים עסקיים</h1>
-  <p class="sub">לפני שבונים אוטומציה צריך להבין את התהליך: מה קורה היום, איפה הוא נתקע, מה כדאי להפוך לאוטומטי, וכמה זה שווה.</p>
-  <div class="hero-meta"><span class="kind-badge">⏱ כ-3 שעות</span><span class="kind-badge">4 בלוקים · הפסקה</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
+  <h1>אפיון תהליכים ויסודות טכניים</h1>
+  <p class="sub">קודם מבינים את התהליך — מה קורה היום, איפה הוא נתקע וכמה הוא שווה. אחר כך לומדים איך מערכות מדברות: JSON, API, Webhooks וקריאה ל-Claude.</p>
+  <div class="hero-meta"><span class="kind-badge">⏱ 3 שעות</span><span class="kind-badge">6 בלוקים · הפסקה</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
   <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · P: מסך מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
-    <li>ברוכים השבים. במפגש הקודם הכרנו את Claude; היום לומדים לנתח תהליך לפני שבונים לו אוטומציה.</li>
-    <li>המשפט שמוביל את כל המפגש: "לא עושים אוטומציה לבלגן". קודם מבינים, אחר כך בונים.</li>
-    <li>לוגיסטיקה: הפסקה אחת באמצע. שעתיים מתוך השלוש הן תרגול מעשי על תהליך ההחזרות.</li>
+    <li>ברוכים השבים. המפגש מחולק לשניים: חצי ראשון — אפיון תהליך; חצי שני — היסודות הטכניים שמאחורי כל אוטומציה.</li>
+    <li>המשפט שמוביל את החלק הראשון: "לא עושים אוטומציה לבלגן". המשפט שמוביל את החלק השני: "מערכות מדברות ב-JSON".</li>
+    <li>לוגיסטיקה: הפסקה אחת באמצע. יש הרבה חומר — נשמור על קצב.</li>
   </ul></aside>
 </section>
 
@@ -675,18 +756,18 @@ body.ov-on #ov{display:block}
   <h2>בסוף המפגש תדעו…</h2>
   <div class="s-body mid">
     <div class="goals">
-      <div><i>🧭</i>לזהות את החלקים של כל תהליך עסקי, ולראיין את מי שעושה את העבודה</div>
-      <div><i>🗺️</i>למפות תהליך קיים (As‑Is) ולתכנן את התהליך הרצוי (To‑Be)</div>
-      <div><i>📊</i>לשרטט תרשים זרימה בחמש צורות פשוטות</div>
-      <div><i>🎯</i>להחליט מה כדאי להפוך לאוטומטי, בעזרת מטריצת הזדמנויות</div>
-      <div><i>💰</i>לחשב ROI: כמה האוטומציה עולה וכמה היא חוסכת</div>
-      <div><i>📄</i>לכתוב מסמך אפיון של עמוד אחד שכולם מבינים</div>
+      <div><i>🧭</i>לזהות את החלקים של תהליך, ולראיין את מי שעושה את העבודה</div>
+      <div><i>🗺️</i>למפות As‑Is ולתכנן To‑Be, ולשרטט תרשים זרימה</div>
+      <div><i>💰</i>להחליט מה כדאי לאוטומט, ולחשב ROI</div>
+      <div><i>🔤</i>לקרוא JSON ולמצוא כל ערך לפי הנתיב שלו</div>
+      <div><i>🔌</i>להבין בקשת API: שיטה, כתובת, מפתח, קוד תשובה ו-Webhooks</div>
+      <div><i>🤖</i>לשלוח קריאה ל-Claude API, ולהשתמש ב-Claude כדי לבנות אוטומציות</div>
     </div>
-    <div class="callout tip"><b>היעד של היום</b>עד סוף המפגש יהיה לכם אפיון מלא של תהליך אמיתי — הבסיס שעליו נבנה אוטומציה החל ממפגש 4.</div>
+    <div class="callout tip"><b>היעד של היום</b>אפיון מלא של תהליך אמיתי, ועוד הבנה של איך המערכות שמאחורי האוטומציה מדברות זו עם זו — הבסיס למפגש 4, שבו נבנה ב-Make.</div>
   </div>
   <aside class="notes"><ul>
-    <li>המטרות נגזרות מהסילבוס של מפגש 2. אל תסבירו עכשיו כל מונח — כל אחד יוסבר כשנגיע אליו.</li>
-    <li>הדגישו: היום עובדים עם עיפרון ונייר (או Claude), לא עם Make. את Make נפגוש כ"טעימה" בלבד.</li>
+    <li>שלוש המטרות הראשונות הן אפיון; שלוש האחרונות הן טכניות. זה בדיוק מבנה המפגש.</li>
+    <li>הדגישו את המטרה האחרונה: לא רק "להבין API", אלא להשתמש ב-Claude ככלי שעוזר לבנות את האוטומציה עצמה.</li>
   </ul></aside>
 </section>
 
@@ -695,7 +776,7 @@ body.ov-on #ov{display:block}
   <h2>איפה אנחנו במסלול</h2>
   <div class="s-body mid">
     <div class="road">
-      <div class="here"><span class="rn">1</span><b>בסיס</b><small>מפגשים 1–3</small><ul><li>מבוא ל-AI ✓</li><li><b>אפיון תהליכים ←</b></li><li>יסודות טכניים</li></ul><em>📍 אנחנו כאן</em></div>
+      <div class="here"><span class="rn">1</span><b>בסיס</b><small>מפגשים 1–3</small><ul><li>מבוא ל-AI ✓</li><li><b>אפיון + יסודות טכניים ←</b></li><li>יסודות מתקדמים</li></ul><em>📍 אנחנו כאן</em></div>
       <div><span class="rn">2</span><b>בניית תהליכים</b><small>מפגשים 4–7</small><ul><li>פלטפורמות אוטומציה</li><li>תהליכים חכמים</li><li>חיבור מערכות</li></ul></div>
       <div><span class="rn">3</span><b>AI מתקדם</b><small>מפגשים 8–10</small><ul><li>בסיסי ידע</li><li>סוכני AI</li></ul></div>
       <div><span class="rn">4</span><b>יישום</b><small>מפגשים 11–12</small><ul><li>AI בארגון</li><li>בדיקות</li></ul></div>
@@ -703,8 +784,8 @@ body.ov-on #ov{display:block}
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>מפגש 2 הוא הגשר: במפגש 1 הבנו מה Claude יכול, במפגש 2 נבין איזה תהליך שווה לבנות, ובשלב הבא נבנה אותו בפועל.</li>
-    <li>החיבור לפרויקט הגמר: האפיון שתלמדו היום הוא בדיוק מה שתעשו לפרויקט שלכם.</li>
+    <li>המפגש הזה סוגר את שלב הבסיס מבחינת ההבנה: אחריו יש לנו גם "מה לבנות" (אפיון) וגם "איך זה עובד מתחת למכסה המנוע" (API).</li>
+    <li>ממפגש 4 מתחילים לבנות ב-Make בפועל, אז חשוב שהיסודות כאן יהיו ברורים.</li>
   </ul></aside>
 </section>
 
@@ -713,15 +794,17 @@ body.ov-on #ov{display:block}
   <h2>מה נעשה היום</h2>
   <div class="s-body mid">
     <div class="agenda">
-      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:15</div><b>מהו תהליך עסקי</b><span>האנטומיה של תהליך, ושאלות לראיון</span></div>
-      <div class="ag" style="--c:var(--p2)"><div class="t">0:15–0:40</div><b>As‑Is ו-To‑Be</b><span>מיפוי התהליך היום, תכנון הרצוי, ותרשימי זרימה</span></div>
-      <div class="ag" style="--c:var(--p3)"><div class="t">0:40–1:00</div><b>מה לאוטומט ובכמה</b><span>מטריצת הזדמנויות וחישוב ROI</span></div>
-      <div class="ag" style="--c:var(--p4)"><div class="t">1:00–3:00</div><b>תרגול: תהליך ההחזרות</b><span>ראיון, מיפוי, ניקוד, ROI ומסמך אפיון</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:40</div><b>אפיון תהליך</b><span>אנטומיה, As‑Is/To‑Be, תרשים זרימה</span></div>
+      <div class="ag" style="--c:var(--p3)"><div class="t">0:40–1:05</div><b>מה לאוטומט ו-ROI</b><span>מטריצת הזדמנויות ומחשבון</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">1:20–2:05</div><b>JSON ו-API</b><span>פורמט הנתונים, בקשות וקודי תשובה</span></div>
+      <div class="ag" style="--c:var(--p5)"><div class="t">2:05–2:35</div><b>אבטחה ו-Claude API</b><span>מפתחות, OAuth, Webhooks וקריאה ל-Claude</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">2:35–3:00</div><b>תרגול עם Claude</b><span>אפיון, חילוץ JSON ובניית אוטומציה</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">1:05–1:20</div><b>הפסקה</b><span>לפני הצלילה הטכנית</span></div>
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>שלושת הרבעים הראשונים הם הרצאה והדגמות; השעתיים האחרונות הן תרגול מעשי.</li>
-    <li>ציינו את ההפסקה — בערך אחרי בלוק 3, לפני התרגול הארוך.</li>
+    <li>החלק הראשון (עד ההפסקה) הוא אפיון. החלק השני הוא היסודות הטכניים והתרגול עם Claude.</li>
+    <li>ההפסקה ממוקמת בדיוק במעבר מ"חשיבה על תהליך" ל"טכני". תנו לכולם לנשום לפני JSON.</li>
   </ul></aside>
 </section>
 
@@ -737,17 +820,17 @@ body.ov-on #ov{display:block}
     <div class="callout warn"><b>לא עושים אוטומציה לבלגן</b>אם התהליך היום לא ברור, אוטומציה רק תעשה את אותו בלגן מהר יותר. קודם ממפים, מסדרים, ורק אז בונים.</div>
   </div>
   <aside class="notes"><ul>
-    <li>זה המשפט המרכזי של המפגש. חזרו עליו כמה פעמים לאורך היום.</li>
-    <li>דוגמה מהחיים: מי שמוכן לשתף תהליך שהרגיש בו שהאוטומציה או הטופס רק הקשו? שמעו סיפור אחד.</li>
+    <li>זה המשפט המרכזי של החצי הראשון. חזרו עליו.</li>
+    <li>שאלה לכיתה: "מי נתקל בטופס או מערכת שרק הקשו במקום לעזור?" שמעו סיפור אחד.</li>
   </ul></aside>
 </section>
 
 <!-- ============================== BLOCK 1 ============================== -->
 <section class="slide divider" data-min="1" data-block="1" data-title="בלוק 1 · מהו תהליך">
-  <div class="s-kicker">בלוק 1 · 15 דקות</div>
+  <div class="s-kicker">בלוק 1</div>
   <h1>מהו תהליך עסקי</h1>
-  <p class="sub">האנטומיה של תהליך, ואיך אוספים את המידע עליו בראיון קצר.</p>
-  <aside class="notes"><ul><li>מעבר לחלק הראשון. המטרה: שפה משותפת למה זה "תהליך" לפני שממפים אותו.</li></ul></aside>
+  <p class="sub">האנטומיה של תהליך, ואיך אוספים עליו מידע בראיון קצר.</p>
+  <aside class="notes"><ul><li>המטרה: שפה משותפת למה זה "תהליך" לפני שממפים אותו.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="1" data-title="הגדרה">
@@ -762,8 +845,8 @@ body.ov-on #ov{display:block}
     <div class="callout"><b>למה זה חשוב לאוטומציה</b>כדי שאוטומציה תפעיל תהליך, היא צריכה להכיר את כל החלקים: מה מתחיל אותו, אילו נתונים נכנסים, מה קורה בכל שלב, ומתי הוא נגמר.</div>
   </div>
   <aside class="notes"><ul>
-    <li>דוגמה יומיומית: קליטת עובד חדש מתחילה ב"חתימה על חוזה" ונגמרת ב"יש לו מחשב, גישה ומייל".</li>
-    <li>הדגישו את המילה "קבוע": תהליך חוזר על עצמו. משהו חד-פעמי הוא לא תהליך.</li>
+    <li>דוגמה: קליטת עובד מתחילה ב"חתימה על חוזה" ונגמרת ב"יש לו מחשב, גישה ומייל".</li>
+    <li>הדגישו "קבוע": תהליך חוזר על עצמו. חד-פעמי הוא לא תהליך.</li>
   </ul></aside>
 </section>
 
@@ -777,9 +860,8 @@ body.ov-on #ov{display:block}
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>עברו חלק-חלק עם הכיתה. לכל חלק יש דוגמה מתהליך הטיפול בליד של "בית ועיצוב".</li>
-    <li>שימו לב במיוחד ל"החלטות" ול"מערכות" — שם מתחבאת רוב המורכבות שאוטומציה צריכה להכיר.</li>
-    <li>לחצו על כמה חלקים חיים מול הכיתה כדי להראות את ההבדל ביניהם.</li>
+    <li>עברו חלק-חלק. לכל חלק דוגמה מתהליך הטיפול בליד של "בית ועיצוב".</li>
+    <li>שימו לב במיוחד ל"החלטות" ול"מערכות" — שם מתחבאת המורכבות.</li>
   </ul></aside>
 </section>
 
@@ -789,18 +871,18 @@ body.ov-on #ov{display:block}
   <div class="s-body mid">
     <div class="qs-int">
       <div><b>התחלה</b>מה מתחיל את התהליך? מאיפה מגיעה הבקשה?</div>
-      <div><b>שלבים</b>תעבור/י איתי צעד אחרי צעד על המקרה האחרון שטיפלת בו.</div>
-      <div><b>מערכות</b>באילו מערכות, קבצים או אתרים את/ה משתמש/ת בכל שלב?</div>
-      <div><b>זמנים</b>כמה זמן לוקח כל שלב? כמה פעמים בחודש זה קורה?</div>
-      <div><b>החלטות</b>איפה צריך להחליט משהו? לפי אילו כללים?</div>
+      <div><b>שלבים</b>תעבור/י איתי צעד אחרי צעד על המקרה האחרון.</div>
+      <div><b>מערכות</b>באילו מערכות, קבצים או אתרים משתמשים בכל שלב?</div>
+      <div><b>זמנים</b>כמה זמן כל שלב? כמה פעמים בחודש?</div>
+      <div><b>החלטות</b>איפה צריך להחליט? לפי אילו כללים?</div>
       <div><b>חריגים</b>מה קורה כשמשהו לא מסתדר? כמה זה נפוץ?</div>
-      <div><b>כאבים</b>מה הכי מעצבן אותך בתהליך? איפה יש טעויות?</div>
+      <div><b>כאבים</b>מה הכי מעצבן? איפה יש טעויות?</div>
       <div><b>הצלחה</b>איך נראה תהליך מושלם מבחינתך?</div>
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>לא צריך לשאול את כולן בכל ראיון. אלה כיווני חקירה.</li>
-    <li>החשובות ביותר: "שלבים" (מקרה אמיתי אחרון) ו"כאבים" (שם מסתתרת ההזדמנות לאוטומציה).</li>
+    <li>לא שואלים את כולן בכל ראיון. אלה כיווני חקירה.</li>
+    <li>החשובות: "שלבים" (מקרה אמיתי אחרון) ו"כאבים" (שם ההזדמנות).</li>
   </ul></aside>
 </section>
 
@@ -808,21 +890,20 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">טיפ מהשטח</div>
   <h2>בקשו מקרה אמיתי — לא "איך זה בדרך כלל"</h2>
   <div class="s-body mid">
-    <div class="callout tip"><b>הטריק החשוב</b>מבקשים לעבור על המקרה האחרון והאמיתי שטופל, ולא על "איך זה עובד בדרך כלל". כך מגלים את השלבים שאף אחד לא כתב בנוהל — ההעתק-הדבק, הבדיקה הקטנה, ההתייעצות בצד.</div>
-    <p class="muted" style="font-size:22px;margin:0">"בדרך כלל" מתאר את התהליך שרוצים שיהיה. "המקרה האחרון" מתאר את התהליך שבאמת קורה — וזה מה שאנחנו ממפים.</p>
+    <div class="callout tip"><b>הטריק החשוב</b>מבקשים לעבור על המקרה האחרון והאמיתי שטופל, לא על "איך זה עובד בדרך כלל". כך מגלים את השלבים שאף אחד לא כתב בנוהל — ההעתק-הדבק, הבדיקה הקטנה, ההתייעצות בצד.</div>
+    <p class="muted" style="font-size:22px;margin:0">"בדרך כלל" = התהליך שרוצים שיהיה. "המקרה האחרון" = התהליך שבאמת קורה. את השני ממפים.</p>
   </div>
   <aside class="notes"><ul>
-    <li>זו אחת התובנות הכי שימושיות במפגש. העובדים כמעט תמיד מדלגים על צעדים "מובנים מאליהם" כשמתארים בכללי.</li>
-    <li>שאלה לכיתה: "חשבו על משימה שאתם עושים — איזה צעד קטן לא הייתם כותבים בנוהל?"</li>
+    <li>העובדים כמעט תמיד מדלגים על צעדים "מובנים מאליהם" כשמתארים בכללי.</li>
   </ul></aside>
 </section>
 
 <!-- ============================== BLOCK 2 ============================== -->
 <section class="slide divider" data-min="1" data-block="2" data-title="בלוק 2 · As-Is ו-To-Be">
-  <div class="s-kicker">בלוק 2 · 25 דקות</div>
+  <div class="s-kicker">בלוק 2</div>
   <h1>As‑Is מול To‑Be</h1>
   <p class="sub">קודם מבינים מה קורה היום, ורק אחר כך מתכננים את התהליך הרצוי — ומשרטטים אותו.</p>
-  <aside class="notes"><ul><li>כאן נכנסת ה"טעימה מ-Make": נראה ליד אחד עובר בתהליך הישן מול התהליך האוטומטי.</li></ul></aside>
+  <aside class="notes"><ul><li>כאן נכנסת ה"טעימה מ-Make": ליד אחד עובר בתהליך הישן מול האוטומטי.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="2" data-title="As-Is מול To-Be">
@@ -846,8 +927,7 @@ body.ov-on #ov{display:block}
     <div class="callout"><b>הכלל</b>אי אפשר לתכנן To‑Be טוב בלי As‑Is מדויק. אם לא יודעים מה קורה היום, לא יודעים מה לשפר.</div>
   </div>
   <aside class="notes"><ul>
-    <li>האנלוגיה: As‑Is זה צילום מצב, To‑Be זה תוכנית אדריכל. אי אפשר לתכנן שיפוץ בלי לראות את הבית.</li>
-    <li>בשקף הבא רואים את זה חי: אותו ליד, שני תהליכים.</li>
+    <li>As‑Is = צילום מצב, To‑Be = תוכנית אדריכל. אי אפשר לתכנן שיפוץ בלי לראות את הבית.</li>
   </ul></aside>
 </section>
 
@@ -874,9 +954,9 @@ body.ov-on #ov{display:block}
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>הפעילו קודם As‑Is, תנו לכיתה לספור את השלבים הידניים וההמתנה. אחר כך To‑Be, ואז השוו.</li>
-    <li>זו ה"טעימה מ-Make": ב-To‑Be, המודולים הירוקים הם Make, הכתום-אדום בוטל, וה-✳️ הוא Claude שמנסח תשובה.</li>
-    <li>הנקודה: אוטומציה לא מוחקת את האדם — היא מוחקת את ההעתק-הדבק ומשאירה לאדם את האישור.</li>
+    <li>הפעילו As‑Is, ספרו שלבים ידניים והמתנה. אחר כך To‑Be, והשוו.</li>
+    <li>ב-To‑Be: הירוק הוא Make, הכתום-אדום בוטל, וה-✳️ הוא Claude שמנסח תשובה.</li>
+    <li>אוטומציה לא מוחקת את האדם — היא מוחקת את ההעתק-הדבק ומשאירה לו את האישור.</li>
   </ul></aside>
 </section>
 
@@ -889,11 +969,10 @@ body.ov-on #ov{display:block}
       <div class="mid"><i>🧩</i><b>מודולים</b><span>שומר לגיליון ול-CRM, בודק מלאי, קורא ל-Claude</span></div><div class="ar">⟵</div>
       <div><i>✅</i><b>פעולה</b><span>שולח מייל ופותח משימת מעקב</span></div>
     </div>
-    <div class="callout claude"><b>זו רק טעימה</b>את Make עצמו — טריגרים, מודולים ומיפוי שדות — נלמד לעומק החל ממפגש 4. היום רק ראינו מה הוא נותן: תהליך שרץ בלי שאף אחד מקליד.</div>
+    <div class="callout claude"><b>זו טעימה — נבנה את זה בהמשך</b>כל המילים כאן — Webhook, מודול, מיפוי שדות, קוד תשובה — הן בדיוק מה שנלמד בחצי השני של המפגש, ונבנה ב-Make ממפגש 4.</div>
   </div>
   <aside class="notes"><ul>
-    <li>אל תיכנסו כאן לממשק של Make. רק רעיון: טריגר מתחיל, מודולים עושים את העבודה, ופעולה מסיימת.</li>
-    <li>הבטיחו: במפגש 4 כל אחד בונה תרחיש כזה בעצמו.</li>
+    <li>זה גשר מצוין לחלק הטכני: "כדי שהמודולים האלה יעבדו, צריך להבין JSON ו-API — וזה בדיוק מה שנעשה אחרי ההפסקה."</li>
   </ul></aside>
 </section>
 
@@ -901,31 +980,30 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">🤖 טעימה מ-Claude · אינטראקטיבי</div>
   <h2>החלק ה"חכם": Claude כותב את התשובה ללקוח</h2>
   <div class="s-body mid">
-    <p class="muted" style="margin:0 0 6px">ב-To‑Be, השלב שסומן ✳️ הוא Claude. הוא מקבל את העובדות מ-Make ומנסח מייל אישי. לחצו כדי לראות מה הוא כותב.</p>
+    <p class="muted" style="margin:0 0 6px">ב-To‑Be, השלב שסומן ✳️ הוא Claude. הוא מקבל את העובדות מ-Make ומנסח מייל אישי. לחצו כדי לראות.</p>
     <div class="reveal">
       <button class="btn rv-btn">👁 מה Claude כתב?</button>
       <div class="rv-c">
         <div class="grid2">
           <div class="card"><b style="color:var(--claude)">מה Make נתן ל-Claude</b>
-            <ul style="margin:8px 0 0;font-size:19px">
+            <ul style="margin:8px 0 0;font-size:18px">
               <li>שם הליד: מיכל לוי</li>
               <li>המוצר: מנורת עמידה — <b>יש במלאי</b></li>
               <li>ההודעה: "מתי זה יגיע?"</li>
-              <li>הוראות קבועות: טון אדיב, חתימה של העסק, בלי הבטחת תאריך מדויק</li>
+              <li>הוראות: טון אדיב, חתימה של העסק, בלי הבטחת תאריך</li>
             </ul>
           </div>
           <div class="card" style="border-color:var(--claude)"><b style="color:var(--claude)">המייל ש-Claude ניסח</b>
-            <p style="margin:8px 0 0;font-size:19px;line-height:1.6">היי מיכל, תודה על הפנייה! מנורת העמידה שהתעניינת בה נמצאת במלאי. נשמח לתאם איתך מועד אספקה — נחזור אלייך עם האפשרויות הקרובות. אם יש עוד שאלה, אנחנו כאן.<br>צוות השירות של בית ועיצוב</p>
+            <p style="margin:8px 0 0;font-size:18px;line-height:1.6">היי מיכל, תודה על הפנייה! מנורת העמידה נמצאת במלאי. נשמח לתאם מועד אספקה — נחזור אלייך עם האפשרויות הקרובות. אם יש עוד שאלה, אנחנו כאן.<br>צוות השירות של בית ועיצוב</p>
           </div>
         </div>
-        <div class="callout tip" style="margin-top:12px"><b>אותו תהליך, תשובה אנושית</b>Make מזיז נתונים; Claude מוסיף את השיקול והטון. יחד הם נותנים תשובה מהירה שנשמעת כאילו אדם כתב אותה.</div>
+        <div class="callout tip" style="margin-top:12px"><b>אותו תהליך, תשובה אנושית</b>Make מזיז נתונים; Claude מוסיף את השיקול והטון. בהמשך נראה איך Make שולח ל-Claude בדיוק את העובדות האלה דרך API.</div>
       </div>
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>לחצו "מה Claude כתב?" רק אחרי ששאלתם את הכיתה: "מה הייתם רוצים שהתשובה תכיל?"</li>
-    <li>הקשר למפגש 1: זה בדיוק פרומפט טוב — תפקיד, הקשר, משימה ומגבלות. כאן Make ממלא את ההקשר אוטומטית.</li>
-    <li>הדגישו את המגבלה "בלי הבטחת תאריך": Claude מכבד כללים עסקיים כשאומרים לו אותם.</li>
+    <li>לחצו רק אחרי ששאלתם: "מה הייתם רוצים שהתשובה תכיל?"</li>
+    <li>חברו לחלק הטכני: "את העובדות האלה Make שולח ל-Claude כ-JSON, דרך API. בדיוק מה שנראה היום."</li>
   </ul></aside>
 </section>
 
@@ -937,8 +1015,8 @@ body.ov-on #ov{display:block}
     <div class="sym-info" id="symInfo"></div>
   </div>
   <aside class="notes"><ul>
-    <li>לחצו על כל צורה. ההבחנה החשובה: מלבן = פעולה, מעוין = החלטה (כן/לא), גליל = איפה הנתונים.</li>
-    <li>לא צריך לזכור צורות "נכונות" — צריך שכולם בצוות יבינו את אותו תרשים.</li>
+    <li>מלבן = פעולה, מעוין = החלטה (כן/לא), גליל = איפה הנתונים.</li>
+    <li>לא צריך צורות "נכונות" — צריך שכל הצוות יבין את אותו תרשים.</li>
   </ul></aside>
 </section>
 
@@ -946,7 +1024,7 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">🤖 טעימה מ-Claude</div>
   <h2>Claude משרטט את התרשים בשבילכם</h2>
   <div class="s-body mid">
-    <p class="muted" style="margin:0 0 6px">מתארים ל-Claude את השלבים במילים, ומבקשים "תרשים זרימה בקוד Mermaid". לחצו לראות דוגמה.</p>
+    <p class="muted" style="margin:0 0 6px">מתארים ל-Claude את השלבים במילים, ומבקשים "תרשים זרימה בקוד Mermaid". לחצו לדוגמה.</p>
     <div class="reveal">
       <button class="btn rv-btn">👁 הקוד שׁ-Claude מחזיר</button>
       <div class="rv-c">
@@ -960,29 +1038,28 @@ body.ov-on #ov{display:block}
   E --> F
   F --> G([הליד קיבל תשובה])</div></div>
           <div class="card"><b>מה עושים עם זה</b>
-            <ul style="margin:8px 0 0;font-size:18px">
+            <ul style="margin:8px 0 0;font-size:17px">
               <li>מדביקים ב-<span class="en">mermaid.live</span> ומקבלים תרשים מיד</li>
-              <li>או ב-<span class="en">draw.io</span> דרך Arrange ‹ Insert ‹ Mermaid</li>
-              <li>עורכים, מוסיפים צבעים, ומצרפים למסמך האפיון</li>
+              <li>או ב-<span class="en">draw.io</span>: Arrange ‹ Insert ‹ Mermaid</li>
+              <li>עורכים ומצרפים למסמך האפיון</li>
             </ul>
-            <div class="callout claude" style="margin-top:10px"><b>נתרגל את זה היום</b>בתרגול תבקשו מ-Claude תרשים כזה לתהליך ההחזרות.</div>
+            <div class="callout claude" style="margin-top:10px"><b>נתרגל את זה</b>בתרגול תבקשו מ-Claude תרשים כזה לתהליך שלכם.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>אם יש זמן ואינטרנט — פתחו את mermaid.live חי, הדביקו את הקוד, והראו שהתרשים מצטייר.</li>
-    <li>הנקודה: לא צריך כלי שרטוט. מתארים במילים, Claude נותן קוד, והתרשים מוכן.</li>
+    <li>אם יש אינטרנט — פתחו mermaid.live חי והדביקו את הקוד.</li>
   </ul></aside>
 </section>
 
 <!-- ============================== BLOCK 3 ============================== -->
 <section class="slide divider" data-min="1" data-block="3" data-title="בלוק 3 · מה לאוטומט ו-ROI">
-  <div class="s-kicker">בלוק 3 · 20 דקות</div>
+  <div class="s-kicker">בלוק 3</div>
   <h1>מה כדאי להפוך לאוטומטי</h1>
-  <p class="sub">לא כל משימה מתאימה. בודקים כמה היא שווה, כמה קל לבנות אותה, וכמה היא מחזירה.</p>
-  <aside class="notes"><ul><li>המעבר: מיפינו את התהליך. עכשיו מחליטים אילו חלקים ממנו שווה להפוך לאוטומטיים.</li></ul></aside>
+  <p class="sub">לא כל משימה מתאימה. בודקים כמה היא שווה, כמה קל לבנות, וכמה היא מחזירה.</p>
+  <aside class="notes"><ul><li>מיפינו את התהליך. עכשיו מחליטים אילו חלקים שווה להפוך לאוטומטיים.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="3" data-title="ערך מול קלות">
@@ -994,11 +1071,10 @@ body.ov-on #ov{display:block}
       <div class="card"><b style="font-size:24px">🔧 כמה קל לבנות?</b><div class="muted">חוקים ברורים, נתונים דיגיטליים, ומחיר טעות נמוך. זו ה"קלות".</div></div>
       <div class="card"><b style="font-size:24px">🎯 מתחילים מ…</b><div class="muted">ערך גבוה + קלות גבוהה. ניצחון מהיר שמוכיח ערך.</div></div>
     </div>
-    <div class="callout warn"><b>זהירות ממשימות "קשות ויקרות"</b>משימה ששווה הרבה אבל קשה לבנות (למשל אישור החזר כספי גדול) היא פרויקט, לא ניצחון מהיר. לרוב משאירים בה אדם באמצע.</div>
+    <div class="callout warn"><b>זהירות ממשימות "קשות ויקרות"</b>משימה ששווה הרבה אבל קשה לבנות (למשל אישור החזר גדול) היא פרויקט, לא ניצחון מהיר. לרוב משאירים בה אדם.</div>
   </div>
   <aside class="notes"><ul>
-    <li>הסבירו "מחיר טעות": שליחת מייל שגוי זה זניח; אישור החזר של 2,400 ₪ בטעות זה יקר. ככל שמחיר הטעות גבוה, פחות מתאים ל"AI לבד".</li>
-    <li>בשקף הבא בודקים את זה על משימות אמיתיות.</li>
+    <li>"מחיר טעות": מייל שגוי זניח; אישור החזר שגוי יקר. ככל שגבוה, פחות מתאים ל"AI לבד".</li>
   </ul></aside>
 </section>
 
@@ -1026,9 +1102,8 @@ body.ov-on #ov{display:block}
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>בחרו 2–3 משימות מהרשימה והראו לאיזה רבע הן נופלות. בקשו מהכיתה לנחש לפני שלוחצים.</li>
-    <li>הזיזו סליידר "מחיר טעות" ותראו איך משימה "זולה לטעות" קופצת לרבע הירוק.</li>
-    <li>חברו לתרגול: בהמשך הם ידרגו את שלבי תהליך ההחזרות בדיוק ככה.</li>
+    <li>בחרו 2–3 משימות והראו לאיזה רבע הן נופלות. בקשו מהכיתה לנחש לפני.</li>
+    <li>הזיזו "מחיר טעות" ותראו איך משימה קופצת לרבע הירוק.</li>
   </ul></aside>
 </section>
 
@@ -1038,14 +1113,13 @@ body.ov-on #ov{display:block}
   <div class="s-body mid">
     <div class="flowc">
       <div><i>💸</i><b>עלות</b><span>שעות בנייה + כלים חודשיים</span></div><div class="ar">⟵</div>
-      <div class="mid"><i>⏱️</i><b>חיסכון</b><span>שעות עבודה שנחסכות × עלות שעה</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>⏱️</i><b>חיסכון</b><span>שעות שנחסכות × עלות שעה</span></div><div class="ar">⟵</div>
       <div><i>📈</i><b>החזר</b><span>מתי זה מחזיר את עצמו</span></div>
     </div>
     <div class="formula">ROI = (חיסכון נטו ל-12 חודשים − עלות הבנייה) ÷ עלות הבנייה × 100%</div>
   </div>
   <aside class="notes"><ul>
-    <li>ROI הוא השפה שמדברים בה מול מנהל. גם אוטומציה מעולה לא תאושר בלי המספר הזה.</li>
-    <li>הסבירו "נקודת איזון": החודש שבו החיסכון המצטבר מכסה את עלות הבנייה.</li>
+    <li>ROI הוא השפה מול מנהל. גם אוטומציה מעולה לא תאושר בלי המספר.</li>
   </ul></aside>
 </section>
 
@@ -1073,20 +1147,7 @@ body.ov-on #ov{display:block}
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>התחילו מערכי ברירת המחדל (תהליך הליד) והראו את נקודת האיזון בגרף.</li>
-    <li>הזיזו "פעמים בחודש" מעלה — ההחזר מתקצר דרמטית. זה למה מתחילים מתהליכים תכופים.</li>
-  </ul></aside>
-</section>
-
-<section class="slide" data-min="2" data-block="3" data-title="מה לא נכנס למחשבון">
-  <div class="s-kicker">לזכור</div>
-  <h2>יש תועלות שהמחשבון לא תופס</h2>
-  <div class="s-body mid">
-    <div class="callout tip"><b>מה לא נכנס למספרים, אבל שווה להזכיר למנהל</b>פחות טעויות, תשובה מהירה יותר ללקוח (ולכן יותר מכירות), ועובדים שמתפנים לעבודה חשובה יותר. קשה לכמת אותן, ולכן כותבים אותן במילים במסמך.</div>
-    <p class="muted" style="font-size:22px;margin:0">המספר פותח את הדלת; התועלות האיכותיות סוגרות את העסקה.</p>
-  </div>
-  <aside class="notes"><ul>
-    <li>דוגמה: לקוח שמקבל תשובה תוך דקה במקום יום — סיכוי גבוה יותר שיקנה. קשה למדוד, קל להרגיש.</li>
+    <li>התחילו מברירת המחדל והראו את נקודת האיזון. הזיזו "פעמים בחודש" מעלה — ההחזר מתקצר.</li>
   </ul></aside>
 </section>
 
@@ -1095,104 +1156,562 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">הפסקה</div>
   <h1>הפסקה · 15 דקות</h1>
   <div class="timer" data-sec="900"></div>
-  <p class="sub">כשחוזרים — מתחילים את התרגול הגדול: אפיון מלא של תהליך ההחזרות.</p>
-  <aside class="notes"><ul><li>הפעילו את הטיימר. לפני ההפסקה, ודאו שכולם פתחו את דף התרגול.</li></ul></aside>
+  <p class="sub">כשחוזרים — צוללים לצד הטכני: איך מערכות באמת מדברות זו עם זו.</p>
+  <aside class="notes"><ul><li>הפעילו את הטיימר. אחרי ההפסקה מתחיל חומר חדש לגמרי (JSON/API), אז כדאי שכולם יהיו רעננים.</li></ul></aside>
 </section>
 
-<!-- ============================== BLOCK 4 ============================== -->
-<section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · תרגול">
-  <div class="s-kicker">בלוק 4 · שעתיים</div>
-  <h1>תרגול: תהליך ההחזרות</h1>
-  <p class="sub">מראיינים, ממפים As‑Is, מדרגים הזדמנויות, מחשבים ROI, וכותבים מסמך אפיון.</p>
-  <aside class="notes"><ul><li>מכאן זה מעשי. אתם מלווים ועונים לשאלות; הם בונים.</li></ul></aside>
+<!-- ============================== BLOCK 4: JSON + API ============================== -->
+<section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · JSON ו-API">
+  <div class="s-kicker">בלוק 4 · יסודות טכניים</div>
+  <h1>איך מערכות מדברות: JSON ו-API</h1>
+  <p class="sub">כדי לחבר בין מערכות צריך להבין באיזו שפה הן מעבירות נתונים, ואיך מבקשים מהן משהו.</p>
+  <aside class="notes"><ul><li>מעבר מ"מה התהליך" ל"איך זה עובד מתחת למכסה". זה החומר שמאפשר לבנות ב-Make.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="4" data-title="מסמך האפיון">
-  <div class="s-kicker">התוצר</div>
-  <h2>מסמך האפיון: עמוד אחד שכולם מבינים</h2>
+<section class="slide" data-min="2" data-block="4" data-title="למה טכני">
+  <div class="s-kicker">למה זה חשוב לנו</div>
+  <h2>אוטומציה = לחבר מערכות. לחבר = לדבר באותה שפה</h2>
   <div class="s-body mid">
-    <div class="doc-t">
-      <div><b>שם התהליך ובעלים</b><br>מי אחראי, ומי משתתף</div>
-      <div><b>טריגר ותוצאה</b><br>מה מתחיל, ואיך יודעים שהסתיים</div>
-      <div><b>As‑Is</b><br>תרשים זרימה ושלבים עם זמנים</div>
-      <div><b>כאבים ומדדים</b><br>צווארי בקבוק, טעויות, המתנה</div>
-      <div><b>To‑Be</b><br>מה עושה Make, מה עושה Claude, ומה אדם</div>
-      <div><b>מערכות ונתונים</b><br>אילו מערכות מתחברות ואילו שדות עוברים</div>
-      <div><b>ROI</b><br>עלות, חיסכון, החזר ותועלות איכותיות</div>
-      <div><b>סיכונים ואישורים</b><br>איפה אדם מאשר, ומה עושים כשנכשל</div>
+    <div class="flowc">
+      <div><i>📝</i><b>טופס באתר</b><span>שולח נתונים…</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔌</i><b>Make / API</b><span>…ב-JSON, דרך בקשת API</span></div><div class="ar">⟵</div>
+      <div><i>🗂️</i><b>גיליון / CRM</b><span>מקבל ומעדכן</span></div>
     </div>
+    <div class="callout"><b>שלושת המושגים של היום</b><b>JSON</b> = הפורמט של הנתונים. <b>API</b> = הדרך לבקש ולשלוח אותם. <b>Webhook</b> = דרך לקבל התראה מיד כשקורה משהו. את שלושתם פוגשים בכל תרחיש Make.</div>
   </div>
   <aside class="notes"><ul>
-    <li>זה התבנית שהם ימלאו בתרגול. עמוד אחד — לא מסמך של 20 עמודים שאף אחד לא קורא.</li>
-    <li>הדגישו את "סיכונים ואישורים": כל אוטומציה צריכה נקודה שבה אדם יכול לעצור.</li>
+    <li>לא צריך להיות מתכנתים. צריך להבין את שלושת המושגים ברמה שמאפשרת למפות שדות ב-Make.</li>
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="4" data-title="התרגיל">
+<section class="slide" data-min="3" data-block="4" data-title="JSON: הפורמט">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>JSON: נתונים שגם אדם וגם מכונה קוראים</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>בנוי מזוגות של מפתח: ערך</b>
+        <ul style="margin:8px 0 0;font-size:18px">
+          <li><b>טקסט</b> ("מיכל לוי") · <b>מספר</b> (890)</li>
+          <li><b>אמת/שקר</b> (true/false) · <b>ריק</b> (null)</li>
+          <li><b>אובייקט</b> { } · <b>מערך</b> (רשימה) [ ]</li>
+        </ul>
+      </div>
+      <div class="copybox"><div class="material">{
+  "order_id": 48213,
+  "paid": true,
+  "customer": { "name": "מיכל לוי" },
+  "items": [ "מנורה", "כרית" ]
+}</div></div>
+    </div>
+    <div class="callout tip"><b>המושג הכי חשוב: נתיב</b>ב-Make מגיעים לכל ערך לפי הנתיב שלו, למשל <code>customer.name</code> או <code>items[0]</code>. זה בדיוק מה שנתרגל עכשיו.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הדגישו: מפתח תמיד במירכאות כפולות. זה מקור טעות נפוץ.</li>
+    <li>"נתיב" הוא המושג שחוזר בכל מיפוי שדות ב-Make. תעצרו עליו.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="4" data-title="סייר JSON">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>סייר JSON: לחצו על מפתח וראו את הנתיב</h2>
   <div class="s-body">
-    <div class="exh"><span class="ex-num">1</span><h2 class="grow">תרגיל: אפיון תהליך ההחזרות</h2><span class="pill">⏱ כ-90 דקות</span><span class="pill">בזוגות</span></div>
-    <div class="s-body-in">
-      <ol class="steps" style="font-size:20px">
-        <li><b>ראיון:</b> אחד מכם נציג שירות, השני מראיין עם 8 השאלות. ממלאים את שלבי ה-As‑Is.</li>
-        <li><b>מיפוי:</b> מבקשים מ-Claude תרשים Mermaid של התהליך, ומסמנים את צווארי הבקבוק.</li>
-        <li><b>ניקוד:</b> מדרגים כל שלב במטריצת ערך-מול-קלות. מה לאוטומט קודם?</li>
-        <li><b>ROI:</b> ממלאים את המחשבון לשלב שבחרתם.</li>
-        <li><b>מסמך:</b> ממלאים את תבנית מסמך האפיון — עמוד אחד.</li>
-      </ol>
-      <div class="deliver">מסמך אפיון של עמוד אחד לתהליך ההחזרות, כולל תרשים To‑Be ו-ROI.</div>
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>הזמנה מ"בית ועיצוב"</h3></div>
+      <div class="sim-body">
+        <div class="jx2">
+          <div class="jtree" id="jtree"></div>
+          <div class="jinfo">
+            <b>הנתיב</b><div class="jpath" id="jpath">לחצו על מפתח</div>
+            <b>הערך</b><div class="jpath" id="jval">–</div>
+            <b>הסוג</b><div class="types" id="jtypes"></div>
+            <div class="chal"><b>אתגר:</b> <span id="chQ"></span><div class="res" id="chR"></div><button class="btn sm ghost" id="chN" style="margin-top:6px">אתגר הבא ←</button></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <aside class="notes"><ul>
-    <li>כל הפרטים, עם כפתורי העתקה, נמצאים בדף התרגול באתר. הפנו אותם לשם.</li>
-    <li>עברו בין הזוגות. השאלה הכי שימושית שלכם: "מאיפה המידע מגיע בשלב הזה?"</li>
-    <li>מי שמסיים מוקדם: שיתכננו To‑Be גם לחריג אחד (מה קורה כשהמוצר לא במלאי).</li>
+    <li>לחצו על כמה מפתחות והראו איך הנתיב נבנה. פתרו אתגר אחד מול הכיתה.</li>
+    <li>שימו לב לנתיב של מערך: <code>items[0].price</code> — אינדקס מתחיל מ-0.</li>
   </ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="4" data-title="מה מגישים">
+<section class="slide w" data-min="4" data-block="4" data-title="תרגיל: בודק JSON">
+  <div class="s-kicker">🛠️ תרגיל קצר</div>
+  <h2>מצאו את הטעות ב-JSON</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">תרגול</span><h3>בודק JSON</h3></div>
+      <div class="sim-body">
+        <div class="row" style="margin-bottom:10px"><button class="btn sm ghost" data-bad="0">פסיק חסר</button><button class="btn sm ghost" data-bad="1">גרש במקום מירכאות</button><button class="btn sm ghost" data-bad="2">פסיק מיותר בסוף</button><button class="btn sm ghost" data-bad="3">מפתח בלי מירכאות</button><button class="btn sm" data-bad="4">JSON תקין</button></div>
+        <div class="val"><textarea id="valIn" spellcheck="false"></textarea><div class="vres" id="valRes"></div></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לחצו על כל כפתור ובקשו מהכיתה לתקן לפני שהם רואים את הרמז. ארבע הטעויות האלה הן 90% מהבאגים ב-JSON.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="API: מלצר">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>API: מלצר בין שתי מערכות</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 4px">הלקוח (Make) לא נכנס למטבח (מסד הנתונים). הוא מוסר הזמנה למלצר (ה-API), והמלצר חוזר עם מנה (התשובה).</p>
+    <div class="tbl"><table>
+      <tr><th>שיטה</th><th>מה היא עושה</th><th>דוגמה</th></tr>
+      <tr><td><code>GET</code></td><td>קריאת נתונים</td><td>להביא את הזמנה 48213</td></tr>
+      <tr><td><code>POST</code></td><td>יצירת רשומה חדשה</td><td>ליצור ליד חדש</td></tr>
+      <tr><td><code>PUT / PATCH</code></td><td>עדכון רשומה</td><td>לשנות סטטוס ל"נשלחה"</td></tr>
+      <tr><td><code>DELETE</code></td><td>מחיקה</td><td>לבטל הזמנה</td></tr>
+    </table></div>
+    <p class="muted" style="font-size:16px;margin:8px 0 0">כל בקשה כוללת: <b>שיטה</b>, <b>כתובת</b> (Endpoint), <b>כותרות</b> (Headers, כולל המפתח), ולפעמים <b>גוף</b> (Body) ב-JSON.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטאפורה של המלצר עובדת טוב. ה-API מסתיר את המורכבות ונותן דרך מוסדרת לבקש.</li>
+    <li>4 השיטות מספיקות ל-95% מהמקרים. ב-Make בוחרים אותן מרשימה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="5" data-block="4" data-title="דוגמה ממייק: מגרש API">
+  <div class="s-kicker">🧩 דוגמה ממייק · אינטראקטיבי</div>
+  <h2>מגרש משחקים: בקשת API כמו ש-Make שולח</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>ה-API של "בית ועיצוב"</h3></div>
+      <div class="sim-body">
+        <div class="pg">
+          <div class="pg-col">
+            <div><label>שיטה</label><select id="pgM"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select></div>
+            <div><label>כתובת (Endpoint)</label><select id="pgP"><option value="/orders">/orders · כל ההזמנות</option><option value="/orders/48213">/orders/48213 · הזמנה קיימת</option><option value="/orders/99999">/orders/99999 · לא קיימת</option></select></div>
+            <label class="chk"><input type="checkbox" id="pgK" checked> לשלוח מפתח API בכותרות</label>
+            <div><label>גוף הבקשה (POST / PUT)</label><textarea id="pgB" spellcheck="false">{
+  "customer": "נועה כהן",
+  "product": "שולחן אלון",
+  "total": 2490
+}</textarea></div>
+            <button class="btn" id="pgSend">שליחת הבקשה ←</button>
+            <div><label>כך נראית הבקשה בפועל</label><div class="raw" id="pgRaw"></div></div>
+          </div>
+          <div class="wire"><div class="line"></div><div class="node">Make<br>(לקוח)</div><div class="pkt" id="pkt">✉️</div><div class="node">API<br>(שרת)</div></div>
+          <div class="pg-col">
+            <label>התשובה</label>
+            <div><span class="status" id="pgS">–</span></div>
+            <div class="resp-expl" id="pgE">שלחו בקשה כדי לראות תשובה.</div>
+            <div class="raw" id="pgR" style="min-height:180px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זו בדיוק פעולת "HTTP" או מודול אפליקציה ב-Make. הדגימו: בקשה בלי מפתח (401), הזמנה לא קיימת (404), POST שיוצר רשומה (201).</li>
+    <li>נסו לשלוח הרבה בקשות ברצף כדי לקבל 429 — זה מה שקורה כשחורגים ממגבלת קצב.</li>
+    <li>הנקודה: Make בונה בדיוק את הבקשה הזאת בשבילכם; אתם רק ממלאים את השדות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="קודי סטטוס">
+  <div class="s-kicker">חלק 2 · קודי סטטוס</div>
+  <h2>הקוד בתשובה אומר מה קרה</h2>
+  <div class="s-body mid">
+    <div class="codes">
+      <div class="code" style="--c:var(--good)"><b>200</b><div>OK</div><span>הצליח, הנתונים בגוף</span></div>
+      <div class="code" style="--c:var(--good)"><b>201</b><div>Created</div><span>נוצרה רשומה (אחרי POST)</span></div>
+      <div class="code" style="--c:var(--p4)"><b>400</b><div>Bad Request</div><span>JSON שבור או שדה חסר</span></div>
+      <div class="code" style="--c:var(--p4)"><b>401</b><div>Unauthorized</div><span>אין מפתח, או מפתח שגוי</span></div>
+      <div class="code" style="--c:var(--p4)"><b>404</b><div>Not Found</div><span>הכתובת/רשומה לא קיימות</span></div>
+      <div class="code" style="--c:var(--p4)"><b>429</b><div>Too Many</div><span>יותר מדי בקשות — לחכות</span></div>
+      <div class="code" style="--c:var(--bad)"><b>500</b><div>Server Error</div><span>תקלה בשרת — לנסות שוב</span></div>
+      <div class="code" style="--c:var(--p2)"><b>2xx/4xx/5xx</b><div>הכלל</div><span>2=תקין · 4=אנחנו · 5=השרת</span></div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לא צריך לשנן את כולם. צריך לזכור את הכלל: 2 תקין, 4 הבעיה אצלנו, 5 הבעיה בשרת.</li>
+    <li>באוטומציה הקוד קובע מה קורה הלאה: 200 → ממשיכים; 429/500 → ניסיון חוזר; 404 → מסלול חלופי.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 5: AUTH + WEBHOOK + CLAUDE API ============================== -->
+<section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · אבטחה, Webhooks ו-Claude API">
+  <div class="s-kicker">בלוק 5 · יסודות טכניים</div>
+  <h1>אבטחה, Webhooks ו-Claude API</h1>
+  <p class="sub">איך ה-API יודע מי אתם, איך מקבלים התראה מיד כשקורה משהו, ואיך קוראים ל-Claude מתוך אוטומציה.</p>
+  <aside class="notes"><ul><li>שלושה נושאים שסוגרים את התמונה הטכנית: זהות, תזמון, ו-Claude כשירות.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="מפתח API מול OAuth">
+  <div class="s-kicker">חלק 3 · אבטחה</div>
+  <h2>איך ה-API יודע מי אתם</h2>
+  <div class="s-body mid">
+    <div class="keys">
+      <div class="card"><h4>🔑 מפתח API</h4><p class="muted" style="margin:0">מחרוזת סודית שנשלחת בכותרת של כל בקשה. כמו מפתח לבניין: מי שמחזיק בה נכנס. Claude API עובד כך.</p></div>
+      <div class="card"><h4>🎫 OAuth</h4><p class="muted" style="margin:0">המשתמש מאשר לאפליקציה גישה מוגבלת, בלי למסור סיסמה. כמו מפתח חניון: מתניע את הרכב, לא פותח את תא המטען. כך Make מתחבר ל-Gmail.</p></div>
+    </div>
+    <div class="callout warn" style="margin-top:12px"><b>מפתח API הוא כמו סיסמה</b>לא מדביקים אותו במסמך משותף, בצילום מסך או בוואטסאפ. שומרים במקום מאובטח, מגדירים מגבלת הוצאה, ואם דלף — מבטלים מיד ויוצרים חדש.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל המעשי: מפתח API = אתם מחזיקים סוד. OAuth = המשתמש מאשר, ואפשר לבטל בכל רגע.</li>
+    <li>האזהרה על המפתח חשובה מאוד — זו טעות אבטחה נפוצה של מתחילים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="5" data-title="OAuth צעד אחרי צעד">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>OAuth צעד אחרי צעד: Make מתחבר ל-Google Sheets</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">אנימציה</span><h3>מי מדבר עם מי בכל שלב</h3></div>
+      <div class="sim-body">
+        <div class="oa"><div class="actor" id="a0"><div class="e">🙋</div><b>אתם</b></div><div class="actor" id="a1"><div class="e">⚙️</div><b>Make</b></div><div class="actor" id="a2"><div class="e">🟩</div><b>Google</b></div></div>
+        <div class="oa-step" id="oaStep"></div>
+        <div class="dots" id="oaDots"></div>
+        <div class="row mt" style="justify-content:center"><button class="btn ghost" id="oaPrev">→ הקודם</button><button class="btn" id="oaNext">הבא ←</button></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו צעד-צעד. הנקודה: Make אף פעם לא רואה את הסיסמה של Google. המשתמש מאשר ישירות מול Google.</li>
+    <li>האסימון (Token) מוגבל להרשאות שאושרו, ואפשר לבטל אותו בכל רגע.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Polling מול Webhook">
+  <div class="s-kicker">חלק 3 · Webhooks</div>
+  <h2>"יש משהו חדש?" מול "אני אודיע לך"</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><h4>🔁 Polling</h4><p class="muted" style="margin:0">Make שואל את המערכת שוב ושוב "יש משהו חדש?". פשוט, אבל איטי ובזבזני — הרבה בקשות ריקות.</p></div>
+      <div class="card" style="border-color:var(--p2)"><h4>⚡ Webhook</h4><p class="muted" style="margin:0">המערכת שולחת הודעה לכתובת של Make ברגע שקורה משהו. מהיר, וחוסך פעולות (ב-Make משלמים לפי פעולות).</p></div>
+    </div>
+    <div class="callout tip"><b>הכלל</b>כשהמערכת תומכת ב-Webhook — משתמשים בו. כשלא — Make עושה Polling כל כמה דקות. בשקף הבא רואים את ההבדל חי.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטאפורה: Polling זה להתקשר למסעדה כל 5 דקות לשאול אם ההזמנה מוכנה. Webhook זה שהם מתקשרים אליכם כשהיא מוכנה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="3" data-block="5" data-title="סימולציה: Polling מול Webhook">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>5 לידים חדשים בדקה אחת — מי מגיב מהר?</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>Polling מול Webhook</h3></div>
+      <div class="sim-body">
+        <div class="row" style="margin-bottom:12px"><button class="btn" id="pwGo">▶ הפעלה</button><span class="muted" id="pwClock">0 שניות</span></div>
+        <div class="pw">
+          <div class="lane"><h4><span>🔁 Polling (כל 15 שניות)</span></h4><div class="track" id="tP"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="pReq">0</b><span>בקשות</span></div><div><b id="pEmpty">0</b><span>ריקות</span></div><div><b id="pLat">0</b><span>המתנה (שנ')</span></div></div></div>
+          <div class="lane"><h4><span>⚡ Webhook</span></h4><div class="track" id="tW"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="wReq">0</b><span>הודעות</span></div><div><b id="wEmpty">0</b><span>ריקות</span></div><div><b id="wLat">0</b><span>המתנה (שנ')</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הפעילו והצביעו על ההבדל: Webhook מגיב מיד (המתנה ~0), Polling צובר המתנה ובקשות ריקות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Claude API: מהצ'אט לשירות">
+  <div class="s-kicker">חלק 3 · Claude API</div>
+  <h2>מהצ'אט לשירות: Claude בתוך אוטומציה</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>💬</i><b>מפגש 1: צ'אט</b><span>אדם מקליד, Claude עונה</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔌</i><b>היום: API</b><span>Make שולח בקשה, מקבל JSON</span></div><div class="ar">⟵</div>
+      <div><i>🤖</i><b>אוטומציה</b><span>בלי שאדם יושב מול המסך</span></div>
+    </div>
+    <div class="callout claude"><b>אותו Claude, ממשק אחר</b>במקום להקליד בצ'אט, Make שולח ל-Claude בקשת API עם <code>system</code>, <code>messages</code> ו-<code>max_tokens</code>, ומקבל תשובה בפורמט JSON שאפשר לפרק לשדות.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה החיבור בין מפגש 1 (צ'אט) למפגשים הבאים (Claude בתוך תהליך).</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="5" data-title="בונה בקשות ל-Claude API">
+  <div class="s-kicker">🤖 הצצה · מתחת למכסה</div>
+  <h2>כך נראית קריאה ל-Claude API (לרוב לא בונים ביד)</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>ערכו את השדות, צפו בבקשה, ושלחו</h3></div>
+      <div class="sim-body">
+        <div class="ca">
+          <div>
+            <label>model: איזה מודל</label><select id="caM"><option value="claude-haiku-5-5">Haiku: מהיר וחסכוני</option><option value="claude-sonnet-5-5" selected>Sonnet: מאוזן</option><option value="claude-opus-5-5">Opus: הכי חזק</option></select>
+            <label>max_tokens: אורך מקסימלי לתשובה</label><select id="caT"><option>100</option><option selected>300</option><option>1000</option></select>
+            <label>system: הוראות קבועות</label><textarea id="caS">אתה מחלץ נתונים מפניות לקוחות של "בית ועיצוב". החזר JSON בלבד עם השדות customer_name, order_id, topic.</textarea>
+            <label>messages: ההודעה של המשתמש</label><textarea id="caU">שלום, אני אבי מזרחי. הספה שהזמנתי (הזמנה 51877) הגיעה עם קרע בבד.</textarea>
+            <button class="btn mt" id="caGo">שליחה ל-Claude ←</button>
+          </div>
+          <div>
+            <label>הבקשה (POST /v1/messages)</label><div class="rq" id="caReq"></div>
+            <label>התשובה</label><div class="rq" id="caRes">לחצו "שליחה"</div>
+            <div class="muted" style="font-size:13px;margin-top:6px" id="caNote"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>מסגרו: "זו ההצצה הטכנית. ברוב האוטומציות לא כותבים את הבקשה הזאת ביד — מתארים ל-Claude את המשימה במילים, והפלטפורמה בונה את הקריאה. המיקוד שלנו הוא בתוצר."</li>
+    <li>שנו את ההודעה (למשל "איפה ההזמנה שלי 48213") והראו איך ה-JSON בתשובה משתנה.</li>
+    <li>הצביעו על <code>content[0].text</code> — זה השדה שנמפה ב-Make, ועל <code>usage</code> — לפיו משלמים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="הנתיב שחשוב לזכור">
+  <div class="s-kicker">לסיכום הטכני</div>
+  <h2>הנתיב שחשוב לזכור</h2>
+  <div class="s-body mid">
+    <div class="copybox"><div class="material">// התשובה של Claude דרך API:
+{
+  "content": [ { "type": "text", "text": "{...התשובה כאן...}" } ],
+  "usage": { "input_tokens": 120, "output_tokens": 45 }
+}</div></div>
+    <div class="callout claude"><b>הטקסט נמצא ב-<code>content[0].text</code></b>זה השדה שנמפה ב-Make במפגשים הבאים (עם Parse JSON נפרק אותו לשדות). ב-<code>usage</code> רואים כמה טוקנים נכנסו ויצאו — ולפיהם משלמים.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>אם יש שקף אחד שהם חייבים לזכור מהחלק הטכני — זה הוא. הנתיב content[0].text חוזר בכל אוטומציה עם Claude.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 6: PRACTICE ============================== -->
+<section class="slide divider" data-min="1" data-block="6" data-title="בלוק 6 · תרגול עם Claude">
+  <div class="s-kicker">בלוק 6</div>
+  <h1>תרגול: אפיון ואוטומציה עם Claude</h1>
+  <p class="sub">דוגמה מלאה מ-Make, ואז תרגילים: אפיון תהליך, חילוץ JSON, ובניית אוטומציה בעזרת Claude.</p>
+  <aside class="notes"><ul><li>מכאן מעשי. אתם מלווים; הם עובדים עם Claude.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="6" data-title="דוגמה ממייק: תרחיש מלא">
+  <div class="s-kicker">🧩 דוגמה ממייק</div>
+  <h2>איך נראה תרחיש Make שלם לתהליך הליד</h2>
+  <div class="s-body mid">
+    <div class="grid4">
+      <div class="card" style="border-top:4px solid var(--p1)"><b>1 · טריגר</b><div class="muted" style="font-size:14px">Webhook: הטופס באתר שולח נתונים ל-Make</div></div>
+      <div class="card" style="border-top:4px solid var(--p2)"><b>2 · Make</b><div class="muted" style="font-size:14px">Add Row לגיליון Google Sheets, ו-Search מלאי</div></div>
+      <div class="card" style="border-top:4px solid var(--claude)"><b>3 · Claude API</b><div class="muted" style="font-size:14px">מנסח תשובה, מחזיר JSON → Parse JSON</div></div>
+      <div class="card" style="border-top:4px solid var(--p5)"><b>4 · פעולה</b><div class="muted" style="font-size:14px">Gmail: שליחת מייל + יצירת משימת מעקב</div></div>
+    </div>
+    <div class="callout tip"><b>כל מה שלמדנו היום, בתרחיש אחד</b>Webhook (טריגר) · מודולים שמעבירים JSON · בקשת API ל-Claude · מיפוי <code>content[0].text</code> · קוד תשובה שמחליט מה הלאה. את זה נבנה בפועל ב-Make ממפגש 4.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו משמאל לימין על ארבעת המודולים. חברו כל אחד למושג שלמדנו (Webhook, JSON, API, מיפוי).</li>
+    <li>אם יש זמן ואינטרנט — פתחו את Make והראו איך נראה מסך התרחיש (בלי לבנות; רק הצצה).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה Claude עושה באוטומציה">
+  <div class="s-kicker">🤖 דוגמאות · מה Claude עושה</div>
+  <h2>ארבע אוטומציות בסיסיות — ומה יוצא מהן</h2>
+  <div class="s-body mid">
+    <div class="grid4">
+      <div class="card" style="border-top:4px solid var(--p1)"><b>🏷️ סיווג</b><div class="muted" style="font-size:14px">פנייה → נושא ודחיפות</div><small style="color:var(--claude)">תוצר: תיבה ממוינת</small></div>
+      <div class="card" style="border-top:4px solid var(--p2)"><b>📤 חילוץ</b><div class="muted" style="font-size:14px">טקסט חופשי → שדות JSON</div><small style="color:var(--claude)">תוצר: שורה בגיליון</small></div>
+      <div class="card" style="border-top:4px solid var(--claude)"><b>✍️ ניסוח</b><div class="muted" style="font-size:14px">עובדות → מייל אישי</div><small style="color:var(--claude)">תוצר: תשובה מוכנה</small></div>
+      <div class="card" style="border-top:4px solid var(--p4)"><b>📝 סיכום</b><div class="muted" style="font-size:14px">שרשור ארוך → עיקר + צעד</div><small style="color:var(--claude)">תוצר: סיכום לפעולה</small></div>
+    </div>
+    <div class="callout tip"><b>הרעיון</b>לא צריך לכתוב קוד או לבנות קריאות API מורכבות. מתארים ל-Claude את המשימה במילים, ומקבלים תוצר שאפשר להכניס מיד לאוטומציה. בשקפים הבאים — דוגמה ותוצר לכל אחת.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>אלה ארבע "הלבנים" שמהן בנויות כמעט כל האוטומציות עם Claude. חזרו עליהן.</li>
+    <li>הדגש: "תוצר ראשוני" — מה יוצא בפועל, מוכן לשלב הבא (גיליון, מייל, משימה). זה מה שחשוב, לא מבנה הקריאה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: סיווג וניתוב">
+  <div class="s-kicker">🏷️ דוגמה · סיווג</div>
+  <h2>סיווג פניות — ותיבה ממוינת כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: 3 פניות שנכנסו</b>
+            <ul style="margin:8px 0 0;font-size:16px">
+              <li>"ההזמנה שלי לא הגיעה, אני צריכה דחוף!"</li>
+              <li>"רציתי לשאול אם יש את השולחן בצבע אגוז"</li>
+              <li>"הכורסה הגיעה עם כתם, אני רוצה החזר"</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color:var(--p1)"><b>התוצר: תיבה ממוינת</b>
+            <div class="tbl" style="margin-top:8px"><table style="font-size:14px">
+              <tr><th>נושא</th><th>דחיפות</th><th>ניתוב</th></tr>
+              <tr><td>delivery</td><td>גבוהה</td><td>שירות</td></tr>
+              <tr><td>presale</td><td>נמוכה</td><td>מכירות</td></tr>
+              <tr><td>refund</td><td>גבוהה</td><td>שירות + מנהל</td></tr>
+            </table></div>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">כל פנייה מסומנת ומנותבת אוטומטית — בלי שאדם קורא וממיין ידנית.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זו האוטומציה הכי נפוצה להתחלה: ערך גבוה, קלות גבוהה. חברו למטריצה מבלוק 3.</li>
+    <li>ב-Make: הטריגר הוא מייל נכנס, Claude מסווג, ו-Router מנתב לפי הנושא.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: חילוץ לגיליון">
+  <div class="s-kicker">📤 דוגמה · חילוץ</div>
+  <h2>חילוץ נתונים — ושורה בגיליון כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: הודעה חופשית</b>
+            <p style="margin:8px 0 0;font-size:17px;line-height:1.6">"שלום, מדברת רונית שגב. ההזמנה שלי 50912 הייתה אמורה להגיע אתמול ולא הגיעה, ואני צריכה אותה דחוף."</p>
+          </div>
+          <div class="card" style="border-color:var(--p2)"><b>התוצר: שורה מוכנה לגיליון</b>
+            <div class="copybox" style="margin-top:8px"><div class="material">{
+  "customer_name": "רונית שגב",
+  "order_id": "50912",
+  "topic": "delivery",
+  "urgency": "high"
+}</div></div>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">Make לוקח את השדות ומוסיף שורה ל-Google Sheets — בלי הקלדה ובלי טעויות.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה בדיוק מה ש-Claude API מחזיר ב-content[0].text, אבל כאן הדגש על התוצר: שורה בגיליון.</li>
+    <li>שאלה לכיתה: "לאיזה עוד מקום אפשר לשלוח את השורה הזאת?" (CRM, התראה, משימה).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: סיכום לפעולה">
+  <div class="s-kicker">📝 דוגמה · סיכום</div>
+  <h2>סיכום שרשור — וצעד הבא כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: שרשור מיילים ארוך</b>
+            <p style="margin:8px 0 0;font-size:16px;line-height:1.55">8 הודעות הלוך ושוב עם לקוח על החזר, מועדים, אי-הבנה לגבי צבע, ובקשה לפיצוי. 600 מילים.</p>
+          </div>
+          <div class="card" style="border-color:var(--p4)"><b>התוצר: סיכום + צעד הבא</b>
+            <ul style="margin:8px 0 0;font-size:16px">
+              <li><b>העניין:</b> לקוח קיבל כורסה בצבע שגוי</li>
+              <li><b>הוסכם:</b> החלפה + זיכוי 10%</li>
+              <li><b>פתוח:</b> לתאם מועד איסוף</li>
+              <li style="color:var(--claude)"><b>צעד הבא:</b> לפתוח משימה לאיסוף ביום א'</li>
+            </ul>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">במקום לקרוא 600 מילים — סיכום בן 4 שורות ומשימה שנפתחת אוטומטית.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>סיכום הוא "ניצחון מהיר" קלאסי: חוסך זמן קריאה, ומייצר צעד פעולה ברור.</li>
+    <li>ב-Make: Claude מסכם, והצעד הבא הופך למשימה ב-CRM או התראה בסלאק.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="20" data-block="6" data-title="תרגיל 1: אפיון התהליך">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">1</span><h2 class="grow">תרגיל: אפיון תהליך ההחזרות</h2><span class="pill">⏱ כ-25 דקות</span><span class="pill">בזוגות</span><div class="timer" data-sec="1500"></div></div>
+    <ol class="steps" style="font-size:19px">
+      <li><b>ראיון:</b> אחד נציג שירות, השני מראיין עם 8 השאלות. ממלאים את שלבי ה-As‑Is.</li>
+      <li><b>מיפוי:</b> מבקשים מ-Claude תרשים Mermaid, ומסמנים צווארי בקבוק.</li>
+      <li><b>ניקוד:</b> מדרגים כל שלב במטריצת ערך-מול-קלות.</li>
+      <li><b>ROI:</b> ממלאים את המחשבון לשלב שבחרתם.</li>
+    </ol>
+    <div class="deliver">מסמך אפיון של עמוד אחד לתהליך ההחזרות, כולל תרשים To‑Be ו-ROI.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>כל הפרטים עם כפתורי העתקה בדף התרגול. עברו בין הזוגות.</li>
+    <li>השאלה הכי שימושית שלכם: "מאיפה המידע מגיע בשלב הזה?"</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="15" data-block="6" data-title="תרגיל 2: Claude מחלץ JSON">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">2</span><h2 class="grow">תרגיל: Claude מחלץ נתונים ל-JSON</h2><span class="pill">⏱ כ-15 דקות</span><span class="pill">עם Claude</span><div class="timer" data-sec="900"></div></div>
+    <p class="muted" style="margin:0 0 6px">פתחו את Claude בצ'אט, הדביקו את הפרומפט, ואז נסו הודעות לקוח משלכם. זה בדיוק מה ש-Make ישלח דרך API.</p>
+    <div class="copybox"><div class="material">אתה מחלץ נתונים מפניות לקוחות של "בית ועיצוב".
+החזר JSON בלבד (בלי טקסט מסביב) עם השדות:
+customer_name, order_id, topic (אחד מ: delivery / defect / refund / other), urgency (low / high).
+
+הפנייה:
+"שלום, מדברת רונית שגב. ההזמנה שלי (50912) הייתה אמורה להגיע אתמול ולא הגיעה, ואני צריכה אותה דחוף."</div></div>
+    <div class="deliver">צילום מסך של ה-JSON ש-Claude החזיר ל-3 פניות שונות (אחת עם שדה חסר).</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטרה: שיראו ש-Claude מחזיר JSON עקבי שאפשר לפרק ב-Make. חברו ל<code>content[0].text</code>.</li>
+    <li>בקשו מהם לנסות פנייה שחסר בה פרט (בלי מספר הזמנה) ולראות מה Claude שם ב-order_id (null).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="10" data-block="6" data-title="תרגיל 3: Claude בונה את האוטומציה">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">3</span><h2 class="grow">תרגיל: Claude בונה את תוכנית האוטומציה</h2><span class="pill">⏱ כ-15 דקות</span><span class="pill">עם Claude</span><div class="timer" data-sec="900"></div></div>
+    <p class="muted" style="margin:0 0 6px">השתמשו ב-Claude כשותף לתכנון: תנו לו את ה-As‑Is שלכם ובקשו תוכנית אוטומציה ל-Make.</p>
+    <div class="copybox"><div class="material">זה תהליך As‑Is שמיפיתי (הדביקו כאן את השלבים שלכם).
+
+אני רוצה להפוך אותו לאוטומציה ב-Make. תכנן לי:
+1. מה הטריגר (Webhook / Polling)?
+2. אילו מודולים נדרשים ובאיזה סדר?
+3. איפה Claude נכנס, ומה הוא מקבל ומחזיר (JSON)?
+4. היכן חייבת להיות נקודת אישור של אדם?
+5. אילו קודי תשובה צריך לטפל בהם (401 / 404 / 429)?
+
+החזר טבלה קצרה של המודולים.</div></div>
+    <div class="deliver">תוכנית אוטומציה מ-Claude לתהליך שלכם, עם הערה אחת שלכם: מה הייתם משנים בה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה הלב של "תרגול עם Claude לאוטומציות": Claude לא רק מנסח טקסט, הוא עוזר לתכנן את התרחיש.</li>
+    <li>הדגישו את ההערה האישית — Claude מציע, האדם מחליט. אל תקבלו תוכנית בעיניים עצומות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה מגישים">
   <div class="s-kicker">לפני שמסיימים</div>
   <h2>בדיקה עצמית לפני שמגישים</h2>
   <div class="s-body mid">
-    <ul class="check" style="font-size:21px">
-      <li>הטריגר והתוצאה מוגדרים במשפט אחד כל אחד</li>
-      <li>יש תרשים As‑Is עם זמנים, וצווארי הבקבוק מסומנים</li>
-      <li>ה-To‑Be מראה בבירור מה Make, מה Claude ומה אדם</li>
-      <li>יש לפחות נקודת אישור אנושית אחת</li>
-      <li>ה-ROI מחושב, ויש שורה של תועלות איכותיות</li>
+    <ul class="check" style="font-size:20px">
+      <li>מסמך אפיון של עמוד אחד, עם As‑Is, To‑Be ו-ROI</li>
+      <li>תרשים זרימה (Mermaid) של התהליך</li>
+      <li>ה-JSON ש-Claude החזיר לשלוש פניות</li>
+      <li>תוכנית אוטומציה מ-Claude, עם הערה אחת שלכם</li>
+      <li>לפחות נקודת אישור אנושית אחת בתוכנית</li>
     </ul>
   </div>
   <aside class="notes"><ul>
-    <li>עברו על הרשימה מול הכיתה בסוף התרגול. סמנו חי אם זה עוזר.</li>
-    <li>אם חסר סעיף אצל מישהו — זה בסדר, זו טיוטה. העיקר שהבינו את המבנה.</li>
+    <li>עברו על הרשימה בסוף. זו טיוטה — העיקר שהבינו את המבנה ואת החיבור בין אפיון לטכני.</li>
   </ul></aside>
 </section>
 
-<section class="slide" data-min="2" data-block="4" data-title="מה למדנו">
+<section class="slide" data-min="2" data-block="6" data-title="מה למדנו">
   <div class="s-kicker">סיכום</div>
   <h2>מה לקחנו מהיום</h2>
   <div class="s-body mid">
     <div class="goals">
-      <div><i>🧭</i>תהליך = מאירוע ועד תוצאה, עם שלבים, החלטות ומערכות</div>
-      <div><i>📸</i>קודם As‑Is מדויק, ורק אז To‑Be</div>
-      <div><i>📊</i>תרשים זרימה בחמש צורות, ו-Claude משרטט אותו</div>
-      <div><i>🎯</i>בוחרים לאוטומט לפי ערך מול קלות</div>
-      <div><i>💰</i>ROI הוא השפה מול המנהל</div>
-      <div><i>📄</i>הכול מתכנס למסמך אפיון של עמוד אחד</div>
+      <div><i>🧭</i>תהליך = מאירוע ועד תוצאה; קודם As‑Is, אז To‑Be</div>
+      <div><i>💰</i>בוחרים לאוטומט לפי ערך מול קלות, ומודדים ב-ROI</div>
+      <div><i>🔤</i>JSON = מפתח:ערך, ומגיעים לכל ערך לפי הנתיב</div>
+      <div><i>🔌</i>API = שיטה + כתובת + מפתח + קוד תשובה</div>
+      <div><i>⚡</i>Webhook מהיר מ-Polling; OAuth שומר על הסיסמה</div>
+      <div><i>🤖</i>Claude API מחזיר JSON — והטקסט ב-content[0].text</div>
     </div>
-    <div class="callout warn" style="font-size:22px"><b>וזה שוב</b>לא עושים אוטומציה לבלגן. היום למדנו איך לסדר קודם.</div>
+    <div class="callout warn" style="font-size:21px"><b>שני המשפטים של היום</b>"לא עושים אוטומציה לבלגן", ו"מערכות מדברות ב-JSON". עם שניהם, אתם מוכנים לבנות ב-Make.</div>
   </div>
   <aside class="notes"><ul>
-    <li>סגרו עם המשפט המרכזי. אם נשאר זמן — שאלו "איזה תהליך אצלכם בעבודה הכי בשל לאפיון כזה?"</li>
-    <li>הכינו למפגש 3: יסודות טכניים (JSON, API, Webhooks) — שם נתחיל לגעת בצד הטכני של Make.</li>
+    <li>סגרו עם שני המשפטים. אם יש זמן — "איזה תהליך אצלכם הכי בשל לאפיון כזה?"</li>
+    <li>הכינו למפגש 4: בונים את התרחיש הראשון ב-Make בפועל, בדיוק מהמושגים של היום.</li>
   </ul></aside>
 </section>
 
-<section class="slide hero" data-min="1" data-block="4" data-title="שאלות וסיום">
+<section class="slide hero" data-min="1" data-block="6" data-title="שאלות וסיום">
   <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2</b></div>
   <h1>שאלות?</h1>
-  <p class="sub">תודה! נתראה במפגש 3: יסודות טכניים — JSON, API ו-Webhooks.</p>
+  <p class="sub">תודה! יש לנו אפיון, ויש לנו את היסודות הטכניים. במפגש 4 בונים את זה ב-Make.</p>
   <div class="hero-meta"><span class="kind-badge">🎓 הרצאה</span><span class="kind-badge">🛠️ תרגול</span><span class="kind-badge">✅ פתרון</span><span class="kind-badge">📌 סיכום</span></div>
-  <aside class="notes"><ul><li>בקשו משוב קצר: דבר אחד שעבד, דבר אחד לשפר.</li><li>הזכירו שכל חומרי המפגש זמינים באתר הקורס.</li></ul></aside>
+  <aside class="notes"><ul><li>בקשו משוב: דבר אחד שעבד, דבר אחד לשפר.</li><li>כל חומרי המפגש זמינים באתר הקורס.</li></ul></aside>
 </section>
 
 </div></div>
@@ -1216,7 +1735,7 @@ const stage=$('#stage'), deck=$('#deck'), notesEl=$('#notes');
 const slides=$$('#stage > .slide');
 const N=slides.length;
 const fmt=m=>Math.floor(m/60)+':'+String(m%60).padStart(2,'0');
-const BLK={0:'הפסקה',1:'בלוק 1 · מהו תהליך עסקי',2:'בלוק 2 · As-Is ו-To-Be',3:'בלוק 3 · מה לאוטומט ו-ROI',4:'בלוק 4 · תרגול'};
+const BLK={0:'הפסקה',1:'בלוק 1 · מהו תהליך',2:'בלוק 2 · As-Is ו-To-Be',3:'בלוק 3 · מה לאוטומט ו-ROI',4:'בלוק 4 · JSON ו-API',5:'בלוק 5 · אבטחה, Webhooks ו-Claude API',6:'בלוק 6 · תרגול'};
 
 /* ---------- per-slide metadata ---------- */
 let acc=0;
@@ -1225,7 +1744,7 @@ slides.forEach((s,i)=>{
   const m=+s.dataset.min||0; s._start=acc; acc+=m;
   if(!s.dataset.title){const h=s.querySelector('h1,h2');s.dataset.title=h?h.textContent.trim():'שקף '+(i+1);}
   const f=document.createElement('div');f.className='sfoot';
-  f.innerHTML=`<span>מפגש 2 · אפיון תהליכים עסקיים</span><b>${i+1} / ${N}</b>`;s.appendChild(f);
+  f.innerHTML=`<span>מפגש 2 · אפיון ויסודות טכניים</span><b>${i+1} / ${N}</b>`;s.appendChild(f);
 });
 const TOTAL=acc;
 const blockTot={};slides.forEach(s=>{const b=s.dataset.block;blockTot[b]=(blockTot[b]||0)+(+s.dataset.min||0);});
@@ -1692,6 +2211,100 @@ function roiCalc(){
   document.getElementById('roiChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" direction="ltr" style="direction:ltr" font-family="Heebo"><line x1="${P/2}" x2="${W-P/2}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink-2)"/>${bars}${be}<text x="${W-P/2}" y="12" font-size="11.5" text-anchor="end" fill="var(--ink-2)">רווח מצטבר לפי חודש (₪), חודש 0 = עלות הבנייה</text></svg>`;
 }
 RI.forEach(([k])=>document.getElementById('r_'+k).oninput=roiCalc);roiCalc();
+
+/* ---------- JSON explorer ---------- */
+const ORDER={order_id:48213,status:"shipped",paid:true,coupon:null,customer:{name:"מיכל לוי",phone:"052-1234567",city:"חולון"},items:[{sku:"LMP-220",name:"מנורת עמידה מעץ",price:890,qty:1},{sku:"CSH-014",name:"כרית נוי",price:79,qty:2}],total:1048};
+function typeOf(v){return v===null?'null':Array.isArray(v)?'array':typeof v==='object'?'object':typeof v==='boolean'?'boolean':typeof v==='number'?'number':'string';}
+const TNAME={string:'טקסט (string)',number:'מספר (number)',boolean:'אמת/שקר (boolean)',null:'ריק (null)',object:'אובייקט (object)',array:'מערך (array)'};
+let rows=[];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function valHtml(v){const t=typeOf(v);return t==='string'?`<span class="s">"${esc(v)}"</span>`:t==='number'?`<span class="n">${v}</span>`:t==='boolean'?`<span class="b">${v}</span>`:`<span class="z">null</span>`;}
+function walk(v,path,ind,key,last){
+  const pad='  '.repeat(ind),kh=key!==null?`<span class="k" data-p="${path}">"${key}"</span>: `:'',comma=last?'':',';const t=typeOf(v);
+  if(t==='object'||t==='array'){const ks=t==='array'?v.map((_,i)=>i):Object.keys(v);rows.push(`<div class="jr">${pad}${kh}${t==='array'?'[':'{'}</div>`);
+    ks.forEach((k,i)=>{const np=t==='array'?`${path}[${k}]`:(path?path+'.'+k:k);walk(v[k],np,ind+1,t==='array'?null:k,i===ks.length-1);});
+    rows.push(`<div class="jr">${pad}${t==='array'?']':'}'}${comma}</div>`);}
+  else rows.push(`<div class="jr">${pad}${kh}${valHtml(v)}${comma}</div>`);
+}
+walk(ORDER,'',0,null,true);document.getElementById('jtree').innerHTML=rows.join('');
+function get(p){return p.split(/\.|\[|\]/).filter(Boolean).reduce((o,k)=>o==null?undefined:o[k],ORDER);}
+function sel(p){document.querySelectorAll('#jtree .k').forEach(k=>k.classList.toggle('sel',k.dataset.p===p));const v=get(p),t=typeOf(v);
+  document.getElementById('jpath').textContent=p;document.getElementById('jval').textContent=t==='object'||t==='array'?JSON.stringify(v).slice(0,80)+(JSON.stringify(v).length>80?'…':''):JSON.stringify(v);
+  document.getElementById('jtypes').innerHTML=Object.entries(TNAME).map(([k,n])=>`<span class="${k===t?'on':''}">${n}</span>`).join('');checkCh(p);}
+document.querySelectorAll('#jtree .k').forEach(k=>k.onclick=()=>sel(k.dataset.p));
+const CH=[['איפה העיר של הלקוחה?','customer.city'],['איפה המחיר של המוצר הראשון?','items[0].price'],['איפה השם של המוצר השני?','items[1].name'],['איזה שדה אומר אם ההזמנה שולמה?','paid'],['איפה רשימת המוצרים כולה?','items']];
+let chI=0;function chShow(){document.getElementById('chQ').textContent=CH[chI][0];document.getElementById('chR').textContent='';}
+function checkCh(p){const r=document.getElementById('chR');if(p===CH[chI][1]){r.textContent='✓ נכון! הנתיב: '+p;r.style.color='var(--good)';}else{r.textContent='עדיין לא. נסו מפתח אחר';r.style.color='var(--ink-2)';}}
+document.getElementById('chN').onclick=()=>{chI=(chI+1)%CH.length;chShow();};chShow();sel('customer.name');
+
+/* ---------- validator ---------- */
+const BAD=['{\n  "name": "מיכל לוי"\n  "phone": "052-1234567"\n}',"{\n  'name': 'מיכל לוי',\n  'phone': '052-1234567'\n}",'{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n}','{\n  name: "מיכל לוי",\n  "phone": "052-1234567"\n}','{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n  "vip": true,\n  "orders": [48213, 50912]\n}'];
+const HINT=['חסר פסיק בין שני זוגות של מפתח וערך.','ב-JSON כותבים רק מירכאות כפולות ("), לא גרשים.','אחרי הזוג האחרון לא שמים פסיק.','גם המפתח צריך להיות בתוך מירכאות כפולות.'];
+let badI=-1;
+function validate(){const ta=document.getElementById('valIn'),r=document.getElementById('valRes');try{const o=JSON.parse(ta.value);ta.className='ok';r.innerHTML=`<b class="ok">✓ JSON תקין</b><br>${Object.keys(o).length} מפתחות ברמה העליונה: <span class="en-inline">${Object.keys(o).join(', ')}</span>`;}
+ catch(e){ta.className='bad';r.innerHTML=`<b class="bad">✗ JSON לא תקין</b><br><span class="en-inline" style="font-size:13px">${esc(e.message)}</span>${badI>=0&&badI<4?`<br><br><b>רמז:</b> ${HINT[badI]}`:''}<br><br><span class="muted">תקנו את הטקסט, והבדיקה תתעדכן מיד.</span>`;}}
+document.querySelectorAll('[data-bad]').forEach(b=>b.onclick=()=>{badI=+b.dataset.bad;document.getElementById('valIn').value=BAD[badI];validate();});
+document.getElementById('valIn').oninput=validate;badI=0;document.getElementById('valIn').value=BAD[0];validate();
+
+/* ---------- API playground ---------- */
+let DB=[{id:48213,customer:"מיכל לוי",product:"מנורת עמידה מעץ",status:"shipped",total:890},{id:48190,customer:"יוסי כהן",product:"שטיח סלון",status:"delivered",total:640},{id:50912,customer:"רונית שגב",product:"3 כיסאות בר",status:"processing",total:1170}];
+let hits=[];
+function rawReq(){const m=pgM.value,p=pgP.value,k=pgK.checked,hasB=m==='POST'||m==='PUT';
+  let s=`<span class="m">${m}</span> ${p} HTTP/1.1\n<span class="h">Host:</span> api.beit-veitzuv.example\n`+(k?`<span class="h">x-api-key:</span> sk-live-••••••••\n`:'')+(hasB?`<span class="h">Content-Type:</span> application/json\n\n${esc(pgB.value)}`:'');document.getElementById('pgRaw').innerHTML=s;}
+const pgM=document.getElementById('pgM'),pgP=document.getElementById('pgP'),pgK=document.getElementById('pgK'),pgB=document.getElementById('pgB');
+[pgM,pgP,pgK,pgB].forEach(e=>e.oninput=rawReq);rawReq();
+function api(m,p,k,body){
+  const now=Date.now();hits=hits.filter(t=>now-t<10000);hits.push(now);
+  if(hits.length>8)return [429,{error:"rate limit exceeded, retry in 10 seconds"},'שלחתם יותר מ-8 בקשות ב-10 שניות. השרת מבקש לחכות. ב-Make מגדירים לזה ניסיון חוזר.'];
+  if(!k)return [401,{error:"missing or invalid API key"},'בלי מפתח השרת לא יודע מי אתם, ולכן הוא מסרב.'];
+  const id=p.split('/')[2];const rec=id?DB.find(o=>String(o.id)===id):null;
+  if(m==='GET'){if(!id)return [200,DB,'קיבלנו את כל ההזמנות כמערך של אובייקטים.'];return rec?[200,rec,'קיבלנו אובייקט אחד: ההזמנה המבוקשת.']:[404,{error:"order not found"},'אין הזמנה עם המספר הזה. באוטומציה צריך להחליט מה עושים במקרה כזה.'];}
+  if(m==='POST'){if(id)return [405,{error:"method not allowed"},'אי אפשר ליצור רשומה בכתובת של רשומה קיימת. POST שולחים ל-/orders.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין. בדקו פסיקים ומירכאות.']}
+    if(!b.customer)return [400,{error:"field 'customer' is required"},'חסר שדה חובה. ה-API מגדיר אילו שדות חייבים להופיע.'];
+    const n={id:Math.max(...DB.map(o=>o.id))+1,status:"new",...b};DB.push(n);return [201,n,'נוצרה הזמנה חדשה. השרת החזיר אותה, כולל המזהה החדש (id). נסו עכשיו GET ל-/orders.'];}
+  if(m==='PUT'){if(!id)return [405,{error:"method not allowed"},'בעדכון צריך לציין איזו רשומה מעדכנים, למשל /orders/48213.'];if(!rec)return [404,{error:"order not found"},'אי אפשר לעדכן הזמנה שלא קיימת.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין.']}Object.assign(rec,b);return [200,rec,'ההזמנה עודכנה. שדות שלא שלחנו נשארו כמו שהיו.'];}
+  if(m==='DELETE'){if(!id)return [405,{error:"method not allowed"},'מוחקים רשומה אחת, ולא את כל הרשימה.'];if(!rec)return [404,{error:"order not found"},'אין מה למחוק.'];DB=DB.filter(o=>o!==rec);return [204,null,'ההזמנה נמחקה. קוד 204 אומר שהפעולה הצליחה ואין תוכן להחזיר.'];}
+}
+document.getElementById('pgSend').onclick=()=>{const pk=document.getElementById('pkt'),btn=document.getElementById('pgSend');btn.disabled=true;
+  const vert=matchMedia('(max-width:860px)').matches;
+  pk.style.transition='none';pk.style.opacity=1;pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';pk.textContent='✉️';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{pk.style.transition='';pk.style.transform=vert?'translateY(26px)':'translateX(-42px)';}));
+  setTimeout(()=>{const [c,b,e]=api(pgM.value,pgP.value,pgK.checked,pgB.value);pk.textContent=c<300?'📦':'⛔';pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';
+   setTimeout(()=>{const s=document.getElementById('pgS');s.textContent=c+' '+({200:'OK',201:'Created',204:'No Content',400:'Bad Request',401:'Unauthorized',404:'Not Found',405:'Method Not Allowed',429:'Too Many Requests'}[c]);s.className='status s'+String(c)[0];
+    document.getElementById('pgE').textContent=e;document.getElementById('pgR').textContent=b===null?'(אין גוף בתשובה)':JSON.stringify(b,null,2);pk.style.opacity=0;btn.disabled=false;},700);},750);};
+
+/* ---------- OAuth ---------- */
+const OA=[[[0,1],'<b>1. מבקשים חיבור.</b> ב-Make לוחצים "Add connection" למודול של Google Sheets.'],[[1,2],'<b>2. Make מפנה ל-Google.</b> נפתח חלון התחברות של Google, ולא של Make. Make לא רואה את הסיסמה.'],[[0,2],'<b>3. אתם מאשרים הרשאות.</b> Google מציג מה Make מבקש, למשל "לקרוא ולערוך גיליונות", ואתם לוחצים "אישור".'],[[2,1],'<b>4. Google נותן ל-Make אסימון (Token).</b> האסימון הוא מפתח מוגבל: רק להרשאות שאישרתם, ואפשר לבטל אותו בכל רגע מהגדרות החשבון.'],[[1,2],'<b>5. Make עובד עם האסימון.</b> בכל קריאה לגיליון, Make שולח את האסימון. אם תבטלו את ההרשאה ב-Google, החיבור יפסיק לעבוד.']];
+let oaI=0;function oaR(){OA[oaI][0];[0,1,2].forEach(i=>document.getElementById('a'+i).classList.toggle('on',OA[oaI][0].includes(i)));document.getElementById('oaStep').innerHTML=OA[oaI][1];
+  document.getElementById('oaDots').innerHTML=OA.map((_,i)=>`<i class="${i===oaI?'on':''}"></i>`).join('');document.getElementById('oaPrev').disabled=oaI===0;document.getElementById('oaNext').disabled=oaI===OA.length-1;}
+document.getElementById('oaNext').onclick=()=>{oaI++;oaR()};document.getElementById('oaPrev').onclick=()=>{oaI--;oaR()};oaR();
+
+/* ---------- polling vs webhook ---------- */
+const EVENTS=[4,11,29,33,52];let pwT=null;
+function fly(track,dir,ico){const el=document.createElement('div');el.className='msg';el.textContent=ico;const W=track.clientWidth;el.style.left=(dir>0?80:W-100)+'px';track.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.left=(dir>0?W-100:80)+'px';}));setTimeout(()=>el.remove(),700);}
+document.getElementById('pwGo').onclick=()=>{clearInterval(pwT);let t=0;const tP=document.getElementById('tP'),tW=document.getElementById('tW');let pReq=0,pEmpty=0,pLat=[],wLat=[],pending=[];
+  ['pReq','pEmpty','pLat','wReq','wEmpty','wLat'].forEach(i=>document.getElementById(i).textContent=0);document.getElementById('pwGo').disabled=true;
+  pwT=setInterval(()=>{t++;document.getElementById('pwClock').textContent=t+' שניות';
+    if(EVENTS.includes(t)){pending.push(t);fly(tW,-1,'⚡');wLat.push(0);document.getElementById('wReq').textContent=wLat.length;}
+    if(t%15===0){pReq++;fly(tP,1,'❓');setTimeout(()=>{if(pending.length){pending.forEach(e=>pLat.push(t-e));pending=[];fly(tP,-1,'📦');}else{pEmpty++;fly(tP,-1,'∅');}
+      document.getElementById('pReq').textContent=pReq;document.getElementById('pEmpty').textContent=pEmpty;document.getElementById('pLat').textContent=pLat.length?Math.round(pLat.reduce((a,b)=>a+b,0)/pLat.length):0;},650);}
+    if(t>=60){clearInterval(pwT);document.getElementById('pwGo').disabled=false;}
+  },160);};
+
+/* ---------- Claude API ---------- */
+const caM=document.getElementById('caM'),caT=document.getElementById('caT'),caS=document.getElementById('caS'),caU=document.getElementById('caU');
+function caBody(){return {model:caM.value,max_tokens:+caT.value,system:caS.value,messages:[{role:"user",content:caU.value}]};}
+function caReq(){document.getElementById('caReq').innerHTML=`<span style="color:#a5b4fc">x-api-key:</span> sk-ant-••••••\n<span style="color:#a5b4fc">anthropic-version:</span> 2023-06-01\n<span style="color:#a5b4fc">content-type:</span> application/json\n\n`+esc(JSON.stringify(caBody(),null,2));}
+[caM,caT,caS,caU].forEach(e=>e.oninput=caReq);caReq();
+document.getElementById('caGo').onclick=()=>{const r=document.getElementById('caRes');r.textContent='⏳ Claude חושב...';
+  setTimeout(()=>{const u=caU.value;const name=(u.match(/אני ([֐-׿]+ [֐-׿]+)/)||[])[1]||null;const oid=(u.match(/\d{5}/)||[])[0]||null;
+   const topic=/קרע|שבור|פגם|פגום/.test(u)?'defect':/לא הגיע|משלוח|מתי/.test(u)?'delivery':'other';
+   const text=JSON.stringify({customer_name:name,order_id:oid,topic});const inT=Math.round((caS.value.length+u.length)/2.2)+12,outT=Math.round(text.length/2.4);
+   const res={id:"msg_01Xk…",type:"message",role:"assistant",model:caM.value,content:[{type:"text",text}],stop_reason:"end_turn",usage:{input_tokens:inT,output_tokens:outT}};
+   let s=esc(JSON.stringify(res,null,2));s=s.replace(/("text": )(".*?[^\\]")/,'$1<span class="hl">$2</span>');r.innerHTML=s;
+   document.getElementById('caNote').textContent='החלק המודגש הוא content[0].text: ה-JSON שביקשנו, כמחרוזת. ב-Make נפרק אותו לשדות (Parse JSON). מספרי הטוקנים כאן הם הערכה לצורך ההדגמה.';},900);};
 /* ---------- start ---------- */
 fit();go(fromHash());
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
