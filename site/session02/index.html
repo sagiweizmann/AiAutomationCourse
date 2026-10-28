@@ -144,19 +144,19 @@
   </ol>
   <div class="callout warn"><b>שגיאת רשת (CORS)?</b>אם מופיעה <span class="en">Network Error</span>, החליפו את ה-<span class="en">Interceptor</span> (בהגדרות, בפינה) מ-<span class="en">Browser</span> ל-<span class="en">Proxy</span>, ושלחו שוב.</div>
   <h4>הבקשות</h4>
-  <div class="copybox"><div class="material"><b>1 · מזג האוויר עכשיו (GET) — שנו lat/long לעיר שלכם</b>GET https://api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m
-→ מצפים לקוד 200. השדה: current.temperature_2m</div></div>
+  <div class="copybox"><div class="material"><b>1 · תחזית שבועית באשדוד, ישראל (GET)</b>GET https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&amp;daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&amp;timezone=Asia%2FJerusalem&amp;forecast_days=7
+→ מצפים לקוד 200. שבעת ימי התחזית נמצאים במערכים: daily.time, daily.temperature_2m_max, daily.temperature_2m_min, daily.precipitation_probability_max ו-daily.weather_code</div></div>
   <div class="copybox"><div class="material"><b>2 · שער הדולר לשקל (GET)</b>GET https://api.frankfurter.app/latest?from=USD&to=ILS
 → קוד 200. השדה: rates.ILS</div></div>
   <div class="copybox"><div class="material"><b>3 · יצירת רשומה (POST) — שימו לב לקוד 201</b>POST https://jsonplaceholder.typicode.com/posts
 לשונית Body → raw / application/json:
 { "title": "בדיקה", "userId": 1 }</div></div>
   <div class="copybox"><div class="material"><b>בונוס · איך השרת רואה את הבקשה שלכם (GET)</b>GET https://httpbin.org/get</div></div>
-  <div class="callout claude"><b>התוצר</b>צילום מסך של תשובת מזג האוויר (קוד 200) ושל ה-POST (קוד 201), וזיהוי השדה <code>temperature_2m</code> בתשובה.</div>
+  <div class="callout claude"><b>התוצר</b>צילום מסך של התחזית השבועית באשדוד (קוד 200) ושל ה-POST (קוד 201), וזיהוי התאריך, טמפרטורת המקסימום והמינימום וסיכוי הגשם לכל יום.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
     <li>קיבלתי קוד 200 על בקשת ה-GET ו-201 על ה-POST</li>
-    <li>אני יודע להצביע על הטמפרטורה בתוך ה-JSON (לפי הנתיב current.temperature_2m)</li>
+    <li>אני יודע להתאים בין התאריך, טמפרטורת המקסימום והמינימום וסיכוי הגשם לפי אותו מיקום במערכי <code>daily</code></li>
     <li>הבנתי את ההבדל בין GET (קוראים נתונים) ל-POST (יוצרים רשומה)</li>
   </ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex3"> סיימתי את התרגיל</label>
@@ -167,8 +167,8 @@
   <div class="ex-meta"><span class="pill">⏱ כ-12 דקות</span><span class="pill">כיף + נתיב</span><span class="pill cls">בכיתה</span></div>
   <p class="goal">לתרגל קריאת ערך מתוך JSON לפי נתיב, על כמה API-ים אמיתיים וחינמיים.</p>
   <p>הדביקו כל כתובת ב-Hoppscotch (שיטה <span class="en">GET</span>), לחצו <span class="en">Send</span>, ומצאו בתשובה את הערך המבוקש לפי הנתיב.</p>
-  <div class="copybox"><div class="material"><b>1 · מזג אוויר בירושלים</b>api.open-meteo.com/v1/forecast?latitude=31.77&longitude=35.21&current=temperature_2m
-→ מה הטמפרטורה עכשיו?  (נתיב: current.temperature_2m)</div></div>
+  <div class="copybox"><div class="material"><b>1 · תחזית שבועית באשדוד</b>api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&amp;daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&amp;timezone=Asia%2FJerusalem&amp;forecast_days=7
+→ מה הטמפרטורה הגבוהה והנמוכה ומה סיכוי הגשם בכל יום?  (נתיבים: daily.temperature_2m_max, daily.temperature_2m_min, daily.precipitation_probability_max)</div></div>
   <div class="copybox"><div class="material"><b>2 · שער דולר-שקל</b>api.frankfurter.app/latest?from=USD&to=ILS
 → כמה שקלים שווה דולר?  (נתיב: rates.ILS)</div></div>
   <div class="copybox"><div class="material"><b>3 · מחיר ביטקוין בשקלים</b>api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ils
