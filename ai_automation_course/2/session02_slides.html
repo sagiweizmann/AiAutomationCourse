@@ -747,6 +747,9 @@ body.ov-on #ov{display:block}
 .slide .grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .slide .codes{grid-template-columns:repeat(4,minmax(0,1fr))}
 .slide .oa{grid-template-columns:repeat(3,minmax(0,1fr))}
+.slide .shot{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16;box-shadow:var(--shadow)}
+.slide .shot img{display:block;width:100%;height:auto}
+.slide .shot figcaption{padding:5px 12px;font-size:12px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -1548,6 +1551,80 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
+<section class="slide" data-min="2" data-block="4" data-title="מדריך Hoppscotch · הממשק">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>Hoppscotch: מה נמצא איפה</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center">
+      <figure class="shot"><img src="assets/hoppscotch/01-interface.jpg" alt="ממשק Hoppscotch — שיטה, כתובת, Send ולשוניות"></figure>
+      <div>
+        <ul style="font-size:17px;line-height:1.85;padding-inline-start:18px;margin:0">
+          <li><b>שיטה</b> (מימין): GET / POST / PUT / DELETE</li>
+          <li><b>כתובת (URL)</b>: לאן שולחים את הבקשה</li>
+          <li>כפתור <b>Send</b> הסגול: שולח את הבקשה</li>
+          <li>לשוניות: <b>Parameters · Body · Headers · Authorization</b></li>
+          <li>התשובה מופיעה למטה: <b>קוד סטטוס</b> + גוף ב-JSON</li>
+        </ul>
+        <div class="callout tip" style="font-size:14.5px"><b>בלי התקנה</b>נכנסים ל-<span class="en">hoppscotch.io</span> ומתחילים מיד. אפשר להירשם (חינם) כדי לשמור בקשות ל-Collections.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הראו את המסך חי אם אפשר. הנקודה: זה פשוט — שיטה, כתובת, Send, ותשובה.</li>
+    <li>זה אותו מבנה כמו המודול HTTP ב-Make: אותם שדות בדיוק.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="מדריך Hoppscotch · GET">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>GET צעד אחר צעד — מזג אוויר אמיתי</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <ol class="steps" style="font-size:16.5px">
+          <li>נכנסים ל-<span class="en">hoppscotch.io</span></li>
+          <li>משאירים את השיטה על <b>GET</b></li>
+          <li>מדביקים בכתובת:<div class="raw" style="min-height:0;font-size:10px;margin-top:4px">api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m</div></li>
+          <li>לוחצים <b>Send</b></li>
+          <li>רואים למטה <b style="color:var(--good)">200 OK</b> ואת ה-JSON</li>
+        </ol>
+      </div>
+      <div>
+        <figure class="shot"><img src="assets/hoppscotch/02-methods.png" alt="בחירת שיטת HTTP ב-Hoppscotch"><figcaption>בוחרים שיטה, מדביקים כתובת, לוחצים Send</figcaption></figure>
+        <div class="muted" style="font-size:12px;margin:8px 0 3px">התשובה שתקבלו:</div>
+        <div class="raw" style="min-height:0;font-size:12px">{ "current": { "temperature_2m": 24.3 } }</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הטמפרטורה בנתיב current.temperature_2m — חברו לשקף ה-JSON path.</li>
+    <li>בקשו מהכיתה לשנות את ה-lat/long לעיר שלהם.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="מדריך Hoppscotch · POST">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>POST — לשלוח גוף JSON</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center">
+      <figure class="shot"><img src="assets/hoppscotch/03-post-body.png" alt="לשונית Body עם application/json ב-Hoppscotch"></figure>
+      <div>
+        <ol class="steps" style="font-size:16.5px">
+          <li>משנים את השיטה ל-<b>POST</b></li>
+          <li>לשונית <b>Body</b> ‹ <b>Content Type</b> ‹ <span class="en">application/json</span></li>
+          <li>מקלידים את הגוף:<div class="raw" style="min-height:0;font-size:11px;margin-top:4px">{ "title": "בדיקה", "userId": 1 }</div></li>
+          <li>Send → מקבלים <b style="color:var(--good)">201 Created</b></li>
+        </ol>
+        <div class="callout warn" style="font-size:14px"><b>שגיאת רשת? (CORS)</b>אם הבקשה נכשלת, החליפו את ה-<b>Interceptor</b> ל-<b>Proxy</b> (בתחתית המסך) ושלחו שוב.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל מ-GET: ב-POST יש Body. שאר הדברים זהים.</li>
+    <li>הטיפ על Interceptor/Proxy חשוב — חלק מה-API-ים חוסמים בקשות מהדפדפן (CORS), וה-Proxy עוקף את זה.</li>
+  </ul></aside>
+</section>
+
 <section class="slide" data-min="3" data-block="4" data-title="Postman צעד אחרי צעד">
   <div class="s-kicker">חלק 2 · Postman</div>
   <h2>Postman צעד אחרי צעד</h2>
@@ -1971,6 +2048,34 @@ customer_name, order_id, topic (אחד מ: delivery / defect / refund / other), 
     <li>זה התרגיל שהופך API ממופשט לממשי: הם מושכים מזג אוויר אמיתי של העיר שלהם.</li>
     <li>הצביעו על ההבדל 200 מול 201, ועל מבנה ה-JSON בתשובה (current.temperature_2m) — בדיוק מה שנמפה ב-Make.</li>
     <li>מי שמסיים: שישנה את העיר, המטבע, או ינסה API מהשקף "חינמיים לשחק איתם".</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="10" data-block="6" data-title="תרגיל 5: סבב API-ים חינמיים">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">5</span><h2 class="grow">תרגיל: סבב API-ים חינמיים ב-Hoppscotch</h2><span class="pill">⏱ כ-12 דקות</span><span class="pill">כיף + תרגול נתיב</span><div class="timer" data-sec="720"></div></div>
+    <p class="muted" style="margin:0 0 6px">הדביקו כל כתובת ב-Hoppscotch (שיטה GET), לחצו Send, ומצאו בתשובה את הערך המבוקש — לפי הנתיב.</p>
+    <div class="copybox"><div class="material">1) מזג אוויר בירושלים:
+   api.open-meteo.com/v1/forecast?latitude=31.77&longitude=35.21&current=temperature_2m
+   → מה הטמפרטורה עכשיו?  (נתיב: current.temperature_2m)
+
+2) שער דולר-שקל:
+   api.frankfurter.app/latest?from=USD&to=ILS
+   → כמה שקלים שווה דולר?  (נתיב: rates.ILS)
+
+3) מחיר ביטקוין בשקלים:
+   api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ils
+   → מה המחיר?  (נתיב: bitcoin.ils)
+
+4) ניחוש גיל משם:
+   api.agify.io/?name=noa
+   → איזה גיל ניחש המודל?  (נתיב: age)</div></div>
+    <div class="deliver">צילום מסך של אחת התשובות, עם סימון הנתיב לערך שמצאתם.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה מחבר הכול: כלי אמיתי (Hoppscotch) + API חינמי + קריאת ערך לפי נתיב (JSON).</li>
+    <li>תחרות קטנה: מי מצא ראשון את מחיר הביטקוין? זה מגביר מעורבות.</li>
+    <li>מי שמסיים: שישנה את העיר/המטבע, או ינסה API מהשקף "חינמיים לשחק איתם".</li>
   </ul></aside>
 </section>
 
