@@ -698,7 +698,7 @@ body.ov-on #ov{display:block}
 .slide.w .sim-head{display:none}
 .slide .sim-head{padding:9px 16px}.slide .sim-head h3{font-size:16px}
 .slide .sim-body{padding:10px 16px 12px}
-.slide .anat{gap:14px}.slide .anat-flow{gap:5px}.slide .af{padding:6px 12px}.slide .af .ic{width:26px;height:26px}.slide .af small{font-size:11.5px}
+.slide .anat{gap:14px;color:var(--ink)}.slide .anat *{color:inherit}.slide .anat-flow{gap:3px}.slide .af{padding:3px 11px;gap:8px;color:var(--ink)}.slide .af .ic{width:23px;height:23px}.slide .af b{font-size:13.5px;color:var(--ink)}.slide .af small{font-size:10.5px;color:var(--ink-2)}.slide .anat-info .t{color:var(--c)}
 .slide .ps-top{gap:8px}.slide .ps-stats{margin:6px 0;gap:8px}.slide .ps-stats div{padding:5px}.slide .ps-stats b{font-size:17px}.slide .ps-stats span{font-size:11.5px}
 .slide .steps .st{padding:4px 11px;grid-template-columns:30px minmax(0,1fr) auto}
 .slide .steps .st .ic{width:30px;height:30px;font-size:14px;border-radius:9px}
@@ -731,6 +731,22 @@ body.ov-on #ov{display:block}
 .slide .ca textarea{min-height:48px;font-size:13px}
 .slide .ca select{padding:5px 8px}
 .slide .ca .rq{min-height:84px;font-size:11.5px;padding:9px 11px}
+/* keep widget layouts 2-col on the fixed 1280 stage (never collapse by window width) */
+.slide .anat{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.slide .anat-info{position:static}
+.slide .af{background:var(--surface-2)}
+.slide .jx2{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.slide .val{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pg{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .ca{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pw{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .keys{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .mx{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.slide .roi{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.slide .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .codes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .oa{grid-template-columns:repeat(3,minmax(0,1fr))}
 </style>
 </head>
 <body>
@@ -742,7 +758,7 @@ body.ov-on #ov{display:block}
   <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2 מתוך 15</b></div>
   <h1>אפיון תהליכים ויסודות טכניים</h1>
   <p class="sub">קודם מבינים את התהליך — מה קורה היום, איפה הוא נתקע וכמה הוא שווה. אחר כך לומדים איך מערכות מדברות: JSON, API, Webhooks וקריאה ל-Claude.</p>
-  <div class="hero-meta"><span class="kind-badge">⏱ 3 שעות</span><span class="kind-badge">6 בלוקים · הפסקה</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
+  <div class="hero-meta"><span class="kind-badge">⏱ 3 שעות</span><span class="kind-badge">6 בלוקים · 2 הפסקות</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
   <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · P: מסך מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
   <aside class="notes"><ul>
     <li>ברוכים השבים. המפגש מחולק לשניים: חצי ראשון — אפיון תהליך; חצי שני — היסודות הטכניים שמאחורי כל אוטומציה.</li>
@@ -799,7 +815,7 @@ body.ov-on #ov{display:block}
       <div class="ag" style="--c:var(--p2)"><div class="t">1:20–2:05</div><b>JSON ו-API</b><span>פורמט הנתונים, בקשות וקודי תשובה</span></div>
       <div class="ag" style="--c:var(--p5)"><div class="t">2:05–2:35</div><b>אבטחה ו-Claude API</b><span>מפתחות, OAuth, Webhooks וקריאה ל-Claude</span></div>
       <div class="ag" style="--c:var(--p4)"><div class="t">2:35–3:00</div><b>תרגול עם Claude</b><span>אפיון, חילוץ JSON ובניית אוטומציה</span></div>
-      <div class="ag" style="--c:var(--claude)"><div class="t">1:05–1:20</div><b>הפסקה</b><span>לפני הצלילה הטכנית</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">2 × 10 דק'</div><b>הפסקות</b><span>לפני הטכני, ולפני התרגול</span></div>
     </div>
   </div>
   <aside class="notes"><ul>
@@ -854,10 +870,12 @@ body.ov-on #ov{display:block}
   <div class="s-kicker">אינטראקטיבי</div>
   <h2>האנטומיה של תהליך — לחצו על כל חלק</h2>
   <div class="s-body">
-    <div class="anat">
-      <div class="anat-flow" id="anatFlow"></div>
-      <div class="anat-info" id="anatInfo"></div>
-    </div>
+    <div class="sim"><div class="sim-head"><span class="tag">אינטראקטיבי</span><h3>החלקים של תהליך</h3></div><div class="sim-body">
+      <div class="anat">
+        <div class="anat-flow" id="anatFlow"></div>
+        <div class="anat-info" id="anatInfo"></div>
+      </div>
+    </div></div>
   </div>
   <aside class="notes"><ul>
     <li>עברו חלק-חלק. לכל חלק דוגמה מתהליך הטיפול בליד של "בית ועיצוב".</li>
@@ -928,6 +946,23 @@ body.ov-on #ov{display:block}
   </div>
   <aside class="notes"><ul>
     <li>As‑Is = צילום מצב, To‑Be = תוכנית אדריכל. אי אפשר לתכנן שיפוץ בלי לראות את הבית.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="טעויות נפוצות במיפוי">
+  <div class="s-kicker">חלק 2 · As-Is</div>
+  <h2>שלוש טעויות נפוצות במיפוי תהליך</h2>
+  <div class="s-body mid">
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ ממפים את הרצוי</b><div class="muted" style="font-size:15px">מתעדים איך "אמור" לעבוד, לא איך באמת עובד. מפספסים את העוקפים והתיקונים.</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ מדלגים על חריגים</b><div class="muted" style="font-size:15px">"בדרך כלל זה חלק" — אבל 20% מהמקרים הם חריגים, ושם האוטומציה נשברת.</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ לא רושמים מערכות</b><div class="muted" style="font-size:15px">שוכחים מאיפה המידע מגיע בכל שלב. בלי זה אי אפשר לחבר ב-Make.</div></div>
+    </div>
+    <div class="callout tip"><b>התרופה</b>לעבור על מקרה אמיתי אחרון, לשאול בכל שלב "ומה אם…", ולרשום ליד כל שלב איזו מערכת או קובץ מעורבים.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>שלוש הטעויות האלה הן ההבדל בין אפיון שמוביל לאוטומציה שעובדת, לאפיון שמוביל לתסכול.</li>
+    <li>שאלה לכיתה: "איזו מהשלוש הכי מפתה אתכם?" (לרוב: לדלג על חריגים).</li>
   </ul></aside>
 </section>
 
@@ -1004,6 +1039,22 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul>
     <li>לחצו רק אחרי ששאלתם: "מה הייתם רוצים שהתשובה תכיל?"</li>
     <li>חברו לחלק הטכני: "את העובדות האלה Make שולח ל-Claude כ-JSON, דרך API. בדיוק מה שנראה היום."</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="איפה אדם נשאר בתהליך">
+  <div class="s-kicker">חלק 2 · To-Be</div>
+  <h2>אוטומציה טובה משאירה לאדם את ההחלטות</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card" style="border-color:var(--p2)"><b>🤖 מה כדאי לאוטומט</b><ul style="margin:8px 0 0;font-size:16px"><li>העתקת נתונים בין מערכות</li><li>סיווג, חילוץ וסיכום</li><li>ניסוח טיוטות</li><li>בדיקות, תזכורות ומעקב</li></ul></div>
+      <div class="card" style="border-color:var(--p5)"><b>🙋 מה משאירים לאדם</b><ul style="margin:8px 0 0;font-size:16px"><li>אישור לפני שליחה ללקוח</li><li>החלטות עם מחיר טעות גבוה</li><li>כסף: החזרים וזיכויים</li><li>חריגים ומקרים רגישים</li></ul></div>
+    </div>
+    <div class="callout warn"><b>הכלל: נקודת אישור אחת לפחות</b>כל תהליך אוטומטי צריך מקום שבו אדם יכול לעצור, לבדוק ולאשר — במיוחד לפני פעולה מול לקוח או כסף.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה מרגיע חשש נפוץ: "האם ה-AI ישלח דברים במקומי בלי שליטה?" לא — אתם מחליטים איפה הוא עוצר לאישור.</li>
+    <li>חברו לטעימת ה-To-Be: שם הנציג מאשר בלחיצה לפני השליחה.</li>
   </ul></aside>
 </section>
 
@@ -1152,12 +1203,12 @@ body.ov-on #ov{display:block}
 </section>
 
 <!-- ============================== BREAK ============================== -->
-<section class="slide brk" data-min="15" data-block="0" data-title="הפסקה">
-  <div class="s-kicker">הפסקה</div>
-  <h1>הפסקה · 15 דקות</h1>
-  <div class="timer" data-sec="900"></div>
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה ראשונה">
+  <div class="s-kicker">הפסקה 1 מתוך 2</div>
+  <h1>הפסקה · 10 דקות</h1>
+  <div class="timer" data-sec="600"></div>
   <p class="sub">כשחוזרים — צוללים לצד הטכני: איך מערכות באמת מדברות זו עם זו.</p>
-  <aside class="notes"><ul><li>הפעילו את הטיימר. אחרי ההפסקה מתחיל חומר חדש לגמרי (JSON/API), אז כדאי שכולם יהיו רעננים.</li></ul></aside>
+  <aside class="notes"><ul><li>הפעילו את הטיימר. אחרי ההפסקה מתחיל חומר חדש לגמרי (JSON/API), אז כדאי שכולם יהיו רעננים.</li><li>זו ההפסקה הראשונה. השנייה תהיה לפני התרגול, בסוף החלק הטכני.</li></ul></aside>
 </section>
 
 <!-- ============================== BLOCK 4: JSON + API ============================== -->
@@ -1208,6 +1259,61 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul>
     <li>הדגישו: מפתח תמיד במירכאות כפולות. זה מקור טעות נפוץ.</li>
     <li>"נתיב" הוא המושג שחוזר בכל מיפוי שדות ב-Make. תעצרו עליו.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="JSON: ששת סוגי הערכים">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>ששת סוגי הערכים ב-JSON</h2>
+  <div class="s-body mid">
+    <div class="grid3">
+      <div class="card"><b>🔤 טקסט <span class="en">(string)</span></b><div class="raw" style="min-height:0;margin:6px 0">"מיכל לוי"</div><div class="muted" style="font-size:13px">תמיד במירכאות כפולות</div></div>
+      <div class="card"><b>🔢 מספר <span class="en">(number)</span></b><div class="raw" style="min-height:0;margin:6px 0">890</div><div class="muted" style="font-size:13px">בלי מירכאות</div></div>
+      <div class="card"><b>✅ אמת/שקר <span class="en">(boolean)</span></b><div class="raw" style="min-height:0;margin:6px 0">true / false</div><div class="muted" style="font-size:13px">כן או לא</div></div>
+      <div class="card"><b>⬜ ריק <span class="en">(null)</span></b><div class="raw" style="min-height:0;margin:6px 0">null</div><div class="muted" style="font-size:13px">אין ערך</div></div>
+      <div class="card"><b>📦 אובייקט <span class="en">(object)</span></b><div class="raw" style="min-height:0;margin:6px 0">{ "name": "…" }</div><div class="muted" style="font-size:13px">אוסף של מפתח:ערך</div></div>
+      <div class="card"><b>📋 מערך <span class="en">(array)</span></b><div class="raw" style="min-height:0;margin:6px 0">[ "א", "ב" ]</div><div class="muted" style="font-size:13px">רשימה מסודרת</div></div>
+    </div>
+    <div class="callout tip"><b>טעות נפוצה</b>מספר במירכאות (<code>"890"</code>) הוא טקסט, לא מספר — ולא תוכלו לחשב איתו. שימו לב מתי יש מירכאות ומתי אין.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו על ששת הסוגים. ההבחנה החשובה: אובייקט (קבוצה) מול מערך (רשימה).</li>
+    <li>הדגישו את טעות המירכאות — היא גורמת להרבה באגים ב-Make ("למה אי אפשר לחבר את המספרים?").</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="JSON: נתיב לערך מקונן">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>אובייקטים בתוך אובייקטים — והנתיב אליהם</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="copybox"><div class="material">{
+  "order_id": 48213,
+  "customer": {
+    "name": "מיכל לוי",
+    "city": "חולון"
+  },
+  "items": [
+    { "name": "מנורה", "price": 890 },
+    { "name": "כרית",  "price": 79 }
+  ]
+}</div></div>
+      <div>
+        <div class="card"><b>הנתיב = איך מגיעים לערך</b>
+          <ul style="margin:8px 0 0;font-size:16px">
+            <li><code>customer.name</code> → "מיכל לוי"</li>
+            <li><code>customer.city</code> → "חולון"</li>
+            <li><code>items[0].price</code> → 890</li>
+            <li><code>items[1].name</code> → "כרית"</li>
+          </ul>
+        </div>
+        <div class="callout warn" style="font-size:15px;margin-top:10px"><b>אינדקס מתחיל מ-0</b>הפריט הראשון במערך הוא <code>[0]</code>, השני <code>[1]</code>. זו הטעות הכי נפוצה במיפוי שדות ב-Make.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה המושג שהכי חוזר בעבודה עם Make: הנתיב. תעצרו עליו.</li>
+    <li>בקשו מהכיתה להגיד את הנתיב ל"השם של המוצר השני" לפני שאתם מראים (items[1].name).</li>
   </ul></aside>
 </section>
 
@@ -1273,6 +1379,74 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
+<section class="slide" data-min="3" data-block="4" data-title="GET: קריאת נתונים">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>GET — קוראים נתונים, ומבינים את התשובה</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה — מזג אוויר עכשיו</div>
+        <div class="raw" style="min-height:0"><span class="m">GET</span> api.open-meteo.com/v1/forecast
+    ?latitude=32.08&longitude=34.78
+    &current=temperature_2m</div>
+        <div class="muted" style="font-size:13px;margin:10px 0 4px">התשובה · <b style="color:var(--good)">200 OK</b></div>
+        <div class="raw" style="min-height:0">{
+  "current": {
+    "time": "2026-10-28T09:00",
+    "temperature_2m": 24.3
+  }
+}</div>
+      </div>
+      <div class="card"><b>איך קוראים את זה</b>
+        <ul style="margin:8px 0 0;font-size:16px">
+          <li>הטמפרטורה בנתיב <code>current.temperature_2m</code></li>
+          <li>הערך: <b>24.3</b> (מספר, בלי מירכאות)</li>
+          <li>ב-Make ממפים בדיוק את הנתיב הזה לשדה</li>
+        </ul>
+        <div class="callout claude" style="margin-top:10px"><b>זה כל הסיפור</b>כל אוטומציה שמושכת נתונים מתחילה מ-GET כזה, וקוראת ערך לפי נתיב. מה שלמדנו ב-JSON — חוזר כאן.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>חברו ישירות לשקף "GET קריאת נתונים" ולסייר JSON: אותו רעיון בדיוק, עכשיו על תשובה אמיתית.</li>
+    <li>אם יש אינטרנט — שלחו חי ב-Hoppscotch והראו את temperature_2m האמיתי.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="POST: יצירת רשומה">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>POST — שולחים נתונים ויוצרים רשומה</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה — יוצרים ליד חדש</div>
+        <div class="raw" style="min-height:0"><span class="m">POST</span> /leads
+<span class="h">Content-Type:</span> application/json
+
+{
+  "name": "דני אבני",
+  "phone": "052-9876543",
+  "product": "ספה"
+}</div>
+      </div>
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">התשובה · <b style="color:var(--good)">201 Created</b></div>
+        <div class="raw" style="min-height:0">{
+  "id": 1043,
+  "status": "new",
+  "name": "דני אבני",
+  "phone": "052-9876543"
+}</div>
+        <div class="callout tip" style="font-size:15px;margin-top:10px"><b>201, לא 200</b>השרת מחזיר את הרשומה שנוצרה, כולל ה-<code>id</code> החדש — שאפשר להשתמש בו בשלב הבא של האוטומציה.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל מ-GET: ב-POST יש גוף (Body) ב-JSON, ובדרך כלל התשובה היא 201 ולא 200.</li>
+    <li>הדגישו את ה-id שחוזר: זה דפוס נפוץ — יוצרים רשומה, מקבלים מזהה, ומשתמשים בו הלאה.</li>
+  </ul></aside>
+</section>
+
 <section class="slide w" data-min="5" data-block="4" data-title="דוגמה ממייק: מגרש API">
   <div class="s-kicker">🧩 דוגמה ממייק · אינטראקטיבי</div>
   <h2>מגרש משחקים: בקשת API כמו ש-Make שולח</h2>
@@ -1333,6 +1507,105 @@ body.ov-on #ov{display:block}
 </section>
 
 <!-- ============================== BLOCK 5: AUTH + WEBHOOK + CLAUDE API ============================== -->
+<section class="slide" data-min="3" data-block="4" data-title="קודי סטטוס באוטומציה">
+  <div class="s-kicker">חלק 2 · קודי סטטוס</div>
+  <h2>מה האוטומציה עושה לכל קוד</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table style="font-size:15.5px">
+      <tr><th>קוד</th><th>מה קרה</th><th>מה Make עושה</th></tr>
+      <tr><td><b style="color:var(--good)">200 / 201</b></td><td>הצליח</td><td>ממשיך לשלב הבא עם הנתונים</td></tr>
+      <tr><td><b style="color:var(--p4)">404</b></td><td>לא נמצא</td><td>מסלול חלופי (למשל "צור רשומה חדשה")</td></tr>
+      <tr><td><b style="color:var(--p4)">401 / 403</b></td><td>בעיית הרשאה</td><td>עוצר ומתריע — המפתח שגוי או חסר</td></tr>
+      <tr><td><b style="color:var(--p4)">429</b></td><td>יותר מדי בקשות</td><td>ממתין ומנסה שוב <span class="en">(retry)</span></td></tr>
+      <tr><td><b style="color:var(--bad)">500</b></td><td>תקלה בשרת</td><td>ניסיון חוזר מאוחר יותר</td></tr>
+    </table></div>
+    <div class="callout warn"><b>תמיד מטפלים בשגיאות</b>אוטומציה טובה לא מניחה שהכול יעבוד. לכל קוד שאינו 2xx צריך להחליט מראש מה קורה — אחרת התהליך נתקע בשקט, ואף אחד לא יודע.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה ההבדל בין אוטומציה "שעובדת בהדגמה" לאוטומציה אמינה: הטיפול בקודים שאינם 200.</li>
+    <li>ב-Make יש Error Handlers בדיוק לזה — נלמד אותם בהמשך הקורס.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="כלים אמיתיים ל-API">
+  <div class="s-kicker">חלק 2 · כלים</div>
+  <h2>מהסימולציה לכלי אמיתי: Postman וחבריו</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><h4>🚀 Postman</h4><p class="muted" style="margin:0;font-size:16px">הכלי המוביל לשליחת בקשות API. בונים בקשה — שיטה, כתובת, כותרות וגוף — שולחים, ורואים תשובה וקוד סטטוס. יש גם <b>גרסת דפדפן ללא התקנה</b>, ושומרים בקשות ב-Collections.</p><div class="muted en" style="font-size:14px;margin-top:6px">postman.com</div></div>
+      <div class="card" style="border-color:var(--accent)"><h4>🧪 מומלץ לקורס: Hoppscotch</h4><p class="muted" style="margin:0;font-size:15px">חינמי, בדפדפן, בלי התקנה ובלי הרשמה — נפתח ומתחילים לשלוח בקשות. <span class="en">hoppscotch.io</span>. חלופה נוספת: <b>ReqBin</b> <span class="en">(reqbin.com)</span>.</p></div>
+    </div>
+    <div class="grid2 mt">
+      <div class="card" style="border-color:var(--p2)"><h4>🧪 API-ים חינמיים לתרגול</h4><ul style="margin:0;font-size:15px"><li><b>JSONPlaceholder</b> — GET/POST מזויף לתרגול <span class="en">(jsonplaceholder.typicode.com)</span></li><li><b>httpbin</b> — מחזיר לכם את הבקשה ששלחתם <span class="en">(httpbin.org)</span></li></ul></div>
+      <div class="card" style="border-color:var(--p4)"><h4>🐱 לזכור קודי סטטוס</h4><p class="muted" style="margin:0;font-size:16px"><b>http.cat</b> — כל קוד סטטוס עם תמונת חתול. דרך משעשעת וזכירה ללמוד 200, 404, 500. <span class="en">(http.cat/404)</span></p></div>
+    </div>
+    <div class="callout claude"><b>הקשר ל-Make</b>כל מה ש-Postman עושה ידנית — בניית הבקשה ושליחתה — Make עושה בשבילכם במודול HTTP. מי שמבין Postman, מבין בדיוק מה Make עושה מתחת למכסה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המלצה מעשית: Postman לגרסת הדפדפן, או Hoppscotch למי שלא רוצה להירשם. לשיעור אין הבדל.</li>
+    <li>httpbin.org/get הוא כלי הוראה מצוין: הוא מחזיר בדיוק את מה ששלחתם — כותרות, שיטה והכול. מושלם כדי "לראות" בקשה.</li>
+    <li>http.cat הוא גימיק, אבל עובד: סטודנטים זוכרים 404 בזכות החתול.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="Postman צעד אחרי צעד">
+  <div class="s-kicker">חלק 2 · Postman</div>
+  <h2>Postman צעד אחרי צעד</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <ol class="steps" style="font-size:17px">
+          <li>בוחרים <b>שיטה</b> (GET) מהרשימה</li>
+          <li>מדביקים את ה<b>כתובת</b> (URL)</li>
+          <li>ב-<b>Headers</b>: מוסיפים מפתח API, אם צריך</li>
+          <li>ל-POST: <b>Body ‹ raw ‹ JSON</b></li>
+          <li>לוחצים <b>Send</b></li>
+          <li>קוראים את <b>קוד הסטטוס</b> ואת גוף התשובה</li>
+        </ol>
+        <div class="callout tip" style="font-size:15px"><b>טיפ</b>שומרים בקשות חוזרות ב-Collection, ומשתנים (כמו המפתח) ב-Environment — כדי לא להדביק אותם בכל פעם.</div>
+      </div>
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה</div>
+        <div class="raw" style="min-height:0"><span class="m">GET</span> https://jsonplaceholder.typicode.com/users/1
+<span class="h">Accept:</span> application/json</div>
+        <div class="muted" style="font-size:13px;margin:10px 0 4px">התשובה · <b style="color:var(--good)">200 OK</b></div>
+        <div class="raw" style="min-height:0">{
+  "id": 1,
+  "name": "Leanne Graham",
+  "email": "leanne@example.com",
+  "company": { "name": "Romaguera" }
+}</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הדגימו חי אם אפשר: GET ל-jsonplaceholder.typicode.com/users/1, הצביעו על קוד 200 ועל ה-JSON.</li>
+    <li>אחר כך POST: שנו שיטה, הוסיפו Body (raw/JSON), ותקבלו 201. חברו לקודי הסטטוס מהשקף הקודם.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="API-ים חינמיים לשחק איתם">
+  <div class="s-kicker">חלק 2 · לשחק ולהתנסות</div>
+  <h2>API-ים חינמיים ומעניינים — בלי מפתח, בלי הרשמה</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 8px">מדביקים את הכתובת ב-<span class="en">Hoppscotch</span>, לוחצים Send, ומקבלים נתונים אמיתיים. כולם <code>GET</code>, בלי מפתח.</p>
+    <div class="grid3">
+      <div class="card"><b>🌦️ מזג אוויר עכשיו</b><div class="muted" style="font-size:13px">בכל נקודה בעולם · Open-Meteo</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m</div></div>
+      <div class="card"><b>💱 שער מטבע</b><div class="muted" style="font-size:13px">דולר לשקל · Frankfurter</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.frankfurter.app/latest?from=USD&to=ILS</div></div>
+      <div class="card"><b>🪙 מחיר קריפטו</b><div class="muted" style="font-size:13px">ביטקוין בשקלים · CoinGecko</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ils</div></div>
+      <div class="card"><b>🔮 ניחוש גיל משם</b><div class="muted" style="font-size:13px">Agify</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.agify.io/?name=david</div></div>
+      <div class="card"><b>🐶 תמונת כלב אקראית</b><div class="muted" style="font-size:13px">Dog CEO</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">dog.ceo/api/breeds/image/random</div></div>
+      <div class="card"><b>🎮 נתוני פוקימון</b><div class="muted" style="font-size:13px">PokéAPI</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">pokeapi.co/api/v2/pokemon/pikachu</div></div>
+    </div>
+    <div class="callout claude"><b>למה זה חשוב לאוטומציה</b>מזג אוויר, שערי מטבע ומחירים הם בדיוק נתונים שאוטומציה אמיתית מושכת: "אם גשם מחר — שלח תזכורת ללקוח", "המר מחיר לשקלים בחשבונית". כל אלה מתחילים מבקשת <code>GET</code> פשוטה כזאת.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>פתחו את Hoppscotch והדביקו חי אחת-שתיים (מזג אוויר תמיד מרשים). תנו לכיתה להציע עיר/מטבע.</li>
+    <li>כל הכתובות נבדקו ועובדות ללא מפתח. httpbin.org/get ו-jsonplaceholder מצטרפים לרשימה מהשקפים הקודמים.</li>
+    <li>חברו לעסק: אותו GET פשוט הוא הבסיס לטריגר "אם התנאי X — עשה Y" ב-Make.</li>
+  </ul></aside>
+</section>
+
 <section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · אבטחה, Webhooks ו-Claude API">
   <div class="s-kicker">בלוק 5 · יסודות טכניים</div>
   <h1>אבטחה, Webhooks ו-Claude API</h1>
@@ -1475,6 +1748,14 @@ body.ov-on #ov{display:block}
 </section>
 
 <!-- ============================== BLOCK 6: PRACTICE ============================== -->
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה שנייה">
+  <div class="s-kicker">הפסקה 2 מתוך 2</div>
+  <h1>הפסקה · 10 דקות</h1>
+  <div class="timer" data-sec="600"></div>
+  <p class="sub">סיימנו את החלק הטכני. כשחוזרים — תרגול מעשי: אפיון, חילוץ JSON ובקשות API אמיתיות.</p>
+  <aside class="notes"><ul><li>הפעילו את הטיימר. לפני ההפסקה, ודאו שכולם פתחו את Hoppscotch ואת Claude.</li><li>אחרי ההפסקה הכול מעשי — הם עובדים, אתם מלווים.</li></ul></aside>
+</section>
+
 <section class="slide divider" data-min="1" data-block="6" data-title="בלוק 6 · תרגול עם Claude">
   <div class="s-kicker">בלוק 6</div>
   <h1>תרגול: אפיון ואוטומציה עם Claude</h1>
@@ -1669,6 +1950,30 @@ customer_name, order_id, topic (אחד מ: delivery / defect / refund / other), 
   </ul></aside>
 </section>
 
+<section class="slide" data-min="12" data-block="6" data-title="תרגיל 4: בקשות אמיתיות ב-Hoppscotch">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">4</span><h2 class="grow">תרגיל: בקשות API אמיתיות ב-Hoppscotch</h2><span class="pill">⏱ כ-12 דקות</span><span class="pill">כלי אמיתי</span><div class="timer" data-sec="720"></div></div>
+    <p class="muted" style="margin:0 0 6px">פתחו <span class="en">hoppscotch.io</span> (או Postman). הדביקו כל כתובת, לחצו Send, וראו את התשובה ואת קוד הסטטוס.</p>
+    <div class="copybox"><div class="material">1) מזג האוויר עכשיו בעיר שלכם (שנו lat/long):
+   GET  https://api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m   → 200
+
+2) שער הדולר לשקל:
+   GET  https://api.frankfurter.app/latest?from=USD&to=ILS   → 200
+
+3) יצירת רשומה (שימו לב לקוד 201):
+   POST https://jsonplaceholder.typicode.com/posts   Body (raw/JSON): {"title":"בדיקה","userId":1}
+
+בונוס) איך השרת רואה את הבקשה שלכם:
+   GET  https://httpbin.org/get</div></div>
+    <div class="deliver">צילום מסך של תשובת מזג האוויר (קוד 200) ושל ה-POST (קוד 201), וזיהוי השדה temperature_2m בתשובה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה התרגיל שהופך API ממופשט לממשי: הם מושכים מזג אוויר אמיתי של העיר שלהם.</li>
+    <li>הצביעו על ההבדל 200 מול 201, ועל מבנה ה-JSON בתשובה (current.temperature_2m) — בדיוק מה שנמפה ב-Make.</li>
+    <li>מי שמסיים: שישנה את העיר, המטבע, או ינסה API מהשקף "חינמיים לשחק איתם".</li>
+  </ul></aside>
+</section>
+
 <section class="slide" data-min="2" data-block="6" data-title="מה מגישים">
   <div class="s-kicker">לפני שמסיימים</div>
   <h2>בדיקה עצמית לפני שמגישים</h2>
@@ -1676,6 +1981,7 @@ customer_name, order_id, topic (אחד מ: delivery / defect / refund / other), 
     <ul class="check" style="font-size:20px">
       <li>מסמך אפיון של עמוד אחד, עם As‑Is, To‑Be ו-ROI</li>
       <li>תרשים זרימה (Mermaid) של התהליך</li>
+      <li>צילומי מסך מ-Hoppscotch: בקשת GET (200) ו-POST (201)</li>
       <li>ה-JSON ש-Claude החזיר לשלוש פניות</li>
       <li>תוכנית אוטומציה מ-Claude, עם הערה אחת שלכם</li>
       <li>לפחות נקודת אישור אנושית אחת בתוכנית</li>
