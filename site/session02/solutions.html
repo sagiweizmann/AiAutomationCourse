@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 2 · פתרונות</title>
+<meta name="description" content="פתרונות מלאים ותשובות לדוגמה לתרגילים של מפגש 2: אפיון תהליך, תיקון JSON, בקשות API ב-Hoppscotch, חילוץ JSON עם Claude ובניית אוטומציה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s02sol">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 2</b><span>›</span><b>פתרונות</b></div>
+  <h1>פתרונות: אפיון תהליכים ויסודות טכניים</h1>
+  <p class="sub">תשובות מלאות ותשובות לדוגמה לכל ששת התרגילים. חלק מהתרגילים (אפיון, תוכנית אוטומציה) פתוחים — שם זו דוגמה טובה, לא "התשובה היחידה". ערכים מ-API חיים (מזג אוויר, מטבעות) משתנים כל הזמן, אז מה שחשוב הוא הנתיב, לא המספר המדויק.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html" class="on">✅ פתרונות</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="callout warn"><b>רגע לפני שמציצים</b>הפתרונות הכי שווים אחרי שניסיתם בעצמכם. קודם נסו, ואז השוו. בתרגילים הפתוחים (1 ו-6) אין תשובה אחת נכונה — המבנה והשיקול חשובים מהניסוח.</div>
+</section>
+
+<!-- ===== block 1 ===== -->
+<div class="blockhead">חלק 1 · אפיון התהליך</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex1">
+  <div class="ex-head"><span class="ex-num">1</span><h3>אפיון תהליך ההחזרות — תשובה לדוגמה</h3></div>
+  <h4>As-Is — התהליך כמו שהוא קורה היום</h4>
+  <ol class="steps">
+    <li>לקוח פונה בוואטסאפ או במייל: "קיבלתי מוצר ואני רוצה להחזיר".</li>
+    <li>הנציג מחפש את ההזמנה בגיליון ההזמנות לפי שם או מספר.</li>
+    <li>הנציג בודק <b>ידנית</b> במסמך המדיניות אם ההחזרה מותרת (עד 14 יום, לא הורכב, לא מוצר מותאם אישית).</li>
+    <li>אם זכאי — שולח הוראות החזרה ומעדכן את הסטטוס בגיליון.</li>
+    <li>כשהמוצר חוזר למחסן — הנציג מאשר זיכוי ידנית ומודיע ללקוח.</li>
+  </ol>
+  <h4>To-Be — תרשים הזרימה (Mermaid)</h4>
+  <p class="note">זה הקוד ש-Claude מחזיר. הדביקו אותו ב-<span class="en">mermaid.live</span> כדי לראות תרשים.</p>
+  <div class="copybox"><pre>flowchart TD
+  A[פניית החזרה נכנסת] --> B{זכאי לפי המדיניות?}
+  B -- לא --> C[הודעה מנומסת ללקוח + סיבה]
+  B -- כן --> D[שליחת הוראות החזרה]
+  D --> E[עדכון סטטוס בגיליון]
+  E --> F{המוצר חזר למחסן?}
+  F -- כן --> G[אישור זיכוי - נקודת אישור אנושית]
+  G --> H[הודעת סיום ללקוח]</pre></div>
+  <div class="sol"><b>✅ צוואר הבקבוק</b>הבדיקה הידנית של הזכאות (שלב 3) — חוזרת על עצמה, תלויה בנציג, ומועדת לטעות. זה גם השלב עם הערך הגבוה ביותר לאוטומציה.</div>
+  <h4>ניקוד — דוגמה</h4>
+  <div class="tbl"><table>
+    <tr><th>שלב</th><th>ערך</th><th>קלות</th><th>עדיפות</th></tr>
+    <tr><td>בדיקת זכאות לפי המדיניות</td><td>5</td><td>4</td><td><b>גבוהה ⭐</b></td></tr>
+    <tr><td>חיפוש ההזמנה בגיליון</td><td>3</td><td>5</td><td>בינונית</td></tr>
+    <tr><td>אישור זיכוי</td><td>4</td><td>2</td><td>נמוכה (משאירים לאדם)</td></tr>
+  </table></div>
+  <h4>ROI — דוגמה</h4>
+  <div class="sol"><b>✅ חישוב</b>נניח 40 החזרות בחודש, 8 דקות לבדיקת זכאות ידנית, עלות שעה 60 ₪:<br>40 × 8 × (60 ÷ 60) = <b>320 ₪ לחודש</b> ≈ 3,840 ₪ בשנה — רק על שלב אחד.</div>
+</div>
+
+</section>
+
+<!-- ===== block 2 ===== -->
+<div class="blockhead">חלק 2 · JSON, API וכלים אמיתיים</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex2">
+  <div class="ex-head"><span class="ex-num">2</span><h3>מצאו את הטעות ב-JSON</h3></div>
+  <div class="fix">
+    <div>
+      <p style="margin:0 0 4px"><b>א' — פסיק חסר</b> בין שתי השורות. הוסיפו פסיק אחרי הערך הראשון:</p>
+      <div class="copybox"><pre>{
+  "name": "רונית",
+  "order_id": 50912
+}</pre></div>
+    </div>
+    <div>
+      <p style="margin:0 0 4px"><b>ב' — גרש במקום מירכאות.</b> מפתח חייב מירכאות כפולות <code>"</code>:</p>
+      <div class="copybox"><pre>{
+  "name": "רונית",
+  "order_id": 50912
+}</pre></div>
+    </div>
+    <div>
+      <p style="margin:0 0 4px"><b>ג' — פסיק מיותר בסוף.</b> אחרי הפריט האחרון אין פסיק:</p>
+      <div class="copybox"><pre>{
+  "name": "רונית",
+  "order_id": 50912
+}</pre></div>
+    </div>
+    <div>
+      <p style="margin:0 0 4px"><b>ד' — מפתח בלי מירכאות.</b> גם המפתח <code>name</code> צריך מירכאות:</p>
+      <div class="copybox"><pre>{
+  "name": "רונית",
+  "order_id": 50912
+}</pre></div>
+    </div>
+  </div>
+  <div class="sol"><b>✅ הכלל</b>מפתחות וערכי טקסט תמיד במירכאות כפולות · בין פריטים פסיק · אחרי הפריט האחרון בלי פסיק · רק מספרים, true/false ו-null בלי מירכאות.</div>
+</div>
+
+<div class="card ex" id="ex3">
+  <div class="ex-head"><span class="ex-num">3</span><h3>בקשות API אמיתיות ב-Hoppscotch</h3></div>
+  <div class="tbl"><table>
+    <tr><th>הבקשה</th><th>קוד</th><th>היכן הערך</th></tr>
+    <tr><td>GET open-meteo (מזג אוויר)</td><td><code>200</code></td><td><code>current.temperature_2m</code></td></tr>
+    <tr><td>GET frankfurter (שער מטבע)</td><td><code>200</code></td><td><code>rates.ILS</code></td></tr>
+    <tr><td>POST jsonplaceholder (יצירת רשומה)</td><td><code>201</code></td><td>התשובה מחזירה את האובייקט + שדה <code>id</code> חדש</td></tr>
+    <tr><td>GET httpbin</td><td><code>200</code></td><td><code>headers</code> / <code>args</code> — איך השרת רואה אתכם</td></tr>
+  </table></div>
+  <p class="note">דוגמה לתשובת מזג האוויר (הערך משתנה בזמן אמת):</p>
+  <div class="copybox"><pre>{
+  "current": {
+    "time": "2026-01-01T12:00",
+    "temperature_2m": 22.4
+  }
+}
+// הטמפרטורה:  current.temperature_2m  →  22.4</pre></div>
+  <div class="sol"><b>✅ ההבדל שחשוב</b><code>200</code> = בקשת GET הצליחה (קראנו נתונים). <code>201</code> = POST יצר רשומה חדשה. זה בדיוק מה ש-Make בודק אחרי כל קריאה.</div>
+</div>
+
+<div class="card ex" id="ex4">
+  <div class="ex-head"><span class="ex-num">4</span><h3>סבב API-ים חינמיים</h3></div>
+  <div class="tbl"><table>
+    <tr><th>ה-API</th><th>הנתיב לערך</th><th>מה מקבלים</th></tr>
+    <tr><td>open-meteo (ירושלים)</td><td><code>current.temperature_2m</code></td><td>הטמפרטורה עכשיו, במעלות</td></tr>
+    <tr><td>frankfurter (USD→ILS)</td><td><code>rates.ILS</code></td><td>כמה שקלים שווה דולר</td></tr>
+    <tr><td>coingecko (bitcoin)</td><td><code>bitcoin.ils</code></td><td>מחיר ביטקוין בשקלים</td></tr>
+    <tr><td>agify (name=noa)</td><td><code>age</code></td><td>הגיל שהמודל ניחש לשם</td></tr>
+  </table></div>
+  <div class="sol"><b>✅ הרעיון</b>המספרים משתנים בכל קריאה — מה שקבוע הוא <b>הנתיב</b>. בדיוק את הנתיב הזה נגדיר ב-Make כדי לשלוף את הערך מהתשובה.</div>
+</div>
+
+</section>
+
+<!-- ===== block 3 ===== -->
+<div class="blockhead">חלק 3 · תרגול עם Claude</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex5">
+  <div class="ex-head"><span class="ex-num">5</span><h3>Claude מחלץ נתונים ל-JSON</h3></div>
+  <p>לפנייה של רונית שגב, Claude אמור להחזיר JSON נקי (בלי טקסט מסביב):</p>
+  <div class="copybox"><pre>{
+  "customer_name": "רונית שגב",
+  "order_id": "50912",
+  "topic": "delivery",
+  "urgency": "high"
+}</pre></div>
+  <p class="note">פנייה בלי מספר הזמנה — <code>order_id</code> חוזר <code>null</code>, לא ערך שהומצא:</p>
+  <div class="copybox"><pre>{
+  "customer_name": "נועה",
+  "order_id": null,
+  "topic": "other",
+  "urgency": "low"
+}</pre></div>
+  <div class="sol"><b>✅ מה בודקים</b>JSON בלבד (בלי "הנה התשובה") · אותם שדות בכל פנייה · <code>topic</code> ו-<code>urgency</code> רק מהרשימה הסגורה · שדה חסר = <code>null</code>.</div>
+</div>
+
+<div class="card ex" id="ex6">
+  <div class="ex-head"><span class="ex-num">6</span><h3>Claude בונה את תוכנית האוטומציה — תשובה לדוגמה</h3></div>
+  <p>תוכנית סבירה לתהליך ההחזרות. הטבלה היא מה ש-Claude מחזיר; ההערה בסוף היא התוספת האנושית.</p>
+  <div class="tbl"><table>
+    <tr><th>#</th><th>מודול</th><th>תפקיד</th></tr>
+    <tr><td>1</td><td>Webhook (טריגר)</td><td>פנייה חדשה (טופס / מייל) מפעילה את התרחיש</td></tr>
+    <tr><td>2</td><td>Claude</td><td>מקבל את טקסט הפנייה, מחזיר JSON: customer_name, order_id, topic, urgency</td></tr>
+    <tr><td>3</td><td>Router</td><td>מפצל לפי <code>topic</code>: delivery / defect / refund / other</td></tr>
+    <tr><td>4</td><td>Google Sheets</td><td>מחפש את ההזמנה ובודק זכאות לפי הנתונים</td></tr>
+    <tr><td>5</td><td>אישור אנושי</td><td>בנתיב <b>refund</b>: עצירה לאישור נציג לפני זיכוי</td></tr>
+    <tr><td>6</td><td>Email / WhatsApp</td><td>שליחת תשובה ללקוח ועדכון הסטטוס בגיליון</td></tr>
+  </table></div>
+  <div class="sol"><b>✅ נקודות שחייבות להופיע</b>טריגר ברור (Webhook) · Claude מחזיר JSON · נקודת אישור אנושית לפני פעולה כספית · טיפול בקודי שגיאה (401 מפתח, 404 רשומה, 429 יותר מדי בקשות → retry).</div>
+  <div class="callout tip"><b>הערה אישית לדוגמה</b>"הייתי מוסיף שלב שמודיע ללקוח שהפנייה התקבלה כבר בשנייה הראשונה, עוד לפני הבדיקה — כדי שלא ירגיש שאף אחד לא ענה."</div>
+</div>
+
+</section>
+
+<section class="blk">
+  <div class="next">
+    <a href="index.html"><div class="card"><span style="font-size:26px">🛠️</span><div><small>חזרה</small><div style="font-family:'Secular One';font-size:20px">דף התרגול</div></div></div></a>
+    <a href="summary.html"><div class="card"><span style="font-size:26px">📌</span><div><small>לחזרה מהירה</small><div style="font-family:'Secular One';font-size:20px">סיכום המפגש</div></div></div></a>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 2 · פתרונות</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
