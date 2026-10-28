@@ -116,19 +116,21 @@
   <div class="ex-head"><span class="ex-num">3</span><h3>בקשות API אמיתיות ב-Hoppscotch</h3></div>
   <div class="tbl"><table>
     <tr><th>הבקשה</th><th>קוד</th><th>היכן הערך</th></tr>
-    <tr><td>GET open-meteo (מזג אוויר)</td><td><code>200</code></td><td><code>current.temperature_2m</code></td></tr>
+    <tr><td>GET open-meteo (תחזית שבועית באשדוד)</td><td><code>200</code></td><td>מערכי <code>daily</code>: time, temperature_2m_max/min, precipitation_probability_max</td></tr>
     <tr><td>GET frankfurter (שער מטבע)</td><td><code>200</code></td><td><code>rates.ILS</code></td></tr>
     <tr><td>POST jsonplaceholder (יצירת רשומה)</td><td><code>201</code></td><td>התשובה מחזירה את האובייקט + שדה <code>id</code> חדש</td></tr>
     <tr><td>GET httpbin</td><td><code>200</code></td><td><code>headers</code> / <code>args</code> — איך השרת רואה אתכם</td></tr>
   </table></div>
-  <p class="note">דוגמה לתשובת מזג האוויר (הערך משתנה בזמן אמת):</p>
+  <p class="note">תשובת התחזית מחזירה <b>מערכים</b> מקבילים — אותו מיקום בכל מערך הוא אותו יום (הערכים משתנים בזמן אמת):</p>
   <div class="copybox"><pre>{
-  "current": {
-    "time": "2026-01-01T12:00",
-    "temperature_2m": 22.4
+  "daily": {
+    "time":                       ["2026-01-01", "2026-01-02", ...],
+    "temperature_2m_max":         [19.8, 21.1, ...],
+    "temperature_2m_min":         [11.2, 10.7, ...],
+    "precipitation_probability_max": [10, 40, ...]
   }
 }
-// הטמפרטורה:  current.temperature_2m  →  22.4</pre></div>
+// היום הראשון:  daily.temperature_2m_max[0]  →  19.8°  |  סיכוי גשם  →  daily.precipitation_probability_max[0]  →  10%</pre></div>
   <div class="sol"><b>✅ ההבדל שחשוב</b><code>200</code> = בקשת GET הצליחה (קראנו נתונים). <code>201</code> = POST יצר רשומה חדשה. זה בדיוק מה ש-Make בודק אחרי כל קריאה.</div>
 </div>
 
@@ -136,7 +138,7 @@
   <div class="ex-head"><span class="ex-num">4</span><h3>סבב API-ים חינמיים</h3></div>
   <div class="tbl"><table>
     <tr><th>ה-API</th><th>הנתיב לערך</th><th>מה מקבלים</th></tr>
-    <tr><td>open-meteo (ירושלים)</td><td><code>current.temperature_2m</code></td><td>הטמפרטורה עכשיו, במעלות</td></tr>
+    <tr><td>open-meteo (תחזית שבועית באשדוד)</td><td><code>daily.temperature_2m_max[0]</code></td><td>טמפ' המקסימום של היום הראשון בתחזית</td></tr>
     <tr><td>frankfurter (USD→ILS)</td><td><code>rates.ILS</code></td><td>כמה שקלים שווה דולר</td></tr>
     <tr><td>coingecko (bitcoin)</td><td><code>bitcoin.ils</code></td><td>מחיר ביטקוין בשקלים</td></tr>
     <tr><td>agify (name=noa)</td><td><code>age</code></td><td>הגיל שהמודל ניחש לשם</td></tr>
