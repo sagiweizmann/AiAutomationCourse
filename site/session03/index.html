@@ -195,6 +195,7 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
     <li>בוחרים את הקובץ, הגיליון, ו-<span class="en">Row with headers = Yes</span>. שומרים</li>
     <li>מוסיפים מודול שני — <span class="en">Gmail</span> → <span class="en">Send an email</span> (או Email מובנה) — ובתוכן ממפים את <span class="en">name</span>, <span class="en">product</span> ו-<span class="en">phone</span> מהשורה:</li>
   </ol>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-watch-rows.jpg" alt="מודול Google Sheets Watch New Rows ב-Make" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מודול הטריגר <span class="en" dir="ltr">Watch New Rows</span>: חיבור Google, בחירת הקובץ והגיליון, ו-<span class="en" dir="ltr">Table contains headers = Yes</span>.</figcaption></figure>
   <div class="copybox"><pre class="rtl">ליד חדש נכנס! 🎉
 שם: {{name}}
 מוצר: {{product}}
@@ -222,6 +223,7 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
   <div class="material" style="margin-top:8px"><b>תקלה ב'</b>מודול ה-HTTP צבוע באדום אחרי <span class="en">Run once</span>, וההרצה נעצרת עליו. בהיסטוריה כתוב <span class="en">URL is required</span>.</div>
   <div class="material" style="margin-top:8px"><b>תקלה ג'</b>תרחיש "שורה חדשה → התראה" שולח התראה על <b>אותו ליד</b> שוב ושוב בכל הרצה.</div>
   <div class="callout tip"><b>איפה מחפשים</b>כל הרצה נשמרת ב-<span class="en">History</span> של התרחיש. לוחצים על הרצה, ואז על כל מודול — רואים בדיוק מה נכנס אליו ומה יצא ממנו. שם מתגלות כמעט כל התקלות.</div>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-history.jpg" alt="טאב ה-History ב-Make עם הרצות ותוצאותיהן" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">טאב ה-<span class="en">History</span>: כל הרצה עם סטטוס, משך וזמן. לוחצים על הרצה כדי לראות קלט/פלט של כל מודול.</figcaption></figure>
   <details class="hint"><summary>רמז לכל תקלה</summary><p style="margin:6px 0 0">א' — השדה הוקלד כטקסט ולא נבחר כ"בועה", או ש-<span class="en">Parse response</span> היה <span class="en">No</span>. ב' — ה-URL ריק או לא נשמר. ג' — הטריגר אולי <span class="en">Search rows</span> במקום <span class="en">Watch rows</span>, או שהמיפוי של "השורה האחרונה שעובדה" אופס.</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
