@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 2 · מצגת · אפיון ויסודות טכניים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== tokens + components copied from session01_lecture.html ===== */
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+
+/* next-token */
+.nt-text{font-size:20px;line-height:1.9;padding:14px 18px;border-radius:14px;background:var(--surface-2);min-height:64px}
+.nt-text .new{background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:6px;padding:0 4px;animation:pop .5s}
+@keyframes pop{from{background:var(--accent);color:#fff}}
+.nt-cands{display:grid;gap:8px;margin-top:14px}
+.cand{display:grid;grid-template-columns:110px minmax(0,1fr) 54px;gap:10px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:10px;border:0;background:none;font:inherit;color:inherit;text-align:right}
+.cand:hover{background:var(--surface-2)}
+.cand .w{font-weight:700}
+.cand .barw{height:22px;border-radius:7px;background:var(--surface-2);overflow:hidden}
+.cand .bar{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--p1),var(--p5));transition:width .45s}
+.cand.weird .bar{background:linear-gradient(90deg,var(--p3),var(--p4))}
+.cand .pc{font-weight:800;font-size:14px;text-align:left;direction:ltr}
+.temp{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:14px;border:1px solid var(--line)}
+.temp input{width:100%;accent-color:var(--accent)}
+.temp .tv{font-weight:800;direction:ltr;min-width:36px;text-align:center}
+.temp-note{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* tokens */
+.tok-in{width:100%;min-height:84px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:inherit;padding:12px 14px;resize:vertical}
+.toks{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;min-height:40px}
+.tk{padding:2px 6px;border-radius:6px;font-size:15px;white-space:pre}
+.tok-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.ts{padding:12px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ts b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ts span{font-size:13px;color:var(--ink-2)}
+.ctx{margin-top:14px}
+.ctx-bar{height:18px;border-radius:99px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.ctx-bar div{height:100%;transition:width .5s}
+.ctx-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:6px}
+.ctx-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+/* capabilities */
+.cap{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.cap .e{font-size:24px}
+.cap b{display:block;margin:4px 0}
+.cap span{font-size:14.5px;color:var(--ink-2)}
+.cap.lim{border-color:color-mix(in srgb,var(--p3) 40%,var(--line))}
+/* hallucination */
+.hal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}
+.bubble{border-radius:16px;padding:14px 16px;font-size:15.5px}
+.bubble.user{background:var(--surface-2)}
+.bubble.bot{background:color-mix(in srgb,var(--claude) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 35%,transparent)}
+.bubble small{display:block;font-weight:800;font-size:12.5px;color:var(--ink-2);margin-bottom:4px}
+.verdict{margin-top:10px;font-weight:700;font-size:14.5px}
+.verdict.bad{color:var(--bad)}.verdict.good{color:var(--good)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* prompt builder */
+.pb{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:18px}
+.parts{display:grid;gap:8px}
+.part{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;border:2px solid var(--line);cursor:pointer;background:var(--surface);font:inherit;color:inherit;text-align:right;transition:.2s}
+.part .dot{width:14px;height:14px;border-radius:5px;background:var(--c);flex:none;opacity:.35;transition:.2s}
+.part.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.part.on .dot{opacity:1}
+.part b{font-size:15px}
+.part small{display:block;color:var(--ink-2);font-size:12.5px}
+.pv{border-radius:14px;background:var(--surface-2);padding:14px 16px;font-size:15px;min-height:120px}
+.pv span{display:block;border-inline-start:4px solid var(--c);padding-inline-start:10px;margin-bottom:8px;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.meter{display:flex;gap:4px;margin:12px 0 6px}
+.meter i{flex:1;height:10px;border-radius:4px;background:var(--surface-2);transition:.3s}
+.meter i.on{background:var(--mc)}
+.out-lbl{font-weight:800;font-size:14px;margin-top:10px}
+.outbox{border-radius:14px;padding:14px 16px;font-size:15px;background:color-mix(in srgb,var(--claude) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent);white-space:pre-wrap;min-height:90px}
+/* json */
+.jx{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);gap:12px;align-items:stretch}
+.mail{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px}
+.mail mark{background:transparent;color:inherit;border-radius:5px;transition:.35s;padding:0 2px}
+.mail mark.hl{background:color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 0 0 2px var(--c)}
+.arrow{display:grid;place-items:center;font-size:30px;color:var(--accent)}
+.json{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:13.5px;direction:ltr;text-align:left;line-height:1.8;min-height:200px}
+.json .ln{white-space:pre;opacity:0;transform:translateX(-6px);transition:.35s}
+.json .ln.show{opacity:1;transform:none}
+.json .k{color:#a5b4fc}.json .s{color:#fcd34d}.json .n{color:#5eead4}
+.sheet{margin-top:14px}
+.sheet table{font-size:14px}
+.sheet tr.newrow td{animation:rowin .7s}
+@keyframes rowin{from{background:color-mix(in srgb,var(--p2) 35%,transparent)}}
+/* claude tiles */
+.ctile{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.ctile .mock{height:120px;border-radius:12px;background:var(--surface-2);margin-bottom:12px;position:relative;overflow:hidden;padding:10px}
+.mock .l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent);margin:6px 0}
+.mock .b1{width:60%;margin-inline-start:auto;background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.mock .b2{width:75%;background:color-mix(in srgb,var(--claude) 35%,transparent)}
+.mock .side{position:absolute;inset:10px auto 10px 10px;width:34%;border-radius:8px;background:var(--surface);border:1px dashed var(--line);padding:6px}
+.mock .doc{height:14px;border-radius:4px;background:color-mix(in srgb,var(--p2) 30%,transparent);margin:5px 0}
+.mock .art{position:absolute;inset:10px 10px 10px auto;width:46%;border-radius:8px;background:var(--surface);border:1px solid var(--line);padding:8px}
+.mock .art .bar{height:10px;border-radius:4px;margin:6px 0;background:linear-gradient(90deg,var(--p1),var(--p5))}
+.ctile b{font-size:17px}
+.ctile p{margin:4px 0 0;font-size:14.5px;color:var(--ink-2)}
+.when{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--claude)}
+/* flow */
+.flow svg{width:100%;height:auto;display:block}
+.flow .lk{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+
+/* ===================== deck ===================== */
+html,body{height:100%;overflow:hidden;scroll-behavior:auto}
+body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-height:1.6}
+#deck{position:fixed;inset:0;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%);transform-origin:50% 50%}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:38px 60px 50px;background:var(--bg);overflow:hidden;box-shadow:0 10px 50px rgba(0,0,0,.2)}
+.slide.on{display:flex}
+.slide::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--bc,var(--accent))}
+.slide[data-block="1"]{--bc:var(--p1)}.slide[data-block="2"]{--bc:var(--p2)}.slide[data-block="3"]{--bc:var(--claude)}
+.aside,.notes{display:none}
+.sfoot{position:absolute;bottom:16px;inset-inline:60px;display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);opacity:.75;pointer-events:none}
+.sfoot b{font-weight:700;direction:ltr;visibility:hidden}
+.s-kicker{font-weight:800;color:var(--bc,var(--accent));font-size:16px;letter-spacing:.3px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.slide h2{font-size:40px;margin:2px 0 12px}
+.s-lead{font-size:21px;color:var(--ink-2);margin:0 0 16px;max-width:1060px;line-height:1.55}
+.s-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+.s-body.mid{justify-content:center}
+.pts{list-style:none;margin:0;padding:0;display:grid;gap:16px;font-size:24px;line-height:1.45}
+.pts li{display:flex;gap:14px;align-items:flex-start}
+.pts li::before{content:"";flex:none;width:12px;height:12px;border-radius:4px;background:var(--bc,var(--accent));margin-top:12px}
+.pts.sm{font-size:21px;gap:12px}
+.pts.sm li::before{margin-top:10px}
+.pts small{display:block;color:var(--ink-2);font-size:.78em}
+.big-q{font-family:"Secular One";font-size:30px;line-height:1.35}
+.c2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+.c3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.c4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.c5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.slide .card{padding:18px 22px}
+.slide .callout{margin:0;font-size:18px}
+.slide .tbl table{font-size:17px}
+.slide th,.slide td{padding:9px 12px}
+.slide pre{font-size:15px;margin:0}
+.slide .material{font-size:16.5px}
+.tag-new{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:800;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--bc,var(--accent)) 14%,var(--surface));color:var(--bc,var(--accent))}
+.en-term{font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:500;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:2px 10px;margin-inline-start:12px;vertical-align:middle;direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* explainer: definition hero + three stacked rows */
+.xp{display:flex;flex-direction:column;justify-content:center;flex:1;min-height:0;gap:0}
+.xb{--c:var(--accent);position:relative;flex-shrink:0}
+.xb>b{display:flex;gap:10px;align-items:center;font-size:22px;font-weight:800;color:var(--c);line-height:1.3}
+.xb>b i{font-style:normal;font-size:26px}
+.xb p{margin:0;font-size:25px;line-height:1.5}
+.xb.what{background:color-mix(in srgb,var(--c) 9%,transparent);border-inline-start:8px solid var(--c);border-radius:6px 0 0 6px;padding:16px 26px;margin-bottom:14px}
+.xb.what>b{display:none}
+.xb.what p{font-size:35px;line-height:1.42;font-weight:500}
+.xb:not(.what){display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:24px;row-gap:8px;align-items:start;padding:11px 4px;border-top:1px solid var(--line)}
+.xb:not(.what):last-child{border-bottom:1px solid var(--line)}
+.xb:not(.what)>b{grid-column:1;grid-row:1/span 4;padding-top:3px}
+.xb:not(.what)>:not(b){grid-column:2}
+.xb pre{font-size:22px;padding:10px 16px;margin:0;line-height:1.5;justify-self:stretch}
+.xb code{font-size:.9em}
+.xb.what{--c:var(--p1)}.xb.ana{--c:var(--p2)}.xb.exm{--c:var(--p4)}.xb.why{--c:var(--claude)}
+/* opening: goals, roadmap, deal, routine */
+.goals{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.goals>div{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:23px;line-height:1.4}
+.goals i{font-style:normal;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--bc) 16%,var(--surface));font-size:24px}
+.slide .goals+.callout{font-size:23px}
+.road{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+.road>div{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.road>div.here{border:2px solid var(--bc);box-shadow:0 0 0 4px var(--glow)}
+.road .rn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:22px}
+.road b{font-family:"Secular One";font-weight:400;font-size:27px;margin-top:6px}
+.road small{font-size:22px;color:var(--ink-2)}
+.road ul{margin:10px 0 0;padding-inline-start:20px;font-size:23px;line-height:1.45;display:grid;gap:4px}
+.road em{margin-top:auto;padding-top:8px;font-style:normal;font-weight:800;font-size:22px;color:var(--bc)}
+.deal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.dl{border-radius:18px;padding:16px 22px;border:1px solid var(--line);background:var(--surface)}
+.dl.give{border-top:6px solid var(--p5)}.dl.do{border-top:6px solid var(--claude);background:color-mix(in srgb,var(--claude) 7%,var(--surface))}
+.dl>b{font-family:"Secular One";font-weight:400;font-size:26px}
+.dl ul{margin:8px 0 0;padding-inline-start:22px;font-size:22px;line-height:1.45;display:grid;gap:4px}
+.routine{display:grid;gap:12px}
+.routine>div{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+.routine .rn{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:23px}
+.routine p{margin:0;flex:1;font-size:26px;line-height:1.4}
+.routine .tm{flex:none;font-weight:800;font-size:23px;color:var(--bc);background:color-mix(in srgb,var(--bc) 12%,var(--surface));border-radius:999px;padding:4px 14px}
+/* in-class exercises 8-13: 22px reading size */
+.ex22 .s-lead,.ex22 .material,.ex22 .callout,.ex22 .deliver,.ex22 .tbl table{font-size:22px}
+.ex22 pre{font-size:22px}
+.slide.ex22 .deliver{font-size:22px}
+.ex22 code{font-size:22px}
+.ex22 .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
+.ex22 .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
+.ex22 .s-body>b,.ex22 .s-body b{font-size:22px}
+/* student site link + QR */
+.hw22 .pts.sm{font-size:22px}
+.hw22 .pts.sm li::before{margin-top:11px}
+.sitebox{display:grid;grid-template-columns:400px minmax(0,1fr);gap:40px;align-items:center}
+.qrbig{width:400px;height:400px;background:#fff;border-radius:22px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.qrbig svg,.qrsmall svg{display:block;width:100%;height:100%}
+.siteinfo .scan{font-size:24px;margin:0 0 8px;color:var(--ink-2)}
+.siteurl{display:inline-block;direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;font-weight:500;font-size:30px;color:var(--accent);text-decoration:none;border-bottom:3px solid color-mix(in srgb,var(--accent) 40%,transparent);line-height:1.4;overflow-wrap:anywhere}
+.siteurl.sm{font-size:22px;border-bottom-width:2px}
+.siteline{display:flex;gap:16px;align-items:center;font-size:22px;margin-top:6px}
+.qrsmall{flex:none;width:112px;height:112px;background:#fff;border-radius:12px;padding:5px;border:1px solid var(--line)}
+/* setup section */
+.setup .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
+.setup .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
+.setup .callout{font-size:22px}
+.setup .tbl table{font-size:22px}
+.setup .tbl td:first-child{white-space:nowrap}
+.setup .check li{font-size:22px}
+.appmock{direction:ltr;display:grid;grid-template-columns:170px minmax(0,1fr);height:300px;border:2px dashed var(--line);border-radius:16px;overflow:hidden;background:var(--surface);font-family:Heebo,sans-serif}
+.am-side{position:relative;background:var(--surface-2);padding:12px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.am-btn{border:1px solid var(--line);border-radius:9px;padding:5px 8px;background:var(--surface);font-weight:700}
+.am-item{font-weight:700;display:flex;align-items:center;gap:6px}
+.am-lbl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.am-l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent)}.am-l.s{width:60%}
+.am-acct{margin-top:auto;display:flex;align-items:center;gap:6px;font-weight:700}
+.am-main{position:relative;padding:16px;display:flex;flex-direction:column;gap:10px}
+.am-bub{height:30px;border-radius:12px;width:70%}
+.am-bub.u{align-self:flex-end;width:45%;background:color-mix(in srgb,var(--accent) 25%,transparent)}
+.am-bub.c{background:color-mix(in srgb,var(--claude) 22%,transparent)}.am-bub.s{width:50%}
+.am-input{margin-top:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px;background:var(--bg)}
+.am-plus{font-weight:800;font-size:20px}.am-ph{flex:1;color:var(--ink-2)}
+.am-model{display:flex;align-items:center;gap:4px;font-weight:700}
+.am-send{width:28px;height:28px;border-radius:8px;background:var(--claude);color:#fff;display:grid;place-items:center;font-weight:800}
+.am-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--p4);color:#1b1834;font-weight:800;font-size:13px;display:inline-grid;place-items:center}
+.am-side>.am-n{position:absolute;top:6px;right:6px}
+/* JSON parts 2-4: same reading sizes */
+.slide[data-title^="JSON:"] .lbl{font-size:22px;padding:9px 14px}
+.slide[data-title^="JSON:"] .lbl code{font-size:22px;min-width:96px}
+.slide[data-title^="JSON:"] .tbl table{font-size:22px}
+.slide[data-title^="JSON:"] .types td:nth-child(2){font-size:22px}
+.slide[data-title^="JSON:"] th,.slide[data-title^="JSON:"] td{padding:7px 12px}
+.slide[data-title^="JSON:"] .callout{font-size:22px}
+.slide[data-title^="JSON:"] .contact .fld{font-size:22px;padding:7px 2px}
+.slide[data-title^="JSON:"] .anat{font-size:23px}
+/* hero / divider / break */
+.slide.hero,.slide.divider,.slide.brk{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;justify-content:center}
+.slide.hero::after,.slide.divider::after,.slide.brk::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 320px at 90% -10%,rgba(34,211,238,.25),transparent 60%),radial-gradient(640px 320px at 0% 115%,rgba(226,72,111,.22),transparent 60%);pointer-events:none}
+.hero>*,.divider>*,.brk>*{position:relative;z-index:1}
+.hero>.sfoot,.divider>.sfoot,.brk>.sfoot,.hero>.hero-keys{position:absolute}
+.slide.hero .sfoot,.slide.divider .sfoot,.slide.brk .sfoot{color:#bdb7ea}
+.hero h1{font-size:72px;margin:16px 0 10px;font-family:"Secular One"}
+.hero .sub{font-size:24px;color:#cfcaf5;max-width:900px;margin:0}
+.hero .crumbs{font-size:18px}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hero .kind-badge,.divider .kind-badge,.brk .kind-badge{font-size:16px;padding:5px 14px}
+.hero-keys{position:absolute;bottom:52px;inset-inline-start:60px;font-size:15px;color:#bdb7ea}
+.divider .num{font-family:"Secular One";font-size:120px;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.5)}
+.divider h2{font-size:56px;margin:8px 0 6px}
+.divider .sub{font-size:22px;color:#cfcaf5;margin:0 0 26px;max-width:900px}
+.blocks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:1100px}
+.blocks>div{border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:15px;color:#cfcaf5}
+.blocks>div b{display:block;color:#fff;font-size:17px}
+.blocks div .t{direction:ltr;text-align:right;font-weight:800;font-size:13px;color:#a5b4fc}
+.blocks>div.here{background:rgba(255,255,255,.2);border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+.blocks>div.done{opacity:.5}
+.brk{align-items:center;text-align:center}
+.brk h2{font-size:54px;margin:0}
+.brk .timer .tm{font-family:"Secular One";font-size:170px;min-width:0;line-height:1.05;direction:ltr;letter-spacing:2px;margin:6px 0}
+.brk .ret{font-size:26px;color:#cfcaf5}
+.brk .ret b{color:#fff;direction:ltr;unicode-bidi:isolate}
+.brk .btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.brk .nextup{margin-top:24px;font-size:19px;color:#cfcaf5}
+/* timers on exercise slides */
+.timer{display:inline-flex;align-self:flex-start;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:4px 6px 4px 12px}
+.timer .tm{font-family:"Secular One";font-size:22px;direction:ltr;min-width:66px;text-align:center}
+.timer.over .tm,.brk .timer.over .tm{color:var(--p3)}
+.brk .timer{border:0;background:none;flex-direction:column;padding:0;align-self:center;gap:6px}
+.exh{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.exh .ex-num{width:48px;height:48px;font-size:22px}
+.exh h2{margin:0}
+.exh .grow{flex:1}
+.slide .deliver{margin-top:0;font-size:17px}
+/* reveal (instructor solutions) */
+.reveal{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+.reveal:not(.shown) .rv-c{filter:blur(10px);opacity:.55;user-select:none;pointer-events:none}
+.rv-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;font-size:18px;padding:12px 22px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.reveal.shown>.rv-btn{display:none}
+.rv-c{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;transition:filter .3s,opacity .3s}
+.lock{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:800;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--p4) 18%,var(--surface));color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+/* misc slide components */
+.phone{width:340px;border-radius:30px;border:2px solid var(--line);background:var(--surface);padding:18px;box-shadow:var(--shadow)}
+.phone .msg{background:var(--surface-2);border-radius:14px;padding:12px 14px;font-size:20px;min-height:64px}
+.phone .sugg{display:flex;gap:6px;margin-top:12px}
+.phone .sugg span{flex:1;text-align:center;background:color-mix(in srgb,var(--accent) 14%,var(--surface));border-radius:10px;padding:8px 4px;font-weight:700;font-size:17px}
+.phone .sugg span:first-child{background:var(--accent);color:#fff}
+.disc{display:grid;gap:14px}
+.disc div{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 20px;font-size:23px}
+.disc div i{font-style:normal;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--bc) 16%,var(--surface));font-size:22px}
+.comp{border-radius:16px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.comp::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--c)}
+.comp b{font-size:22px;display:block}
+.comp span{color:var(--ink-2);font-size:17px}
+.comp .n{font-family:"Secular One";color:var(--c);font-size:16px}
+.mx{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.mx>div{border-radius:14px;padding:14px 16px;font-size:18px}
+.mx .h{background:none;font-weight:800;color:var(--ink-2);display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px}
+.mx .a{background:color-mix(in srgb,var(--good) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--good) 40%,transparent)}
+.mx .b{background:color-mix(in srgb,var(--p4) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--p4) 40%,transparent)}
+.mx .c{background:color-mix(in srgb,var(--bad) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--bad) 40%,transparent)}
+.mx b{display:block;font-size:20px}
+.ans{font-weight:800}.ans.a{color:var(--good)}.ans.b{color:color-mix(in srgb,var(--p4) 75%,var(--ink))}.ans.c{color:var(--bad)}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.why:not(.xb){border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--p2) 10%,var(--surface));border-inline-start:4px solid var(--p2);font-size:17px}
+.why:not(.xb)::before{content:"💡 למה זה עובד: ";font-weight:800}
+.mistake{border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--bad) 8%,var(--surface));border-inline-start:4px solid var(--bad);font-size:17px}
+.mistake::before{content:"⚠️ טעות נפוצה: ";font-weight:800}
+.anat{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:18px;padding:22px 26px;font-family:"JetBrains Mono",monospace;font-size:24px;line-height:1.9;direction:ltr;text-align:left}
+.anat .k{color:#a5b4fc}.anat .s{color:#fcd34d}.anat .n{color:#5eead4}.anat .p{color:#f472b6;font-weight:700}.anat .b{color:#94a3b8}
+.lbls{display:grid;gap:12px}
+.lbl{display:flex;gap:12px;align-items:center;font-size:19px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.lbl code{font-size:18px;flex:none;min-width:74px;text-align:center}
+.types td:nth-child(2){direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:16px}
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.contact .av{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;display:grid;place-items:center;font-family:"Secular One";font-size:30px;margin:0 auto 8px}
+.contact .nm{text-align:center;font-family:"Secular One";font-size:26px}
+.contact .fld{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 2px;font-size:18px}
+.contact .fld span{color:var(--ink-2)}
+.slide .json{font-size:14.5px}
+.pstack{display:flex;flex-direction:column}
+.pstack pre{border-radius:0;margin:0;font-size:16px;line-height:1.55;padding:8px 18px}
+.pstack pre:first-child{border-radius:14px 14px 0 0;padding-top:14px}
+.pstack pre:last-child{border-radius:0 0 14px 14px;padding-bottom:14px}
+.bug{display:grid;gap:10px}
+.bug pre{font-size:17px;padding:12px 16px}
+.bug .fix{font-size:16px;margin-top:4px}
+.gl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gl div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:15px;line-height:1.45}
+.gl b{display:block;font-size:17px;color:var(--bc)}
+.gl span{color:var(--ink-2)}
+.slide .q{margin:0;padding:16px 20px}
+.slide .q>b{font-size:19px;display:block}
+.slide .q button.opt{font-size:17px;padding:7px 14px}
+.slide .q .opts{gap:7px}
+.slide .q .fb{font-size:15.5px}
+.qs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.fitl{display:grid;gap:8px}
+.fitl .row{justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px 8px 16px;font-size:19px}
+.fitl .seg button{font-size:15px}
+.rule{display:flex;gap:12px;align-items:flex-start;font-size:19px}
+.rule .rn{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One"}
+.take{display:grid;gap:12px}
+.take .card{display:flex;gap:16px;align-items:flex-start;padding:14px 18px}
+.take .n{font-family:"Secular One";font-size:34px;line-height:1;color:var(--c)}
+.take b{display:block;font-size:21px}
+.take span{font-size:16.5px;color:var(--ink-2)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;font-size:19px}
+.steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:16px}
+.flowc{display:flex;align-items:stretch;gap:10px}
+.flowc>div{flex:1;border-radius:16px;padding:16px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.flowc>div.mid{background:linear-gradient(135deg,color-mix(in srgb,var(--p1) 85%,#fff),#22d3ee);color:#0d0c1a;border:0}
+.flowc>div i{font-style:normal;font-size:34px;display:block}
+.flowc>div b{display:block;font-size:20px}
+.flowc>div span{font-size:15px;color:var(--ink-2)}
+.flowc>div.mid span{color:#1b1834}
+.flowc .ar{flex:none;display:grid;place-items:center;font-size:28px;color:var(--accent);background:none;border:0;padding:0}
+.legend{display:flex;gap:10px;flex-wrap:wrap}
+.legend span{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-size:16px}
+/* bigger sims on slides */
+.slide .sim-body{padding:14px 20px 16px}
+.slide .sim-head{padding:10px 20px}
+.slide .nt-text{font-size:23px}
+.slide .cand{grid-template-columns:150px minmax(0,1fr) 60px;font-size:19px}
+.slide .tok-in{min-height:70px;font-size:19px}
+.slide .tk{font-size:18px}
+.slide .bubble{font-size:17px}
+.slide .mail{font-size:16.5px}
+.sim.nt[data-slider="1"] .nt-text{font-size:20px;min-height:0;padding:8px 16px}
+.sim.nt[data-slider="1"] .nt-cands{gap:4px;margin-top:10px}
+.sim.nt[data-slider="1"] .temp{margin-top:10px;padding:8px 14px}
+.sim.nt[data-slider="1"] .row.mt{margin-top:10px}
+
+/* ===================== chrome ===================== */
+#prog{position:fixed;top:0;right:0;height:4px;width:0;background:linear-gradient(270deg,var(--p1),var(--p2));z-index:70;transition:width .3s}
+#ctrl{position:fixed;bottom:10px;left:10px;display:flex;gap:4px;align-items:center;z-index:75;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:4px;opacity:.45;transition:opacity .2s}
+#ctrl:hover,#ctrl:focus-within{opacity:1}
+#ctrl button{border:0;background:none;color:var(--ink);font:inherit;font-size:17px;width:38px;height:34px;border-radius:9px;cursor:pointer;display:grid;place-items:center}
+#ctrl button:hover{background:var(--surface-2)}
+#ctrl button.on{background:var(--ink);color:var(--bg)}
+#count{font-weight:700;font-size:14px;padding:0 8px;direction:ltr;color:var(--ink-2);min-width:64px;text-align:center}
+#notes{position:fixed;left:0;right:0;bottom:0;height:34vh;display:none;z-index:72;background:var(--surface);border-top:2px solid var(--accent);box-shadow:0 -10px 30px rgba(0,0,0,.15);padding:12px 22px 54px;overflow:auto;font-size:17px;line-height:1.6}
+body.notes-on #notes{display:block}
+#notes .nh{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+#notes .nh b{font-family:"Secular One";font-size:19px;font-weight:400;margin-inline-end:6px}
+#notes ul{margin:4px 0;padding-inline-start:22px}
+#notes li{margin:3px 0}
+#notes .nx{color:var(--ink-2);font-size:14.5px;margin-top:6px}
+#ov{position:fixed;inset:0;display:none;overflow:auto;background:var(--bg);z-index:90;padding:22px 24px 60px}
+body.ov-on #ov{display:block}
+#ov h3{font-size:24px;margin:0 0 14px}
+#ov .ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px}
+.ov-cell{cursor:pointer;border-radius:12px;padding:6px;transition:.15s}
+.ov-cell:hover{background:var(--surface-2)}
+.ov-thumb{width:240px;height:135px;position:relative;overflow:hidden;border-radius:8px;border:2px solid var(--line);margin:0 auto}
+.ov-thumb .slide{display:flex;width:1280px;height:720px;right:0;top:0;left:auto;bottom:auto;transform:scale(.1875);transform-origin:top right;pointer-events:none;box-shadow:none}
+.ov-cell.cur .ov-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.ov-cell small{display:flex;gap:6px;justify-content:space-between;font-size:13px;color:var(--ink-2);padding:4px 6px 0}
+.ov-cell small b{color:var(--ink)}
+.ov-blk{grid-column:1/-1;font-family:"Secular One";font-size:19px;margin-top:8px;color:var(--ink-2)}
+#help{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:95;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 16px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .3s}
+#help.show{opacity:.92}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===================== print: one slide per page ===================== */
+@page{size:1280px 720px;margin:0}
+@media print{
+  html,body{height:auto;overflow:visible;background:#fff}
+  #deck{position:static;overflow:visible}
+  #stage{position:static;transform:none!important;width:1280px;height:auto}
+  .slide{display:flex!important;position:relative;inset:auto;width:1280px;height:720px;box-shadow:none;break-after:page;page-break-after:always;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sfoot b{visibility:visible}
+  #prog,#ctrl,#notes,#ov,#help,.rv-btn,.timer .btn,.brk .btn{display:none!important}
+  .reveal .rv-c{filter:none!important;opacity:1!important}
+  .card,.sim{box-shadow:none}
+}
+</style>
+<style>/* --- session 2 + 3 widget styles (from lecture pages) --- */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* anatomy */
+.anat{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.anat-flow{display:flex;flex-direction:column;gap:8px}
+.af{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);cursor:pointer;transition:.2s;font:inherit;color:inherit;text-align:right}
+.af:hover,.af.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.af .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);flex:none}
+.af small{display:block;color:var(--ink-2);font-size:12.5px}
+.anat-info{position:sticky;top:70px;padding:18px;border-radius:16px;background:var(--surface-2);min-height:180px}
+.anat-info .t{font-family:"Secular One";font-size:22px;color:var(--c)}
+/* process sim */
+.ps-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.ps-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.ps-stats div{padding:10px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ps-stats b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ps-stats span{font-size:13px;color:var(--ink-2)}
+.steps{display:flex;flex-direction:column;gap:0;position:relative}
+.st{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);transition:.3s;position:relative}
+.st+.st{margin-top:22px}
+.st+.st::before{content:"";position:absolute;top:-22px;right:35px;width:2px;height:20px;background:var(--line)}
+.st .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st b{display:block}
+.st small{color:var(--ink-2);font-size:13px}
+.st .min{font-weight:800;font-size:14px;padding:3px 10px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.st.active{border-color:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 22%,transparent);transform:scale(1.01)}
+.st.done{opacity:.55}
+.st.pain::after{content:"⚠️ צוואר בקבוק";position:absolute;top:-11px;left:14px;font-size:11.5px;font-weight:800;background:var(--p3);color:#fff;border-radius:7px;padding:1px 8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+.cmp{margin-top:14px;display:grid;gap:8px}
+.cmp .r{display:grid;grid-template-columns:90px minmax(0,1fr) 120px;white-space:nowrap;gap:10px;align-items:center;font-size:14px}
+.cmp .bw{height:16px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.cmp .bw i{display:block;height:100%;border-radius:6px;transition:width .6s}
+/* symbols */
+.syms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.sym{padding:12px 8px;border-radius:14px;border:2px solid var(--line);background:var(--surface);text-align:center;cursor:pointer;font:inherit;color:inherit;transition:.2s}
+.sym:hover,.sym.on{border-color:var(--accent)}
+.sym svg{width:100%;height:56px;display:block}
+.sym b{font-size:14px}
+.sym-info{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:70px}
+/* matrix */
+.mx{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.mx svg{width:100%;height:auto;display:block}
+.mx .dot{cursor:pointer;transition:.4s}
+.sl{display:grid;grid-template-columns:120px minmax(0,1fr) 48px;gap:10px;align-items:center;font-size:14.5px;margin-bottom:8px}
+.sl input{width:100%;accent-color:var(--accent)}
+.sl .v{font-weight:800;text-align:center;direction:ltr}
+.verdict{margin-top:10px;padding:12px 14px;border-radius:12px;font-weight:700;background:color-mix(in srgb,var(--vc) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 40%,transparent)}
+.task-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.task-list button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer}
+.task-list button.on{background:var(--ink);color:var(--bg)}
+/* roi */
+.roi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}
+.roi-in .sl{grid-template-columns:150px minmax(0,1fr) 64px}
+.roi-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.roi-out div{padding:12px;border-radius:14px;background:var(--surface-2)}
+.roi-out b{display:block;font-family:"Secular One";font-size:24px;line-height:1.2;unicode-bidi:plaintext;text-align:right}
+.roi-out span{font-size:13px;color:var(--ink-2)}
+.roi svg{width:100%;height:auto;display:block}
+.formula{direction:ltr;text-align:center;font-family:"JetBrains Mono",monospace;font-size:14px;padding:10px;border-radius:12px;background:var(--surface-2);margin-top:10px}
+/* doc template */
+.doc-t{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;counter-reset:d}
+.doc-t div{counter-increment:d;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14.5px}
+.doc-t div::before{content:counter(d) ". ";font-weight:800;color:var(--accent)}
+.doc-t b{font-size:15.5px}
+.qs-int{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.qs-int div{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:15px}
+.qs-int div b{display:block;font-size:13px;color:var(--accent)}
+@media (max-width:820px){.anat,.mx,.roi{grid-template-columns:minmax(0,1fr)}.syms{grid-template-columns:repeat(3,minmax(0,1fr))}.doc-t,.qs-int{grid-template-columns:minmax(0,1fr)}.anat-info{position:static}}
+@media (max-width:480px){.roi-in .sl,.sl{grid-template-columns:96px minmax(0,1fr) 52px}.ps-stats b{font-size:21px}.st{grid-template-columns:38px minmax(0,1fr);}.st .min{grid-column:2;justify-self:start}}
+.en-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* json explorer */
+.jx2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.jtree{background:var(--code-bg);color:var(--code-ink);border-radius:16px;padding:16px 18px;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.85;direction:ltr;text-align:left;overflow-x:auto}
+.jtree .k{color:#a5b4fc;cursor:pointer;border-radius:4px;padding:0 2px}
+.jtree .k:hover{background:rgba(165,180,252,.18)}
+.jtree .k.sel{background:#a5b4fc;color:#16142a}
+.jtree .s{color:#fcd34d}.jtree .n{color:#5eead4}.jtree .b{color:#f9a8d4}.jtree .z{color:#94a3b8}
+.jtree .jr{white-space:pre}
+.jinfo{padding:18px;border-radius:16px;background:var(--surface-2)}
+.jpath{direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0 10px;word-break:break-all}
+.types{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.types span{font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.types span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chal{margin-top:12px;padding:12px 14px;border-radius:12px;border:2px dashed var(--accent)}
+.chal .res{font-weight:800;margin-top:4px}
+/* validator */
+.val{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.val textarea{width:100%;min-height:170px;border-radius:14px;border:2px solid var(--line);background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:13.5px;padding:12px 14px;direction:ltr;text-align:left;resize:vertical}
+.val textarea.ok{border-color:var(--good)}.val textarea.bad{border-color:var(--bad)}
+.vres{padding:14px 16px;border-radius:14px;background:var(--surface-2);font-size:15px}
+.vres b.ok{color:var(--good)}.vres b.bad{color:var(--bad)}
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:12px;align-items:stretch}
+.pg-col{display:flex;flex-direction:column;gap:10px}
+.pg label{font-size:13px;font-weight:700;color:var(--ink-2)}
+.pg select,.pg textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.pg textarea{font-family:"JetBrains Mono",monospace;font-size:13px;min-height:96px;direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-ink)}
+.raw{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;min-height:90px}
+.raw .m{color:#fcd34d;font-weight:700}.raw .h{color:#a5b4fc}
+.wire{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.wire .line{position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+.pkt{position:relative;z-index:1;font-size:26px;transition:transform .7s ease-in-out,opacity .3s;opacity:0}
+.node{font-size:13px;font-weight:800;color:var(--ink-2);text-align:center}
+.status{display:inline-flex;gap:8px;align-items:center;font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;direction:ltr}
+.status.s2{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.status.s4{background:color-mix(in srgb,var(--p4) 20%,transparent);color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+.status.s5{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.resp-expl{font-size:14px;color:var(--ink-2)}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;cursor:pointer}
+/* status codes */
+.codes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.code{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c)}
+.code b{font-family:"JetBrains Mono",monospace;font-size:20px;color:var(--c)}
+.code div{font-weight:700;margin:2px 0}
+.code span{font-size:13.5px;color:var(--ink-2)}
+/* oauth */
+.oa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.actor{padding:16px;border-radius:16px;border:2px solid var(--line);text-align:center;transition:.3s;background:var(--surface)}
+.actor .e{font-size:30px}
+.actor.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+.oa-step{padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:76px}
+.oa-step b{color:var(--accent)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* polling vs webhook */
+.pw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lane{padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.lane h4{display:flex;justify-content:space-between}
+.track{position:relative;height:120px;border-radius:12px;background:var(--surface-2);margin:10px 0;overflow:hidden}
+.track .srv,.track .cli{position:absolute;top:8px;bottom:8px;width:64px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800;text-align:center;background:var(--surface);border:1px solid var(--line)}
+.track .srv{right:8px}.track .cli{left:8px}
+.msg{position:absolute;top:50%;font-size:18px;transform:translateY(-50%);transition:left .6s linear}
+.lane .st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.lane .st div{padding:8px;border-radius:10px;background:var(--surface-2)}
+.lane .st b{display:block;font-family:"Secular One";font-size:20px}
+.lane .st span{font-size:12px;color:var(--ink-2)}
+/* claude api */
+.ca{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.ca label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-top:8px}
+.ca textarea,.ca select{width:100%;font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px 10px}
+.ca textarea{min-height:70px;resize:vertical}
+.ca .rq{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;min-height:120px}
+.ca .rq .hl{background:#fcd34d;color:#16142a;border-radius:4px;padding:0 3px}
+@media (max-width:860px){.jx2,.val,.ca,.pw,.keys{grid-template-columns:minmax(0,1fr)}.pg{grid-template-columns:minmax(0,1fr)}.wire{min-height:70px}.wire .line{top:0;bottom:0;left:50%;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line) 0 8px,transparent 8px 14px)}.codes{grid-template-columns:repeat(2,minmax(0,1fr))}.oa{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.codes{grid-template-columns:minmax(0,1fr)}.actor{padding:10px 6px}.actor .e{font-size:22px}}
+/* --- compact interactive widgets so they fit a 720px slide --- */
+.slide.w{padding:14px 44px 18px}
+.slide.w>.s-kicker{margin-bottom:0}
+.slide.w>h2{font-size:21px;margin:2px 0 6px;line-height:1.2}
+.slide.w>.s-body{margin-top:0}
+.slide.w .sim-head{display:none}
+.slide .sim-head{padding:9px 16px}.slide .sim-head h3{font-size:16px}
+.slide .sim-body{padding:10px 16px 12px}
+.slide .anat{gap:14px;color:var(--ink)}.slide .anat *{color:inherit}.slide .anat-flow{gap:3px}.slide .af{padding:3px 11px;gap:8px;color:var(--ink)}.slide .af .ic{width:23px;height:23px}.slide .af b{font-size:13.5px;color:var(--ink)}.slide .af small{font-size:10.5px;color:var(--ink-2)}.slide .anat-info .t{color:var(--c)}
+.slide .ps-top{gap:8px}.slide .ps-stats{margin:6px 0;gap:8px}.slide .ps-stats div{padding:5px}.slide .ps-stats b{font-size:17px}.slide .ps-stats span{font-size:11.5px}
+.slide .steps .st{padding:4px 11px;grid-template-columns:30px minmax(0,1fr) auto}
+.slide .steps .st .ic{width:30px;height:30px;font-size:14px;border-radius:9px}
+.slide .steps .st+.st{margin-top:6px}.slide .steps .st+.st::before{top:-6px;height:5px;right:28px}
+.slide .steps .st b{font-size:13.5px;line-height:1.2}.slide .steps .st small{font-size:11px}.slide .steps .st .min{font-size:11px;padding:2px 7px}.slide .steps .st.pain::after{font-size:10px;top:-8px}
+.slide .legend{margin-top:6px;font-size:11px;gap:9px}.slide .cmp{margin-top:6px}.slide .cmp .r{font-size:12px}
+.slide .syms .sym svg{height:42px}.slide .syms .sym{padding:8px 6px}
+.slide .mx{gap:14px}.slide .mx .sl,.slide .roi-in .sl{margin-bottom:5px;font-size:13px}
+.slide .roi{gap:14px}.slide .roi-out{gap:8px;margin-bottom:8px}.slide .roi-out div{padding:7px 10px}.slide .roi-out b{font-size:19px}
+/* session 3 widgets compaction */
+.slide .jx2{gap:12px}
+.slide .jtree{font-size:11px;line-height:1.55;padding:12px 14px}
+.slide .jinfo{padding:12px 14px}
+.slide .jpath{font-size:13px;padding:6px 10px;margin:4px 0 8px}
+.slide .chal{padding:9px 12px;margin-top:8px}
+.slide .val textarea{min-height:120px;font-size:12px}
+.slide .vres{padding:10px 12px;font-size:13.5px}
+.slide .pg{gap:10px;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .pg textarea{min-height:64px;font-size:12px}
+.slide .pg .raw{min-height:62px;font-size:11.5px;padding:8px 10px}
+.slide .pg label{font-size:12px}
+.slide .pg select{padding:5px 8px}
+.slide .codes{gap:8px}.slide .code{padding:9px 11px}.slide .code b{font-size:17px}.slide .code span{font-size:12px}
+.slide .keys{gap:12px}
+.slide .oa{gap:10px;margin-bottom:10px}.slide .actor{padding:9px}.slide .actor .e{font-size:24px}
+.slide .oa-step{min-height:56px;padding:10px 14px;font-size:14.5px}
+.slide .pw .track{height:84px}.slide .lane{padding:11px}.slide .lane .st b{font-size:16px}
+.slide .ca{gap:14px}
+.slide .ca label{margin-top:5px;font-size:12px}
+.slide .ca textarea{min-height:48px;font-size:13px}
+.slide .ca select{padding:5px 8px}
+.slide .ca .rq{min-height:84px;font-size:11.5px;padding:9px 11px}
+/* keep widget layouts 2-col on the fixed 1280 stage (never collapse by window width) */
+.slide .anat{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.slide .anat-info{position:static}
+.slide .af{background:var(--surface-2)}
+.slide .jx2{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.slide .val{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pg{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .ca{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pw{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .keys{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .mx{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.slide .roi{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.slide .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .codes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .oa{grid-template-columns:repeat(3,minmax(0,1fr))}
+.slide .shot{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16;box-shadow:var(--shadow)}
+.slide .shot img{display:block;width:100%;height:auto}
+.slide .shot figcaption{padding:5px 12px;font-size:12px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="deck"><div id="stage">
+
+<!-- ============================== OPENING ============================== -->
+<section class="slide hero" data-min="3" data-block="1" data-title="פתיחה">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2 מתוך 15</b></div>
+  <h1>אפיון תהליכים ויסודות טכניים</h1>
+  <p class="sub">קודם מבינים את התהליך — מה קורה היום, איפה הוא נתקע וכמה הוא שווה. אחר כך לומדים איך מערכות מדברות: JSON, API, Webhooks וקריאה ל-Claude.</p>
+  <div class="hero-meta"><span class="kind-badge">⏱ 3 שעות</span><span class="kind-badge">6 בלוקים · 2 הפסקות</span><span class="kind-badge">🛋️ העסק שלנו: "בית ועיצוב"</span></div>
+  <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · P: מסך מרצה · O: סקירה · F: מסך מלא · D: בהיר/כהה</div>
+  <aside class="notes"><ul>
+    <li>ברוכים השבים. המפגש מחולק לשניים: חצי ראשון — אפיון תהליך; חצי שני — היסודות הטכניים שמאחורי כל אוטומציה.</li>
+    <li>המשפט שמוביל את החלק הראשון: "לא עושים אוטומציה לבלגן". המשפט שמוביל את החלק השני: "מערכות מדברות ב-JSON".</li>
+    <li>לוגיסטיקה: הפסקה אחת באמצע. יש הרבה חומר — נשמור על קצב.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="מה נשיג היום">
+  <div class="s-kicker">על המפגש</div>
+  <h2>בסוף המפגש תדעו…</h2>
+  <div class="s-body mid">
+    <div class="goals">
+      <div><i>🧭</i>לזהות את החלקים של תהליך, ולראיין את מי שעושה את העבודה</div>
+      <div><i>🗺️</i>למפות As‑Is ולתכנן To‑Be, ולשרטט תרשים זרימה</div>
+      <div><i>💰</i>להחליט מה כדאי לאוטומט, ולחשב ROI</div>
+      <div><i>🔤</i>לקרוא JSON ולמצוא כל ערך לפי הנתיב שלו</div>
+      <div><i>🔌</i>להבין בקשת API: שיטה, כתובת, מפתח, קוד תשובה ו-Webhooks</div>
+      <div><i>🤖</i>לשלוח קריאה ל-Claude API, ולהשתמש ב-Claude כדי לבנות אוטומציות</div>
+    </div>
+    <div class="callout tip"><b>היעד של היום</b>אפיון מלא של תהליך אמיתי, ועוד הבנה של איך המערכות שמאחורי האוטומציה מדברות זו עם זו — הבסיס למפגש 4, שבו נבנה ב-Make.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>שלוש המטרות הראשונות הן אפיון; שלוש האחרונות הן טכניות. זה בדיוק מבנה המפגש.</li>
+    <li>הדגישו את המטרה האחרונה: לא רק "להבין API", אלא להשתמש ב-Claude ככלי שעוזר לבנות את האוטומציה עצמה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="אנחנו כאן">
+  <div class="s-kicker">המסלול</div>
+  <h2>איפה אנחנו במסלול</h2>
+  <div class="s-body mid">
+    <div class="road">
+      <div class="here"><span class="rn">1</span><b>בסיס</b><small>מפגשים 1–3</small><ul><li>מבוא ל-AI ✓</li><li><b>אפיון + יסודות טכניים ←</b></li><li>יסודות מתקדמים</li></ul><em>📍 אנחנו כאן</em></div>
+      <div><span class="rn">2</span><b>בניית תהליכים</b><small>מפגשים 4–7</small><ul><li>פלטפורמות אוטומציה</li><li>תהליכים חכמים</li><li>חיבור מערכות</li></ul></div>
+      <div><span class="rn">3</span><b>AI מתקדם</b><small>מפגשים 8–10</small><ul><li>בסיסי ידע</li><li>סוכני AI</li></ul></div>
+      <div><span class="rn">4</span><b>יישום</b><small>מפגשים 11–12</small><ul><li>AI בארגון</li><li>בדיקות</li></ul></div>
+      <div><span class="rn">5</span><b>פרויקט גמר</b><small>מפגשים 13–15</small><ul><li>אפיון ובנייה</li><li>הצגה</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המפגש הזה סוגר את שלב הבסיס מבחינת ההבנה: אחריו יש לנו גם "מה לבנות" (אפיון) וגם "איך זה עובד מתחת למכסה המנוע" (API).</li>
+    <li>ממפגש 4 מתחילים לבנות ב-Make בפועל, אז חשוב שהיסודות כאן יהיו ברורים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="מה נעשה היום">
+  <div class="s-kicker">מבנה המפגש · 3 שעות</div>
+  <h2>מה נעשה היום</h2>
+  <div class="s-body mid">
+    <div class="agenda">
+      <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:40</div><b>אפיון תהליך</b><span>אנטומיה, As‑Is/To‑Be, תרשים זרימה</span></div>
+      <div class="ag" style="--c:var(--p3)"><div class="t">0:40–1:05</div><b>מה לאוטומט ו-ROI</b><span>מטריצת הזדמנויות ומחשבון</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">1:20–2:05</div><b>JSON ו-API</b><span>פורמט הנתונים, בקשות וקודי תשובה</span></div>
+      <div class="ag" style="--c:var(--p5)"><div class="t">2:05–2:35</div><b>אבטחה ו-Claude API</b><span>מפתחות, OAuth, Webhooks וקריאה ל-Claude</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">2:35–3:00</div><b>תרגול עם Claude</b><span>אפיון, חילוץ JSON ובניית אוטומציה</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">2 × 10 דק'</div><b>הפסקות</b><span>לפני הטכני, ולפני התרגול</span></div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>החלק הראשון (עד ההפסקה) הוא אפיון. החלק השני הוא היסודות הטכניים והתרגול עם Claude.</li>
+    <li>ההפסקה ממוקמת בדיוק במעבר מ"חשיבה על תהליך" ל"טכני". תנו לכולם לנשום לפני JSON.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="למה אפיון קודם">
+  <div class="s-kicker">למה זה חשוב</div>
+  <h2>למה לא פשוט לבנות אוטומציה מיד?</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>🤔</i><b>תהליך לא ברור</b><span>אף אחד לא יודע בדיוק מה קורה</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>⚙️</i><b>בונים אוטומציה</b><span>על בסיס ניחושים</span></div><div class="ar">⟵</div>
+      <div><i>💥</i><b>בלגן מהיר יותר</b><span>הטעויות רק מתרבות</span></div>
+    </div>
+    <div class="callout warn"><b>לא עושים אוטומציה לבלגן</b>אם התהליך היום לא ברור, אוטומציה רק תעשה את אותו בלגן מהר יותר. קודם ממפים, מסדרים, ורק אז בונים.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה המשפט המרכזי של החצי הראשון. חזרו עליו.</li>
+    <li>שאלה לכיתה: "מי נתקל בטופס או מערכת שרק הקשו במקום לעזור?" שמעו סיפור אחד.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 1 ============================== -->
+<section class="slide divider" data-min="1" data-block="1" data-title="בלוק 1 · מהו תהליך">
+  <div class="s-kicker">בלוק 1</div>
+  <h1>מהו תהליך עסקי</h1>
+  <p class="sub">האנטומיה של תהליך, ואיך אוספים עליו מידע בראיון קצר.</p>
+  <aside class="notes"><ul><li>המטרה: שפה משותפת למה זה "תהליך" לפני שממפים אותו.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="1" data-title="הגדרה">
+  <div class="s-kicker">הגדרה</div>
+  <h2>תהליך = רצף קבוע מאירוע ועד תוצאה</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>⚡</i><b>אירוע מתחיל</b><span>טריגר</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔁</i><b>שלבים לפי סדר</b><span>פעולות והחלטות</span></div><div class="ar">⟵</div>
+      <div><i>🎯</i><b>תוצאה</b><span>סימן שהתהליך הסתיים</span></div>
+    </div>
+    <div class="callout"><b>למה זה חשוב לאוטומציה</b>כדי שאוטומציה תפעיל תהליך, היא צריכה להכיר את כל החלקים: מה מתחיל אותו, אילו נתונים נכנסים, מה קורה בכל שלב, ומתי הוא נגמר.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>דוגמה: קליטת עובד מתחילה ב"חתימה על חוזה" ונגמרת ב"יש לו מחשב, גישה ומייל".</li>
+    <li>הדגישו "קבוע": תהליך חוזר על עצמו. חד-פעמי הוא לא תהליך.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="1" data-title="האנטומיה של תהליך">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>האנטומיה של תהליך — לחצו על כל חלק</h2>
+  <div class="s-body">
+    <div class="sim"><div class="sim-head"><span class="tag">אינטראקטיבי</span><h3>החלקים של תהליך</h3></div><div class="sim-body">
+      <div class="anat">
+        <div class="anat-flow" id="anatFlow"></div>
+        <div class="anat-info" id="anatInfo"></div>
+      </div>
+    </div></div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו חלק-חלק. לכל חלק דוגמה מתהליך הטיפול בליד של "בית ועיצוב".</li>
+    <li>שימו לב במיוחד ל"החלטות" ול"מערכות" — שם מתחבאת המורכבות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="1" data-title="הראיון">
+  <div class="s-kicker">איך אוספים מידע</div>
+  <h2>הראיון: 8 שאלות למי שעושה את העבודה</h2>
+  <div class="s-body mid">
+    <div class="qs-int">
+      <div><b>התחלה</b>מה מתחיל את התהליך? מאיפה מגיעה הבקשה?</div>
+      <div><b>שלבים</b>תעבור/י איתי צעד אחרי צעד על המקרה האחרון.</div>
+      <div><b>מערכות</b>באילו מערכות, קבצים או אתרים משתמשים בכל שלב?</div>
+      <div><b>זמנים</b>כמה זמן כל שלב? כמה פעמים בחודש?</div>
+      <div><b>החלטות</b>איפה צריך להחליט? לפי אילו כללים?</div>
+      <div><b>חריגים</b>מה קורה כשמשהו לא מסתדר? כמה זה נפוץ?</div>
+      <div><b>כאבים</b>מה הכי מעצבן? איפה יש טעויות?</div>
+      <div><b>הצלחה</b>איך נראה תהליך מושלם מבחינתך?</div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לא שואלים את כולן בכל ראיון. אלה כיווני חקירה.</li>
+    <li>החשובות: "שלבים" (מקרה אמיתי אחרון) ו"כאבים" (שם ההזדמנות).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="הטריק החשוב">
+  <div class="s-kicker">טיפ מהשטח</div>
+  <h2>בקשו מקרה אמיתי — לא "איך זה בדרך כלל"</h2>
+  <div class="s-body mid">
+    <div class="callout tip"><b>הטריק החשוב</b>מבקשים לעבור על המקרה האחרון והאמיתי שטופל, לא על "איך זה עובד בדרך כלל". כך מגלים את השלבים שאף אחד לא כתב בנוהל — ההעתק-הדבק, הבדיקה הקטנה, ההתייעצות בצד.</div>
+    <p class="muted" style="font-size:22px;margin:0">"בדרך כלל" = התהליך שרוצים שיהיה. "המקרה האחרון" = התהליך שבאמת קורה. את השני ממפים.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>העובדים כמעט תמיד מדלגים על צעדים "מובנים מאליהם" כשמתארים בכללי.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 2 ============================== -->
+<section class="slide divider" data-min="1" data-block="2" data-title="בלוק 2 · As-Is ו-To-Be">
+  <div class="s-kicker">בלוק 2</div>
+  <h1>As‑Is מול To‑Be</h1>
+  <p class="sub">קודם מבינים מה קורה היום, ורק אחר כך מתכננים את התהליך הרצוי — ומשרטטים אותו.</p>
+  <aside class="notes"><ul><li>כאן נכנסת ה"טעימה מ-Make": ליד אחד עובר בתהליך הישן מול האוטומטי.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="As-Is מול To-Be">
+  <div class="s-kicker">שני תצלומים של התהליך</div>
+  <h2>קודם מבינים מה קורה היום, ורק אחר כך משנים</h2>
+  <div class="s-body mid">
+    <div class="deal">
+      <div class="dl do"><b>📸 As‑Is — התהליך היום</b>
+        <ul>
+          <li>איך זה קורה בפועל, כולל מה שעושים "על הדרך"</li>
+          <li>כולל ההעתק-הדבק, ההמתנות והטעויות</li>
+          <li>לא מייפים — מתעדים את המציאות</li>
+        </ul></div>
+      <div class="dl give"><b>🎯 To‑Be — התהליך הרצוי</b>
+        <ul>
+          <li>איך נרצה שייראה אחרי השינוי</li>
+          <li>מה עושה Make, מה עושה Claude, ומה נשאר לאדם</li>
+          <li>כל שלב ידני שבוטל = זמן שחסכנו</li>
+        </ul></div>
+    </div>
+    <div class="callout"><b>הכלל</b>אי אפשר לתכנן To‑Be טוב בלי As‑Is מדויק. אם לא יודעים מה קורה היום, לא יודעים מה לשפר.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>As‑Is = צילום מצב, To‑Be = תוכנית אדריכל. אי אפשר לתכנן שיפוץ בלי לראות את הבית.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="טעויות נפוצות במיפוי">
+  <div class="s-kicker">חלק 2 · As-Is</div>
+  <h2>שלוש טעויות נפוצות במיפוי תהליך</h2>
+  <div class="s-body mid">
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ ממפים את הרצוי</b><div class="muted" style="font-size:15px">מתעדים איך "אמור" לעבוד, לא איך באמת עובד. מפספסים את העוקפים והתיקונים.</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ מדלגים על חריגים</b><div class="muted" style="font-size:15px">"בדרך כלל זה חלק" — אבל 20% מהמקרים הם חריגים, ושם האוטומציה נשברת.</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>❌ לא רושמים מערכות</b><div class="muted" style="font-size:15px">שוכחים מאיפה המידע מגיע בכל שלב. בלי זה אי אפשר לחבר ב-Make.</div></div>
+    </div>
+    <div class="callout tip"><b>התרופה</b>לעבור על מקרה אמיתי אחרון, לשאול בכל שלב "ומה אם…", ולרשום ליד כל שלב איזו מערכת או קובץ מעורבים.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>שלוש הטעויות האלה הן ההבדל בין אפיון שמוביל לאוטומציה שעובדת, לאפיון שמוביל לתסכול.</li>
+    <li>שאלה לכיתה: "איזו מהשלוש הכי מפתה אתכם?" (לרוב: לדלג על חריגים).</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="5" data-block="2" data-title="טעימה מ-Make: As-Is מול To-Be">
+  <div class="s-kicker">🧩 טעימה מ-Make · אינטראקטיבי</div>
+  <h2>ליד חדש מהאתר: מהטופס ועד התשובה</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>As‑Is מול To‑Be — לחצו הפעלה</h3></div>
+      <div class="sim-body">
+        <div class="ps-top">
+          <div class="seg" id="psSeg"><button class="on" data-m="asis">As‑Is · היום</button><button data-m="tobe">To‑Be · עם אוטומציה</button></div>
+          <div class="row"><button class="btn" id="psPlay">▶ הפעלה</button><button class="btn ghost" id="psReset">↺ איפוס</button></div>
+        </div>
+        <div class="ps-stats">
+          <div><b id="psHands">0</b><span>דקות עבודה של נציג</span></div>
+          <div><b id="psWait">0</b><span>זמן עד שהלקוח מקבל תשובה</span></div>
+          <div><b id="psManual">0</b><span>שלבים ידניים</span></div>
+        </div>
+        <div class="steps" id="psSteps"></div>
+        <div class="legend"><span><i style="background:var(--p3)"></i>עבודה ידנית</span><span><i style="background:var(--p4)"></i>המתנה</span><span><i style="background:var(--p2)"></i>אוטומטי (Make)</span><span><i style="background:var(--claude)"></i>Claude</span><span><i style="background:var(--p5)"></i>אישור אדם</span></div>
+        <div class="cmp" id="psCmp"></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הפעילו As‑Is, ספרו שלבים ידניים והמתנה. אחר כך To‑Be, והשוו.</li>
+    <li>ב-To‑Be: הירוק הוא Make, הכתום-אדום בוטל, וה-✳️ הוא Claude שמנסח תשובה.</li>
+    <li>אוטומציה לא מוחקת את האדם — היא מוחקת את ההעתק-הדבק ומשאירה לו את האישור.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="מה Make עשה כאן">
+  <div class="s-kicker">🧩 טעימה מ-Make</div>
+  <h2>מה בעצם Make עשה שם?</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>⚡</i><b>טריגר</b><span>הטופס נשלח → Make מתעורר (Webhook)</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🧩</i><b>מודולים</b><span>שומר לגיליון ול-CRM, בודק מלאי, קורא ל-Claude</span></div><div class="ar">⟵</div>
+      <div><i>✅</i><b>פעולה</b><span>שולח מייל ופותח משימת מעקב</span></div>
+    </div>
+    <div class="callout claude"><b>זו טעימה — נבנה את זה בהמשך</b>כל המילים כאן — Webhook, מודול, מיפוי שדות, קוד תשובה — הן בדיוק מה שנלמד בחצי השני של המפגש, ונבנה ב-Make ממפגש 4.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה גשר מצוין לחלק הטכני: "כדי שהמודולים האלה יעבדו, צריך להבין JSON ו-API — וזה בדיוק מה שנעשה אחרי ההפסקה."</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="טעימה מ-Claude: ניסוח התשובה">
+  <div class="s-kicker">🤖 טעימה מ-Claude · אינטראקטיבי</div>
+  <h2>החלק ה"חכם": Claude כותב את התשובה ללקוח</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 6px">ב-To‑Be, השלב שסומן ✳️ הוא Claude. הוא מקבל את העובדות מ-Make ומנסח מייל אישי. לחצו כדי לראות.</p>
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude כתב?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b style="color:var(--claude)">מה Make נתן ל-Claude</b>
+            <ul style="margin:8px 0 0;font-size:18px">
+              <li>שם הליד: מיכל לוי</li>
+              <li>המוצר: מנורת עמידה — <b>יש במלאי</b></li>
+              <li>ההודעה: "מתי זה יגיע?"</li>
+              <li>הוראות: טון אדיב, חתימה של העסק, בלי הבטחת תאריך</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color:var(--claude)"><b style="color:var(--claude)">המייל ש-Claude ניסח</b>
+            <p style="margin:8px 0 0;font-size:18px;line-height:1.6">היי מיכל, תודה על הפנייה! מנורת העמידה נמצאת במלאי. נשמח לתאם מועד אספקה — נחזור אלייך עם האפשרויות הקרובות. אם יש עוד שאלה, אנחנו כאן.<br>צוות השירות של בית ועיצוב</p>
+          </div>
+        </div>
+        <div class="callout tip" style="margin-top:12px"><b>אותו תהליך, תשובה אנושית</b>Make מזיז נתונים; Claude מוסיף את השיקול והטון. בהמשך נראה איך Make שולח ל-Claude בדיוק את העובדות האלה דרך API.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לחצו רק אחרי ששאלתם: "מה הייתם רוצים שהתשובה תכיל?"</li>
+    <li>חברו לחלק הטכני: "את העובדות האלה Make שולח ל-Claude כ-JSON, דרך API. בדיוק מה שנראה היום."</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="איפה אדם נשאר בתהליך">
+  <div class="s-kicker">חלק 2 · To-Be</div>
+  <h2>אוטומציה טובה משאירה לאדם את ההחלטות</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card" style="border-color:var(--p2)"><b>🤖 מה כדאי לאוטומט</b><ul style="margin:8px 0 0;font-size:16px"><li>העתקת נתונים בין מערכות</li><li>סיווג, חילוץ וסיכום</li><li>ניסוח טיוטות</li><li>בדיקות, תזכורות ומעקב</li></ul></div>
+      <div class="card" style="border-color:var(--p5)"><b>🙋 מה משאירים לאדם</b><ul style="margin:8px 0 0;font-size:16px"><li>אישור לפני שליחה ללקוח</li><li>החלטות עם מחיר טעות גבוה</li><li>כסף: החזרים וזיכויים</li><li>חריגים ומקרים רגישים</li></ul></div>
+    </div>
+    <div class="callout warn"><b>הכלל: נקודת אישור אחת לפחות</b>כל תהליך אוטומטי צריך מקום שבו אדם יכול לעצור, לבדוק ולאשר — במיוחד לפני פעולה מול לקוח או כסף.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה מרגיע חשש נפוץ: "האם ה-AI ישלח דברים במקומי בלי שליטה?" לא — אתם מחליטים איפה הוא עוצר לאישור.</li>
+    <li>חברו לטעימת ה-To-Be: שם הנציג מאשר בלחיצה לפני השליחה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="2" data-title="תרשים זרימה: 5 צורות">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>חמש צורות שמספיקות כמעט לכל תהליך</h2>
+  <div class="s-body">
+    <div class="syms" id="syms"></div>
+    <div class="sym-info" id="symInfo"></div>
+  </div>
+  <aside class="notes"><ul>
+    <li>מלבן = פעולה, מעוין = החלטה (כן/לא), גליל = איפה הנתונים.</li>
+    <li>לא צריך צורות "נכונות" — צריך שכל הצוות יבין את אותו תרשים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="טעימה מ-Claude: Mermaid">
+  <div class="s-kicker">🤖 טעימה מ-Claude</div>
+  <h2>Claude משרטט את התרשים בשבילכם</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 6px">מתארים ל-Claude את השלבים במילים, ומבקשים "תרשים זרימה בקוד Mermaid". לחצו לדוגמה.</p>
+    <div class="reveal">
+      <button class="btn rv-btn">👁 הקוד שׁ-Claude מחזיר</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="copybox"><div class="material">flowchart TD
+  A([ליד ממלא טופס]) --> B[Make שומר לגיליון ול-CRM]
+  B --> C{המוצר במלאי?}
+  C -- כן --> D[Claude מנסח תשובה עם מועד]
+  C -- לא --> E[Claude מציע מוצר דומה]
+  D --> F[נציג מאשר ושולח]
+  E --> F
+  F --> G([הליד קיבל תשובה])</div></div>
+          <div class="card"><b>מה עושים עם זה</b>
+            <ul style="margin:8px 0 0;font-size:17px">
+              <li>מדביקים ב-<span class="en">mermaid.live</span> ומקבלים תרשים מיד</li>
+              <li>או ב-<span class="en">draw.io</span>: Arrange ‹ Insert ‹ Mermaid</li>
+              <li>עורכים ומצרפים למסמך האפיון</li>
+            </ul>
+            <div class="callout claude" style="margin-top:10px"><b>נתרגל את זה</b>בתרגול תבקשו מ-Claude תרשים כזה לתהליך שלכם.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>אם יש אינטרנט — פתחו mermaid.live חי והדביקו את הקוד.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 3 ============================== -->
+<section class="slide divider" data-min="1" data-block="3" data-title="בלוק 3 · מה לאוטומט ו-ROI">
+  <div class="s-kicker">בלוק 3</div>
+  <h1>מה כדאי להפוך לאוטומטי</h1>
+  <p class="sub">לא כל משימה מתאימה. בודקים כמה היא שווה, כמה קל לבנות, וכמה היא מחזירה.</p>
+  <aside class="notes"><ul><li>מיפינו את התהליך. עכשיו מחליטים אילו חלקים שווה להפוך לאוטומטיים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="ערך מול קלות">
+  <div class="s-kicker">איך בוחרים</div>
+  <h2>שתי שאלות על כל משימה</h2>
+  <div class="s-body mid">
+    <div class="c3">
+      <div class="card"><b style="font-size:24px">💰 כמה זה שווה?</b><div class="muted">כמה זמן המשימה גוזלת בחודש — תדירות × דקות. זה ה"ערך".</div></div>
+      <div class="card"><b style="font-size:24px">🔧 כמה קל לבנות?</b><div class="muted">חוקים ברורים, נתונים דיגיטליים, ומחיר טעות נמוך. זו ה"קלות".</div></div>
+      <div class="card"><b style="font-size:24px">🎯 מתחילים מ…</b><div class="muted">ערך גבוה + קלות גבוהה. ניצחון מהיר שמוכיח ערך.</div></div>
+    </div>
+    <div class="callout warn"><b>זהירות ממשימות "קשות ויקרות"</b>משימה ששווה הרבה אבל קשה לבנות (למשל אישור החזר גדול) היא פרויקט, לא ניצחון מהיר. לרוב משאירים בה אדם.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>"מחיר טעות": מייל שגוי זניח; אישור החזר שגוי יקר. ככל שגבוה, פחות מתאים ל"AI לבד".</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="3" data-title="מטריצת ההזדמנויות">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>מטריצת ההזדמנויות: ערך מול קלות</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>ניקוד הזדמנויות לאוטומציה</h3></div>
+      <div class="sim-body">
+        <div class="task-list" id="taskList"></div>
+        <div class="mx">
+          <div id="mxSvg"></div>
+          <div>
+            <div class="sl"><span>פעמים בחודש</span><input type="range" id="sFreq" min="1" max="400" value="120"><span class="v" id="vFreq"></span></div>
+            <div class="sl"><span>דקות בכל פעם</span><input type="range" id="sMin" min="1" max="60" value="6"><span class="v" id="vMin"></span></div>
+            <div class="sl"><span>חוקים ברורים</span><input type="range" id="sRule" min="1" max="5" value="4"><span class="v" id="vRule"></span></div>
+            <div class="sl"><span>נתונים דיגיטליים</span><input type="range" id="sDig" min="1" max="5" value="5"><span class="v" id="vDig"></span></div>
+            <div class="sl"><span>מחיר טעות</span><input type="range" id="sErr" min="1" max="5" value="2"><span class="v" id="vErr"></span></div>
+            <div class="muted" style="font-size:14px" id="mxHours"></div>
+            <div class="verdict" id="mxVerdict"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>בחרו 2–3 משימות והראו לאיזה רבע הן נופלות. בקשו מהכיתה לנחש לפני.</li>
+    <li>הזיזו "מחיר טעות" ותראו איך משימה קופצת לרבע הירוק.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="3" data-title="מה זה ROI">
+  <div class="s-kicker">השאלה של כל מנהל</div>
+  <h2>ROI: כמה זה עולה, וכמה זה חוסך?</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>💸</i><b>עלות</b><span>שעות בנייה + כלים חודשיים</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>⏱️</i><b>חיסכון</b><span>שעות שנחסכות × עלות שעה</span></div><div class="ar">⟵</div>
+      <div><i>📈</i><b>החזר</b><span>מתי זה מחזיר את עצמו</span></div>
+    </div>
+    <div class="formula">ROI = (חיסכון נטו ל-12 חודשים − עלות הבנייה) ÷ עלות הבנייה × 100%</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ROI הוא השפה מול מנהל. גם אוטומציה מעולה לא תאושר בלי המספר.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="3" data-title="מחשבון ROI">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>מחשבון ROI לאוטומציה</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">מחשבון</span><h3>הזיזו את הסליידרים וראו את ההחזר</h3></div>
+      <div class="sim-body">
+        <div class="roi">
+          <div class="roi-in" id="roiIn"></div>
+          <div>
+            <div class="roi-out">
+              <div><b id="oSave"></b><span>חיסכון נטו בחודש</span></div>
+              <div><b id="oHours"></b><span>שעות שנחסכות בחודש</span></div>
+              <div><b id="oPay"></b><span>החזר ההשקעה</span></div>
+              <div><b id="oRoi"></b><span>ROI אחרי 12 חודשים</span></div>
+            </div>
+            <div id="roiChart"></div>
+          </div>
+        </div>
+        <div class="formula">ROI = (12-month net savings − build cost) ÷ build cost × 100%</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>התחילו מברירת המחדל והראו את נקודת האיזון. הזיזו "פעמים בחודש" מעלה — ההחזר מתקצר.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BREAK ============================== -->
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה ראשונה">
+  <div class="s-kicker">הפסקה 1 מתוך 2</div>
+  <h1>הפסקה · 10 דקות</h1>
+  <div class="timer" data-sec="600"></div>
+  <p class="sub">כשחוזרים — צוללים לצד הטכני: איך מערכות באמת מדברות זו עם זו.</p>
+  <aside class="notes"><ul><li>הפעילו את הטיימר. אחרי ההפסקה מתחיל חומר חדש לגמרי (JSON/API), אז כדאי שכולם יהיו רעננים.</li><li>זו ההפסקה הראשונה. השנייה תהיה לפני התרגול, בסוף החלק הטכני.</li></ul></aside>
+</section>
+
+<!-- ============================== BLOCK 4: JSON + API ============================== -->
+<section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · JSON ו-API">
+  <div class="s-kicker">בלוק 4 · יסודות טכניים</div>
+  <h1>איך מערכות מדברות: JSON ו-API</h1>
+  <p class="sub">כדי לחבר בין מערכות צריך להבין באיזו שפה הן מעבירות נתונים, ואיך מבקשים מהן משהו.</p>
+  <aside class="notes"><ul><li>מעבר מ"מה התהליך" ל"איך זה עובד מתחת למכסה". זה החומר שמאפשר לבנות ב-Make.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="למה טכני">
+  <div class="s-kicker">למה זה חשוב לנו</div>
+  <h2>אוטומציה = לחבר מערכות. לחבר = לדבר באותה שפה</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>📝</i><b>טופס באתר</b><span>שולח נתונים…</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔌</i><b>Make / API</b><span>…ב-JSON, דרך בקשת API</span></div><div class="ar">⟵</div>
+      <div><i>🗂️</i><b>גיליון / CRM</b><span>מקבל ומעדכן</span></div>
+    </div>
+    <div class="callout"><b>שלושת המושגים של היום</b><b>JSON</b> = הפורמט של הנתונים. <b>API</b> = הדרך לבקש ולשלוח אותם. <b>Webhook</b> = דרך לקבל התראה מיד כשקורה משהו. את שלושתם פוגשים בכל תרחיש Make.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לא צריך להיות מתכנתים. צריך להבין את שלושת המושגים ברמה שמאפשרת למפות שדות ב-Make.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="JSON: הפורמט">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>JSON: נתונים שגם אדם וגם מכונה קוראים</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>בנוי מזוגות של מפתח: ערך</b>
+        <ul style="margin:8px 0 0;font-size:18px">
+          <li><b>טקסט</b> ("מיכל לוי") · <b>מספר</b> (890)</li>
+          <li><b>אמת/שקר</b> (true/false) · <b>ריק</b> (null)</li>
+          <li><b>אובייקט</b> { } · <b>מערך</b> (רשימה) [ ]</li>
+        </ul>
+      </div>
+      <div class="copybox"><div class="material">{
+  "order_id": 48213,
+  "paid": true,
+  "customer": { "name": "מיכל לוי" },
+  "items": [ "מנורה", "כרית" ]
+}</div></div>
+    </div>
+    <div class="callout tip"><b>המושג הכי חשוב: נתיב</b>ב-Make מגיעים לכל ערך לפי הנתיב שלו, למשל <code>customer.name</code> או <code>items[0]</code>. זה בדיוק מה שנתרגל עכשיו.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הדגישו: מפתח תמיד במירכאות כפולות. זה מקור טעות נפוץ.</li>
+    <li>"נתיב" הוא המושג שחוזר בכל מיפוי שדות ב-Make. תעצרו עליו.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="JSON: ששת סוגי הערכים">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>ששת סוגי הערכים ב-JSON</h2>
+  <div class="s-body mid">
+    <div class="grid3">
+      <div class="card"><b>🔤 טקסט <span class="en">(string)</span></b><div class="raw" style="min-height:0;margin:6px 0">"מיכל לוי"</div><div class="muted" style="font-size:13px">תמיד במירכאות כפולות</div></div>
+      <div class="card"><b>🔢 מספר <span class="en">(number)</span></b><div class="raw" style="min-height:0;margin:6px 0">890</div><div class="muted" style="font-size:13px">בלי מירכאות</div></div>
+      <div class="card"><b>✅ אמת/שקר <span class="en">(boolean)</span></b><div class="raw" style="min-height:0;margin:6px 0">true / false</div><div class="muted" style="font-size:13px">כן או לא</div></div>
+      <div class="card"><b>⬜ ריק <span class="en">(null)</span></b><div class="raw" style="min-height:0;margin:6px 0">null</div><div class="muted" style="font-size:13px">אין ערך</div></div>
+      <div class="card"><b>📦 אובייקט <span class="en">(object)</span></b><div class="raw" style="min-height:0;margin:6px 0">{ "name": "…" }</div><div class="muted" style="font-size:13px">אוסף של מפתח:ערך</div></div>
+      <div class="card"><b>📋 מערך <span class="en">(array)</span></b><div class="raw" style="min-height:0;margin:6px 0">[ "א", "ב" ]</div><div class="muted" style="font-size:13px">רשימה מסודרת</div></div>
+    </div>
+    <div class="callout tip"><b>טעות נפוצה</b>מספר במירכאות (<code>"890"</code>) הוא טקסט, לא מספר — ולא תוכלו לחשב איתו. שימו לב מתי יש מירכאות ומתי אין.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו על ששת הסוגים. ההבחנה החשובה: אובייקט (קבוצה) מול מערך (רשימה).</li>
+    <li>הדגישו את טעות המירכאות — היא גורמת להרבה באגים ב-Make ("למה אי אפשר לחבר את המספרים?").</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="JSON: נתיב לערך מקונן">
+  <div class="s-kicker">חלק 1 · JSON</div>
+  <h2>אובייקטים בתוך אובייקטים — והנתיב אליהם</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="copybox"><div class="material">{
+  "order_id": 48213,
+  "customer": {
+    "name": "מיכל לוי",
+    "city": "חולון"
+  },
+  "items": [
+    { "name": "מנורה", "price": 890 },
+    { "name": "כרית",  "price": 79 }
+  ]
+}</div></div>
+      <div>
+        <div class="card"><b>הנתיב = איך מגיעים לערך</b>
+          <ul style="margin:8px 0 0;font-size:16px">
+            <li><code>customer.name</code> → "מיכל לוי"</li>
+            <li><code>customer.city</code> → "חולון"</li>
+            <li><code>items[0].price</code> → 890</li>
+            <li><code>items[1].name</code> → "כרית"</li>
+          </ul>
+        </div>
+        <div class="callout warn" style="font-size:15px;margin-top:10px"><b>אינדקס מתחיל מ-0</b>הפריט הראשון במערך הוא <code>[0]</code>, השני <code>[1]</code>. זו הטעות הכי נפוצה במיפוי שדות ב-Make.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה המושג שהכי חוזר בעבודה עם Make: הנתיב. תעצרו עליו.</li>
+    <li>בקשו מהכיתה להגיד את הנתיב ל"השם של המוצר השני" לפני שאתם מראים (items[1].name).</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="4" data-title="סייר JSON">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>סייר JSON: לחצו על מפתח וראו את הנתיב</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>הזמנה מ"בית ועיצוב"</h3></div>
+      <div class="sim-body">
+        <div class="jx2">
+          <div class="jtree" id="jtree"></div>
+          <div class="jinfo">
+            <b>הנתיב</b><div class="jpath" id="jpath">לחצו על מפתח</div>
+            <b>הערך</b><div class="jpath" id="jval">–</div>
+            <b>הסוג</b><div class="types" id="jtypes"></div>
+            <div class="chal"><b>אתגר:</b> <span id="chQ"></span><div class="res" id="chR"></div><button class="btn sm ghost" id="chN" style="margin-top:6px">אתגר הבא ←</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לחצו על כמה מפתחות והראו איך הנתיב נבנה. פתרו אתגר אחד מול הכיתה.</li>
+    <li>שימו לב לנתיב של מערך: <code>items[0].price</code> — אינדקס מתחיל מ-0.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="4" data-title="תרגיל: בודק JSON">
+  <div class="s-kicker">🛠️ תרגיל קצר</div>
+  <h2>מצאו את הטעות ב-JSON</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">תרגול</span><h3>בודק JSON</h3></div>
+      <div class="sim-body">
+        <div class="row" style="margin-bottom:10px"><button class="btn sm ghost" data-bad="0">פסיק חסר</button><button class="btn sm ghost" data-bad="1">גרש במקום מירכאות</button><button class="btn sm ghost" data-bad="2">פסיק מיותר בסוף</button><button class="btn sm ghost" data-bad="3">מפתח בלי מירכאות</button><button class="btn sm" data-bad="4">JSON תקין</button></div>
+        <div class="val"><textarea id="valIn" spellcheck="false"></textarea><div class="vres" id="valRes"></div></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לחצו על כל כפתור ובקשו מהכיתה לתקן לפני שהם רואים את הרמז. ארבע הטעויות האלה הן 90% מהבאגים ב-JSON.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="API: מלצר">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>API: מלצר בין שתי מערכות</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 4px">הלקוח (Make) לא נכנס למטבח (מסד הנתונים). הוא מוסר הזמנה למלצר (ה-API), והמלצר חוזר עם מנה (התשובה).</p>
+    <div class="tbl"><table>
+      <tr><th>שיטה</th><th>מה היא עושה</th><th>דוגמה</th></tr>
+      <tr><td><code>GET</code></td><td>קריאת נתונים</td><td>להביא את הזמנה 48213</td></tr>
+      <tr><td><code>POST</code></td><td>יצירת רשומה חדשה</td><td>ליצור ליד חדש</td></tr>
+      <tr><td><code>PUT / PATCH</code></td><td>עדכון רשומה</td><td>לשנות סטטוס ל"נשלחה"</td></tr>
+      <tr><td><code>DELETE</code></td><td>מחיקה</td><td>לבטל הזמנה</td></tr>
+    </table></div>
+    <p class="muted" style="font-size:16px;margin:8px 0 0">כל בקשה כוללת: <b>שיטה</b>, <b>כתובת</b> (Endpoint), <b>כותרות</b> (Headers, כולל המפתח), ולפעמים <b>גוף</b> (Body) ב-JSON.</p>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטאפורה של המלצר עובדת טוב. ה-API מסתיר את המורכבות ונותן דרך מוסדרת לבקש.</li>
+    <li>4 השיטות מספיקות ל-95% מהמקרים. ב-Make בוחרים אותן מרשימה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="GET: קריאת נתונים">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>GET — קוראים נתונים, ומבינים את התשובה</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה — מזג אוויר עכשיו</div>
+        <div class="raw" style="min-height:0"><span class="m">GET</span> api.open-meteo.com/v1/forecast
+    ?latitude=32.08&longitude=34.78
+    &current=temperature_2m</div>
+        <div class="muted" style="font-size:13px;margin:10px 0 4px">התשובה · <b style="color:var(--good)">200 OK</b></div>
+        <div class="raw" style="min-height:0">{
+  "current": {
+    "time": "2026-10-28T09:00",
+    "temperature_2m": 24.3
+  }
+}</div>
+      </div>
+      <div class="card"><b>איך קוראים את זה</b>
+        <ul style="margin:8px 0 0;font-size:16px">
+          <li>הטמפרטורה בנתיב <code>current.temperature_2m</code></li>
+          <li>הערך: <b>24.3</b> (מספר, בלי מירכאות)</li>
+          <li>ב-Make ממפים בדיוק את הנתיב הזה לשדה</li>
+        </ul>
+        <div class="callout claude" style="margin-top:10px"><b>זה כל הסיפור</b>כל אוטומציה שמושכת נתונים מתחילה מ-GET כזה, וקוראת ערך לפי נתיב. מה שלמדנו ב-JSON — חוזר כאן.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>חברו ישירות לשקף "GET קריאת נתונים" ולסייר JSON: אותו רעיון בדיוק, עכשיו על תשובה אמיתית.</li>
+    <li>אם יש אינטרנט — שלחו חי ב-Hoppscotch והראו את temperature_2m האמיתי.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="POST: יצירת רשומה">
+  <div class="s-kicker">חלק 2 · API</div>
+  <h2>POST — שולחים נתונים ויוצרים רשומה</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה — יוצרים ליד חדש</div>
+        <div class="raw" style="min-height:0"><span class="m">POST</span> /leads
+<span class="h">Content-Type:</span> application/json
+
+{
+  "name": "דני אבני",
+  "phone": "052-9876543",
+  "product": "ספה"
+}</div>
+      </div>
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">התשובה · <b style="color:var(--good)">201 Created</b></div>
+        <div class="raw" style="min-height:0">{
+  "id": 1043,
+  "status": "new",
+  "name": "דני אבני",
+  "phone": "052-9876543"
+}</div>
+        <div class="callout tip" style="font-size:15px;margin-top:10px"><b>201, לא 200</b>השרת מחזיר את הרשומה שנוצרה, כולל ה-<code>id</code> החדש — שאפשר להשתמש בו בשלב הבא של האוטומציה.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל מ-GET: ב-POST יש גוף (Body) ב-JSON, ובדרך כלל התשובה היא 201 ולא 200.</li>
+    <li>הדגישו את ה-id שחוזר: זה דפוס נפוץ — יוצרים רשומה, מקבלים מזהה, ומשתמשים בו הלאה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="5" data-block="4" data-title="דוגמה ממייק: מגרש API">
+  <div class="s-kicker">🧩 דוגמה ממייק · אינטראקטיבי</div>
+  <h2>מגרש משחקים: בקשת API כמו ש-Make שולח</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>ה-API של "בית ועיצוב"</h3></div>
+      <div class="sim-body">
+        <div class="pg">
+          <div class="pg-col">
+            <div><label>שיטה</label><select id="pgM"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select></div>
+            <div><label>כתובת (Endpoint)</label><select id="pgP"><option value="/orders">/orders · כל ההזמנות</option><option value="/orders/48213">/orders/48213 · הזמנה קיימת</option><option value="/orders/99999">/orders/99999 · לא קיימת</option></select></div>
+            <label class="chk"><input type="checkbox" id="pgK" checked> לשלוח מפתח API בכותרות</label>
+            <div><label>גוף הבקשה (POST / PUT)</label><textarea id="pgB" spellcheck="false">{
+  "customer": "נועה כהן",
+  "product": "שולחן אלון",
+  "total": 2490
+}</textarea></div>
+            <button class="btn" id="pgSend">שליחת הבקשה ←</button>
+            <div><label>כך נראית הבקשה בפועל</label><div class="raw" id="pgRaw"></div></div>
+          </div>
+          <div class="wire"><div class="line"></div><div class="node">Make<br>(לקוח)</div><div class="pkt" id="pkt">✉️</div><div class="node">API<br>(שרת)</div></div>
+          <div class="pg-col">
+            <label>התשובה</label>
+            <div><span class="status" id="pgS">–</span></div>
+            <div class="resp-expl" id="pgE">שלחו בקשה כדי לראות תשובה.</div>
+            <div class="raw" id="pgR" style="min-height:180px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זו בדיוק פעולת "HTTP" או מודול אפליקציה ב-Make. הדגימו: בקשה בלי מפתח (401), הזמנה לא קיימת (404), POST שיוצר רשומה (201).</li>
+    <li>נסו לשלוח הרבה בקשות ברצף כדי לקבל 429 — זה מה שקורה כשחורגים ממגבלת קצב.</li>
+    <li>הנקודה: Make בונה בדיוק את הבקשה הזאת בשבילכם; אתם רק ממלאים את השדות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="קודי סטטוס">
+  <div class="s-kicker">חלק 2 · קודי סטטוס</div>
+  <h2>הקוד בתשובה אומר מה קרה</h2>
+  <div class="s-body mid">
+    <div class="codes">
+      <div class="code" style="--c:var(--good)"><b>200</b><div>OK</div><span>הצליח, הנתונים בגוף</span></div>
+      <div class="code" style="--c:var(--good)"><b>201</b><div>Created</div><span>נוצרה רשומה (אחרי POST)</span></div>
+      <div class="code" style="--c:var(--p4)"><b>400</b><div>Bad Request</div><span>JSON שבור או שדה חסר</span></div>
+      <div class="code" style="--c:var(--p4)"><b>401</b><div>Unauthorized</div><span>אין מפתח, או מפתח שגוי</span></div>
+      <div class="code" style="--c:var(--p4)"><b>404</b><div>Not Found</div><span>הכתובת/רשומה לא קיימות</span></div>
+      <div class="code" style="--c:var(--p4)"><b>429</b><div>Too Many</div><span>יותר מדי בקשות — לחכות</span></div>
+      <div class="code" style="--c:var(--bad)"><b>500</b><div>Server Error</div><span>תקלה בשרת — לנסות שוב</span></div>
+      <div class="code" style="--c:var(--p2)"><b>2xx/4xx/5xx</b><div>הכלל</div><span>2=תקין · 4=אנחנו · 5=השרת</span></div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>לא צריך לשנן את כולם. צריך לזכור את הכלל: 2 תקין, 4 הבעיה אצלנו, 5 הבעיה בשרת.</li>
+    <li>באוטומציה הקוד קובע מה קורה הלאה: 200 → ממשיכים; 429/500 → ניסיון חוזר; 404 → מסלול חלופי.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 5: AUTH + WEBHOOK + CLAUDE API ============================== -->
+<section class="slide" data-min="3" data-block="4" data-title="קודי סטטוס באוטומציה">
+  <div class="s-kicker">חלק 2 · קודי סטטוס</div>
+  <h2>מה האוטומציה עושה לכל קוד</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table style="font-size:15.5px">
+      <tr><th>קוד</th><th>מה קרה</th><th>מה Make עושה</th></tr>
+      <tr><td><b style="color:var(--good)">200 / 201</b></td><td>הצליח</td><td>ממשיך לשלב הבא עם הנתונים</td></tr>
+      <tr><td><b style="color:var(--p4)">404</b></td><td>לא נמצא</td><td>מסלול חלופי (למשל "צור רשומה חדשה")</td></tr>
+      <tr><td><b style="color:var(--p4)">401 / 403</b></td><td>בעיית הרשאה</td><td>עוצר ומתריע — המפתח שגוי או חסר</td></tr>
+      <tr><td><b style="color:var(--p4)">429</b></td><td>יותר מדי בקשות</td><td>ממתין ומנסה שוב <span class="en">(retry)</span></td></tr>
+      <tr><td><b style="color:var(--bad)">500</b></td><td>תקלה בשרת</td><td>ניסיון חוזר מאוחר יותר</td></tr>
+    </table></div>
+    <div class="callout warn"><b>תמיד מטפלים בשגיאות</b>אוטומציה טובה לא מניחה שהכול יעבוד. לכל קוד שאינו 2xx צריך להחליט מראש מה קורה — אחרת התהליך נתקע בשקט, ואף אחד לא יודע.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה ההבדל בין אוטומציה "שעובדת בהדגמה" לאוטומציה אמינה: הטיפול בקודים שאינם 200.</li>
+    <li>ב-Make יש Error Handlers בדיוק לזה — נלמד אותם בהמשך הקורס.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="כלים אמיתיים ל-API">
+  <div class="s-kicker">חלק 2 · כלים</div>
+  <h2>מהסימולציה לכלי אמיתי: Postman וחבריו</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><h4>🚀 Postman</h4><p class="muted" style="margin:0;font-size:16px">הכלי המוביל לשליחת בקשות API. בונים בקשה — שיטה, כתובת, כותרות וגוף — שולחים, ורואים תשובה וקוד סטטוס. יש גם <b>גרסת דפדפן ללא התקנה</b>, ושומרים בקשות ב-Collections.</p><div class="muted en" style="font-size:14px;margin-top:6px">postman.com</div></div>
+      <div class="card" style="border-color:var(--accent)"><h4>🧪 מומלץ לקורס: Hoppscotch</h4><p class="muted" style="margin:0;font-size:15px">חינמי, בדפדפן, בלי התקנה ובלי הרשמה — נפתח ומתחילים לשלוח בקשות. <span class="en">hoppscotch.io</span>. חלופה נוספת: <b>ReqBin</b> <span class="en">(reqbin.com)</span>.</p></div>
+    </div>
+    <div class="grid2 mt">
+      <div class="card" style="border-color:var(--p2)"><h4>🧪 API-ים חינמיים לתרגול</h4><ul style="margin:0;font-size:15px"><li><b>JSONPlaceholder</b> — GET/POST מזויף לתרגול <span class="en">(jsonplaceholder.typicode.com)</span></li><li><b>httpbin</b> — מחזיר לכם את הבקשה ששלחתם <span class="en">(httpbin.org)</span></li></ul></div>
+      <div class="card" style="border-color:var(--p4)"><h4>🐱 לזכור קודי סטטוס</h4><p class="muted" style="margin:0;font-size:16px"><b>http.cat</b> — כל קוד סטטוס עם תמונת חתול. דרך משעשעת וזכירה ללמוד 200, 404, 500. <span class="en">(http.cat/404)</span></p></div>
+    </div>
+    <div class="callout claude"><b>הקשר ל-Make</b>כל מה ש-Postman עושה ידנית — בניית הבקשה ושליחתה — Make עושה בשבילכם במודול HTTP. מי שמבין Postman, מבין בדיוק מה Make עושה מתחת למכסה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המלצה מעשית: Postman לגרסת הדפדפן, או Hoppscotch למי שלא רוצה להירשם. לשיעור אין הבדל.</li>
+    <li>httpbin.org/get הוא כלי הוראה מצוין: הוא מחזיר בדיוק את מה ששלחתם — כותרות, שיטה והכול. מושלם כדי "לראות" בקשה.</li>
+    <li>http.cat הוא גימיק, אבל עובד: סטודנטים זוכרים 404 בזכות החתול.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="מדריך Hoppscotch · הממשק">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>Hoppscotch: מה נמצא איפה</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center">
+      <figure class="shot"><img src="assets/hoppscotch/01-interface.jpg" alt="ממשק Hoppscotch — שיטה, כתובת, Send ולשוניות"></figure>
+      <div>
+        <ul style="font-size:17px;line-height:1.85;padding-inline-start:18px;margin:0">
+          <li><b>שיטה</b> (מימין): GET / POST / PUT / DELETE</li>
+          <li><b>כתובת (URL)</b>: לאן שולחים את הבקשה</li>
+          <li>כפתור <b>Send</b> הסגול: שולח את הבקשה</li>
+          <li>לשוניות: <b>Parameters · Body · Headers · Authorization</b></li>
+          <li>התשובה מופיעה למטה: <b>קוד סטטוס</b> + גוף ב-JSON</li>
+        </ul>
+        <div class="callout tip" style="font-size:14.5px"><b>בלי התקנה</b>נכנסים ל-<span class="en">hoppscotch.io</span> ומתחילים מיד. אפשר להירשם (חינם) כדי לשמור בקשות ל-Collections.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הראו את המסך חי אם אפשר. הנקודה: זה פשוט — שיטה, כתובת, Send, ותשובה.</li>
+    <li>זה אותו מבנה כמו המודול HTTP ב-Make: אותם שדות בדיוק.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="מדריך Hoppscotch · GET">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>GET צעד אחר צעד — מזג אוויר אמיתי</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <ol class="steps" style="font-size:16.5px">
+          <li>נכנסים ל-<span class="en">hoppscotch.io</span></li>
+          <li>משאירים את השיטה על <b>GET</b></li>
+          <li>מדביקים בכתובת:<div class="raw" style="min-height:0;font-size:10px;margin-top:4px">api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m</div></li>
+          <li>לוחצים <b>Send</b></li>
+          <li>רואים למטה <b style="color:var(--good)">200 OK</b> ואת ה-JSON</li>
+        </ol>
+      </div>
+      <div>
+        <figure class="shot"><img src="assets/hoppscotch/02-methods.png" alt="בחירת שיטת HTTP ב-Hoppscotch"><figcaption>בוחרים שיטה, מדביקים כתובת, לוחצים Send</figcaption></figure>
+        <div class="muted" style="font-size:12px;margin:8px 0 3px">התשובה שתקבלו:</div>
+        <div class="raw" style="min-height:0;font-size:12px">{ "current": { "temperature_2m": 24.3 } }</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הטמפרטורה בנתיב current.temperature_2m — חברו לשקף ה-JSON path.</li>
+    <li>בקשו מהכיתה לשנות את ה-lat/long לעיר שלהם.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="מדריך Hoppscotch · POST">
+  <div class="s-kicker">🧭 מדריך Hoppscotch</div>
+  <h2>POST — לשלוח גוף JSON</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center">
+      <figure class="shot"><img src="assets/hoppscotch/03-post-body.png" alt="לשונית Body עם application/json ב-Hoppscotch"></figure>
+      <div>
+        <ol class="steps" style="font-size:16.5px">
+          <li>משנים את השיטה ל-<b>POST</b></li>
+          <li>לשונית <b>Body</b> ‹ <b>Content Type</b> ‹ <span class="en">application/json</span></li>
+          <li>מקלידים את הגוף:<div class="raw" style="min-height:0;font-size:11px;margin-top:4px">{ "title": "בדיקה", "userId": 1 }</div></li>
+          <li>Send → מקבלים <b style="color:var(--good)">201 Created</b></li>
+        </ol>
+        <div class="callout warn" style="font-size:14px"><b>שגיאת רשת? (CORS)</b>אם הבקשה נכשלת, החליפו את ה-<b>Interceptor</b> ל-<b>Proxy</b> (בתחתית המסך) ושלחו שוב.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל מ-GET: ב-POST יש Body. שאר הדברים זהים.</li>
+    <li>הטיפ על Interceptor/Proxy חשוב — חלק מה-API-ים חוסמים בקשות מהדפדפן (CORS), וה-Proxy עוקף את זה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="Postman צעד אחרי צעד">
+  <div class="s-kicker">חלק 2 · Postman</div>
+  <h2>Postman צעד אחרי צעד</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div>
+        <ol class="steps" style="font-size:17px">
+          <li>בוחרים <b>שיטה</b> (GET) מהרשימה</li>
+          <li>מדביקים את ה<b>כתובת</b> (URL)</li>
+          <li>ב-<b>Headers</b>: מוסיפים מפתח API, אם צריך</li>
+          <li>ל-POST: <b>Body ‹ raw ‹ JSON</b></li>
+          <li>לוחצים <b>Send</b></li>
+          <li>קוראים את <b>קוד הסטטוס</b> ואת גוף התשובה</li>
+        </ol>
+        <div class="callout tip" style="font-size:15px"><b>טיפ</b>שומרים בקשות חוזרות ב-Collection, ומשתנים (כמו המפתח) ב-Environment — כדי לא להדביק אותם בכל פעם.</div>
+      </div>
+      <div>
+        <div class="muted" style="font-size:13px;margin-bottom:4px">הבקשה</div>
+        <div class="raw" style="min-height:0"><span class="m">GET</span> https://jsonplaceholder.typicode.com/users/1
+<span class="h">Accept:</span> application/json</div>
+        <div class="muted" style="font-size:13px;margin:10px 0 4px">התשובה · <b style="color:var(--good)">200 OK</b></div>
+        <div class="raw" style="min-height:0">{
+  "id": 1,
+  "name": "Leanne Graham",
+  "email": "leanne@example.com",
+  "company": { "name": "Romaguera" }
+}</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הדגימו חי אם אפשר: GET ל-jsonplaceholder.typicode.com/users/1, הצביעו על קוד 200 ועל ה-JSON.</li>
+    <li>אחר כך POST: שנו שיטה, הוסיפו Body (raw/JSON), ותקבלו 201. חברו לקודי הסטטוס מהשקף הקודם.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="API-ים חינמיים לשחק איתם">
+  <div class="s-kicker">חלק 2 · לשחק ולהתנסות</div>
+  <h2>API-ים חינמיים ומעניינים — בלי מפתח, בלי הרשמה</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 8px">מדביקים את הכתובת ב-<span class="en">Hoppscotch</span>, לוחצים Send, ומקבלים נתונים אמיתיים. כולם <code>GET</code>, בלי מפתח.</p>
+    <div class="grid3">
+      <div class="card"><b>🌦️ מזג אוויר עכשיו</b><div class="muted" style="font-size:13px">בכל נקודה בעולם · Open-Meteo</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m</div></div>
+      <div class="card"><b>💱 שער מטבע</b><div class="muted" style="font-size:13px">דולר לשקל · Frankfurter</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.frankfurter.app/latest?from=USD&to=ILS</div></div>
+      <div class="card"><b>🪙 מחיר קריפטו</b><div class="muted" style="font-size:13px">ביטקוין בשקלים · CoinGecko</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ils</div></div>
+      <div class="card"><b>🔮 ניחוש גיל משם</b><div class="muted" style="font-size:13px">Agify</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">api.agify.io/?name=david</div></div>
+      <div class="card"><b>🐶 תמונת כלב אקראית</b><div class="muted" style="font-size:13px">Dog CEO</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">dog.ceo/api/breeds/image/random</div></div>
+      <div class="card"><b>🎮 נתוני פוקימון</b><div class="muted" style="font-size:13px">PokéAPI</div><div class="raw" style="min-height:0;font-size:10.5px;margin-top:6px">pokeapi.co/api/v2/pokemon/pikachu</div></div>
+    </div>
+    <div class="callout claude"><b>למה זה חשוב לאוטומציה</b>מזג אוויר, שערי מטבע ומחירים הם בדיוק נתונים שאוטומציה אמיתית מושכת: "אם גשם מחר — שלח תזכורת ללקוח", "המר מחיר לשקלים בחשבונית". כל אלה מתחילים מבקשת <code>GET</code> פשוטה כזאת.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>פתחו את Hoppscotch והדביקו חי אחת-שתיים (מזג אוויר תמיד מרשים). תנו לכיתה להציע עיר/מטבע.</li>
+    <li>כל הכתובות נבדקו ועובדות ללא מפתח. httpbin.org/get ו-jsonplaceholder מצטרפים לרשימה מהשקפים הקודמים.</li>
+    <li>חברו לעסק: אותו GET פשוט הוא הבסיס לטריגר "אם התנאי X — עשה Y" ב-Make.</li>
+  </ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · אבטחה, Webhooks ו-Claude API">
+  <div class="s-kicker">בלוק 5 · יסודות טכניים</div>
+  <h1>אבטחה, Webhooks ו-Claude API</h1>
+  <p class="sub">איך ה-API יודע מי אתם, איך מקבלים התראה מיד כשקורה משהו, ואיך קוראים ל-Claude מתוך אוטומציה.</p>
+  <aside class="notes"><ul><li>שלושה נושאים שסוגרים את התמונה הטכנית: זהות, תזמון, ו-Claude כשירות.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="מפתח API מול OAuth">
+  <div class="s-kicker">חלק 3 · אבטחה</div>
+  <h2>איך ה-API יודע מי אתם</h2>
+  <div class="s-body mid">
+    <div class="keys">
+      <div class="card"><h4>🔑 מפתח API</h4><p class="muted" style="margin:0">מחרוזת סודית שנשלחת בכותרת של כל בקשה. כמו מפתח לבניין: מי שמחזיק בה נכנס. Claude API עובד כך.</p></div>
+      <div class="card"><h4>🎫 OAuth</h4><p class="muted" style="margin:0">המשתמש מאשר לאפליקציה גישה מוגבלת, בלי למסור סיסמה. כמו מפתח חניון: מתניע את הרכב, לא פותח את תא המטען. כך Make מתחבר ל-Gmail.</p></div>
+    </div>
+    <div class="callout warn" style="margin-top:12px"><b>מפתח API הוא כמו סיסמה</b>לא מדביקים אותו במסמך משותף, בצילום מסך או בוואטסאפ. שומרים במקום מאובטח, מגדירים מגבלת הוצאה, ואם דלף — מבטלים מיד ויוצרים חדש.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ההבדל המעשי: מפתח API = אתם מחזיקים סוד. OAuth = המשתמש מאשר, ואפשר לבטל בכל רגע.</li>
+    <li>האזהרה על המפתח חשובה מאוד — זו טעות אבטחה נפוצה של מתחילים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="5" data-title="OAuth צעד אחרי צעד">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>OAuth צעד אחרי צעד: Make מתחבר ל-Google Sheets</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">אנימציה</span><h3>מי מדבר עם מי בכל שלב</h3></div>
+      <div class="sim-body">
+        <div class="oa"><div class="actor" id="a0"><div class="e">🙋</div><b>אתם</b></div><div class="actor" id="a1"><div class="e">⚙️</div><b>Make</b></div><div class="actor" id="a2"><div class="e">🟩</div><b>Google</b></div></div>
+        <div class="oa-step" id="oaStep"></div>
+        <div class="dots" id="oaDots"></div>
+        <div class="row mt" style="justify-content:center"><button class="btn ghost" id="oaPrev">→ הקודם</button><button class="btn" id="oaNext">הבא ←</button></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו צעד-צעד. הנקודה: Make אף פעם לא רואה את הסיסמה של Google. המשתמש מאשר ישירות מול Google.</li>
+    <li>האסימון (Token) מוגבל להרשאות שאושרו, ואפשר לבטל אותו בכל רגע.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Polling מול Webhook">
+  <div class="s-kicker">חלק 3 · Webhooks</div>
+  <h2>"יש משהו חדש?" מול "אני אודיע לך"</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><h4>🔁 Polling</h4><p class="muted" style="margin:0">Make שואל את המערכת שוב ושוב "יש משהו חדש?". פשוט, אבל איטי ובזבזני — הרבה בקשות ריקות.</p></div>
+      <div class="card" style="border-color:var(--p2)"><h4>⚡ Webhook</h4><p class="muted" style="margin:0">המערכת שולחת הודעה לכתובת של Make ברגע שקורה משהו. מהיר, וחוסך פעולות (ב-Make משלמים לפי פעולות).</p></div>
+    </div>
+    <div class="callout tip"><b>הכלל</b>כשהמערכת תומכת ב-Webhook — משתמשים בו. כשלא — Make עושה Polling כל כמה דקות. בשקף הבא רואים את ההבדל חי.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטאפורה: Polling זה להתקשר למסעדה כל 5 דקות לשאול אם ההזמנה מוכנה. Webhook זה שהם מתקשרים אליכם כשהיא מוכנה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="3" data-block="5" data-title="סימולציה: Polling מול Webhook">
+  <div class="s-kicker">אינטראקטיבי</div>
+  <h2>5 לידים חדשים בדקה אחת — מי מגיב מהר?</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>Polling מול Webhook</h3></div>
+      <div class="sim-body">
+        <div class="row" style="margin-bottom:12px"><button class="btn" id="pwGo">▶ הפעלה</button><span class="muted" id="pwClock">0 שניות</span></div>
+        <div class="pw">
+          <div class="lane"><h4><span>🔁 Polling (כל 15 שניות)</span></h4><div class="track" id="tP"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="pReq">0</b><span>בקשות</span></div><div><b id="pEmpty">0</b><span>ריקות</span></div><div><b id="pLat">0</b><span>המתנה (שנ')</span></div></div></div>
+          <div class="lane"><h4><span>⚡ Webhook</span></h4><div class="track" id="tW"><div class="cli">Make</div><div class="srv">אתר</div></div><div class="st"><div><b id="wReq">0</b><span>הודעות</span></div><div><b id="wEmpty">0</b><span>ריקות</span></div><div><b id="wLat">0</b><span>המתנה (שנ')</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>הפעילו והצביעו על ההבדל: Webhook מגיב מיד (המתנה ~0), Polling צובר המתנה ובקשות ריקות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Claude API: מהצ'אט לשירות">
+  <div class="s-kicker">חלק 3 · Claude API</div>
+  <h2>מהצ'אט לשירות: Claude בתוך אוטומציה</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>💬</i><b>מפגש 1: צ'אט</b><span>אדם מקליד, Claude עונה</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔌</i><b>היום: API</b><span>Make שולח בקשה, מקבל JSON</span></div><div class="ar">⟵</div>
+      <div><i>🤖</i><b>אוטומציה</b><span>בלי שאדם יושב מול המסך</span></div>
+    </div>
+    <div class="callout claude"><b>אותו Claude, ממשק אחר</b>במקום להקליד בצ'אט, Make שולח ל-Claude בקשת API עם <code>system</code>, <code>messages</code> ו-<code>max_tokens</code>, ומקבל תשובה בפורמט JSON שאפשר לפרק לשדות.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה החיבור בין מפגש 1 (צ'אט) למפגשים הבאים (Claude בתוך תהליך).</li>
+  </ul></aside>
+</section>
+
+<section class="slide w" data-min="4" data-block="5" data-title="בונה בקשות ל-Claude API">
+  <div class="s-kicker">🤖 הצצה · מתחת למכסה</div>
+  <h2>כך נראית קריאה ל-Claude API (לרוב לא בונים ביד)</h2>
+  <div class="s-body">
+    <div class="sim">
+      <div class="sim-head"><span class="tag">סימולציה</span><h3>ערכו את השדות, צפו בבקשה, ושלחו</h3></div>
+      <div class="sim-body">
+        <div class="ca">
+          <div>
+            <label>model: איזה מודל</label><select id="caM"><option value="claude-haiku-5-5">Haiku: מהיר וחסכוני</option><option value="claude-sonnet-5-5" selected>Sonnet: מאוזן</option><option value="claude-opus-5-5">Opus: הכי חזק</option></select>
+            <label>max_tokens: אורך מקסימלי לתשובה</label><select id="caT"><option>100</option><option selected>300</option><option>1000</option></select>
+            <label>system: הוראות קבועות</label><textarea id="caS">אתה מחלץ נתונים מפניות לקוחות של "בית ועיצוב". החזר JSON בלבד עם השדות customer_name, order_id, topic.</textarea>
+            <label>messages: ההודעה של המשתמש</label><textarea id="caU">שלום, אני אבי מזרחי. הספה שהזמנתי (הזמנה 51877) הגיעה עם קרע בבד.</textarea>
+            <button class="btn mt" id="caGo">שליחה ל-Claude ←</button>
+          </div>
+          <div>
+            <label>הבקשה (POST /v1/messages)</label><div class="rq" id="caReq"></div>
+            <label>התשובה</label><div class="rq" id="caRes">לחצו "שליחה"</div>
+            <div class="muted" style="font-size:13px;margin-top:6px" id="caNote"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>מסגרו: "זו ההצצה הטכנית. ברוב האוטומציות לא כותבים את הבקשה הזאת ביד — מתארים ל-Claude את המשימה במילים, והפלטפורמה בונה את הקריאה. המיקוד שלנו הוא בתוצר."</li>
+    <li>שנו את ההודעה (למשל "איפה ההזמנה שלי 48213") והראו איך ה-JSON בתשובה משתנה.</li>
+    <li>הצביעו על <code>content[0].text</code> — זה השדה שנמפה ב-Make, ועל <code>usage</code> — לפיו משלמים.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="הנתיב שחשוב לזכור">
+  <div class="s-kicker">לסיכום הטכני</div>
+  <h2>הנתיב שחשוב לזכור</h2>
+  <div class="s-body mid">
+    <div class="copybox"><div class="material">// התשובה של Claude דרך API:
+{
+  "content": [ { "type": "text", "text": "{...התשובה כאן...}" } ],
+  "usage": { "input_tokens": 120, "output_tokens": 45 }
+}</div></div>
+    <div class="callout claude"><b>הטקסט נמצא ב-<code>content[0].text</code></b>זה השדה שנמפה ב-Make במפגשים הבאים (עם Parse JSON נפרק אותו לשדות). ב-<code>usage</code> רואים כמה טוקנים נכנסו ויצאו — ולפיהם משלמים.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>אם יש שקף אחד שהם חייבים לזכור מהחלק הטכני — זה הוא. הנתיב content[0].text חוזר בכל אוטומציה עם Claude.</li>
+  </ul></aside>
+</section>
+
+<!-- ============================== BLOCK 6: PRACTICE ============================== -->
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה שנייה">
+  <div class="s-kicker">הפסקה 2 מתוך 2</div>
+  <h1>הפסקה · 10 דקות</h1>
+  <div class="timer" data-sec="600"></div>
+  <p class="sub">סיימנו את החלק הטכני. כשחוזרים — תרגול מעשי: אפיון, חילוץ JSON ובקשות API אמיתיות.</p>
+  <aside class="notes"><ul><li>הפעילו את הטיימר. לפני ההפסקה, ודאו שכולם פתחו את Hoppscotch ואת Claude.</li><li>אחרי ההפסקה הכול מעשי — הם עובדים, אתם מלווים.</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="6" data-title="בלוק 6 · תרגול עם Claude">
+  <div class="s-kicker">בלוק 6</div>
+  <h1>תרגול: אפיון ואוטומציה עם Claude</h1>
+  <p class="sub">דוגמה מלאה מ-Make, ואז תרגילים: אפיון תהליך, חילוץ JSON, ובניית אוטומציה בעזרת Claude.</p>
+  <aside class="notes"><ul><li>מכאן מעשי. אתם מלווים; הם עובדים עם Claude.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="6" data-title="דוגמה ממייק: תרחיש מלא">
+  <div class="s-kicker">🧩 דוגמה ממייק</div>
+  <h2>איך נראה תרחיש Make שלם לתהליך הליד</h2>
+  <div class="s-body mid">
+    <div class="grid4">
+      <div class="card" style="border-top:4px solid var(--p1)"><b>1 · טריגר</b><div class="muted" style="font-size:14px">Webhook: הטופס באתר שולח נתונים ל-Make</div></div>
+      <div class="card" style="border-top:4px solid var(--p2)"><b>2 · Make</b><div class="muted" style="font-size:14px">Add Row לגיליון Google Sheets, ו-Search מלאי</div></div>
+      <div class="card" style="border-top:4px solid var(--claude)"><b>3 · Claude API</b><div class="muted" style="font-size:14px">מנסח תשובה, מחזיר JSON → Parse JSON</div></div>
+      <div class="card" style="border-top:4px solid var(--p5)"><b>4 · פעולה</b><div class="muted" style="font-size:14px">Gmail: שליחת מייל + יצירת משימת מעקב</div></div>
+    </div>
+    <div class="callout tip"><b>כל מה שלמדנו היום, בתרחיש אחד</b>Webhook (טריגר) · מודולים שמעבירים JSON · בקשת API ל-Claude · מיפוי <code>content[0].text</code> · קוד תשובה שמחליט מה הלאה. את זה נבנה בפועל ב-Make ממפגש 4.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו משמאל לימין על ארבעת המודולים. חברו כל אחד למושג שלמדנו (Webhook, JSON, API, מיפוי).</li>
+    <li>אם יש זמן ואינטרנט — פתחו את Make והראו איך נראה מסך התרחיש (בלי לבנות; רק הצצה).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה Claude עושה באוטומציה">
+  <div class="s-kicker">🤖 דוגמאות · מה Claude עושה</div>
+  <h2>ארבע אוטומציות בסיסיות — ומה יוצא מהן</h2>
+  <div class="s-body mid">
+    <div class="grid4">
+      <div class="card" style="border-top:4px solid var(--p1)"><b>🏷️ סיווג</b><div class="muted" style="font-size:14px">פנייה → נושא ודחיפות</div><small style="color:var(--claude)">תוצר: תיבה ממוינת</small></div>
+      <div class="card" style="border-top:4px solid var(--p2)"><b>📤 חילוץ</b><div class="muted" style="font-size:14px">טקסט חופשי → שדות JSON</div><small style="color:var(--claude)">תוצר: שורה בגיליון</small></div>
+      <div class="card" style="border-top:4px solid var(--claude)"><b>✍️ ניסוח</b><div class="muted" style="font-size:14px">עובדות → מייל אישי</div><small style="color:var(--claude)">תוצר: תשובה מוכנה</small></div>
+      <div class="card" style="border-top:4px solid var(--p4)"><b>📝 סיכום</b><div class="muted" style="font-size:14px">שרשור ארוך → עיקר + צעד</div><small style="color:var(--claude)">תוצר: סיכום לפעולה</small></div>
+    </div>
+    <div class="callout tip"><b>הרעיון</b>לא צריך לכתוב קוד או לבנות קריאות API מורכבות. מתארים ל-Claude את המשימה במילים, ומקבלים תוצר שאפשר להכניס מיד לאוטומציה. בשקפים הבאים — דוגמה ותוצר לכל אחת.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>אלה ארבע "הלבנים" שמהן בנויות כמעט כל האוטומציות עם Claude. חזרו עליהן.</li>
+    <li>הדגש: "תוצר ראשוני" — מה יוצא בפועל, מוכן לשלב הבא (גיליון, מייל, משימה). זה מה שחשוב, לא מבנה הקריאה.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: סיווג וניתוב">
+  <div class="s-kicker">🏷️ דוגמה · סיווג</div>
+  <h2>סיווג פניות — ותיבה ממוינת כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: 3 פניות שנכנסו</b>
+            <ul style="margin:8px 0 0;font-size:16px">
+              <li>"ההזמנה שלי לא הגיעה, אני צריכה דחוף!"</li>
+              <li>"רציתי לשאול אם יש את השולחן בצבע אגוז"</li>
+              <li>"הכורסה הגיעה עם כתם, אני רוצה החזר"</li>
+            </ul>
+          </div>
+          <div class="card" style="border-color:var(--p1)"><b>התוצר: תיבה ממוינת</b>
+            <div class="tbl" style="margin-top:8px"><table style="font-size:14px">
+              <tr><th>נושא</th><th>דחיפות</th><th>ניתוב</th></tr>
+              <tr><td>delivery</td><td>גבוהה</td><td>שירות</td></tr>
+              <tr><td>presale</td><td>נמוכה</td><td>מכירות</td></tr>
+              <tr><td>refund</td><td>גבוהה</td><td>שירות + מנהל</td></tr>
+            </table></div>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">כל פנייה מסומנת ומנותבת אוטומטית — בלי שאדם קורא וממיין ידנית.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זו האוטומציה הכי נפוצה להתחלה: ערך גבוה, קלות גבוהה. חברו למטריצה מבלוק 3.</li>
+    <li>ב-Make: הטריגר הוא מייל נכנס, Claude מסווג, ו-Router מנתב לפי הנושא.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: חילוץ לגיליון">
+  <div class="s-kicker">📤 דוגמה · חילוץ</div>
+  <h2>חילוץ נתונים — ושורה בגיליון כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: הודעה חופשית</b>
+            <p style="margin:8px 0 0;font-size:17px;line-height:1.6">"שלום, מדברת רונית שגב. ההזמנה שלי 50912 הייתה אמורה להגיע אתמול ולא הגיעה, ואני צריכה אותה דחוף."</p>
+          </div>
+          <div class="card" style="border-color:var(--p2)"><b>התוצר: שורה מוכנה לגיליון</b>
+            <div class="copybox" style="margin-top:8px"><div class="material">{
+  "customer_name": "רונית שגב",
+  "order_id": "50912",
+  "topic": "delivery",
+  "urgency": "high"
+}</div></div>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">Make לוקח את השדות ומוסיף שורה ל-Google Sheets — בלי הקלדה ובלי טעויות.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה בדיוק מה ש-Claude API מחזיר ב-content[0].text, אבל כאן הדגש על התוצר: שורה בגיליון.</li>
+    <li>שאלה לכיתה: "לאיזה עוד מקום אפשר לשלוח את השורה הזאת?" (CRM, התראה, משימה).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="דוגמה: סיכום לפעולה">
+  <div class="s-kicker">📝 דוגמה · סיכום</div>
+  <h2>סיכום שרשור — וצעד הבא כתוצר</h2>
+  <div class="s-body mid">
+    <div class="reveal">
+      <button class="btn rv-btn">👁 מה Claude החזיר?</button>
+      <div class="rv-c">
+        <div class="grid2">
+          <div class="card"><b>הקלט: שרשור מיילים ארוך</b>
+            <p style="margin:8px 0 0;font-size:16px;line-height:1.55">8 הודעות הלוך ושוב עם לקוח על החזר, מועדים, אי-הבנה לגבי צבע, ובקשה לפיצוי. 600 מילים.</p>
+          </div>
+          <div class="card" style="border-color:var(--p4)"><b>התוצר: סיכום + צעד הבא</b>
+            <ul style="margin:8px 0 0;font-size:16px">
+              <li><b>העניין:</b> לקוח קיבל כורסה בצבע שגוי</li>
+              <li><b>הוסכם:</b> החלפה + זיכוי 10%</li>
+              <li><b>פתוח:</b> לתאם מועד איסוף</li>
+              <li style="color:var(--claude)"><b>צעד הבא:</b> לפתוח משימה לאיסוף ביום א'</li>
+            </ul>
+          </div>
+        </div>
+        <div class="deliver" style="margin-top:10px">במקום לקרוא 600 מילים — סיכום בן 4 שורות ומשימה שנפתחת אוטומטית.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes"><ul>
+    <li>סיכום הוא "ניצחון מהיר" קלאסי: חוסך זמן קריאה, ומייצר צעד פעולה ברור.</li>
+    <li>ב-Make: Claude מסכם, והצעד הבא הופך למשימה ב-CRM או התראה בסלאק.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="20" data-block="6" data-title="תרגיל 1: אפיון התהליך">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">1</span><h2 class="grow">תרגיל: אפיון תהליך ההחזרות</h2><span class="pill">⏱ כ-25 דקות</span><span class="pill">בזוגות</span><div class="timer" data-sec="1500"></div></div>
+    <ol class="steps" style="font-size:19px">
+      <li><b>ראיון:</b> אחד נציג שירות, השני מראיין עם 8 השאלות. ממלאים את שלבי ה-As‑Is.</li>
+      <li><b>מיפוי:</b> מבקשים מ-Claude תרשים Mermaid, ומסמנים צווארי בקבוק.</li>
+      <li><b>ניקוד:</b> מדרגים כל שלב במטריצת ערך-מול-קלות.</li>
+      <li><b>ROI:</b> ממלאים את המחשבון לשלב שבחרתם.</li>
+    </ol>
+    <div class="deliver">מסמך אפיון של עמוד אחד לתהליך ההחזרות, כולל תרשים To‑Be ו-ROI.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>כל הפרטים עם כפתורי העתקה בדף התרגול. עברו בין הזוגות.</li>
+    <li>השאלה הכי שימושית שלכם: "מאיפה המידע מגיע בשלב הזה?"</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="15" data-block="6" data-title="תרגיל 2: Claude מחלץ JSON">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">2</span><h2 class="grow">תרגיל: Claude מחלץ נתונים ל-JSON</h2><span class="pill">⏱ כ-15 דקות</span><span class="pill">עם Claude</span><div class="timer" data-sec="900"></div></div>
+    <p class="muted" style="margin:0 0 6px">פתחו את Claude בצ'אט, הדביקו את הפרומפט, ואז נסו הודעות לקוח משלכם. זה בדיוק מה ש-Make ישלח דרך API.</p>
+    <div class="copybox"><div class="material">אתה מחלץ נתונים מפניות לקוחות של "בית ועיצוב".
+החזר JSON בלבד (בלי טקסט מסביב) עם השדות:
+customer_name, order_id, topic (אחד מ: delivery / defect / refund / other), urgency (low / high).
+
+הפנייה:
+"שלום, מדברת רונית שגב. ההזמנה שלי (50912) הייתה אמורה להגיע אתמול ולא הגיעה, ואני צריכה אותה דחוף."</div></div>
+    <div class="deliver">צילום מסך של ה-JSON ש-Claude החזיר ל-3 פניות שונות (אחת עם שדה חסר).</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המטרה: שיראו ש-Claude מחזיר JSON עקבי שאפשר לפרק ב-Make. חברו ל<code>content[0].text</code>.</li>
+    <li>בקשו מהם לנסות פנייה שחסר בה פרט (בלי מספר הזמנה) ולראות מה Claude שם ב-order_id (null).</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="10" data-block="6" data-title="תרגיל 3: Claude בונה את האוטומציה">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">3</span><h2 class="grow">תרגיל: Claude בונה את תוכנית האוטומציה</h2><span class="pill">⏱ כ-15 דקות</span><span class="pill">עם Claude</span><div class="timer" data-sec="900"></div></div>
+    <p class="muted" style="margin:0 0 6px">השתמשו ב-Claude כשותף לתכנון: תנו לו את ה-As‑Is שלכם ובקשו תוכנית אוטומציה ל-Make.</p>
+    <div class="copybox"><div class="material">זה תהליך As‑Is שמיפיתי (הדביקו כאן את השלבים שלכם).
+
+אני רוצה להפוך אותו לאוטומציה ב-Make. תכנן לי:
+1. מה הטריגר (Webhook / Polling)?
+2. אילו מודולים נדרשים ובאיזה סדר?
+3. איפה Claude נכנס, ומה הוא מקבל ומחזיר (JSON)?
+4. היכן חייבת להיות נקודת אישור של אדם?
+5. אילו קודי תשובה צריך לטפל בהם (401 / 404 / 429)?
+
+החזר טבלה קצרה של המודולים.</div></div>
+    <div class="deliver">תוכנית אוטומציה מ-Claude לתהליך שלכם, עם הערה אחת שלכם: מה הייתם משנים בה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה הלב של "תרגול עם Claude לאוטומציות": Claude לא רק מנסח טקסט, הוא עוזר לתכנן את התרחיש.</li>
+    <li>הדגישו את ההערה האישית — Claude מציע, האדם מחליט. אל תקבלו תוכנית בעיניים עצומות.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="12" data-block="6" data-title="תרגיל 4: בקשות אמיתיות ב-Hoppscotch">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">4</span><h2 class="grow">תרגיל: בקשות API אמיתיות ב-Hoppscotch</h2><span class="pill">⏱ כ-12 דקות</span><span class="pill">כלי אמיתי</span><div class="timer" data-sec="720"></div></div>
+    <p class="muted" style="margin:0 0 6px">פתחו <span class="en">hoppscotch.io</span> (או Postman). הדביקו כל כתובת, לחצו Send, וראו את התשובה ואת קוד הסטטוס.</p>
+    <div class="copybox"><div class="material">1) מזג האוויר עכשיו בעיר שלכם (שנו lat/long):
+   GET  https://api.open-meteo.com/v1/forecast?latitude=32.08&longitude=34.78&current=temperature_2m   → 200
+
+2) שער הדולר לשקל:
+   GET  https://api.frankfurter.app/latest?from=USD&to=ILS   → 200
+
+3) יצירת רשומה (שימו לב לקוד 201):
+   POST https://jsonplaceholder.typicode.com/posts   Body (raw/JSON): {"title":"בדיקה","userId":1}
+
+בונוס) איך השרת רואה את הבקשה שלכם:
+   GET  https://httpbin.org/get</div></div>
+    <div class="deliver">צילום מסך של תשובת מזג האוויר (קוד 200) ושל ה-POST (קוד 201), וזיהוי השדה temperature_2m בתשובה.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה התרגיל שהופך API ממופשט לממשי: הם מושכים מזג אוויר אמיתי של העיר שלהם.</li>
+    <li>הצביעו על ההבדל 200 מול 201, ועל מבנה ה-JSON בתשובה (current.temperature_2m) — בדיוק מה שנמפה ב-Make.</li>
+    <li>מי שמסיים: שישנה את העיר, המטבע, או ינסה API מהשקף "חינמיים לשחק איתם".</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="10" data-block="6" data-title="תרגיל 5: סבב API-ים חינמיים">
+  <div class="s-body">
+    <div class="exh"><span class="ex-num">5</span><h2 class="grow">תרגיל: סבב API-ים חינמיים ב-Hoppscotch</h2><span class="pill">⏱ כ-12 דקות</span><span class="pill">כיף + תרגול נתיב</span><div class="timer" data-sec="720"></div></div>
+    <p class="muted" style="margin:0 0 6px">הדביקו כל כתובת ב-Hoppscotch (שיטה GET), לחצו Send, ומצאו בתשובה את הערך המבוקש — לפי הנתיב.</p>
+    <div class="copybox"><div class="material">1) מזג אוויר בירושלים:
+   api.open-meteo.com/v1/forecast?latitude=31.77&longitude=35.21&current=temperature_2m
+   → מה הטמפרטורה עכשיו?  (נתיב: current.temperature_2m)
+
+2) שער דולר-שקל:
+   api.frankfurter.app/latest?from=USD&to=ILS
+   → כמה שקלים שווה דולר?  (נתיב: rates.ILS)
+
+3) מחיר ביטקוין בשקלים:
+   api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=ils
+   → מה המחיר?  (נתיב: bitcoin.ils)
+
+4) ניחוש גיל משם:
+   api.agify.io/?name=noa
+   → איזה גיל ניחש המודל?  (נתיב: age)</div></div>
+    <div class="deliver">צילום מסך של אחת התשובות, עם סימון הנתיב לערך שמצאתם.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>זה מחבר הכול: כלי אמיתי (Hoppscotch) + API חינמי + קריאת ערך לפי נתיב (JSON).</li>
+    <li>תחרות קטנה: מי מצא ראשון את מחיר הביטקוין? זה מגביר מעורבות.</li>
+    <li>מי שמסיים: שישנה את העיר/המטבע, או ינסה API מהשקף "חינמיים לשחק איתם".</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה מגישים">
+  <div class="s-kicker">לפני שמסיימים</div>
+  <h2>בדיקה עצמית לפני שמגישים</h2>
+  <div class="s-body mid">
+    <ul class="check" style="font-size:20px">
+      <li>מסמך אפיון של עמוד אחד, עם As‑Is, To‑Be ו-ROI</li>
+      <li>תרשים זרימה (Mermaid) של התהליך</li>
+      <li>צילומי מסך מ-Hoppscotch: בקשת GET (200) ו-POST (201)</li>
+      <li>ה-JSON ש-Claude החזיר לשלוש פניות</li>
+      <li>תוכנית אוטומציה מ-Claude, עם הערה אחת שלכם</li>
+      <li>לפחות נקודת אישור אנושית אחת בתוכנית</li>
+    </ul>
+  </div>
+  <aside class="notes"><ul>
+    <li>עברו על הרשימה בסוף. זו טיוטה — העיקר שהבינו את המבנה ואת החיבור בין אפיון לטכני.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה למדנו">
+  <div class="s-kicker">סיכום</div>
+  <h2>מה לקחנו מהיום</h2>
+  <div class="s-body mid">
+    <div class="goals">
+      <div><i>🧭</i>תהליך = מאירוע ועד תוצאה; קודם As‑Is, אז To‑Be</div>
+      <div><i>💰</i>בוחרים לאוטומט לפי ערך מול קלות, ומודדים ב-ROI</div>
+      <div><i>🔤</i>JSON = מפתח:ערך, ומגיעים לכל ערך לפי הנתיב</div>
+      <div><i>🔌</i>API = שיטה + כתובת + מפתח + קוד תשובה</div>
+      <div><i>⚡</i>Webhook מהיר מ-Polling; OAuth שומר על הסיסמה</div>
+      <div><i>🤖</i>Claude API מחזיר JSON — והטקסט ב-content[0].text</div>
+    </div>
+    <div class="callout warn" style="font-size:21px"><b>שני המשפטים של היום</b>"לא עושים אוטומציה לבלגן", ו"מערכות מדברות ב-JSON". עם שניהם, אתם מוכנים לבנות ב-Make.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>סגרו עם שני המשפטים. אם יש זמן — "איזה תהליך אצלכם הכי בשל לאפיון כזה?"</li>
+    <li>הכינו למפגש 4: בונים את התרחיש הראשון ב-Make בפועל, בדיוק מהמושגים של היום.</li>
+  </ul></aside>
+</section>
+
+<section class="slide hero" data-min="1" data-block="6" data-title="שאלות וסיום">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 2</b></div>
+  <h1>שאלות?</h1>
+  <p class="sub">תודה! יש לנו אפיון, ויש לנו את היסודות הטכניים. במפגש 4 בונים את זה ב-Make.</p>
+  <div class="hero-meta"><span class="kind-badge">🎓 הרצאה</span><span class="kind-badge">🛠️ תרגול</span><span class="kind-badge">✅ פתרון</span><span class="kind-badge">📌 סיכום</span></div>
+  <aside class="notes"><ul><li>בקשו משוב: דבר אחד שעבד, דבר אחד לשפר.</li><li>כל חומרי המפגש זמינים באתר הקורס.</li></ul></aside>
+</section>
+
+</div></div>
+<div id="ctrl" role="toolbar" aria-label="ניווט במצגת">
+  <button id="bPrev" title="הקודם (→)" aria-label="הקודם">→</button>
+  <span id="count">1 / 1</span>
+  <button id="bNext" title="הבא (← / רווח)" aria-label="הבא">←</button>
+  <button id="bNotes" title="הערות מרצה (N)" aria-label="הערות מרצה">📝</button>
+  <button id="bOv" title="סקירה (O)" aria-label="סקירה">▦</button>
+  <button id="bFs" title="מסך מלא (F)" aria-label="מסך מלא">⛶</button>
+  <button id="bTheme" title="מצב בהיר/כהה (D)" aria-label="מצב תצוגה">🌓</button>
+  <button id="bPv" title="מסך מרצה בחלון נפרד (P)" aria-label="מסך מרצה">🖥</button>
+</div>
+<aside id="notes" aria-live="polite"></aside>
+<div id="ov" aria-label="סקירת שקפים"><h3>סקירת שקפים</h3><div class="ovg" id="ovg"></div></div>
+<div id="help"></div>
+<script>
+(()=>{
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const stage=$('#stage'), deck=$('#deck'), notesEl=$('#notes');
+const slides=$$('#stage > .slide');
+const N=slides.length;
+const fmt=m=>Math.floor(m/60)+':'+String(m%60).padStart(2,'0');
+const BLK={0:'הפסקה',1:'בלוק 1 · מהו תהליך',2:'בלוק 2 · As-Is ו-To-Be',3:'בלוק 3 · מה לאוטומט ו-ROI',4:'בלוק 4 · JSON ו-API',5:'בלוק 5 · אבטחה, Webhooks ו-Claude API',6:'בלוק 6 · תרגול'};
+
+/* ---------- per-slide metadata ---------- */
+let acc=0;
+slides.forEach((s,i)=>{
+  s.dataset.idx=i;
+  const m=+s.dataset.min||0; s._start=acc; acc+=m;
+  if(!s.dataset.title){const h=s.querySelector('h1,h2');s.dataset.title=h?h.textContent.trim():'שקף '+(i+1);}
+  const f=document.createElement('div');f.className='sfoot';
+  f.innerHTML=`<span>מפגש 2 · אפיון ויסודות טכניים</span><b>${i+1} / ${N}</b>`;s.appendChild(f);
+});
+const TOTAL=acc;
+const blockTot={};slides.forEach(s=>{const b=s.dataset.block;blockTot[b]=(blockTot[b]||0)+(+s.dataset.min||0);});
+console.info('[deck] slides:',N,'total minutes:',TOTAL,'per block:',JSON.stringify(blockTot));
+
+/* ---------- scaling ---------- */
+function fit(){
+  const nh=document.body.classList.contains('notes-on')?notesEl.offsetHeight:0;
+  deck.style.bottom=nh+'px';
+  const W=deck.clientWidth,H=deck.clientHeight;
+  const s=Math.min(W/1280,H/720);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit);
+
+/* ---------- navigation ---------- */
+let cur=-1;
+const help=$('#help');let helpT;
+function toast(t,ms){help.textContent=t;help.classList.add('show');clearTimeout(helpT);helpT=setTimeout(()=>help.classList.remove('show'),ms||1400);}
+function go(i){
+  i=Math.max(0,Math.min(N-1,i|0));
+  if(i===cur)return;
+  if(cur>=0)slides[cur].classList.remove('on');
+  cur=i;const s=slides[cur];s.classList.add('on');
+  $('#prog').style.width=((cur+1)/N*100)+'%';
+  $('#count').textContent=(cur+1)+' / '+N;
+  const h='#'+(cur+1);
+  if(location.hash!==h){try{history.replaceState(null,'',h)}catch(e){location.hash=h}}
+  renderNotes();
+  pvState();
+  s.dispatchEvent(new CustomEvent('enter'));
+  if(document.activeElement&&document.activeElement!==document.body&&!s.contains(document.activeElement)&&!$('#ctrl').contains(document.activeElement))document.activeElement.blur();
+}
+const next=()=>go(cur+1), prev=()=>go(cur-1);
+function fromHash(){const n=parseInt((location.hash||'').replace(/[^0-9]/g,''),10);return n>=1&&n<=N?n-1:0;}
+addEventListener('hashchange',()=>go(fromHash()));
+
+/* ---------- notes ---------- */
+function renderNotes(){
+  const s=slides[cur];const m=+s.dataset.min||0;const n=s.querySelector('.notes');
+  const nx=slides[cur+1];
+  notesEl.innerHTML=`<div class="nh"><b>${s.dataset.title}</b><span class="pill">שקף ${cur+1}/${N}</span><span class="pill">${BLK[s.dataset.block]||''}</span><span class="pill claude">⏱ ${m} דק'</span><span class="pill">מתוכנן: ${fmt(s._start)}–${fmt(s._start+m)}</span><span class="pill">סה"כ מפגש: ${TOTAL} דק'</span></div>`+
+    (n?n.innerHTML:'<p class="muted">אין הערות לשקף הזה.</p>')+
+    (nx?`<div class="nx">השקף הבא: ${nx.dataset.title} (${nx.dataset.min} דק')</div>`:'<div class="nx">זה השקף האחרון.</div>');
+}
+function toggleNotes(){document.body.classList.toggle('notes-on');$('#bNotes').classList.toggle('on',document.body.classList.contains('notes-on'));fit();}
+
+/* ---------- overview ---------- */
+const ovg=$('#ovg');let ovOn=false;
+function openOv(){
+  if(ovOn)return;ovOn=true;ovg.innerHTML='';let lastB=null;
+  slides.forEach((s,i)=>{
+    const b=s.dataset.block;
+    if(b!==lastB&&b!=='0'){const h=document.createElement('div');h.className='ov-blk';h.textContent=BLK[b];ovg.appendChild(h);}
+    if(b!=='0')lastB=b;
+    const c=document.createElement('div');c.className='ov-cell'+(i===cur?' cur':'');c.tabIndex=0;
+    const t=document.createElement('div');t.className='ov-thumb';t.appendChild(s);c.appendChild(t);
+    const l=document.createElement('small');l.innerHTML=`<b>${i+1}. ${s.dataset.title}</b><span>${s.dataset.min} דק'</span>`;c.appendChild(l);
+    c.onclick=()=>{closeOv();go(i);};
+    c.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();c.onclick();}};
+    ovg.appendChild(c);
+  });
+  document.body.classList.add('ov-on');$('#bOv').classList.add('on');
+  const cc=ovg.querySelector('.ov-cell.cur');if(cc)cc.scrollIntoView({block:'center'});
+}
+function closeOv(){
+  if(!ovOn)return;ovOn=false;
+  slides.forEach(s=>stage.appendChild(s));
+  ovg.innerHTML='';document.body.classList.remove('ov-on');$('#bOv').classList.remove('on');fit();
+}
+const toggleOv=()=>ovOn?closeOv():openOv();
+
+/* ---------- theme + fullscreen ---------- */
+const root=document.documentElement;
+try{const t=localStorage.getItem('s2deck-theme');if(t)root.dataset.theme=t;}catch(e){}
+function toggleTheme(){const d=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;root.dataset.theme=d?'light':'dark';try{localStorage.setItem('s2deck-theme',root.dataset.theme)}catch(e){}toast(d?'מצב בהיר':'מצב כהה');}
+function toggleFs(){try{if(document.fullscreenElement)document.exitFullscreen();else (document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).call(document.documentElement);}catch(e){toast('מסך מלא לא זמין בדפדפן הזה');}}
+document.addEventListener('fullscreenchange',()=>{$('#bFs').classList.toggle('on',!!document.fullscreenElement);setTimeout(fit,50);});
+
+/* ---------- controls ---------- */
+$('#bPrev').onclick=prev;$('#bNext').onclick=next;$('#bNotes').onclick=toggleNotes;$('#bOv').onclick=toggleOv;$('#bFs').onclick=toggleFs;$('#bTheme').onclick=toggleTheme;$('#bPv').onclick=openPresenter;
+
+/* ---------- keyboard (RTL: left = forward) ---------- */
+addEventListener('keydown',e=>{
+  const t=e.target;
+  if(t.closest&&t.closest('input,textarea,select,[contenteditable="true"]')){if(e.key==='Escape')t.blur();return;}
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(ovOn){
+    if(e.key==='Escape'||e.code==='KeyO'){e.preventDefault();closeOv();}
+    return;
+  }
+  const onBtn=t.tagName==='BUTTON'&&!$('#ctrl').contains(t);
+  switch(e.key){
+    case 'ArrowLeft':case 'PageDown':e.preventDefault();next();return;
+    case ' ':if(onBtn)return;e.preventDefault();e.shiftKey?prev():next();return;
+    case 'ArrowRight':case 'PageUp':e.preventDefault();prev();return;
+    case 'Home':e.preventDefault();go(0);return;
+    case 'End':e.preventDefault();go(N-1);return;
+  }
+  switch(e.code){
+    case 'KeyN':e.preventDefault();toggleNotes();return;
+    case 'KeyO':e.preventDefault();toggleOv();return;
+    case 'KeyF':e.preventDefault();toggleFs();return;
+    case 'KeyD':case 'KeyT':e.preventDefault();toggleTheme();return;
+    case 'KeyP':e.preventDefault();openPresenter();return;
+  }
+});
+
+/* ---------- click / tap zones + swipe ---------- */
+const INTERACTIVE='button,a,input,textarea,select,label,summary,details,.sim,.q,.reveal,.copybox,.timer,.fitl,.material,pre';
+deck.addEventListener('click',e=>{
+  if(ovOn||e.target.closest(INTERACTIVE))return;
+  if(getSelection&&String(getSelection()).length)return;
+  const x=e.clientX/innerWidth;
+  if(x<0.3)next();else if(x>0.7)prev();
+});
+let tx=null,ty=null;
+deck.addEventListener('touchstart',e=>{const p=e.changedTouches[0];tx=p.clientX;ty=p.clientY;},{passive:true});
+deck.addEventListener('touchend',e=>{if(tx===null)return;const p=e.changedTouches[0];const dx=p.clientX-tx,dy=p.clientY-ty;tx=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5&&!e.target.closest('input,textarea,.sim'))(dx>0?next:prev)();},{passive:true});
+
+/* ---------- timers ---------- */
+$$('.timer').forEach(el=>{
+  const total=+el.dataset.sec;let left=total,iv=null,started=false;
+  const isBrk=!!el.closest('.brk');
+  el.innerHTML=`<span class="tm"></span>${isBrk?'<div class="ret"></div>':''}<div class="row" style="gap:6px;justify-content:center"><button class="btn sm ghost t-go">▶ התחלה</button><button class="btn sm ghost t-rs" title="איפוס">↺</button></div>`;
+  const tm=el.querySelector('.tm'),go_=el.querySelector('.t-go'),ret=el.querySelector('.ret');
+  const draw=()=>{const a=Math.abs(left);tm.textContent=(left<0?'+':'')+Math.floor(a/60)+':'+String(a%60).padStart(2,'0');el.classList.toggle('over',left<0);go_.textContent=iv?'⏸ עצירה':(started?'▶ המשך':'▶ התחלה');};
+  const setRet=()=>{if(!ret)return;const d=new Date(Date.now()+Math.max(left,0)*1000);ret.innerHTML=`חוזרים בשעה <b>${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</b>`;};
+  const start=()=>{if(iv)return;started=true;setRet();iv=setInterval(()=>{left--;draw();},1000);draw();};
+  const stop=()=>{clearInterval(iv);iv=null;draw();};
+  go_.onclick=()=>iv?stop():start();
+  el.querySelector('.t-rs').onclick=()=>{stop();left=total;started=false;if(ret)ret.textContent='';draw();};
+  if(ret)ret.textContent='';
+  draw();
+  if(el.dataset.auto){const s=el.closest('.slide');s.addEventListener('enter',()=>{if(!started)start();});}
+});
+
+/* ---------- presenter view (popup for a second screen) ----------
+   The deck opens a blank named window, writes its document once, and from then on
+   both sides talk only through postMessage. That keeps working on file:// URLs,
+   where every page load gets its own opaque origin, and lets a reloaded deck
+   re-adopt the existing popup from its heartbeat (e.source). */
+const PV_NAME='session02-presenter';
+const DECK_ID=Math.random().toString(36).slice(2);
+let pw=null;
+function pvMark(){const b=$('#bPv');if(b)b.classList.toggle('on',!!pw);}
+function pvPost(m){
+  if(!pw)return;
+  try{if(pw.closed){pw=null;pvMark();return;}pw.postMessage(m,'*');}catch(e){pw=null;pvMark();}
+}
+function pvClone(el){const c=el.cloneNode(true);c.classList.add('on');c.querySelectorAll('.notes').forEach(x=>x.remove());return c.outerHTML;}
+function pvState(){
+  if(!pw||cur<0)return;
+  const s=slides[cur],nx=slides[cur+1],m=+s.dataset.min||0,n=s.querySelector('.notes');
+  pvPost({s2d:'state',deck:DECK_ID,idx:cur,n:N,title:s.dataset.title,min:m,start:s._start,total:TOTAL,
+    block:BLK[s.dataset.block]||'',notes:n?n.innerHTML:'',cur:pvClone(s),next:nx?pvClone(nx):'',
+    nextTitle:nx?nx.dataset.title:'',nextMin:nx?(+nx.dataset.min||0):0,hidden:!!s.querySelector('.reveal:not(.shown)')});
+  pvMark();
+}
+const PV_CSS=`
+.pv [hidden]{display:none!important}
+#pv-root{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:14px 18px;background:var(--bg);color:var(--ink)}
+.pv-top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pv-tt{display:flex;gap:12px;align-items:center;min-width:0;flex:1 1 320px}
+#pv-title{font-family:"Secular One";font-weight:400;font-size:30px;line-height:1.2}
+#pv-count{font-size:20px;direction:ltr;flex:none}
+.pv-clocks{display:flex;gap:10px;flex-wrap:wrap}
+.pv-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 14px;text-align:center;min-width:120px}
+.pv-box small{display:block;font-size:15px;color:var(--ink-2)}
+.pv-box b{display:block;font-family:"Secular One";font-weight:400;font-size:32px;direction:ltr;line-height:1.2}
+.pv-box.warn{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--surface))}
+.pv-box.warn b{color:var(--bad)}
+.pv-box.ok b{color:var(--good)}
+.pv-tbtn{display:flex;gap:4px;justify-content:center;margin-top:2px}
+.pv button{font:inherit;font-size:16px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:3px 12px;cursor:pointer}
+.pv button:hover{border-color:var(--accent)}
+.pv-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,32%);gap:16px;min-height:0}
+.pv-notes-wrap{display:flex;flex-direction:column;min-height:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 24px}
+.pv-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:17px;color:var(--ink-2);margin-bottom:8px}
+#pv-notes{flex:1;min-height:0;overflow:auto;font-size:var(--nfs,30px);line-height:1.5;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#pv-pace{direction:rtl;unicode-bidi:plaintext;font-size:26px}
+#pv-notes ul{margin:0;padding-inline-start:1.1em;display:grid;gap:.5em}
+#pv-notes b{color:var(--accent)}
+.pv-side{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.pv-side small{font-size:16px;color:var(--ink-2)}
+.pv-side small b{color:var(--ink)}
+.pv-thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:10px;border:2px solid var(--accent);background:var(--bg);flex:none}
+.pv-thumb.nx{border-color:var(--line);width:78%}
+.pv-stage{position:absolute;top:0;right:0;width:1280px;height:720px;transform-origin:top right;pointer-events:none}
+.pv-stage .slide{box-shadow:none}
+.pv-bot{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pv-bot .sp{flex:1}
+.pv-bot .lbl2{font-size:16px;color:var(--ink-2)}
+#pv-prev,#pv-nextb{font-size:22px;padding:8px 22px}
+#pv-fs{font-weight:800;direction:ltr;min-width:2.2em;text-align:center}
+#pv-disc{position:fixed;inset:0;background:rgba(10,9,22,.88);display:grid;place-items:center;z-index:9;color:#fff;text-align:center;padding:20px}
+#pv-disc b{font-family:"Secular One";font-size:42px;font-weight:400}
+#pv-disc p{font-size:24px;margin:8px 0 0}
+@media (max-width:900px){.pv-main{grid-template-columns:minmax(0,1fr)}.pv-side{display:none}}
+`;
+/* Runs inside the popup (serialized with toString). Only talks to the deck via postMessage. */
+function pvMain(){
+  const $=s=>document.querySelector(s);
+  let deckId=null,lastAck=0,curIdx=-1,slideT0=Date.now(),st=null,talk={run:false,acc:0,t0:0},fs=30;
+  try{const v=+localStorage.getItem('s2pv-font');if(v>=18&&v<=60)fs=v;}catch(e){}
+  const pad=n=>String(n).padStart(2,'0');
+  const fmtS=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+pad(m):m)+':'+pad(x);};
+  const fmtM=m=>Math.floor(m/60)+':'+pad(m%60);
+  const send=m=>{try{if(window.opener&&!window.opener.closed)window.opener.postMessage(m,'*');}catch(e){}};
+  const cmd=c=>send({s2p:'cmd',cmd:c});
+  function setFont(v){fs=Math.max(18,Math.min(60,v));document.documentElement.style.setProperty('--nfs',fs+'px');$('#pv-fs').textContent=fs;try{localStorage.setItem('s2pv-font',String(fs));}catch(e){}}
+  const talkSec=()=>(talk.acc+(talk.run?Date.now()-talk.t0:0))/1000;
+  function fitThumbs(){document.querySelectorAll('.pv-thumb').forEach(t=>{const s=t.querySelector('.pv-stage');if(s)s.style.transform='scale('+(t.clientWidth/1280)+')';});}
+  function thumb(el,html){el.innerHTML=html?'<div class="pv-stage">'+html+'</div>':'';fitThumbs();}
+  function render(d){
+    if(d.idx!==curIdx){curIdx=d.idx;slideT0=Date.now();$('#pv-notes').scrollTop=0;}
+    st=d;deckId=d.deck;
+    document.title='מסך מרצה · '+(d.idx+1)+'/'+d.n;
+    $('#pv-title').textContent=d.title;
+    $('#pv-count').textContent=(d.idx+1)+' / '+d.n;
+    $('#pv-plan').textContent=d.block+' · מתוכנן '+fmtM(d.start)+'–'+fmtM(d.start+d.min)+' · סה"כ '+d.total+' דק\'';
+    $('#pv-notes').innerHTML=d.notes||'<p class="muted">אין הערות לשקף הזה.</p>';
+    $('#pv-hidden').hidden=!d.hidden;
+    thumb($('#pv-cur'),d.cur);
+    thumb($('#pv-next'),d.next);
+    $('#pv-nexttitle').textContent=d.next?d.nextTitle+' ('+d.nextMin+' דק\')':'זה השקף האחרון';
+    $('#pv-next').hidden=!d.next;
+    tick();
+  }
+  function tick(){
+    const now=new Date();
+    $('#pv-clock').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+    const ts=talkSec();
+    $('#pv-talk').textContent=fmtS(ts);
+    $('#pv-tgo').textContent=talk.run?'⏸':'▶';
+    if(st){
+      const el=(Date.now()-slideT0)/1000,plan=st.min*60;
+      $('#pv-slide').textContent=fmtS(el);
+      $('#pv-slideplan').textContent='מתוך '+st.min+' דק\'';
+      $('#pv-slidebox').classList.toggle('warn',plan>0&&el>plan);
+      const pb=$('#pv-pacebox');
+      if(talk.run||talk.acc>0){
+        const diff=Math.round(ts/60-st.start);
+        $('#pv-pace').textContent=diff===0?'בזמן':(diff>0?'באיחור '+diff+' דק\'':'לפני הזמן '+(-diff)+' דק\'');
+        pb.classList.toggle('warn',diff>=3);pb.classList.toggle('ok',diff<=0);
+      }else{$('#pv-pace').textContent='—';pb.classList.remove('warn','ok');}
+    }
+    const disc=!window.opener||window.opener.closed||Date.now()-lastAck>3000;
+    $('#pv-disc').hidden=!disc;
+  }
+  addEventListener('message',e=>{
+    if(!window.opener||e.source!==window.opener)return;
+    const d=e.data;if(!d||!d.s2d)return;
+    if(d.s2d==='bye'){lastAck=0;tick();return;}
+    lastAck=Date.now();
+    if(d.s2d==='state')render(d);else tick();
+  });
+  addEventListener('keydown',e=>{
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    const k=e.key;
+    if(k==='ArrowLeft'||k==='PageDown'||k===' '){e.preventDefault();if(e.shiftKey&&k===' ')cmd('prev');else cmd('next');}
+    else if(k==='ArrowRight'||k==='PageUp'){e.preventDefault();cmd('prev');}
+    else if(k==='Home'){e.preventDefault();cmd('home');}
+    else if(k==='End'){e.preventDefault();cmd('end');}
+    else if(k==='+'||k==='='){e.preventDefault();setFont(fs+2);}
+    else if(k==='-'||k==='_'){e.preventDefault();setFont(fs-2);}
+  });
+  $('#pv-prev').onclick=()=>cmd('prev');
+  $('#pv-nextb').onclick=()=>cmd('next');
+  $('#pv-fup').onclick=()=>setFont(fs+2);
+  $('#pv-fdn').onclick=()=>setFont(fs-2);
+  $('#pv-tgo').onclick=()=>{if(talk.run){talk.acc+=Date.now()-talk.t0;talk.run=false;}else{talk.t0=Date.now();talk.run=true;}tick();};
+  $('#pv-trs').onclick=()=>{talk={run:false,acc:0,t0:0};tick();};
+  addEventListener('resize',fitThumbs);
+  setFont(fs);
+  window.__pvTest={talkSec:()=>talkSec(),fs:()=>fs,idx:()=>curIdx,connected:()=>!$('#pv-disc').hidden?false:true};
+  const hello=()=>send({s2p:'hello',idx:curIdx,deck:deckId});
+  hello();
+  setInterval(()=>{hello();tick();},1000);
+  tick();
+}
+function pvDoc(){
+  const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+  const fl=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  return '<!DOCTYPE html><html lang="he" dir="rtl" data-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>מסך מרצה · מפגש 2</title>'+
+  (fl?'<link rel="stylesheet" href="'+fl.href+'">':'')+'<style>'+css+'</style><style>'+PV_CSS+'</style></head><body class="pv">'+
+  '<div id="pv-root"><header class="pv-top"><div class="pv-tt"><span id="pv-count" class="pill"></span><b id="pv-title">מתחבר…</b></div>'+
+  '<div class="pv-clocks"><div class="pv-box"><small>השעה</small><b id="pv-clock"></b></div>'+
+  '<div class="pv-box" id="pv-slidebox"><small>בשקף הזה</small><b id="pv-slide">0:00</b><small id="pv-slideplan"></small></div>'+
+  '<div class="pv-box"><small>זמן ההרצאה</small><b id="pv-talk">0:00</b><div class="pv-tbtn"><button id="pv-tgo" title="התחלה/עצירה">▶</button><button id="pv-trs" title="איפוס">↺</button></div></div>'+
+  '<div class="pv-box" id="pv-pacebox"><small>מול התכנון</small><b id="pv-pace">—</b></div></div></header>'+
+  '<main class="pv-main"><section class="pv-notes-wrap"><div class="pv-meta"><span id="pv-plan"></span><span id="pv-hidden" class="lock" hidden>🔒 פתרון מוסתר בשקף</span></div><div id="pv-notes"></div></section>'+
+  '<aside class="pv-side"><small>עכשיו על המסך</small><div class="pv-thumb" id="pv-cur"></div><small>השקף הבא: <b id="pv-nexttitle"></b></small><div class="pv-thumb nx" id="pv-next"></div></aside></main>'+
+  '<footer class="pv-bot"><button id="pv-prev">→ הקודם</button><button id="pv-nextb">הבא ←</button><span class="sp"></span><span class="lbl2">גודל הטקסט</span><button id="pv-fdn" title="הקטנה (-)">A−</button><span id="pv-fs"></span><button id="pv-fup" title="הגדלה (+)">A+</button></footer>'+
+  '<div id="pv-disc" hidden><div><b>המצגת מנותקת</b><p>לחצו P בחלון המצגת כדי להתחבר מחדש.</p></div></div></div>'+
+  '<script>('+pvMain.toString()+')();<\/script></body></html>';
+}
+function openPresenter(){
+  if(pw&&!pw.closed){try{pw.focus();}catch(e){}pvState();return;}
+  let w=null;
+  try{w=window.open('',PV_NAME,'width=1280,height=800');}catch(e){}
+  if(!w){toast('הדפדפן חסם את החלון. אפשרו חלונות קופצים לקובץ הזה ולחצו P שוב',5000);return;}
+  let fresh=false;
+  try{fresh=!w.document.getElementById('pv-root');}catch(e){fresh=false;}
+  if(fresh){w.document.open();w.document.write(pvDoc());w.document.close();}
+  pw=w;pvState();
+  try{w.focus();}catch(e){}
+}
+addEventListener('message',e=>{
+  const d=e.data;if(!d||!d.s2p||!e.source)return;
+  if(e.source!==pw){pw=e.source;pvMark();}
+  if(d.s2p==='hello'){if(d.deck!==DECK_ID||d.idx!==cur)pvState();else pvPost({s2d:'ack'});}
+  else if(d.s2p==='cmd'){
+    if(d.cmd==='next')next();else if(d.cmd==='prev')prev();else if(d.cmd==='home')go(0);else if(d.cmd==='end')go(N-1);
+    pvState();
+  }
+});
+addEventListener('pagehide',()=>pvPost({s2d:'bye'}));
+
+/* ---------- reveal ---------- */
+$$('.reveal').forEach(r=>{const b=r.querySelector('.rv-btn');if(b)b.onclick=()=>{r.classList.add('shown');pvState();};});
+
+/* ---------- copy buttons (from the course pages) ---------- */
+$$('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;const ok=()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)};(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(ok).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){}ta.remove();})};box.appendChild(b);});
+
+/* ---------- checklists ---------- */
+$$('.check li').forEach(li=>li.onclick=()=>li.classList.toggle('done'));
+
+/* ---------- quiz ---------- */
+$$('.q').forEach(q=>{const ans=+q.dataset.a;const o=q.querySelectorAll('.opt');o.forEach((b,i)=>b.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');b.classList.add(i===ans?'ok':'no');o[ans].classList.add('ok');});});
+
+/* ---------- anatomy ---------- */
+const AN=[
+ ['trigger','⚡','טריגר','האירוע שמתחיל את התהליך','--p1','ליד ממלא טופס "צור קשר" באתר.'],
+ ['input','📥','קלט','המידע שנכנס לתהליך','--p2','שם, טלפון, מייל, המוצר שהתעניין בו והודעה חופשית.'],
+ ['steps','🔁','שלבים','הפעולות לפי הסדר','--p4','להעתיק לגיליון, לבדוק מלאי, לכתוב תשובה, להזין ל-CRM, לקבוע מעקב.'],
+ ['decision','◆','החלטות','נקודות שבהן התהליך מתפצל','--p3','המוצר במלאי? אם כן, מציעים מועד אספקה. אם לא, מציעים מוצר דומה.'],
+ ['actors','👥','משתתפים','מי עושה כל שלב','--p5','נציג שירות, מנהל מלאי, ולפעמים מנהלת המכירות.'],
+ ['systems','🗄️','מערכות','איפה הנתונים נמצאים','--claude','אתר, תיבת מייל, גיליון הזמנות, גיליון מלאי, CRM ויומן.'],
+ ['output','🎯','תוצאה','איך יודעים שהתהליך הסתיים','--good','הליד קיבל תשובה אישית, והוא רשום ב-CRM עם משימת מעקב.']
+];
+function anRender(sel){
+  document.getElementById('anatFlow').innerHTML=AN.map(([k,ic,n,d,c])=>`<button class="af ${k===sel?'on':''}" data-k="${k}" style="--c:var(${c})"><span class="ic">${ic}</span><span><b>${n}</b><small>${d}</small></span></button>`).join('');
+  document.querySelectorAll('.af').forEach(b=>b.onclick=()=>anRender(b.dataset.k));
+  const a=AN.find(x=>x[0]===sel);
+  document.getElementById('anatInfo').innerHTML=`<div class="t" style="--c:var(${a[4]})">${a[1]} ${a[2]}</div><p class="muted" style="margin:4px 0 10px">${a[3]}</p><b>בתהליך הליד של בית ועיצוב:</b><p style="margin:4px 0 0">${a[5]}</p>`;
+}
+anRender('trigger');
+
+/* ---------- process sim ---------- */
+const PS={
+ asis:[
+  ['⚡','ליד ממלא טופס באתר','הטופס נשלח לתיבת המייל הכללית',0,0,'--p1'],
+  ['⏳','ממתין בתיבת המייל','עד שנציג מתפנה לקרוא',0,240,'--p4',1],
+  ['✍️','נציג מעתיק את הפרטים לגיליון','העתק-הדבק של 6 שדות',4,4,'--p3'],
+  ['📦','נציג בודק מלאי','פותח את גיליון המלאי ומחפש את המוצר',3,3,'--p3'],
+  ['✉️','נציג כותב תשובה','כל נציג כותב בסגנון אחר',6,6,'--p3',1],
+  ['🗂️','נציג מזין את הליד ל-CRM','שוב אותם פרטים, במערכת אחרת',3,3,'--p3'],
+  ['📅','נציג קובע תזכורת למעקב ביומן','לפעמים נשכח',2,2,'--p3']
+ ],
+ tobe:[
+  ['⚡','ליד ממלא טופס באתר','Make מקבל את הנתונים מיד (Webhook)',0,0,'--p1'],
+  ['⚙️','Make שומר לגיליון ול-CRM','בלי העתקה, ובלי טעויות הקלדה',0,1,'--p2'],
+  ['📦','Make בודק מלאי בגיליון','לפי מזהה המוצר',0,1,'--p2'],
+  ['✳️','Claude מנסח תשובה אישית','לפי הוראות קבועות, מצב המלאי וההודעה של הליד',0,1,'--claude'],
+  ['👍','נציג מאשר בלחיצה','קורא, מתקן אם צריך ושולח',1,5,'--p5'],
+  ['⚙️','Make שולח מייל ופותח משימת מעקב','משימה ב-CRM לעוד 3 ימים',0,1,'--p2']
+ ]
+};
+let psMode='asis',psTimer=null,psDone={asis:null,tobe:null};
+const fmtT=m=>m>=60?`${Math.floor(m/60)} ש' ${m%60?m%60+" ד'":''}`.trim():`${m} ד'`;
+function psDraw(upto=-1){
+  const st=PS[psMode];
+  document.getElementById('psSteps').innerHTML=st.map(([ic,t,d,h,w,c,pain],i)=>`<div class="st ${i===upto?'active':''} ${i<upto?'done':''} ${pain&&psMode==='asis'?'pain':''}" style="--c:var(${c})"><span class="ic">${ic}</span><span><b>${t}</b><small>${d}</small></span><span class="min">${w>h&&h===0&&c==='--p4'?'⏳ '+fmtT(w):h?'👤 '+h+" ד'":'⚙️ אוטומטי'}</span></div>`).join('');
+  let hands=0,wait=0,man=0;st.slice(0,upto+1).forEach(([,, ,h,w,c])=>{hands+=h;wait+=w;if(c==='--p3'||c==='--p5')man++;});
+  document.getElementById('psHands').textContent=hands;document.getElementById('psWait').textContent=fmtT(wait);document.getElementById('psManual').textContent=man;
+  if(upto===st.length-1){psDone[psMode]={hands,wait,man};psCmp();}
+}
+function psCmp(){
+  const a=psDone.asis,b=psDone.tobe;if(!a||!b){document.getElementById('psCmp').innerHTML=(a||b)?'<div class="muted" style="font-size:14px">הפעילו גם את המצב השני כדי לראות השוואה.</div>':'';return;}
+  const row=(n,x,y,mx,u,f)=>`<div class="r"><b>${n}</b><span class="bw"><i style="width:${x/mx*100}%;background:var(--p3)"></i></span><span>As‑Is: ${f(x)}</span></div><div class="r"><span></span><span class="bw"><i style="width:${Math.max(1,y/mx*100)}%;background:var(--p2)"></i></span><span>To‑Be: ${f(y)}</span></div>`;
+  document.getElementById('psCmp').innerHTML=row('עבודת נציג',a.hands,b.hands,a.hands,'',x=>x+" ד'")+row('זמן תגובה',a.wait,b.wait,a.wait,'',fmtT);
+}
+function psPlay(){clearInterval(psTimer);let i=0;psDraw(0);document.getElementById('psPlay').disabled=true;
+  psTimer=setInterval(()=>{i++;if(i>=PS[psMode].length){clearInterval(psTimer);document.getElementById('psPlay').disabled=false;return;}psDraw(i);},1100);}
+document.getElementById('psPlay').onclick=psPlay;
+document.getElementById('psReset').onclick=()=>{clearInterval(psTimer);document.getElementById('psPlay').disabled=false;psDraw(-1);};
+document.querySelectorAll('#psSeg button').forEach(b=>b.onclick=()=>{clearInterval(psTimer);document.getElementById('psPlay').disabled=false;psMode=b.dataset.m;document.querySelectorAll('#psSeg button').forEach(x=>x.classList.toggle('on',x===b));psDraw(-1);});
+psDraw(-1);
+
+/* ---------- symbols ---------- */
+const SY=[
+ ['התחלה / סיום','<ellipse cx="60" cy="28" rx="50" ry="20"/>','אליפסה מסמנת איפה התהליך מתחיל ואיפה הוא נגמר.','"ליד ממלא טופס" או "הליד קיבל תשובה".'],
+ ['פעולה','<rect x="12" y="8" width="96" height="40" rx="4"/>','מלבן הוא שלב שבו מישהו (או משהו) עושה פעולה.','"לבדוק מלאי", "לכתוב תשובה".'],
+ ['החלטה','<polygon points="60,4 108,28 60,52 12,28"/>','מעוין הוא שאלה של כן או לא, והתהליך מתפצל ממנו לשני כיוונים.','"המוצר במלאי?"'],
+ ['קלט / פלט','<polygon points="26,8 108,8 94,48 12,48"/>','מקבילית היא מידע שנכנס לתהליך או יוצא ממנו.','"פרטי הטופס", "מייל ללקוח".'],
+ ['מאגר נתונים','<path d="M20 14 a40 9 0 0 0 80 0 v28 a40 9 0 0 1 -80 0z M20 14 a40 9 0 0 1 80 0"/>','גליל הוא מקום שבו הנתונים נשמרים: גיליון, CRM, מסד נתונים.','"גיליון המלאי", "CRM".']
+];
+function syR(i){document.getElementById('syms').innerHTML=SY.map(([n,s],j)=>`<button class="sym ${j===i?'on':''}" data-i="${j}"><svg viewBox="0 0 120 56" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(${['--p1','--p2','--p3','--p4','--p5'][j]})">${s}</svg><b>${n}</b></button>`).join('');
+ document.querySelectorAll('.sym').forEach(b=>b.onclick=()=>syR(+b.dataset.i));
+ document.getElementById('symInfo').innerHTML=`<b>${SY[i][0]}:</b> ${SY[i][2]}<br><span class="muted">דוגמה מהתהליך שלנו: ${SY[i][3]}</span>`;}
+syR(0);
+
+/* ---------- matrix ---------- */
+const TASKS=[
+ ['מענה ל"מה הסטטוס של ההזמנה?"',220,4,5,5,1],
+ ['העתקת לידים לגיליון ול-CRM',120,7,5,5,2],
+ ['סיכום שיחות מכירה',80,8,3,4,2],
+ ['אישור החזר כספי גדול',10,10,2,4,5],
+ ['שיחה עם לקוח כועס',30,15,1,2,4],
+ ['הכנת דוח מכירות שבועי',4,90,4,5,2]
+];
+function score(f,m,r,d,e){const hours=f*m/60;const val=Math.min(1,Math.log10(1+hours)/Math.log10(1+60));const ease=(r+d+(6-e)-3)/12;return {hours,val,ease};}
+function quad(s){return s.val>=.5&&s.ease>=.5?['לאוטומט עכשיו','--good','ערך גבוה וקל לבנות. מכאן מתחילים.']:s.val>=.5?['פרויקט גדול','--p4','שווה הרבה, אבל צריך תכנון, ולרוב גם אישור של אדם.']:s.ease>=.5?['ניצחון קטן','--p5','קל לבנות, אבל החיסכון קטן. טוב כתרגול או כתוספת.']:['לא כרגע','--p3','קשה לבנות וחוסך מעט. משאירים לאדם.'];}
+let mxSel=1;
+function mxDraw(){
+  const W=420,H=320,P=44;const X=v=>P+v*(W-2*P),Y=e=>H-P-e*(H-2*P);
+  const cur=score(+sFreq.value,+sMin.value,+sRule.value,+sDig.value,+sErr.value);
+  let dots=TASKS.map((t,i)=>{const s=score(t[1],t[2],t[3],t[4],t[5]);return i===mxSel?'':`<circle class="dot" cx="${X(s.val)}" cy="${Y(s.ease)}" r="7" fill="var(--ink-2)" opacity=".35" data-i="${i}"/>`;}).join('');
+  const q=quad(cur);
+  document.getElementById('mxSvg').innerHTML=`<svg viewBox="0 0 ${W} ${H}" direction="ltr" style="direction:ltr" font-family="Heebo">
+   <rect x="${X(.5)}" y="${Y(1)}" width="${X(1)-X(.5)}" height="${Y(.5)-Y(1)}" fill="var(--good)" opacity=".10"/>
+   <rect x="${X(.5)}" y="${Y(.5)}" width="${X(1)-X(.5)}" height="${Y(0)-Y(.5)}" fill="var(--p4)" opacity=".10"/>
+   <rect x="${X(0)}" y="${Y(1)}" width="${X(.5)-X(0)}" height="${Y(.5)-Y(1)}" fill="var(--p5)" opacity=".08"/>
+   <rect x="${X(0)}" y="${Y(.5)}" width="${X(.5)-X(0)}" height="${Y(0)-Y(.5)}" fill="var(--p3)" opacity=".07"/>
+   <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(0)}" stroke="var(--ink-2)"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(1)}" stroke="var(--ink-2)"/>
+   <line x1="${X(.5)}" y1="${Y(0)}" x2="${X(.5)}" y2="${Y(1)}" stroke="var(--line)" stroke-dasharray="4 4"/><line x1="${X(0)}" y1="${Y(.5)}" x2="${X(1)}" y2="${Y(.5)}" stroke="var(--line)" stroke-dasharray="4 4"/>
+   <g font-size="12.5" font-weight="700" text-anchor="middle">
+    <text x="${X(.75)}" y="${Y(.95)}" fill="var(--good)">לאוטומט עכשיו</text><text x="${X(.75)}" y="${Y(.05)}" fill="var(--p4)">פרויקט גדול</text>
+    <text x="${X(.25)}" y="${Y(.95)}" fill="var(--p5)">ניצחון קטן</text><text x="${X(.25)}" y="${Y(.05)}" fill="var(--p3)">לא כרגע</text></g>
+   <text x="${X(.5)}" y="${H-10}" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">ערך (שעות עבודה בחודש)</text><text x="${X(0)}" y="${H-10}" font-size="11" fill="var(--ink-2)">נמוך</text><text x="${X(1)}" y="${H-10}" text-anchor="end" font-size="11" fill="var(--ink-2)">גבוה</text>
+   <text x="14" y="${Y(.5)}" text-anchor="middle" font-size="12.5" fill="var(--ink-2)" transform="rotate(-90 14 ${Y(.5)})">קלות האוטומציה</text><text x="${X(0)-6}" y="${Y(1)+4}" text-anchor="end" font-size="11" fill="var(--ink-2)">קל</text><text x="${X(0)-6}" y="${Y(0)}" text-anchor="end" font-size="11" fill="var(--ink-2)">קשה</text>
+   ${dots}
+   <circle cx="${X(cur.val)}" cy="${Y(cur.ease)}" r="11" fill="var(${q[1]})" stroke="var(--surface)" stroke-width="3" style="transition:.4s"/>
+  </svg>`;
+  document.querySelectorAll('#mxSvg .dot').forEach(d=>d.onclick=()=>pickTask(+d.dataset.i));
+  [['Freq',''],['Min',''],['Rule','/5'],['Dig','/5'],['Err','/5']].forEach(([k,s])=>document.getElementById('v'+k).textContent=document.getElementById('s'+k).value+s);
+  document.getElementById('mxHours').textContent=`זה ${cur.hours.toFixed(1)} שעות עבודה בחודש.`;
+  const v=document.getElementById('mxVerdict');v.style.setProperty('--vc',`var(${q[1]})`);v.innerHTML=`${q[0]}: <span style="font-weight:500">${q[2]}</span>`;
+}
+function pickTask(i){mxSel=i;const t=TASKS[i];[['Freq',1],['Min',2],['Rule',3],['Dig',4],['Err',5]].forEach(([k,j])=>document.getElementById('s'+k).value=t[j]);
+  document.querySelectorAll('#taskList button').forEach((b,j)=>b.classList.toggle('on',j===i));mxDraw();}
+document.getElementById('taskList').innerHTML=TASKS.map((t,i)=>`<button>${t[0]}</button>`).join('');
+document.querySelectorAll('#taskList button').forEach((b,i)=>b.onclick=()=>pickTask(i));
+['sFreq','sMin','sRule','sDig','sErr'].forEach(id=>document.getElementById(id).oninput=()=>{mxSel=-1;document.querySelectorAll('#taskList button').forEach(b=>b.classList.remove('on'));mxDraw();});
+pickTask(1);
+
+/* ---------- ROI ---------- */
+const RI=[['n','פעמים בחודש',10,500,10,120],['m','דקות בכל פעם',1,60,1,18],['c','עלות שעת עבודה (₪)',30,200,5,60],['p','אחוז שנחסך',10,100,5,80],['b','שעות בנייה',2,80,1,16],['bc','עלות שעת בנייה (₪)',50,400,10,150],['t','כלים בחודש (₪)',0,500,10,100]];
+document.getElementById('roiIn').innerHTML=RI.map(([k,n,a,b,s,v])=>`<div class="sl"><span>${n}</span><input type="range" id="r_${k}" min="${a}" max="${b}" step="${s}" value="${v}"><span class="v" id="rv_${k}">${v}</span></div>`).join('');
+const nf=x=>Math.round(x).toLocaleString('he-IL');
+function roiCalc(){
+  const g=k=>+document.getElementById('r_'+k).value;RI.forEach(([k])=>document.getElementById('rv_'+k).textContent=g(k));
+  const hours=g('n')*g('m')/60*g('p')/100, gross=hours*g('c'), net=gross-g('t'), build=g('b')*g('bc');
+  const pay=net>0?build/net:Infinity, roi=net>0?(net*12-build)/build*100:-100;
+  document.getElementById('oSave').textContent='₪'+nf(net);document.getElementById('oHours').textContent=hours.toFixed(1);
+  document.getElementById('oPay').textContent=net<=0?'לא מחזיר':pay<1?'פחות מחודש':pay.toFixed(1)+' חודשים';
+  document.getElementById('oRoi').textContent=nf(roi)+'%';
+  const W=480,H=210,P=36,cum=[...Array(13)].map((_,i)=>-build+net*i);const mx=Math.max(...cum,0),mn=Math.min(...cum,0),rng=(mx-mn)||1;
+  const Y=v=>P/2+(mx-v)/rng*(H-P-P/2),bw=(W-P)/13;
+  let bars=cum.map((v,i)=>`<rect x="${W-P/2-(i+1)*bw+3}" y="${Math.min(Y(v),Y(0))}" width="${bw-6}" height="${Math.max(1,Math.abs(Y(v)-Y(0)))}" rx="3" fill="var(${v<0?'--p3':'--p2'})"/><text x="${W-P/2-(i+.5)*bw}" y="${H-6}" font-size="10.5" text-anchor="middle" fill="var(--ink-2)">${i}</text>`).join('');
+  const be=net>0&&pay<=12?`<line x1="${W-P/2-pay*bw-bw/2}" x2="${W-P/2-pay*bw-bw/2}" y1="${P/2}" y2="${H-P}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${W-P/2-pay*bw-bw/2-4}" y="${P/2+10}" font-size="11.5" text-anchor="end" fill="var(--ink)">נקודת איזון</text>`:'';
+  document.getElementById('roiChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" direction="ltr" style="direction:ltr" font-family="Heebo"><line x1="${P/2}" x2="${W-P/2}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink-2)"/>${bars}${be}<text x="${W-P/2}" y="12" font-size="11.5" text-anchor="end" fill="var(--ink-2)">רווח מצטבר לפי חודש (₪), חודש 0 = עלות הבנייה</text></svg>`;
+}
+RI.forEach(([k])=>document.getElementById('r_'+k).oninput=roiCalc);roiCalc();
+
+/* ---------- JSON explorer ---------- */
+const ORDER={order_id:48213,status:"shipped",paid:true,coupon:null,customer:{name:"מיכל לוי",phone:"052-1234567",city:"חולון"},items:[{sku:"LMP-220",name:"מנורת עמידה מעץ",price:890,qty:1},{sku:"CSH-014",name:"כרית נוי",price:79,qty:2}],total:1048};
+function typeOf(v){return v===null?'null':Array.isArray(v)?'array':typeof v==='object'?'object':typeof v==='boolean'?'boolean':typeof v==='number'?'number':'string';}
+const TNAME={string:'טקסט (string)',number:'מספר (number)',boolean:'אמת/שקר (boolean)',null:'ריק (null)',object:'אובייקט (object)',array:'מערך (array)'};
+let rows=[];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function valHtml(v){const t=typeOf(v);return t==='string'?`<span class="s">"${esc(v)}"</span>`:t==='number'?`<span class="n">${v}</span>`:t==='boolean'?`<span class="b">${v}</span>`:`<span class="z">null</span>`;}
+function walk(v,path,ind,key,last){
+  const pad='  '.repeat(ind),kh=key!==null?`<span class="k" data-p="${path}">"${key}"</span>: `:'',comma=last?'':',';const t=typeOf(v);
+  if(t==='object'||t==='array'){const ks=t==='array'?v.map((_,i)=>i):Object.keys(v);rows.push(`<div class="jr">${pad}${kh}${t==='array'?'[':'{'}</div>`);
+    ks.forEach((k,i)=>{const np=t==='array'?`${path}[${k}]`:(path?path+'.'+k:k);walk(v[k],np,ind+1,t==='array'?null:k,i===ks.length-1);});
+    rows.push(`<div class="jr">${pad}${t==='array'?']':'}'}${comma}</div>`);}
+  else rows.push(`<div class="jr">${pad}${kh}${valHtml(v)}${comma}</div>`);
+}
+walk(ORDER,'',0,null,true);document.getElementById('jtree').innerHTML=rows.join('');
+function get(p){return p.split(/\.|\[|\]/).filter(Boolean).reduce((o,k)=>o==null?undefined:o[k],ORDER);}
+function sel(p){document.querySelectorAll('#jtree .k').forEach(k=>k.classList.toggle('sel',k.dataset.p===p));const v=get(p),t=typeOf(v);
+  document.getElementById('jpath').textContent=p;document.getElementById('jval').textContent=t==='object'||t==='array'?JSON.stringify(v).slice(0,80)+(JSON.stringify(v).length>80?'…':''):JSON.stringify(v);
+  document.getElementById('jtypes').innerHTML=Object.entries(TNAME).map(([k,n])=>`<span class="${k===t?'on':''}">${n}</span>`).join('');checkCh(p);}
+document.querySelectorAll('#jtree .k').forEach(k=>k.onclick=()=>sel(k.dataset.p));
+const CH=[['איפה העיר של הלקוחה?','customer.city'],['איפה המחיר של המוצר הראשון?','items[0].price'],['איפה השם של המוצר השני?','items[1].name'],['איזה שדה אומר אם ההזמנה שולמה?','paid'],['איפה רשימת המוצרים כולה?','items']];
+let chI=0;function chShow(){document.getElementById('chQ').textContent=CH[chI][0];document.getElementById('chR').textContent='';}
+function checkCh(p){const r=document.getElementById('chR');if(p===CH[chI][1]){r.textContent='✓ נכון! הנתיב: '+p;r.style.color='var(--good)';}else{r.textContent='עדיין לא. נסו מפתח אחר';r.style.color='var(--ink-2)';}}
+document.getElementById('chN').onclick=()=>{chI=(chI+1)%CH.length;chShow();};chShow();sel('customer.name');
+
+/* ---------- validator ---------- */
+const BAD=['{\n  "name": "מיכל לוי"\n  "phone": "052-1234567"\n}',"{\n  'name': 'מיכל לוי',\n  'phone': '052-1234567'\n}",'{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n}','{\n  name: "מיכל לוי",\n  "phone": "052-1234567"\n}','{\n  "name": "מיכל לוי",\n  "phone": "052-1234567",\n  "vip": true,\n  "orders": [48213, 50912]\n}'];
+const HINT=['חסר פסיק בין שני זוגות של מפתח וערך.','ב-JSON כותבים רק מירכאות כפולות ("), לא גרשים.','אחרי הזוג האחרון לא שמים פסיק.','גם המפתח צריך להיות בתוך מירכאות כפולות.'];
+let badI=-1;
+function validate(){const ta=document.getElementById('valIn'),r=document.getElementById('valRes');try{const o=JSON.parse(ta.value);ta.className='ok';r.innerHTML=`<b class="ok">✓ JSON תקין</b><br>${Object.keys(o).length} מפתחות ברמה העליונה: <span class="en-inline">${Object.keys(o).join(', ')}</span>`;}
+ catch(e){ta.className='bad';r.innerHTML=`<b class="bad">✗ JSON לא תקין</b><br><span class="en-inline" style="font-size:13px">${esc(e.message)}</span>${badI>=0&&badI<4?`<br><br><b>רמז:</b> ${HINT[badI]}`:''}<br><br><span class="muted">תקנו את הטקסט, והבדיקה תתעדכן מיד.</span>`;}}
+document.querySelectorAll('[data-bad]').forEach(b=>b.onclick=()=>{badI=+b.dataset.bad;document.getElementById('valIn').value=BAD[badI];validate();});
+document.getElementById('valIn').oninput=validate;badI=0;document.getElementById('valIn').value=BAD[0];validate();
+
+/* ---------- API playground ---------- */
+let DB=[{id:48213,customer:"מיכל לוי",product:"מנורת עמידה מעץ",status:"shipped",total:890},{id:48190,customer:"יוסי כהן",product:"שטיח סלון",status:"delivered",total:640},{id:50912,customer:"רונית שגב",product:"3 כיסאות בר",status:"processing",total:1170}];
+let hits=[];
+function rawReq(){const m=pgM.value,p=pgP.value,k=pgK.checked,hasB=m==='POST'||m==='PUT';
+  let s=`<span class="m">${m}</span> ${p} HTTP/1.1\n<span class="h">Host:</span> api.beit-veitzuv.example\n`+(k?`<span class="h">x-api-key:</span> sk-live-••••••••\n`:'')+(hasB?`<span class="h">Content-Type:</span> application/json\n\n${esc(pgB.value)}`:'');document.getElementById('pgRaw').innerHTML=s;}
+const pgM=document.getElementById('pgM'),pgP=document.getElementById('pgP'),pgK=document.getElementById('pgK'),pgB=document.getElementById('pgB');
+[pgM,pgP,pgK,pgB].forEach(e=>e.oninput=rawReq);rawReq();
+function api(m,p,k,body){
+  const now=Date.now();hits=hits.filter(t=>now-t<10000);hits.push(now);
+  if(hits.length>8)return [429,{error:"rate limit exceeded, retry in 10 seconds"},'שלחתם יותר מ-8 בקשות ב-10 שניות. השרת מבקש לחכות. ב-Make מגדירים לזה ניסיון חוזר.'];
+  if(!k)return [401,{error:"missing or invalid API key"},'בלי מפתח השרת לא יודע מי אתם, ולכן הוא מסרב.'];
+  const id=p.split('/')[2];const rec=id?DB.find(o=>String(o.id)===id):null;
+  if(m==='GET'){if(!id)return [200,DB,'קיבלנו את כל ההזמנות כמערך של אובייקטים.'];return rec?[200,rec,'קיבלנו אובייקט אחד: ההזמנה המבוקשת.']:[404,{error:"order not found"},'אין הזמנה עם המספר הזה. באוטומציה צריך להחליט מה עושים במקרה כזה.'];}
+  if(m==='POST'){if(id)return [405,{error:"method not allowed"},'אי אפשר ליצור רשומה בכתובת של רשומה קיימת. POST שולחים ל-/orders.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין. בדקו פסיקים ומירכאות.']}
+    if(!b.customer)return [400,{error:"field 'customer' is required"},'חסר שדה חובה. ה-API מגדיר אילו שדות חייבים להופיע.'];
+    const n={id:Math.max(...DB.map(o=>o.id))+1,status:"new",...b};DB.push(n);return [201,n,'נוצרה הזמנה חדשה. השרת החזיר אותה, כולל המזהה החדש (id). נסו עכשיו GET ל-/orders.'];}
+  if(m==='PUT'){if(!id)return [405,{error:"method not allowed"},'בעדכון צריך לציין איזו רשומה מעדכנים, למשל /orders/48213.'];if(!rec)return [404,{error:"order not found"},'אי אפשר לעדכן הזמנה שלא קיימת.'];
+    let b;try{b=JSON.parse(body)}catch(e){return [400,{error:"invalid JSON body"},'גוף הבקשה הוא לא JSON תקין.']}Object.assign(rec,b);return [200,rec,'ההזמנה עודכנה. שדות שלא שלחנו נשארו כמו שהיו.'];}
+  if(m==='DELETE'){if(!id)return [405,{error:"method not allowed"},'מוחקים רשומה אחת, ולא את כל הרשימה.'];if(!rec)return [404,{error:"order not found"},'אין מה למחוק.'];DB=DB.filter(o=>o!==rec);return [204,null,'ההזמנה נמחקה. קוד 204 אומר שהפעולה הצליחה ואין תוכן להחזיר.'];}
+}
+document.getElementById('pgSend').onclick=()=>{const pk=document.getElementById('pkt'),btn=document.getElementById('pgSend');btn.disabled=true;
+  const vert=matchMedia('(max-width:860px)').matches;
+  pk.style.transition='none';pk.style.opacity=1;pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';pk.textContent='✉️';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{pk.style.transition='';pk.style.transform=vert?'translateY(26px)':'translateX(-42px)';}));
+  setTimeout(()=>{const [c,b,e]=api(pgM.value,pgP.value,pgK.checked,pgB.value);pk.textContent=c<300?'📦':'⛔';pk.style.transform=vert?'translateY(-26px)':'translateX(42px)';
+   setTimeout(()=>{const s=document.getElementById('pgS');s.textContent=c+' '+({200:'OK',201:'Created',204:'No Content',400:'Bad Request',401:'Unauthorized',404:'Not Found',405:'Method Not Allowed',429:'Too Many Requests'}[c]);s.className='status s'+String(c)[0];
+    document.getElementById('pgE').textContent=e;document.getElementById('pgR').textContent=b===null?'(אין גוף בתשובה)':JSON.stringify(b,null,2);pk.style.opacity=0;btn.disabled=false;},700);},750);};
+
+/* ---------- OAuth ---------- */
+const OA=[[[0,1],'<b>1. מבקשים חיבור.</b> ב-Make לוחצים "Add connection" למודול של Google Sheets.'],[[1,2],'<b>2. Make מפנה ל-Google.</b> נפתח חלון התחברות של Google, ולא של Make. Make לא רואה את הסיסמה.'],[[0,2],'<b>3. אתם מאשרים הרשאות.</b> Google מציג מה Make מבקש, למשל "לקרוא ולערוך גיליונות", ואתם לוחצים "אישור".'],[[2,1],'<b>4. Google נותן ל-Make אסימון (Token).</b> האסימון הוא מפתח מוגבל: רק להרשאות שאישרתם, ואפשר לבטל אותו בכל רגע מהגדרות החשבון.'],[[1,2],'<b>5. Make עובד עם האסימון.</b> בכל קריאה לגיליון, Make שולח את האסימון. אם תבטלו את ההרשאה ב-Google, החיבור יפסיק לעבוד.']];
+let oaI=0;function oaR(){OA[oaI][0];[0,1,2].forEach(i=>document.getElementById('a'+i).classList.toggle('on',OA[oaI][0].includes(i)));document.getElementById('oaStep').innerHTML=OA[oaI][1];
+  document.getElementById('oaDots').innerHTML=OA.map((_,i)=>`<i class="${i===oaI?'on':''}"></i>`).join('');document.getElementById('oaPrev').disabled=oaI===0;document.getElementById('oaNext').disabled=oaI===OA.length-1;}
+document.getElementById('oaNext').onclick=()=>{oaI++;oaR()};document.getElementById('oaPrev').onclick=()=>{oaI--;oaR()};oaR();
+
+/* ---------- polling vs webhook ---------- */
+const EVENTS=[4,11,29,33,52];let pwT=null;
+function fly(track,dir,ico){const el=document.createElement('div');el.className='msg';el.textContent=ico;const W=track.clientWidth;el.style.left=(dir>0?80:W-100)+'px';track.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.left=(dir>0?W-100:80)+'px';}));setTimeout(()=>el.remove(),700);}
+document.getElementById('pwGo').onclick=()=>{clearInterval(pwT);let t=0;const tP=document.getElementById('tP'),tW=document.getElementById('tW');let pReq=0,pEmpty=0,pLat=[],wLat=[],pending=[];
+  ['pReq','pEmpty','pLat','wReq','wEmpty','wLat'].forEach(i=>document.getElementById(i).textContent=0);document.getElementById('pwGo').disabled=true;
+  pwT=setInterval(()=>{t++;document.getElementById('pwClock').textContent=t+' שניות';
+    if(EVENTS.includes(t)){pending.push(t);fly(tW,-1,'⚡');wLat.push(0);document.getElementById('wReq').textContent=wLat.length;}
+    if(t%15===0){pReq++;fly(tP,1,'❓');setTimeout(()=>{if(pending.length){pending.forEach(e=>pLat.push(t-e));pending=[];fly(tP,-1,'📦');}else{pEmpty++;fly(tP,-1,'∅');}
+      document.getElementById('pReq').textContent=pReq;document.getElementById('pEmpty').textContent=pEmpty;document.getElementById('pLat').textContent=pLat.length?Math.round(pLat.reduce((a,b)=>a+b,0)/pLat.length):0;},650);}
+    if(t>=60){clearInterval(pwT);document.getElementById('pwGo').disabled=false;}
+  },160);};
+
+/* ---------- Claude API ---------- */
+const caM=document.getElementById('caM'),caT=document.getElementById('caT'),caS=document.getElementById('caS'),caU=document.getElementById('caU');
+function caBody(){return {model:caM.value,max_tokens:+caT.value,system:caS.value,messages:[{role:"user",content:caU.value}]};}
+function caReq(){document.getElementById('caReq').innerHTML=`<span style="color:#a5b4fc">x-api-key:</span> sk-ant-••••••\n<span style="color:#a5b4fc">anthropic-version:</span> 2023-06-01\n<span style="color:#a5b4fc">content-type:</span> application/json\n\n`+esc(JSON.stringify(caBody(),null,2));}
+[caM,caT,caS,caU].forEach(e=>e.oninput=caReq);caReq();
+document.getElementById('caGo').onclick=()=>{const r=document.getElementById('caRes');r.textContent='⏳ Claude חושב...';
+  setTimeout(()=>{const u=caU.value;const name=(u.match(/אני ([֐-׿]+ [֐-׿]+)/)||[])[1]||null;const oid=(u.match(/\d{5}/)||[])[0]||null;
+   const topic=/קרע|שבור|פגם|פגום/.test(u)?'defect':/לא הגיע|משלוח|מתי/.test(u)?'delivery':'other';
+   const text=JSON.stringify({customer_name:name,order_id:oid,topic});const inT=Math.round((caS.value.length+u.length)/2.2)+12,outT=Math.round(text.length/2.4);
+   const res={id:"msg_01Xk…",type:"message",role:"assistant",model:caM.value,content:[{type:"text",text}],stop_reason:"end_turn",usage:{input_tokens:inT,output_tokens:outT}};
+   let s=esc(JSON.stringify(res,null,2));s=s.replace(/("text": )(".*?[^\\]")/,'$1<span class="hl">$2</span>');r.innerHTML=s;
+   document.getElementById('caNote').textContent='החלק המודגש הוא content[0].text: ה-JSON שביקשנו, כמחרוזת. ב-Make נפרק אותו לשדות (Parse JSON). מספרי הטוקנים כאן הם הערכה לצורך ההדגמה.';},900);};
+/* ---------- start ---------- */
+fit();go(fromHash());
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+})();
+</script>
+</body></html>
