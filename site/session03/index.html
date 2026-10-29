@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 3 · תרגול</title>
+<meta name="description" content="התרגילים של מפגש 3: האוטומציה הראשונה ב-Make. רענון, בנייה בידיים ותרגילים מעמיקים — בלי Claude עדיין.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-page="s03">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 3</b></div>
+  <h1>תרגול: האוטומציה הראשונה ב-Make</h1>
+  <p class="sub">רענון קצר ממפגש 2, ואז בונים בידיים את האוטומציה הראשונה — Make קורא ל-API של מזג האוויר ושולח את התחזית לבד, בלי Claude עדיין. סמנו כל תרגיל שסיימתם: הסימון נשמר בדפדפן שלכם.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html" class="on">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html">✅ פתרונות</a>
+  <a href="../guides/make-signup.html">🧩 הרשמה ל-Make</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/7</span></div></div>
+
+<section class="blk" id="toc">
+  <div class="kicker">תוכן העניינים</div>
+  <h2>מה יש בדף</h2>
+  <div class="callout claude" style="border-color:var(--claude)"><b>העסק שלנו ממשיך: "בית ועיצוב"</b>חנות הרהיטים שולחת משלוחים כל יום. גשם משבש הובלות של רהיטים גדולים — אז נבנה אוטומציה שכל בוקר מושכת את תחזית מזג האוויר של אשדוד (אותו API שקראנו ידנית במפגש 2) ושולחת אותה לצוות המשלוחים. בלי Claude — רק Make מזיז נתונים.</div>
+  <ul class="toc">
+    <li><a href="#setup"><span class="n">0</span><span class="t">הכנה: חשבון Make מוכן</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex1"><span class="n">1</span><span class="t">מתכננים את התרחיש על הנייר</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex2"><span class="n">2</span><span class="t">בונים: Schedule → HTTP → שליחה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex3"><span class="n">3</span><span class="t">מוסיפים תנאי: שולחים רק כשיורד גשם</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex4"><span class="n">4</span><span class="t">תרחיש שני: שורה חדשה בגיליון → התראה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex5"><span class="n">5</span><span class="t">דיבוג: התרחיש השבור</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex6"><span class="n">6</span><span class="t">ממפים תהליך אמיתי שלכם ל-Make</span><span class="pill home">📝 לבית</span></a></li>
+  </ul>
+</section>
+
+<!-- ================= setup ================= -->
+<section class="blk">
+<div class="card ex" id="setup">
+  <div class="ex-head"><span class="ex-num">0</span><h3>הכנה: חשבון Make מוכן</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">להגיע לתרגילים עם חשבון Make פעיל, ועם חשבון Google מחובר (לאימייל ולגיליון).</p>
+  <ol class="steps">
+    <li>נרשמים ל-Make לפי <a href="../guides/make-signup.html">מדריך ההרשמה</a>. התוכנית החינמית מספיקה לכל התרגילים</li>
+    <li>נכנסים ל-<span class="en">make.com</span> ומוודאים שרואים את לוח הבקרה (<span class="en">Dashboard</span>)</li>
+    <li>בתפריט הצד פותחים <span class="en">Scenarios</span> — כאן נבנה את האוטומציות</li>
+  </ol>
+  <div class="callout tip"><b>למה חשבון Google</b>האוטומציה שלנו שולחת מייל (Gmail) וכותבת לגיליון (Google Sheets). שני אלה משתמשים באותו חיבור ל-Google, אז נחבר אותו פעם אחת בתרגיל 2.</div>
+  <div class="callout warn"><b>אין לכם Gmail?</b>אפשר לשלוח מייל גם עם מודול <span class="en">Email</span> המובנה של Make (דורש הגדרת SMTP), או פשוט לכתוב רק לגיליון. העיקר שתראו את האוטומציה רצה מקצה לקצה.</div>
+  <ul class="check">
+    <li>יש לי חשבון Make פעיל ואני רואה את ה-<span class="en">Dashboard</span></li>
+    <li>יש לי חשבון Google שאוכל להתחבר איתו</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="setup"> סיימתי את ההכנה</label>
+</div>
+</section>
+
+<!-- ================= block 1 ================= -->
+<div class="blockhead">חלק 1 · רענון וה-ABC של Make</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex1">
+  <div class="ex-head"><span class="ex-num">1</span><h3>מתכננים את התרחיש על הנייר</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 8 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לפני שנוגעים ב-Make — לתרגם את התהליך לשפה של אוטומציה: טריגר, צעדים ופעולה. בדיוק מה שאפיינו במפגש 2.</p>
+  <p>כל אוטומציה היא <b>טריגר</b> (מה מתחיל אותה) ← <b>צעדים</b> (מה קורה באמצע) ← <b>פעולה</b> (התוצאה). מלאו את הטבלה לתרחיש "תחזית הבוקר":</p>
+  <div class="tbl"><table>
+    <tr><th>חלק</th><th>מה כותבים</th></tr>
+    <tr><td><b>טריגר</b> — מתי רץ?</td><td>_________ (רמז: לא אירוע חיצוני, אלא שעון)</td></tr>
+    <tr><td><b>מקור נתונים</b> — מאיפה המידע?</td><td>_________ (רמז: אותו API ממפגש 2)</td></tr>
+    <tr><td><b>עיבוד</b> — מה לוקחים מהתשובה?</td><td>_________ (אילו שדות מתוך ה-JSON?)</td></tr>
+    <tr><td><b>פעולה</b> — מה התוצאה?</td><td>_________ (לאן זה נשלח?)</td></tr>
+  </table></div>
+  <div class="material"><b>תזכורת ממפגש 2 — הכתובת של מזג האוויר (מצב נוכחי, אשדוד)</b>
+https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&amp;current=temperature_2m,precipitation,weather_code&amp;timezone=Asia%2FJerusalem</div>
+  <details class="hint"><summary>רמז</summary><p style="margin:6px 0 0">טריגר = תזמון (כל יום ב-07:00). מקור = בקשת GET ל-open-meteo. עיבוד = לקרוא את <code>current.temperature_2m</code> ואת <code>current.precipitation</code> מה-JSON. פעולה = מייל + שורה בגיליון.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>הטריגר הוא תזמון (שעון), לא אירוע חיצוני</li>
+    <li>זיהיתי אילו שדות מתוך ה-JSON אני צריך (טמפרטורה ומשקעים)</li>
+    <li>יש לי ברור מה הפעולה הסופית — לאן התחזית נשלחת</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex1"> סיימתי את התרגיל</label>
+</div>
+
+</section>
+
+<!-- ================= block 2 ================= -->
+<div class="blockhead">חלק 2 · בונים את האוטומציה הראשונה</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex2">
+  <div class="ex-head"><span class="ex-num">2</span><h3>בונים: Schedule → HTTP → שליחה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לבנות את התרחיש הראשון שעובד מקצה לקצה: כל בוקר מושך את מזג האוויר ושולח אותו. בלי Claude.</p>
+
+  <h4>1. תרחיש חדש + מודול ה-HTTP</h4>
+  <ol class="steps">
+    <li>ב-<span class="en">Scenarios</span> לוחצים <span class="en">Create a new scenario</span></li>
+    <li>לוחצים על העיגול הגדול עם ה-+, מחפשים <span class="en">HTTP</span> ובוחרים <span class="en">Make a request</span></li>
+    <li>ממלאים: <span class="en">URL</span> = הכתובת של מזג האוויר (למטה), <span class="en">Method</span> = <span class="en">GET</span></li>
+    <li><b>חשוב:</b> מגלגלים למטה ל-<span class="en">Parse response</span> ובוחרים <span class="en">Yes</span> — כך Make הופך את ה-JSON לשדות שאפשר לבחור</li>
+  </ol>
+  <div class="copybox"><pre>https://api.open-meteo.com/v1/forecast?latitude=31.79213&longitude=34.64966&current=temperature_2m,precipitation,weather_code&timezone=Asia/Jerusalem</pre></div>
+  <ol class="steps" start="5">
+    <li>לוחצים <span class="en">Run once</span> (למטה משמאל) ובודקים את הפלט: צריך לראות <code>current.temperature_2m</code> עם מספר אמיתי</li>
+  </ol>
+
+  <h4>2. הפעולה: שולחים מייל</h4>
+  <ol class="steps">
+    <li>לוחצים על ה-+ ליד מודול ה-HTTP ומחפשים <span class="en">Gmail</span> → <span class="en">Send an email</span></li>
+    <li>בפעם הראשונה לוחצים <span class="en">Create a connection</span> ומתחברים לחשבון Google (אישור הרשאות)</li>
+    <li>ממלאים: <span class="en">To</span> = המייל שלכם · <span class="en">Subject</span> = "תחזית הבוקר — אשדוד"</li>
+    <li>ב-<span class="en">Content</span> כותבים טקסט, ובתוכו <b>בוחרים מהרשימה</b> את השדות מה-HTTP (ה"בועות" הסגולות):</li>
+  </ol>
+  <div class="copybox"><pre class="rtl">בוקר טוב! מזג האוויר באשדוד עכשיו:
+טמפרטורה: {{current.temperature_2m}} מעלות
+משקעים: {{current.precipitation}} מ"מ</pre></div>
+  <div class="callout tip"><b>איך ממפים שדה</b>לא מקלידים <code>{{current.temperature_2m}}</code> ביד — לוחצים בתוך שדה התוכן, ומהחלונית שנפתחת בוחרים את השדה מתוך מודול ה-HTTP. Make מכניס את ה"בועה" לבד.</div>
+
+  <h4>3. הפעולה הנוספת: כותבים לגיליון</h4>
+  <ol class="steps">
+    <li>פותחים ב-Google Sheets גיליון חדש עם כותרות בשורה הראשונה: <span class="en">date</span>, <span class="en">temp</span>, <span class="en">rain</span></li>
+    <li>ב-Make מוסיפים מודול <span class="en">Google Sheets</span> → <span class="en">Add a row</span>, בוחרים את הקובץ והגיליון</li>
+    <li>ממפים: <span class="en">date</span> ← <code>{{now}}</code> · <span class="en">temp</span> ← <code>current.temperature_2m</code> · <span class="en">rain</span> ← <code>current.precipitation</code></li>
+  </ol>
+
+  <h4>4. תזמון + הפעלה</h4>
+  <ol class="steps">
+    <li>לוחצים על שעון התזמון (מתחת למודול הראשון) ובוחרים <span class="en">Every day</span> בשעה <span class="en">07:00</span></li>
+    <li>לוחצים <span class="en">Run once</span> לבדיקה אחרונה — בודקים שהגיע מייל ושנוספה שורה בגיליון</li>
+    <li>מדליקים את המתג <span class="en">ON</span> (למטה משמאל) כדי שהתרחיש ירוץ לבד</li>
+  </ol>
+  <details class="hint"><summary>משהו נתקע?</summary><p style="margin:6px 0 0">מודול ה-HTTP אדום? בדקו שה-URL הודבק במלואו ושה-Method הוא GET. לא רואים את שדות מזג האוויר במייל? חזרו ל-HTTP וּודאו ש-<span class="en">Parse response = Yes</span>, ואז הריצו <span class="en">Run once</span> שוב כדי ש-Make "ילמד" את השדות.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>מודול ה-HTTP מחזיר JSON עם טמפרטורה אמיתית</li>
+    <li>קיבלתי מייל עם הטמפרטורה והמשקעים האמיתיים (לא <code>{{...}}</code> גולמי)</li>
+    <li>נוספה שורה בגיליון עם תאריך, טמפרטורה ומשקעים</li>
+    <li>התרחיש מתוזמן לכל בוקר ומצבו <span class="en">ON</span></li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex2"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="ex3">
+  <div class="ex-head"><span class="ex-num">3</span><h3>מוסיפים תנאי: שולחים רק כשיורד גשם</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">אוטומציה טובה לא מציפה. נוסיף פילטר שמעביר הלאה רק כשיש משקעים — בדיוק מה שמעניין את צוות המשלוחים.</p>
+  <ol class="steps">
+    <li>בתרחיש מתרגיל 2, לוחצים על הקו (ה"חוט") שבין מודול ה-HTTP למודול המייל</li>
+    <li>לוחצים על אייקון מפתח הברגים <span class="en">Set up a filter</span></li>
+    <li>נותנים שם לפילטר: "רק אם יש גשם"</li>
+    <li>בתנאי: בשדה הראשון בוחרים <code>current.precipitation</code>, בוחרים <span class="en">Greater than</span>, ובערך כותבים <code>0</code></li>
+    <li>לוחצים <span class="en">Run once</span> — אם אין גשם עכשיו, המייל לא יישלח (והקו מראה שהחבילה נעצרה בפילטר)</li>
+  </ol>
+  <div class="callout tip"><b>איך בודקים שזה באמת עובד</b>כדי לוודא שהמייל כן יוצא כשצריך, שנו זמנית את הערך בפילטר ל-<code>-1</code> (כל מספר גדול מ-1−). אם עכשיו המייל יוצא, הפילטר תקין. אחר כך החזירו ל-<code>0</code>.</div>
+  <details class="hint"><summary>רמז: מתי הפילטר "חוסם"?</summary><p style="margin:6px 0 0">פילטר מעביר הלאה רק חבילות שעומדות בתנאי. <code>precipitation &gt; 0</code> אומר: המשך רק אם יש אפילו טיפה. אין משקעים → <code>precipitation = 0</code> → התנאי לא מתקיים → המודול הבא לא רץ.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>יש פילטר על הקו שבין ה-HTTP למייל, עם התנאי <code>precipitation &gt; 0</code></li>
+    <li>כשאין משקעים, המייל לא נשלח (ראיתי שהחבילה נעצרה בפילטר)</li>
+    <li>בדקתי שהמייל כן יוצא כשהתנאי מתקיים (על ידי שינוי זמני של הערך)</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex3"> סיימתי את התרגיל</label>
+</div>
+
+</section>
+
+<!-- ================= block 3 ================= -->
+<div class="blockhead">חלק 3 · מעמיקים</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex4">
+  <div class="ex-head"><span class="ex-num">4</span><h3>תרחיש שני: שורה חדשה בגיליון → התראה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">להכיר טריגר מסוג אחר: לא שעון, אלא אירוע. כשנכנסת שורה חדשה לגיליון, Make מגיב מיד.</p>
+  <p>תרחיש אמיתי ל"בית ועיצוב": יש גיליון "לידים" שבו מזכירה מוסיפה כל פנייה חדשה. רוצים שבכל פנייה חדשה תצא התראה אוטומטית.</p>
+  <ol class="steps">
+    <li>מכינים גיליון <b>לידים</b> עם כותרות: <span class="en">name</span>, <span class="en">product</span>, <span class="en">phone</span></li>
+    <li>תרחיש חדש → מודול ראשון: <span class="en">Google Sheets</span> → <span class="en">Watch rows</span> (זה הטריגר)</li>
+    <li>בוחרים את הקובץ, הגיליון, ו-<span class="en">Row with headers = Yes</span>. שומרים</li>
+    <li>מוסיפים מודול שני — <span class="en">Gmail</span> → <span class="en">Send an email</span> (או Email מובנה) — ובתוכן ממפים את <span class="en">name</span>, <span class="en">product</span> ו-<span class="en">phone</span> מהשורה:</li>
+  </ol>
+  <div class="copybox"><pre class="rtl">ליד חדש נכנס! 🎉
+שם: {{name}}
+מוצר: {{product}}
+טלפון: {{phone}}</pre></div>
+  <ol class="steps" start="5">
+    <li>לוחצים <span class="en">Run once</span>, ואז מוסיפים שורה חדשה בגיליון ורואים שההתראה יוצאת</li>
+    <li>מתזמנים את הטריגר (למשל כל 15 דקות) ומדליקים <span class="en">ON</span></li>
+  </ol>
+  <details class="hint"><summary>רמז: למה זה שונה מתרגיל 2?</summary><p style="margin:6px 0 0">בתרגיל 2 הטריגר היה <b>שעון</b> (רץ בזמן קבוע). כאן הטריגר הוא <b>אירוע</b> — Make "צופה" בגיליון ומריץ את התרחיש רק כשמשהו משתנה. <span class="en">Watch rows</span> זוכר את השורה האחרונה שעיבד, כך שלא שולח פעמיים.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>המודול הראשון הוא <span class="en">Watch rows</span> (טריגר של אירוע, לא שעון)</li>
+    <li>הוספתי שורה חדשה וקיבלתי התראה עם השם, המוצר והטלפון</li>
+    <li>אני יכול להסביר במשפט את ההבדל בין טריגר של שעון לטריגר של אירוע</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex4"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="ex5">
+  <div class="ex-head"><span class="ex-num">5</span><h3>דיבוג: התרחיש השבור</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">מאתגר</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">אוטומציה נשברת — זה חלק מהעבודה. נלמד לקרוא את ההיסטוריה ולמצוא איפה זה נתקע.</p>
+  <p>לפניכם שלוש תקלות נפוצות. לכל אחת, כתבו <b>מה הסימן</b> שתראו ב-Make, ו<b>מה התיקון</b>:</p>
+  <div class="material"><b>תקלה א'</b>בניתם את תרחיש מזג האוויר, אבל במייל מופיע הטקסט <code>{{current.temperature_2m}}</code> במקום מספר.</div>
+  <div class="material" style="margin-top:8px"><b>תקלה ב'</b>מודול ה-HTTP צבוע באדום אחרי <span class="en">Run once</span>, וההרצה נעצרת עליו. בהיסטוריה כתוב <span class="en">URL is required</span>.</div>
+  <div class="material" style="margin-top:8px"><b>תקלה ג'</b>תרחיש "שורה חדשה → התראה" שולח התראה על <b>אותו ליד</b> שוב ושוב בכל הרצה.</div>
+  <div class="callout tip"><b>איפה מחפשים</b>כל הרצה נשמרת ב-<span class="en">History</span> של התרחיש. לוחצים על הרצה, ואז על כל מודול — רואים בדיוק מה נכנס אליו ומה יצא ממנו. שם מתגלות כמעט כל התקלות.</div>
+  <details class="hint"><summary>רמז לכל תקלה</summary><p style="margin:6px 0 0">א' — השדה הוקלד כטקסט ולא נבחר כ"בועה", או ש-<span class="en">Parse response</span> היה <span class="en">No</span>. ב' — ה-URL ריק או לא נשמר. ג' — הטריגר אולי <span class="en">Search rows</span> במקום <span class="en">Watch rows</span>, או שהמיפוי של "השורה האחרונה שעובדה" אופס.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>לכל תקלה כתבתי את הסימן ואת התיקון</li>
+    <li>פתחתי את ה-<span class="en">History</span> של תרחיש אמיתי שלי ובדקתי קלט/פלט של מודול</li>
+    <li>אני יודע להסביר למה תקלה א' נותנת טקסט גולמי במקום מספר</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex5"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex home" id="ex6">
+  <div class="ex-head"><span class="ex-num">6</span><h3>ממפים תהליך אמיתי שלכם ל-Make</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ כ-20 דקות</span><span class="pill">בינוני</span><span class="pill home">📝 משימה לבית</span></div>
+  <p class="goal">לקחת תהליך חוזר מהעבודה שלכם, ולתכנן אותו כתרחיש Make — ולסמן איפה Claude ייכנס בעתיד.</p>
+  <ol class="steps">
+    <li>בחרו תהליך שחוזר על עצמו (טיפול בליד, הנפקת חשבונית, תזכורת ללקוח, איסוף נתונים)</li>
+    <li>מלאו את הטבלה: לכל שלב — איזה מודול Make מתאים, ומאיזו אפליקציה</li>
+  </ol>
+  <div class="tbl"><table>
+    <tr><th>שלב בתהליך</th><th>טריגר / פעולה?</th><th>מודול ואפליקציה ב-Make</th></tr>
+    <tr><td>מה מתחיל את התהליך?</td><td>טריגר</td><td>_________</td></tr>
+    <tr><td>איזה מידע אוספים?</td><td>פעולה</td><td>_________</td></tr>
+    <tr><td>איפה צריך החלטה / תנאי?</td><td>פילטר</td><td>_________</td></tr>
+    <tr><td>מה התוצאה הסופית?</td><td>פעולה</td><td>_________</td></tr>
+  </table></div>
+  <div class="callout claude"><b>איפה Claude ייכנס?</b>סמנו שלב אחד שבו "צריך ראש" — לנסח תשובה, לסווג, לסכם או להחליט לפי שיקול. זה בדיוק המקום שבו נחבר את Claude בשיעור הבא. כרגע השאירו אותו ידני או כהערה.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>יש לי תהליך אמיתי עם טריגר, לפחות שתי פעולות, ותנאי אחד</li>
+    <li>לכל שלב רשמתי מודול ואפליקציה ב-Make</li>
+    <li>סימנתי שלב אחד שבו Claude יוסיף ערך בעתיד</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex6"> סיימתי את המשימה</label>
+</div>
+
+</section>
+
+<!-- ================= submit ================= -->
+<section class="blk" id="submit">
+  <div class="kicker">הגשה</div>
+  <h2>מה מגישים</h2>
+  <div class="card">
+    <p>מכינים מסמך אחד עם כל התרגילים שעשיתם — צילומי מסך של התרחישים, הטבלאות שמילאתם והתשובות — ושולחים בקבוצת הקורס. בחרו את הדרך הנוחה לכם:</p>
+    <div class="callout claude"><b>אפשרות א' — Claude בונה לכם דף הגשה 🤖</b>העתיקו את הפרומפט ל-Claude. הוא יבנה דף הגשה אינטראקטיבי בעברית שאפשר למלא, לפרסם (Publish) ולשלוח כקישור, או להוריד כ-PDF.</div>
+    <div class="copybox"><pre class="rtl">בנה לי Artifact בעברית ומימין לשמאל: דף הגשה למפגש 3 בקורס אוטומציה ("האוטומציה הראשונה ב-Make").
+בראש הדף: שדות לשם, תאריך וקבוצה.
+אחר כך סעיף לכל אחד מ-6 התרגילים, עם כותרת התרגיל ותיבת טקסט גדולה למילוי + מקום להדביק צילום מסך.
+התרגילים: 1) תכנון התרחיש על הנייר 2) בניית תרחיש מזג האוויר 3) הוספת פילטר גשם 4) תרחיש שורה חדשה בגיליון 5) דיבוג שלוש תקלות 6) מיפוי תהליך אמיתי שלי.
+בסוף: כפתור "הורדה / הדפסה ל-PDF". עיצוב נקי ופשוט.</pre></div>
+    <p style="text-align:center;margin:16px 0 0"><a class="btn" href="submit.html">📝 אפשרות ב' — עמוד המילוי באתר</a></p>
+    <p class="muted" style="text-align:center;font-size:14px;margin:8px 0 0">עמוד מילוי מוכן באתר — ממלאים בדפדפן (נשמר אצלכם), ולוחצים "ייצוא / הדפסה ל-PDF".</p>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">לפני המפגש הבא</div>
+  <h2>משימה לבית</h2>
+  <div class="card">
+    <ul class="check">
+      <li>השלמתי את תרגיל 6: מיפוי תהליך אמיתי שלי ל-Make, עם סימון איפה Claude ייכנס</li>
+      <li>התרחיש של מזג האוויר שלי במצב <span class="en">ON</span> ורץ לבד לפחות בוקר אחד</li>
+      <li>עברתי על <a href="summary.html">דף הסיכום</a>, ושמרתי את חשבון Make מוכן למפגש הבא</li>
+    </ul>
+    <div class="callout tip"><b>מה בשיעור הבא</b>נוסיף את Claude לאוטומציה: נירשם לפלטפורמת ה-API של Claude, נחבר אותה ל-Make, וניתן ל-Claude לנסח, לסווג ולהחליט בתוך התרחישים שבנינו היום.</div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 3 · תרגול</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

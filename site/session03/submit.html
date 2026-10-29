@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 3 · הגשה</title>
+<meta name="description" content="עמוד ההגשה של מפגש 3: ממלאים את התרגילים, נשמר בדפדפן, ומייצאים ל-PDF.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  .fld{margin:14px 0}
+  .fld label{display:block;font-weight:700;margin-bottom:6px}
+  .fld input,.fld textarea{width:100%;font:inherit;color:var(--ink);background:var(--surface);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-sizing:border-box}
+  .fld textarea{min-height:120px;resize:vertical;line-height:1.6}
+  .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  @media (max-width:640px){.row3{grid-template-columns:1fr}}
+  .exh{margin:22px 0 6px;font-weight:800;color:var(--accent)}
+  .bar2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:4px 0 2px}
+  .saved{font-size:13px;color:var(--ink-2)}
+  @media print{
+    .tabs,.bar2,.no-print,footer{display:none!important}
+    .top{background:#fff!important;color:#000!important}
+    .top *{color:#000!important}
+    a[href]:after{content:""}
+    .fld input,.fld textarea{border:1px solid #999}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body data-page="s03submit">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><a href="index.html" style="color:var(--ink-2)">מפגש 3</a><span>›</span><b>הגשה</b></div>
+  <h1>הגשת מפגש 3 — האוטומציה הראשונה ב-Make</h1>
+  <p class="sub">ממלאים כאן את כל התרגילים (נשמר אוטומטית בדפדפן שלכם), מצרפים צילומי מסך של התרחישים, ולוחצים "ייצוא / הדפסה ל-PDF". את ה-PDF שולחים בקבוצת הקורס.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="submit.html" class="on">📝 הגשה</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="bar2 no-print">
+    <button class="btn" type="button" id="pdf">🖨️ ייצוא / הדפסה ל-PDF</button>
+    <button class="btn ghost" type="button" id="clear">🗑️ איפוס הכל</button>
+    <span class="saved" id="saved"></span>
+  </div>
+  <div class="card">
+    <div class="row3">
+      <div class="fld"><label for="f_name">שם מלא</label><input id="f_name" data-k="name" type="text"></div>
+      <div class="fld"><label for="f_date">תאריך</label><input id="f_date" data-k="date" type="date"></div>
+      <div class="fld"><label for="f_group">קבוצה</label><input id="f_group" data-k="group" type="text"></div>
+    </div>
+
+    <div class="exh">תרגיל 1 — תכנון התרחיש על הנייר</div>
+    <div class="fld"><textarea data-k="ex1" placeholder="טריגר / מקור נתונים / עיבוד / פעולה — מה כתבתם לכל חלק?"></textarea></div>
+
+    <div class="exh">תרגיל 2 — בניית תרחיש מזג האוויר</div>
+    <div class="fld"><textarea data-k="ex2" placeholder="תארו את התרחיש שבניתם, והדביקו צילום מסך של ה-Scenario ושל המייל/השורה בגיליון."></textarea></div>
+
+    <div class="exh">תרגיל 3 — הוספת פילטר גשם</div>
+    <div class="fld"><textarea data-k="ex3" placeholder="מה התנאי שהגדרתם? איך בדקתם שהוא עובד? צרפו צילום מסך של הפילטר."></textarea></div>
+
+    <div class="exh">תרגיל 4 — תרחיש שורה חדשה בגיליון → התראה</div>
+    <div class="fld"><textarea data-k="ex4" placeholder="מה ההבדל בין הטריגר כאן לטריגר בתרגיל 2? צרפו צילום מסך של ההתראה שהתקבלה."></textarea></div>
+
+    <div class="exh">תרגיל 5 — דיבוג שלוש התקלות</div>
+    <div class="fld"><textarea data-k="ex5" placeholder="לכל תקלה (א', ב', ג'): מה הסימן ומה התיקון?"></textarea></div>
+
+    <div class="exh">תרגיל 6 — מיפוי תהליך אמיתי שלי</div>
+    <div class="fld"><textarea data-k="ex6" placeholder="התהליך שבחרתי, הטבלה (טריגר/פעולות/פילטר/תוצאה), והשלב שבו Claude ייכנס בעתיד."></textarea></div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 3 · הגשה</footer>
+<script src="../assets/site.js"></script>
+<script>
+(function(){
+  var KEY='aiac-s03-submit:';
+  var saved=document.getElementById('saved');
+  var t;
+  function flash(msg){saved.textContent=msg;clearTimeout(t);t=setTimeout(function(){saved.textContent='';},1600);}
+  var fields=document.querySelectorAll('[data-k]');
+  fields.forEach(function(el){
+    var k=KEY+el.dataset.k;
+    try{var v=localStorage.getItem(k);if(v!==null)el.value=v;}catch(e){}
+    el.addEventListener('input',function(){try{localStorage.setItem(k,el.value);flash('נשמר ✓');}catch(e){}});
+  });
+  document.getElementById('pdf').addEventListener('click',function(){window.print();});
+  document.getElementById('clear').addEventListener('click',function(){
+    if(!confirm('לאפס את כל השדות? אי אפשר לשחזר.'))return;
+    fields.forEach(function(el){el.value='';try{localStorage.removeItem(KEY+el.dataset.k);}catch(e){}});
+    flash('אופס ✓');
+  });
+})();
+</script>
+</body>
+</html>

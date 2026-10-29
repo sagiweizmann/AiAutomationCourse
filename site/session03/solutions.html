@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 3 · פתרונות</title>
+<meta name="description" content="פתרונות ותשובות לדוגמה לתרגילי מפגש 3: תכנון תרחיש, בניית אוטומציית מזג אוויר ב-Make, פילטר, טריגר אירוע, דיבוג ומיפוי תהליך.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s03sol">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 3</b><span>›</span><b>פתרונות</b></div>
+  <h1>פתרונות: האוטומציה הראשונה ב-Make</h1>
+  <p class="sub">תשובות מלאות ותשובות לדוגמה לכל ששת התרגילים. חלק מהתרגילים (תכנון, מיפוי תהליך) פתוחים — שם זו דוגמה טובה, לא "התשובה היחידה". ערכי מזג אוויר חיים משתנים כל הזמן, אז מה שחשוב הוא הנתיב והמבנה, לא המספר המדויק.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html" class="on">✅ פתרונות</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<!-- ex1 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">1</span><h3>מתכננים את התרחיש על הנייר</h3></div>
+  <p class="note">תרגיל פתוח — זו התשובה הנכונה לתרחיש "תחזית הבוקר".</p>
+  <div class="tbl"><table>
+    <tr><th>חלק</th><th>התשובה</th></tr>
+    <tr><td><b>טריגר</b></td><td>שעון (Schedule) — כל יום ב-07:00. לא אירוע חיצוני, אלא תזמון קבוע.</td></tr>
+    <tr><td><b>מקור נתונים</b></td><td>בקשת GET ל-API של open-meteo (אשדוד) — אותו API ממפגש 2.</td></tr>
+    <tr><td><b>עיבוד</b></td><td>מתוך ה-JSON לוקחים את <code>current.temperature_2m</code> ואת <code>current.precipitation</code>.</td></tr>
+    <tr><td><b>פעולה</b></td><td>שליחת מייל (Gmail) + הוספת שורה לגיליון (Google Sheets).</td></tr>
+  </table></div>
+  <div class="sol"><b>למה שעון ולא אירוע?</b>אין כאן "משהו שקורה" שצריך להגיב אליו — פשוט רוצים מידע בזמן קבוע כל בוקר. זה בדיוק המקרה של טריגר שעון.</div>
+</div>
+</section>
+
+<!-- ex2 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">2</span><h3>בונים: Schedule → HTTP → שליחה</h3></div>
+  <p>שרשרת המודולים המלאה, מודול-מודול:</p>
+  <div class="sol"><b>מודול 1 · HTTP → Make a request</b>
+    <ul class="steps">
+      <li><span class="en">URL</span> = הכתובת של מזג האוויר (למטה)</li>
+      <li><span class="en">Method</span> = <span class="en">GET</span></li>
+      <li><span class="en">Parse response</span> = <b>Yes</b> (קריטי — בלי זה אין שדות למפות)</li>
+    </ul>
+    <div class="copybox"><pre>https://api.open-meteo.com/v1/forecast?latitude=31.79213&longitude=34.64966&current=temperature_2m,precipitation,weather_code&timezone=Asia/Jerusalem</pre></div>
+  </div>
+  <div class="sol"><b>מודול 2 · Gmail → Send an email</b>
+    <ul class="steps">
+      <li>חיבור ל-Google (פעם אחת) · <span class="en">To</span> = המייל שלכם · <span class="en">Subject</span> = "תחזית הבוקר — אשדוד"</li>
+      <li>בתוכן <b>בוחרים</b> את השדות מה-HTTP (לא מקלידים):</li>
+    </ul>
+    <div class="copybox"><pre class="rtl">טמפרטורה: {{current.temperature_2m}} מעלות
+משקעים: {{current.precipitation}} מ"מ</pre></div>
+  </div>
+  <div class="sol"><b>מודול 3 · Google Sheets → Add a row</b>
+    <p style="margin:4px 0 0">גיליון עם כותרות <code>date | temp | rain</code>, ומיפוי: <code>date ← {{now}}</code> · <code>temp ← current.temperature_2m</code> · <code>rain ← current.precipitation</code>.</p>
+  </div>
+  <div class="sol"><b>תזמון והפעלה</b>
+    <p style="margin:4px 0 0">שעון → <span class="en">Every day</span> → 07:00. <span class="en">Run once</span> לבדיקה, ואז מתג <span class="en">ON</span>.</p>
+  </div>
+  <div class="callout tip"><b>בדיקה</b>אם במייל מופיע מספר אמיתי (לא <code>{{...}}</code>) ובגיליון נוספה שורה — התרחיש עובד. הערכים אצל כל אחד שונים כי זה מזג אוויר חי.</div>
+</div>
+</section>
+
+<!-- ex3 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">3</span><h3>מוסיפים תנאי: שולחים רק כשיורד גשם</h3></div>
+  <div class="sol"><b>הפילטר</b>
+    <p style="margin:4px 0 0">לוחצים על החוט בין ה-HTTP למייל → אייקון מפתח → <span class="en">Set up a filter</span>. התנאי:</p>
+    <div class="copybox"><pre>current.precipitation   Greater than   0</pre></div>
+  </div>
+  <div class="sol"><b>איך בודקים שהוא עובד</b>
+    <p style="margin:4px 0 0">אין משקעים עכשיו → <code>precipitation = 0</code> → התנאי לא מתקיים → המייל לא יוצא (רואים שהחבילה נעצרה בפילטר). לבדיקה חיובית: שנו זמנית את הערך ל-<code>-1</code>, הריצו, וראו שהמייל כן יוצא. אחר כך החזירו ל-<code>0</code>.</p>
+  </div>
+  <div class="callout"><b>הרעיון</b>פילטר מעביר הלאה רק מה שעומד בתנאי. כך צוות המשלוחים מקבל מייל רק בימי גשם — לא כל בוקר.</div>
+</div>
+</section>
+
+<!-- ex4 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">4</span><h3>תרחיש שני: שורה חדשה בגיליון → התראה</h3></div>
+  <div class="sol"><b>שרשרת המודולים</b>
+    <ul class="steps">
+      <li>מודול 1 (טריגר): <span class="en">Google Sheets → Watch rows</span> — בוחרים את גיליון הלידים, <span class="en">Row with headers = Yes</span></li>
+      <li>מודול 2: <span class="en">Gmail → Send an email</span>, וממפים <code>name</code>, <code>product</code>, <code>phone</code> מהשורה</li>
+      <li>מתזמנים את הטריגר (למשל כל 15 דקות) ומדליקים <span class="en">ON</span></li>
+    </ul>
+  </div>
+  <div class="sol"><b>ההבדל מתרגיל 2</b>
+    <p style="margin:4px 0 0">בתרגיל 2 הטריגר הוא <b>שעון</b> — רץ בזמן קבוע. כאן הטריגר הוא <b>אירוע</b> — Make "צופה" בגיליון ומריץ רק כשנכנסת שורה חדשה. <span class="en">Watch rows</span> זוכר את השורה האחרונה שעיבד, כדי לא לשלוח התראה כפולה על אותו ליד.</p>
+  </div>
+</div>
+</section>
+
+<!-- ex5 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">5</span><h3>דיבוג: התרחיש השבור</h3></div>
+  <div class="fix">
+    <div class="sol"><b>תקלה א' — טקסט <code>{{current.temperature_2m}}</code> במקום מספר</b>
+      <p class="note" style="margin:2px 0 0"><b>סימן:</b> המייל מכיל את שם השדה כטקסט. <b>תיקון:</b> השדה הוקלד ביד במקום להיבחר — מוחקים, לוחצים בשדה התוכן ו<b>בוחרים</b> את השדה מהרשימה. ואם זה לא עוזר — <span class="en">Parse response</span> היה <span class="en">No</span>: מעבירים ל-Yes, מריצים <span class="en">Run once</span> שוב כדי ש-Make "ילמד" את השדות, וממפים מחדש.</p>
+    </div>
+    <div class="sol"><b>תקלה ב' — מודול אדום, <span class="en">URL is required</span></b>
+      <p class="note" style="margin:2px 0 0"><b>סימן:</b> ההרצה נעצרת על מודול ה-HTTP. <b>תיקון:</b> ה-URL ריק או לא נשמר — מדביקים את הכתובת המלאה בשדה <span class="en">URL</span>, שומרים את המודול (<span class="en">OK</span>), ומריצים שוב.</p>
+    </div>
+    <div class="sol"><b>תקלה ג' — שולח התראה על אותו ליד שוב ושוב</b>
+      <p class="note" style="margin:2px 0 0"><b>סימן:</b> בכל הרצה יוצאת התראה על שורות ישנות. <b>תיקון:</b> כנראה נבחר <span class="en">Search rows</span> (שמחזיר הכול בכל פעם) במקום <span class="en">Watch rows</span> (שזוכר איפה עצר). מחליפים ל-Watch rows, וב-<span class="en">Choose where to start</span> בוחרים "מעכשיו והלאה".</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ex6 -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">6</span><h3>ממפים תהליך אמיתי שלכם ל-Make</h3></div>
+  <p class="note">תרגיל פתוח — להלן דוגמה מלאה לתהליך "טיפול בליד חדש מהאתר".</p>
+  <div class="tbl"><table>
+    <tr><th>שלב בתהליך</th><th>טריגר / פעולה?</th><th>מודול ואפליקציה ב-Make</th></tr>
+    <tr><td>לקוח ממלא טופס באתר</td><td>טריגר</td><td><span class="en">Webhooks → Custom webhook</span> (או <span class="en">Watch rows</span> אם הטופס כותב לגיליון)</td></tr>
+    <tr><td>שומרים את הליד</td><td>פעולה</td><td><span class="en">Google Sheets → Add a row</span></td></tr>
+    <tr><td>האם המוצר במלאי?</td><td>פילטר / Router</td><td><span class="en">Filter</span> על שדה המלאי</td></tr>
+    <tr><td>שולחים תשובה ללקוח</td><td>פעולה</td><td><span class="en">Gmail → Send an email</span></td></tr>
+  </table></div>
+  <div class="sol"><b>איפה Claude ייכנס (בשיעור הבא)</b>בשלב "שולחים תשובה ללקוח" — במקום טקסט קבוע, Claude ינסח תשובה אישית לפי פרטי הליד והמלאי. זה השלב שבו "צריך ראש": ניסוח, טון ושיקול. את כל השאר Make עושה לבד.</div>
+  <div class="callout claude"><b>הכלל</b>מסמנים שלב אחד שבו צריך לנסח, לסווג, לסכם או להחליט לפי שיקול — זה המקום של Claude. כל שלב של "העבר נתון מכאן לשם" נשאר Make טהור.</div>
+</div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 3 · פתרונות</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
