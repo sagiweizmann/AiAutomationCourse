@@ -108,13 +108,15 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
   <ol class="steps">
     <li>ב-<span class="en">Scenarios</span> לוחצים <span class="en">Create a new scenario</span></li>
     <li>לוחצים על העיגול הגדול עם ה-+, מחפשים <span class="en">HTTP</span> ובוחרים <span class="en">Make a request</span></li>
-    <li>ממלאים: <span class="en">URL</span> = הכתובת של מזג האוויר (למטה), <span class="en">Method</span> = <span class="en">GET</span></li>
+    <li>ממלאים: <span class="en">Authentication type</span> = <span class="en">No authentication</span>, <span class="en">URL</span> = הכתובת של מזג האוויר (למטה), <span class="en">Method</span> = <span class="en">GET</span></li>
     <li><b>חשוב:</b> מגלגלים למטה ל-<span class="en">Parse response</span> ובוחרים <span class="en">Yes</span> — כך Make הופך את ה-JSON לשדות שאפשר לבחור</li>
   </ol>
   <div class="copybox"><pre>https://api.open-meteo.com/v1/forecast?latitude=31.79213&longitude=34.64966&current=temperature_2m,precipitation,weather_code&timezone=Asia/Jerusalem</pre></div>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-http-config.jpg" alt="מודול HTTP ב-Make עם ה-URL של מזג האוויר ו-Method GET" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מודול ה-HTTP: Authentication type = No authentication, ה-URL של אשדוד, Method = GET.</figcaption></figure>
   <ol class="steps" start="5">
-    <li>לוחצים <span class="en">Run once</span> (למטה משמאל) ובודקים את הפלט: צריך לראות <code>current.temperature_2m</code> עם מספר אמיתי</li>
+    <li>לוחצים <span class="en">Run once</span> (למטה משמאל), פותחים את ה-<span class="en">Output</span> ומרחיבים את <code>current</code>: צריך לראות <code>current.temperature_2m</code> עם מספר אמיתי</li>
   </ol>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-http-output.jpg" alt="פלט ה-JSON של מזג האוויר ב-Make עם current.temperature_2m" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט אחרי Run once — <span class="en" dir="ltr">current.temperature_2m</span> עם ערך אמיתי. אצלכם המספר יהיה שונה.</figcaption></figure>
 
   <h4>2. הפעולה: שולחים מייל</h4>
   <ol class="steps">
@@ -127,6 +129,7 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
 טמפרטורה: {{current.temperature_2m}} מעלות
 משקעים: {{current.precipitation}} מ"מ</pre></div>
   <div class="callout tip"><b>איך ממפים שדה</b>לא מקלידים <code>{{current.temperature_2m}}</code> ביד — לוחצים בתוך שדה התוכן, ומהחלונית שנפתחת בוחרים את השדה מתוך מודול ה-HTTP. Make מכניס את ה"בועה" לבד.</div>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-mapping.jpg" alt="חלונית המיפוי של Make עם שדות ה-HTTP כבועות" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">חלונית המיפוי: בוחרים שדה מהרשימה והוא הופך ל"בועה" סגולה בתוך הערך. אותו מנגנון בכל מודול.</figcaption></figure>
 
   <h4>3. הפעולה הנוספת: כותבים לגיליון</h4>
   <ol class="steps">
@@ -163,6 +166,7 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
     <li>בתנאי: בשדה הראשון בוחרים <code>current.precipitation</code>, בוחרים <span class="en">Greater than</span>, ובערך כותבים <code>0</code></li>
     <li>לוחצים <span class="en">Run once</span> — אם אין גשם עכשיו, המייל לא יישלח (והקו מראה שהחבילה נעצרה בפילטר)</li>
   </ol>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-filter.jpg" alt="חלונית Set up a filter ב-Make עם תנאי מספרי Greater than" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">חלונית הפילטר: שם, השדה (precipitation), אופרטור <span class="en" dir="ltr">Greater than</span> וערך 0.</figcaption></figure>
   <div class="callout tip"><b>איך בודקים שזה באמת עובד</b>כדי לוודא שהמייל כן יוצא כשצריך, שנו זמנית את הערך בפילטר ל-<code>-1</code> (כל מספר גדול מ-1−). אם עכשיו המייל יוצא, הפילטר תקין. אחר כך החזירו ל-<code>0</code>.</div>
   <details class="hint"><summary>רמז: מתי הפילטר "חוסם"?</summary><p style="margin:6px 0 0">פילטר מעביר הלאה רק חבילות שעומדות בתנאי. <code>precipitation &gt; 0</code> אומר: המשך רק אם יש אפילו טיפה. אין משקעים → <code>precipitation = 0</code> → התנאי לא מתקיים → המודול הבא לא רץ.</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>

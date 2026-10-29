@@ -947,6 +947,15 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
+<section class="slide" data-min="1" data-block="2" data-title="מסך: חלונית המיפוי">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>מיפוי: בוחרים שדה מהרשימה — לא מקלידים</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-mapping.jpg" alt="חלונית המיפוי של Make עם שדות ה-HTTP כבועות"><figcaption>לוחצים בתוך שדה, ומהחלונית בוחרים את השדה מהמודול הקודם. השדה הופך ל"בועה" סגולה בתוך הערך.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>צילום מהבנייה החיה. הדגישו: הבועה הסגולה = מופה נכון; טקסט רגיל = לא ימופה.</li></ul></aside>
+</section>
+
 <section class="slide" data-min="2" data-block="2" data-title="הבנה לפני בנייה">
   <div class="s-kicker">לפני ההפסקה</div>
   <h2>התרחיש שנבנה — על רגל אחת</h2>
@@ -982,7 +991,7 @@ body.ov-on #ov{display:block}
   <h2>HTTP → Make a request</h2>
   <div class="s-body mid">
     <div class="grid2">
-      <div class="card"><b>מה ממלאים</b><ul style="margin:8px 0 0;font-size:16px"><li><span class="en">URL</span> = הכתובת של מזג האוויר (למטה)</li><li><span class="en">Method</span> = <span class="en">GET</span></li><li><span class="en">Parse response</span> = <b>Yes</b> ← קריטי!</li></ul></div>
+      <div class="card"><b>מה ממלאים</b><ul style="margin:8px 0 0;font-size:16px"><li><span class="en">Authentication type</span> = <span class="en">No authentication</span></li><li><span class="en">URL</span> = הכתובת של מזג האוויר (למטה)</li><li><span class="en">Method</span> = <span class="en">GET</span></li><li><span class="en">Parse response</span> = <b>Yes</b> ← קריטי!</li></ul></div>
       <div class="card" style="border-color:var(--p2)"><b>למה Parse = Yes</b><div style="font-size:16px;margin-top:6px">בלי זה, Make מקבל את ה-JSON כטקסט אחד גדול. עם Yes — הוא הופך אותו לשדות שאפשר לבחור ולמפות.</div></div>
     </div>
     <div class="copybox"><div class="material">https://api.open-meteo.com/v1/forecast?latitude=31.79213&longitude=34.64966&current=temperature_2m,precipitation,weather_code&timezone=Asia/Jerusalem</div></div>
@@ -993,20 +1002,21 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
+<section class="slide" data-min="1" data-block="3" data-title="מסך: מודול ה-HTTP">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>מודול ה-HTTP — URL, Method ו-Parse</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-http-config.jpg" alt="מודול HTTP Make a request עם ה-URL של מזג האוויר ו-Method GET"><figcaption>צילום אמיתי מהבנייה: Authentication type = No authentication, ה-URL של אשדוד, Method = GET. גוללים למטה ל-Parse response = Yes.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>צילום מהבנייה החיה. הראו את שדה ה-Authentication type (No authentication) — חובה בגרסה הנוכחית.</li></ul></aside>
+</section>
+
 <section class="slide" data-min="3" data-block="3" data-title="בודקים את התשובה">
   <div class="s-kicker">Run once</div>
   <h2>מריצים פעם אחת ורואים מה חזר</h2>
   <div class="s-body mid">
-    <p class="muted" style="margin:0 0 6px">לוחצים <span class="en">Run once</span>, ואז על בועת ה-HTTP — רואים את ה-JSON. זה מה שבחרנו ממנו:</p>
-    <div class="copybox"><div class="material">{
-  "current": {
-    "time": "2026-01-15T09:00",
-    "temperature_2m": 17.4,
-    "precipitation": 0,
-    "weather_code": 2
-  }
-}</div></div>
-    <div class="callout tip"><b>הנתיב = הכתובת של הערך</b><code>current.temperature_2m</code> = 17.4. בדיוק כמו במפגש 2. את זה נמפה למייל ולגיליון.</div>
+    <p class="muted" style="margin:0 0 6px">לוחצים <span class="en">Run once</span>, פותחים את ה-<span class="en">Output</span> ומרחיבים את <code>current</code> — רואים את השדות האמיתיים:</p>
+    <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-http-output.jpg" alt="פלט ה-JSON של מזג האוויר ב-Make: current.temperature_2m עם ערך אמיתי"><figcaption>הפלט האמיתי: <span class="en" dir="ltr">current.temperature_2m = 26.9</span>, precipitation = 0. אצל כל אחד המספר שונה — זה חי.</figcaption></figure>
   </div>
   <aside class="notes"><ul>
     <li>המספרים אצל כל אחד שונים — זה חי. חשוב הנתיב, לא הערך.</li>
@@ -1068,6 +1078,15 @@ body.ov-on #ov{display:block}
 </section>
 
 <!-- ============================== BLOCK 4 ============================== -->
+<section class="slide" data-min="1" data-block="3" data-title="מסך: התרחיש על הקנבס">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>התרחיש על הקנבס</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-canvas.jpg" alt="מודול ה-HTTP על הקנבס של Make עם תיוג ה-GET והתזמון"><figcaption>כל מודול הוא עיגול; הקו מחבר ביניהם; השעון מתחת למודול הראשון הוא התזמון. זה "תרחיש".</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>צילום מהבנייה החיה. הצביעו על השעון (תזמון) ועל בועת הפלט (1).</li></ul></aside>
+</section>
+
 <section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · תנאים, טריגרים ודיבוג">
   <div class="s-kicker">בלוק 4</div>
   <h1>תנאים, טריגרים ודיבוג</h1>
@@ -1088,6 +1107,15 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul>
     <li>לבדיקה: שנו זמנית את הערך ל-1− כדי לראות שהמייל כן יוצא. אחר כך מחזירים ל-0.</li>
   </ul></aside>
+</section>
+
+<section class="slide" data-min="1" data-block="4" data-title="מסך: חלונית הפילטר">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>חלונית הפילטר — תנאי על הקו</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-filter.jpg" alt="חלונית Set up a filter ב-Make עם תנאי מספרי Greater than"><figcaption>נותנים שם לפילטר, בוחרים את השדה (precipitation), אופרטור <span class="en" dir="ltr">Greater than</span> וערך 0 — ממשיך רק אם יש משקעים.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>צילום מהבנייה החיה. הראו שבוחרים אופרטור מספרי (Numeric), לא טקסטואלי.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="4" data-block="4" data-title="טריגר אירוע">
