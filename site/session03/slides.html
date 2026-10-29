@@ -814,7 +814,7 @@ body.ov-on #ov{display:block}
     <div class="agenda">
       <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:30</div><b>רענון + מה זה Make</b><span>מאוטומציה למודול</span></div>
       <div class="ag" style="--c:var(--p2)"><div class="t">0:30–1:00</div><b>ה-ABC של Make</b><span>תרחיש, מודול, חיבור, מיפוי</span></div>
-      <div class="ag" style="--c:var(--p5)"><div class="t">1:10–2:00</div><b>בונים: תרחיש מזג האוויר</b><span>Schedule → HTTP → שליחה</span></div>
+      <div class="ag" style="--c:var(--p5)"><div class="t">1:00–1:50</div><b>בונים: תרחיש מזג האוויר</b><span>Schedule → HTTP → מייל + גיליון, ואז הפסקה</span></div>
       <div class="ag" style="--c:var(--p4)"><div class="t">2:00–2:30</div><b>תנאים, טריגרים ודיבוג</b><span>פילטר, Watch rows, History</span></div>
       <div class="ag" style="--c:var(--claude)"><div class="t">2:30–2:45</div><b>לקראת Claude API</b><span>מה מוסיפים בשיעור הבא</span></div>
       <div class="ag" style="--c:var(--p3)"><div class="t">2:45–3:00</div><b>תרגול וסיום</b><span>כל אחד מריץ אוטומציה</span></div>
@@ -822,7 +822,7 @@ body.ov-on #ov{display:block}
   </div>
   <aside class="notes"><ul>
     <li>רוב הזמן הוא בלוק 3 — הבנייה בפועל. שם כולם פותחים מחשב.</li>
-    <li>ההפסקה אחרי ה-ABC ולפני הבנייה, כדי שכולם ייכנסו לבנייה רעננים.</li>
+    <li>ההפסקה אחרי שבונים את האוטומציה הראשונה — רגע מתגמל, וכל מי שנתקע משלים בה לפני בלוק 4.</li>
   </ul></aside>
 </section>
 
@@ -844,6 +844,7 @@ body.ov-on #ov{display:block}
       <div><i>✅</i><b>פעולה</b><span>מייל, שורה בגיליון, התראה</span></div>
     </div>
     <div class="callout"><b>זוכרים ממפגש 2?</b>אפיינו תהליך: מה מתחיל אותו, אילו נתונים נכנסים, אילו החלטות יש, ומה התוצאה. אלה בדיוק טריגר, צעדים ופעולה — רק במילים של Make.</div>
+    <div class="callout tip"><b>דוגמה מהחיים</b>טריגר: לקוח ממלא טופס באתר. צעדים: שומרים את הפנייה לגיליון, בודקים אם המוצר במלאי. פעולה: שולחים מייל אישור. אותו שלד בדיוק גם לתחזית הבוקר שנבנה היום.</div>
   </div>
   <aside class="notes"><ul>
     <li>חברו ישירות לאפיון: המבנה זהה. Make הוא רק הכלי שמריץ את מה שאפיינו.</li>
@@ -874,6 +875,7 @@ body.ov-on #ov{display:block}
       <div class="card"><b>מה Make עושה</b><ul style="margin:8px 0 0;font-size:16px"><li>מקשיב לטריגר (שעון, שורה חדשה, מייל נכנס)</li><li>מושך ומזיז מידע בין אפליקציות</li><li>מעבד, מסנן ומחליט</li><li>מבצע פעולה — הכול לבד, 24/7</li></ul></div>
       <div class="card"><b>למה דווקא Make</b><ul style="margin:8px 0 0;font-size:16px"><li>ויזואלי: גוררים מודולים ומחברים בקו</li><li>מאות אפליקציות מוכנות (Gmail, Sheets, Slack…)</li><li>יש מודול HTTP לכל API אחר</li><li>תוכנית חינמית שמספיקה ללמידה</li></ul></div>
     </div>
+    <div class="callout tip"><b>דוגמה לתרחיש אחד</b>"כל יום ב-9:00 — קח את ההזמנות החדשות מהגיליון, סכם אותן, ושלח לי טבלה במייל." כל המשפט הזה הוא תרחיש אחד ב-Make, בלי שורת קוד אחת.</div>
     <div class="callout claude"><b>Make מזיז, Claude חושב</b>היום Make רק מזיז נתונים. בשיעור הבא נוסיף את Claude בשלב ה"צעדים" — שם צריך לנסח, לסווג או להחליט.</div>
   </div>
   <aside class="notes"><ul>
@@ -900,6 +902,7 @@ body.ov-on #ov{display:block}
       <div><i>🗺️</i><b>תרחיש</b><span>כל השרשרת יחד = האוטומציה</span></div>
     </div>
     <div class="callout"><b>המודול הראשון מיוחד</b>המודול הראשון בשרשרת הוא תמיד הטריגר — הוא קובע <b>מתי</b> כל התרחיש רץ. שאר המודולים הם פעולות שרצות אחריו, בזו אחר זו.</div>
+    <div class="callout tip"><b>חבילה (Bundle)</b>הנתונים שעוברים בין המודולים נקראים "חבילה" (Bundle). כל מודול מקבל חבילה, עושה את שלו, ומעביר הלאה — בדיוק כמו פס ייצור שבו כל תחנה מוסיפה משהו.</div>
   </div>
   <aside class="notes"><ul>
     <li>דימוי: תרחיש = פס ייצור. כל מודול תחנה. החבילה (bundle) עוברת מתחנה לתחנה.</li>
@@ -957,26 +960,19 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide" data-min="2" data-block="2" data-title="הבנה לפני בנייה">
-  <div class="s-kicker">לפני ההפסקה</div>
+  <div class="s-kicker">לפני שבונים</div>
   <h2>התרחיש שנבנה — על רגל אחת</h2>
   <div class="s-body mid">
     <div class="flowc">
-      <div><i>⏰</i><b>07:00</b><span>הטריגר: שעון</span></div><div class="ar">⟵</div>
+      <div><i>⏰</i><b>07:00</b><span>הטריגר: שעון, כל בוקר</span></div><div class="ar">⟵</div>
       <div class="mid"><i>🔌</i><b>HTTP GET</b><span>מזג האוויר של אשדוד</span></div><div class="ar">⟵</div>
       <div><i>📧</i><b>מייל + גיליון</b><span>הטמפרטורה והמשקעים</span></div>
     </div>
-    <div class="callout claude"><b>אחרי ההפסקה — בונים</b>כל אחד פותח את Make. נבנה את זה ביחד, מודול-מודול.</div>
+    <div class="callout claude"><b>עכשיו בונים ביחד</b>כל אחד פותח את <span class="en">make.com</span>, יוצר תרחיש חדש, ובונה איתי מודול-אחרי-מודול. מי שנתקע — מרים יד, לא נשאר מאחור. בסוף הבלוק תהיה לכם אוטומציה שרצה לבד — ואז נצא להפסקה.</div>
   </div>
-  <aside class="notes"><ul><li>זו תמונת היעד. אחרי ההפסקה כולם בונים בדיוק את זה.</li></ul></aside>
+  <aside class="notes"><ul><li>זו תמונת היעד. ודאו שכולם פתחו מחשב ונכנסו ל-Make לפני שממשיכים.</li><li>קצב איטי — זה החלק שבו הכי קל להישאר מאחור. ההפסקה רק בסוף הבנייה.</li></ul></aside>
 </section>
 
-<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה">
-  <div class="s-kicker">הפסקה</div>
-  <h1>הפסקה — 10 דקות</h1>
-  <p class="sub">כשחוזרים: פותחים מחשב, נכנסים ל-make.com, ומתחילים לבנות.</p>
-  <div class="timer" data-sec="600" data-auto></div>
-  <aside class="notes"><ul><li>ודאו שכולם חוזרים עם Make פתוח. מי שלא נרשם — לעזור עכשיו.</li></ul></aside>
-</section>
 
 <!-- ============================== BLOCK 3 ============================== -->
 <section class="slide divider" data-min="1" data-block="3" data-title="בלוק 3 · התרחיש הראשון">
@@ -1085,6 +1081,14 @@ body.ov-on #ov{display:block}
     <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-canvas.jpg" alt="מודול ה-HTTP על הקנבס של Make עם תיוג ה-GET והתזמון"><figcaption>כל מודול הוא עיגול; הקו מחבר ביניהם; השעון מתחת למודול הראשון הוא התזמון. זה "תרחיש".</figcaption></figure>
   </div>
   <aside class="notes"><ul><li>צילום מהבנייה החיה. הצביעו על השעון (תזמון) ועל בועת הפלט (1).</li></ul></aside>
+</section>
+
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה">
+  <div class="s-kicker">הפסקה</div>
+  <h1>בנינו אוטומציה שעובדת! 🎉<br>הפסקה — 10 דקות</h1>
+  <p class="sub">כשחוזרים: הופכים את האוטומציה לחכמה יותר — פילטר שמחליט מתי לשלוח, טריגר אירוע, ודיבוג כשמשהו נשבר.</p>
+  <div class="timer" data-sec="600" data-auto></div>
+  <aside class="notes"><ul><li>רגע מצוין להפסקה: כולם הרגע ראו משהו משלהם שעובד. תנו לזה לשקוע.</li><li>מי שלא סיים את הבנייה — זה הזמן להשלים איתו בהפסקה, כדי שייכנס לבלוק 4 עם תרחיש עובד.</li></ul></aside>
 </section>
 
 <section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · תנאים, טריגרים ודיבוג">
@@ -1223,6 +1227,19 @@ body.ov-on #ov{display:block}
     <li>ההבחנה הזו מבלבלת רבים: "כבר יש לי Claude, למה עוד חשבון?" — כי זה ערוץ אחר, לתוכנה.</li>
     <li>מפתח API = סיסמה שמחייבת את החשבון. לא משתפים, לא מעלים לגיט.</li>
   </ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="עלות ה-API">
+  <div class="s-kicker">כמה זה עולה</div>
+  <h2>משלמים לפי שימוש — טוקנים</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>💬 claude.ai</b><div style="font-size:16px;margin-top:6px">מנוי חודשי קבוע. משלמים אותו דבר בין אם שלחתם הודעה אחת או מאה.</div></div>
+      <div class="card" style="border-color:var(--claude)"><b>🔌 Claude API</b><div style="font-size:16px;margin-top:6px">משלמים רק על מה שהשתמשתם. כל קריאה עולה לפי אורך הטקסט שנכנס ויוצא — נמדד ב"טוקנים" (בערך 3/4 מילה כל טוקן).</div></div>
+    </div>
+    <div class="callout tip"><b>בפועל — זול לרוב השימושים</b>ניסוח מייל קצר עולה שברירי אגורות. אבל כי זה לפי שימוש — חשוב להבין את התמחור לפני שמחברים אוטומציה שרצה אלפי פעמים. נעשה את זה ביחד בשיעור הבא.</div>
+  </div>
+  <aside class="notes"><ul><li>אל תיכנסו למספרים מדויקים — העיקרון: מנוי קבוע מול תשלום-לפי-שימוש.</li><li>הרגיעו: ללמידה ולתרגול העלות זניחה. החשש האמיתי הוא אוטומציה שרצה בלולאה בלי בקרה.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="2" data-block="5" data-title="מה נכין לשיעור הבא">
