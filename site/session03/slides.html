@@ -1007,6 +1007,21 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>צילום מהבנייה החיה. הראו את שדה ה-Authentication type (No authentication) — חובה בגרסה הנוכחית.</li></ul></aside>
 </section>
 
+<section class="slide" data-min="3" data-block="3" data-title="עיר אחרת">
+  <div class="s-kicker">להתאים לעצמכם</div>
+  <h2>רוצים עיר אחרת? משנים שני מספרים</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 4px">כל מה שמגדיר את העיר ב-URL הוא קו הרוחב (<span class="en">latitude</span>) וקו האורך (<span class="en">longitude</span>). מחליפים אותם — וזהו:</p>
+    <div class="anat" style="font-size:19px">https://api.open-meteo.com/v1/forecast?latitude=<span class="p">32.0853</span>&amp;longitude=<span class="p">34.7818</span>&amp;current=temperature_2m,precipitation&amp;timezone=Asia/Jerusalem</div>
+    <div class="grid2">
+      <div class="card"><b>כמה ערים מוכנות</b><ul style="margin:8px 0 0;font-size:16px"><li>תל אביב: <code>32.0853</code>, <code>34.7818</code></li><li>ירושלים: <code>31.7683</code>, <code>35.2137</code></li><li>חיפה: <code>32.7940</code>, <code>34.9896</code></li><li>באר שבע: <code>31.2518</code>, <code>34.7913</code></li></ul></div>
+      <div class="card" style="border-color:var(--p2)"><b>איך מוצאים כל עיר</b><div style="font-size:16px;margin-top:6px">מחפשים בגוגל <span class="en" dir="ltr">"&lt;שם העיר&gt; lat long"</span>, או פותחים את העיר ב-Google Maps ולוחצים עליה — שני המספרים מופיעים למטה.</div></div>
+    </div>
+    <div class="callout tip"><b>רק ה-URL משתנה</b>המבנה של התרחיש זהה לגמרי — אותו מודול HTTP, אותו מיפוי. זו בדיוק העוצמה של מודול ה-HTTP: API אחד, אינסוף ערים.</div>
+  </div>
+  <aside class="notes"><ul><li>הדגימו חי: שנו את ה-latitude/longitude והריצו Run once — הטמפרטורה משתנה לעיר אחרת.</li><li>זה מרגיע: "האוטומציה שלי, העיר שלי". לא חייבים אשדוד.</li></ul></aside>
+</section>
+
 <section class="slide" data-min="3" data-block="3" data-title="בודקים את התשובה">
   <div class="s-kicker">Run once</div>
   <h2>מריצים פעם אחת ורואים מה חזר</h2>
@@ -1081,6 +1096,36 @@ body.ov-on #ov{display:block}
     <figure class="shot" style="max-width:800px;margin:0 auto"><img src="../assets/make/s03-canvas.jpg" alt="מודול ה-HTTP על הקנבס של Make עם תיוג ה-GET והתזמון"><figcaption>כל מודול הוא עיגול; הקו מחבר ביניהם; השעון מתחת למודול הראשון הוא התזמון. זה "תרחיש".</figcaption></figure>
   </div>
   <aside class="notes"><ul><li>צילום מהבנייה החיה. הצביעו על השעון (תזמון) ועל בועת הפלט (1).</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="דוגמה שנייה">
+  <div class="s-kicker">אותו דפוס, API אחר</div>
+  <h2>דוגמה שנייה: שער הדולר כל בוקר</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>⏰</i><b>08:00</b><span>הטריגר: שעון, כל בוקר</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>💱</i><b>HTTP GET</b><span>API של שערי מטבע</span></div><div class="ar">⟵</div>
+      <div><i>📧</i><b>מייל מנוסח</b><span>דולר, אירו, ליש"ט</span></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><b>1. ה-URL (מספר מטבעות)</b>
+        <div class="copybox" style="margin-top:8px"><div class="material">https://api.frankfurter.dev/v1/latest?base=USD&amp;symbols=ILS,EUR,GBP</div></div>
+        <div class="muted" style="font-size:14px;margin-top:6px">מחזיר <code>rates.ILS</code>, <code>rates.EUR</code>, <code>rates.GBP</code> ואת <code>date</code>. בלי מפתח, בלי הרשמה.</div>
+      </div>
+      <div class="card" style="border-color:var(--claude)"><b>2. המייל — עם מיפוי</b>
+        <div class="copybox" style="margin-top:8px"><div class="material">שערי הבוקר ({{date}}):
+💵 דולר: {{rates.ILS}} ₪
+💶 אירו: שווה {{rates.EUR}} דולר
+💷 ליש"ט: שווה {{rates.GBP}} דולר</div></div>
+      </div>
+    </div>
+    <div class="callout tip"><b>שמתם לב? הכול זהה</b>אותו שלד בדיוק כמו מזג האוויר — שעון ← HTTP ← מייל. מה שהשתנה: רק ה-<b>URL</b> והשדות שבחרתם. זו בדיוק המשמעות של "לומדים דפוס, לא תרחיש אחד".</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>המסר המרכזי: הדפוס כללי. מי שבנה את מזג האוויר יודע לבנות את זה ב-5 דקות.</li>
+    <li>frankfurter = API חינמי לשערי מטבע, בלי מפתח. אפשר להוסיף כל מטבע ל-symbols.</li>
+    <li>אפשר לשלב: אותו מייל יכול להכיל גם מזג אוויר וגם שערים — שני מודולי HTTP בשרשרת.</li>
+  </ul></aside>
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה">
@@ -1282,6 +1327,97 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul>
     <li>כל התרגילים בדף התרגול באתר, עם צעדים מלאים ובדיקות עצמיות.</li>
   </ul></aside>
+</section>
+
+<section class="slide ex22" data-min="8" data-block="6" data-title="תרגיל 1">
+  <div class="exh"><span class="ex-num">1</span><h2>מתכננים על הנייר</h2><span class="grow"></span><span class="timer" data-sec="480"></span></div>
+  <p class="s-lead">לפני שנוגעים ב-Make — מתרגמים את "תחזית הבוקר" לשפה של אוטומציה.</p>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>חלק</th><th>מה כותבים</th></tr>
+      <tr><td><b>טריגר</b> — מתי רץ?</td><td>שעון או אירוע?</td></tr>
+      <tr><td><b>מקור</b> — מאיפה המידע?</td><td>איזה API?</td></tr>
+      <tr><td><b>עיבוד</b> — מה לוקחים?</td><td>אילו שדות מה-JSON?</td></tr>
+      <tr><td><b>פעולה</b> — התוצאה?</td><td>לאן זה נשלח?</td></tr>
+    </table></div>
+    <div class="deliver">טבלה מלאה: טריגר=שעון, מקור=open-meteo, עיבוד=טמפרטורה+משקעים, פעולה=מייל וגיליון.</div>
+  </div>
+  <aside class="notes"><ul><li>8 דקות. מי שמסיים מהר — להתחיל לפתוח Make.</li></ul></aside>
+</section>
+
+<section class="slide ex22" data-min="20" data-block="6" data-title="תרגיל 2">
+  <div class="exh"><span class="ex-num">2</span><h2>בונים: Schedule → HTTP → שליחה</h2><span class="grow"></span><span class="timer" data-sec="1200"></span></div>
+  <p class="s-lead">התרחיש הראשון שעובד מקצה לקצה — כל בוקר מושך את מזג האוויר ושולח אותו.</p>
+  <div class="s-body mid">
+    <ol class="steps">
+      <li>תרחיש חדש → מודול <span class="en">HTTP · Make a request</span>: <span class="en">No auth</span>, ה-URL, <span class="en">GET</span>, <span class="en">Parse = Yes</span></li>
+      <li><span class="en">Run once</span> ובודקים ש-<code>current.temperature_2m</code> חזר עם מספר</li>
+      <li>מודול <span class="en">Gmail · Send an email</span> — <b>בוחרים</b> את השדות לתוך התוכן</li>
+      <li>מודול <span class="en">Sheets · Add a row</span> לגיליון <code>date | temp | rain</code></li>
+      <li>תזמון <span class="en">Every day 07:00</span> → <span class="en">Run once</span> → <span class="en">ON</span></li>
+    </ol>
+    <div class="deliver">אוטומציה שמצבה ON: הגיע מייל עם מספרים אמיתיים, ונוספה שורה בגיליון.</div>
+  </div>
+  <aside class="notes"><ul><li>התרגיל המרכזי. עברו בין המשתתפים, ודאו שהשדות נבחרו כבועות (לא טקסט).</li></ul></aside>
+</section>
+
+<section class="slide ex22" data-min="10" data-block="6" data-title="תרגיל 3">
+  <div class="exh"><span class="ex-num">3</span><h2>מוסיפים תנאי: רק כשיורד גשם</h2><span class="grow"></span><span class="timer" data-sec="600"></span></div>
+  <p class="s-lead">אוטומציה טובה לא מציפה — פילטר שמעביר הלאה רק כשיש משקעים.</p>
+  <div class="s-body mid">
+    <ol class="steps">
+      <li>לוחצים על החוט שבין ה-HTTP למייל → אייקון מפתח → <span class="en">Set up a filter</span></li>
+      <li>תנאי: <code>precipitation</code> · <span class="en">Greater than</span> · <code>0</code></li>
+      <li>בדיקה: שנו זמנית ל-<code>-1</code> → המייל כן יוצא → החזירו ל-<code>0</code></li>
+    </ol>
+    <div class="deliver">פילטר על הקו עם התנאי <code>precipitation &gt; 0</code> — כשאין גשם, המייל נעצר.</div>
+  </div>
+  <aside class="notes"><ul><li>10 דקות. מי שאין לו גשם עכשיו — בדיקה עם 1− מוכיחה שהפילטר תקין.</li></ul></aside>
+</section>
+
+<section class="slide ex22" data-min="15" data-block="6" data-title="תרגיל 4">
+  <div class="exh"><span class="ex-num">4</span><h2>תרחיש שני: שורה חדשה → התראה</h2><span class="grow"></span><span class="timer" data-sec="900"></span></div>
+  <p class="s-lead">טריגר מסוג אחר — לא שעון, אלא אירוע. שורה חדשה בגיליון הלידים מפעילה את התרחיש מיד.</p>
+  <div class="s-body mid">
+    <ol class="steps">
+      <li>גיליון <b>לידים</b> עם כותרות: <code>name | product | phone</code></li>
+      <li>תרחיש חדש → מודול ראשון <span class="en">Sheets · Watch rows</span> (הטריגר)</li>
+      <li>מודול שני <span class="en">Gmail · Send an email</span> — ממפים את שלושת השדות לתוכן</li>
+      <li><span class="en">Run once</span>, מוסיפים שורה, ורואים שההתראה יוצאת → תזמון → <span class="en">ON</span></li>
+    </ol>
+    <div class="deliver">התראה אוטומטית עם שם, מוצר וטלפון — בכל שורה חדשה שנוספת לגיליון.</div>
+  </div>
+  <aside class="notes"><ul><li>ההבדל מתרגיל 2: הטריגר הוא אירוע. Watch rows זוכר איפה עצר — לא שולח פעמיים.</li></ul></aside>
+</section>
+
+<section class="slide ex22" data-min="10" data-block="6" data-title="תרגיל 5">
+  <div class="exh"><span class="ex-num">5</span><h2>דיבוג: התרחיש השבור</h2><span class="grow"></span><span class="timer" data-sec="600"></span></div>
+  <p class="s-lead">לכל תקלה — מה הסימן ב-Make, ומה התיקון. מחפשים ב-<span class="en">History</span>.</p>
+  <div class="s-body mid">
+    <div class="grid3">
+      <div class="card" style="border-top:4px solid var(--p3)"><b>א' · טקסט גולמי</b><div class="muted" style="font-size:15px">במייל מופיע <code>{{temperature_2m}}</code> במקום מספר. למה? מה התיקון?</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>ב' · מודול אדום</b><div class="muted" style="font-size:15px">בהיסטוריה: <span class="en">URL is required</span>. מה הסיבה? מה התיקון?</div></div>
+      <div class="card" style="border-top:4px solid var(--p3)"><b>ג' · שולח פעמיים</b><div class="muted" style="font-size:15px">התראה על אותו ליד שוב ושוב. למה? מה התיקון?</div></div>
+    </div>
+    <div class="deliver">לכל תקלה: סימן + תיקון. ופתחתם History של תרחיש אמיתי וקראתם קלט/פלט של מודול.</div>
+  </div>
+  <aside class="notes"><ul><li>בקשו תשובות בעל פה לפני שמראים את הפתרונות. התשובות המלאות בדף הפתרונות.</li></ul></aside>
+</section>
+
+<section class="slide ex22" data-min="2" data-block="6" data-title="תרגיל 6">
+  <div class="exh"><span class="ex-num">6</span><h2>ממפים תהליך אמיתי שלכם</h2><span class="grow"></span><span class="pill" style="font-size:16px">📝 לבית</span></div>
+  <p class="s-lead">לוקחים תהליך חוזר מהעבודה שלכם, ומתכננים אותו כתרחיש Make.</p>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>שלב</th><th>טריגר/פעולה?</th><th>מודול ואפליקציה</th></tr>
+      <tr><td>מה מתחיל את התהליך?</td><td>טריגר</td><td>___</td></tr>
+      <tr><td>איזה מידע אוספים?</td><td>פעולה</td><td>___</td></tr>
+      <tr><td>איפה צריך תנאי?</td><td>פילטר</td><td>___</td></tr>
+      <tr><td>מה התוצאה?</td><td>פעולה</td><td>___</td></tr>
+    </table></div>
+    <div class="callout claude"><b>איפה Claude ייכנס?</b>סמנו שלב אחד שבו "צריך ראש" — לנסח, לסווג, לסכם או להחליט. שם נחבר את Claude בשיעור הבא.</div>
+  </div>
+  <aside class="notes"><ul><li>משימת בית. היא גם הגשר לשיעור הבא — השלב ש"צריך ראש" הוא שם Claude ייכנס.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="2" data-block="6" data-title="מה מגישים">
