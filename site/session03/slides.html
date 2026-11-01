@@ -1098,6 +1098,25 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>צילום מהבנייה החיה. חדדו: קריאת HTTP לבד היא רק "שלוף נתון". האוטומציה = הטריגר (שעון) שמריץ לבד + הפעולה שאחריו (מייל/גיליון).</li></ul></aside>
 </section>
 
+<section class="slide" data-min="3" data-block="3" data-title="להוסיף עוד מודול">
+  <div class="s-kicker">אוטומציה גדלה בקלות</div>
+  <h2>רוצים גם לתעד? מוסיפים עוד מודול</h2>
+  <div class="s-body mid">
+    <p class="muted" style="margin:0 0 4px">אותו תרחיש, עכשיו עם מודול שלישי: אחרי שהמייל נשלח, <span class="en" dir="ltr">Google Sheets</span> מוסיף שורה ליומן המעקב. לוחצים על ה-<b>+</b> שבקצה המודול האחרון, בוחרים <span class="en" dir="ltr">Google Sheets → Add a Row</span>, וזהו.</p>
+    <figure class="shot" style="max-width:780px;margin:0 auto"><img src="../assets/make/s03-add-module-canvas.jpg" alt="התרחיש עם שלושה מודולים: HTTP ← Gmail ← Google Sheets"><figcaption>שלושה מודולים בשרשרת: <span class="en" dir="ltr">HTTP ← Gmail ← Google Sheets</span>. כל <b>+</b> מאריך את השרשרת בעוד צעד — זו העוצמה של Make.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>המסר: אוטומציה היא לגו. מוסיפים מודול, מחברים, ממפים — וממשיכים. אין תקרה.</li><li>צילום מהבנייה החיה: אותו תרחיש מזג אוויר, עם מודול Sheets שלישי.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="3" data-title="מסך: מודול ה-Sheets">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>מודול ה-Sheets — בוחרים קובץ ועמודות</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:720px;margin:0 auto"><img src="../assets/make/s03-sheets-config.jpg" alt="הגדרת מודול Google Sheets Add a Row: בחירת הקובץ, הגיליון והעמודות date/temp/rain"><figcaption>בוחרים את הקובץ (<span dir="rtl">מעקב מזג אוויר</span>) ואת הגיליון, ו-Make קורא את כותרות העמודות: <code>date</code>, <code>temp</code>, <code>rain</code>. ממפים אליהן בדיוק כמו במייל — <code>date←now</code>, <code>temp←temperature_2m</code>, <code>rain←precipitation</code>.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>צילום מהבנייה החיה. המיפוי לעמודות זהה למיפוי בגוף המייל — אותו מנגנון "בועות".</li><li>כותרות העמודות בשורה הראשונה של הגיליון הן מה ש-Make מציג כאן.</li></ul></aside>
+</section>
+
 <section class="slide" data-min="3" data-block="3" data-title="דוגמה שנייה">
   <div class="s-kicker">אותו דפוס, API אחר</div>
   <h2>דוגמה שנייה: שער הדולר כל בוקר</h2>

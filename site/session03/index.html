@@ -138,6 +138,9 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
     <li>ב-Make מוסיפים מודול <span class="en">Google Sheets</span> → <span class="en">Add a row</span>, בוחרים את הקובץ והגיליון</li>
     <li>ממפים: <span class="en">date</span> ← <code>{{now}}</code> · <span class="en">temp</span> ← <code>current.temperature_2m</code> · <span class="en">rain</span> ← <code>current.precipitation</code></li>
   </ol>
+  <div class="callout tip" style="margin-top:10px"><b>📸 כך זה נראה — הוספת מודול שלישי</b>אחרי המייל, לוחצים על ה-<b>+</b> בקצה המודול ובוחרים <span class="en">Google Sheets → Add a Row</span>. התרחיש גדל לשלושה מודולים:</div>
+  <figure style="margin:8px 0 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-add-module-canvas.jpg" alt="התרחיש עם שלושה מודולים: HTTP ← Gmail ← Google Sheets" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">שלושה מודולים בשרשרת: <span class="en" dir="ltr">HTTP ← Gmail ← Google Sheets</span>. כל <b>+</b> מאריך את השרשרת בעוד צעד.</figcaption></figure>
+  <figure style="margin:8px 0 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-sheets-config.jpg" alt="הגדרת מודול Google Sheets Add a Row: בחירת הקובץ, הגיליון והעמודות date/temp/rain" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מודול ה-<span class="en">Sheets</span>: בוחרים את הקובץ והגיליון, ו-Make קורא את כותרות העמודות (<code>date</code>, <code>temp</code>, <code>rain</code>) למיפוי — בדיוק כמו במייל.</figcaption></figure>
 
   <h4>4. תזמון + הפעלה</h4>
   <ol class="steps">
