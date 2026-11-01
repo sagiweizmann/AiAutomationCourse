@@ -79,6 +79,33 @@
 </div>
 </section>
 
+<!-- bonus: dollar -->
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: שער הדולר כל בוקר</h3></div>
+  <p class="note">אותו דפוס בדיוק כמו תרגיל 2 — שעון ← HTTP ← מייל. רק ה-URL והשדות שונים. בנינו אותו חי ב-Make, הנה הצעדים והצילומים.</p>
+  <div class="sol"><b>מודול 1 · HTTP → Make a request</b>
+    <p style="margin:4px 0 0"><span class="en">Authentication type = No authentication</span>, <span class="en">Method = GET</span>, <span class="en">Parse response = Yes</span>, וה-URL:</p>
+    <div class="copybox"><pre>https://api.frankfurter.dev/v1/latest?base=USD&symbols=ILS,EUR,GBP</pre></div>
+    <p style="margin:6px 0 0"><span class="en">Run once</span> → בפלט פותחים <code>Data</code> ואז <code>rates</code>, ורואים את שלושת השערים:</p>
+    <figure style="margin:8px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-output.jpg" alt="פלט שערי המטבע ב-Make: rates.ILS, rates.EUR, rates.GBP" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)"><span class="en" dir="ltr">rates.ILS=3.1284, rates.EUR=0.89509, rates.GBP=0.74633</span>, וגם <code>date</code> ו-<span class="en" dir="ltr">Status 200</span>.</figcaption></figure>
+  </div>
+  <div class="sol"><b>מודול 2 · Gmail → Send an email</b>
+    <p style="margin:4px 0 0">אותו חיבור Google מתרגיל 2. בגוף המייל <b>בוחרים</b> את השדות (בועות), לא מקלידים:</p>
+    <div class="copybox"><pre class="rtl">שערי המטבע להיום: {{date}}
+דולר (USD): {{rates.ILS}} ₪
+אירו (EUR): {{rates.EUR}}
+ליש"ט (GBP): {{rates.GBP}}</pre></div>
+    <figure style="margin:8px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-mapping.jpg" alt="מיפוי שלושת השערים לגוף המייל ב-Make" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">שלוש הבועות בגוף המייל, שנבחרו מרשימת שדות ה-HTTP שמימין.</figcaption></figure>
+  </div>
+  <div class="sol"><b>תזמון והפעלה</b>
+    <p style="margin:4px 0 0">שעון → <span class="en">Daily</span> → 08:00. <span class="en">Run once</span> לבדיקה, ואז <span class="en">ON</span>. התרחיש המוגמר:</p>
+    <figure style="margin:8px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-canvas.jpg" alt="התרחיש 'שער הדולר כל בוקר' על הקנבס: HTTP ← Gmail, Daily at 08:00" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)"><span class="en" dir="ltr">HTTP ← Gmail</span>, מתוזמן <span class="en" dir="ltr">Daily at 08:00</span> — אותו מבנה כמו מזג האוויר.</figcaption></figure>
+  </div>
+  <div class="callout tip"><b>מה למדנו מהבונוס</b>אותו שלד בדיוק שירת תחום אחר לגמרי. שינינו רק את ה-URL ואת שמות השדות (<code>rates.ILS</code> במקום <code>current.temperature_2m</code>). זה "לדעת דפוס", לא לשנן תרחיש אחד.</div>
+</div>
+</section>
+
 <!-- ex3 -->
 <section class="blk">
 <div class="card ex">

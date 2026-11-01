@@ -168,13 +168,19 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
     <li>ב-<span class="en">Content</span> כותבים טקסט ו<b>בוחרים</b> את השדות (ה"בועות") — לא מקלידים:</li>
   </ol>
   <div class="copybox"><pre>https://api.frankfurter.dev/v1/latest?base=USD&symbols=ILS,EUR,GBP</pre></div>
+  <div class="callout tip" style="margin-top:10px"><b>📸 בנינו את זה חי ב-Make — הנה איך זה נראה</b>צילומי המסך למטה הם מהתרחיש האמיתי שבנינו, שלב-שלב. אצלכם המספרים יהיו שונים (זה חי).</div>
+  <p style="margin:12px 0 4px"><b>אחרי Run once</b> — הפלט מחזיר את השערים תחת <code>rates</code>:</p>
+  <figure style="margin:8px 0 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-output.jpg" alt="פלט ה-JSON של שערי המטבע ב-Make: rates.ILS, rates.EUR, rates.GBP" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט אחרי <span class="en" dir="ltr">Run once</span> — פותחים את <code>Data</code> ואז <code>rates</code>: <span class="en" dir="ltr">ILS=3.1284, EUR=0.89509, GBP=0.74633</span>, וגם <code>date</code> ו-<span class="en" dir="ltr">Status Code 200</span>.</figcaption></figure>
   <div class="copybox"><pre class="rtl">שערי הבוקר ({{date}}):
 💵 דולר: {{rates.ILS}} ₪
 💶 אירו: שווה {{rates.EUR}} דולר
 💷 ליש"ט: שווה {{rates.GBP}} דולר</pre></div>
+  <p style="margin:12px 0 4px"><b>המיפוי במייל</b> — בוחרים כל שדה מהרשימה שמימין, והוא הופך ל"בועה":</p>
+  <figure style="margin:8px 0 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-mapping.jpg" alt="מודול Gmail ב-Make עם גוף המייל שבו ILS, EUR ו-GBP ממופים כבועות" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">גוף המייל עם שלוש הבועות (<span class="en" dir="ltr">rates: ILS / EUR / GBP</span>). מימין — רשימת השדות שיצאו ממודול ה-HTTP, שמהם בוחרים.</figcaption></figure>
   <ol class="steps" start="5">
     <li>מתזמנים <span class="en">Every day</span> בשעה <span class="en">08:00</span>, מריצים <span class="en">Run once</span> לבדיקה, ומדליקים <span class="en">ON</span></li>
   </ol>
+  <figure style="margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s03-dollar-canvas.jpg" alt="התרחיש 'שער הדולר כל בוקר' על הקנבס של Make: HTTP מחובר ל-Gmail, מתוזמן Daily at 08:00" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">התרחיש המוגמר על הקנבס: <span class="en" dir="ltr">HTTP</span> ← <span class="en" dir="ltr">Gmail</span>, מתוזמן <span class="en" dir="ltr">Daily at 08:00</span>. בדיוק אותו מבנה כמו מזג האוויר.</figcaption></figure>
   <div class="callout tip"><b>רוצים עוד מטבעות?</b>מוסיפים ל-<code>symbols</code> כל קוד מטבע מופרד בפסיק — למשל <code>symbols=ILS,EUR,GBP,JPY</code> יוסיף גם ין יפני. כל מטבע שמוסיפים מופיע כשדה חדש למיפוי (<code>rates.JPY</code>).</div>
   <details class="hint"><summary>רמז: מה בעצם שונה ממזג האוויר?</summary><p style="margin:6px 0 0">כלום מהמבנה. אותו מודול HTTP, אותו Parse, אותו מיפוי לתוך מייל, אותו תזמון. רק הכתובת (<span class="en">frankfurter</span> במקום <span class="en">open-meteo</span>) ושמות השדות (<code>rates.ILS</code> במקום <code>current.temperature_2m</code>) שונים. זו המשמעות של "דפוס".</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
