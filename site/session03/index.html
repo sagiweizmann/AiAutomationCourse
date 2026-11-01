@@ -37,6 +37,7 @@
     <li><a href="#setup"><span class="n">0</span><span class="t">הכנה: חשבון Make מוכן</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex1"><span class="n">1</span><span class="t">מתכננים את התרחיש על הנייר</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex2"><span class="n">2</span><span class="t">בונים: Schedule → HTTP → שליחה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#exdollar"><span class="n">★</span><span class="t">בונוס: אותו דפוס, API אחר — שער הדולר כל בוקר</span><span class="pill">בונוס</span></a></li>
     <li><a href="#ex3"><span class="n">3</span><span class="t">מוסיפים תנאי: שולחים רק כשיורד גשם</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex4"><span class="n">4</span><span class="t">תרחיש שני: שורה חדשה בגיליון → התראה</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex5"><span class="n">5</span><span class="t">דיבוג: התרחיש השבור</span><span class="pill cls">בכיתה</span></a></li>
@@ -153,6 +154,36 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
     <li>התרחיש מתוזמן לכל בוקר ומצבו <span class="en">ON</span></li>
   </ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex2"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="exdollar">
+  <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: שער הדולר כל בוקר</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill">בונוס</span></div>
+  <p class="goal">להוכיח לעצמכם שלמדתם <b>דפוס</b>, לא תרחיש אחד: לבנות אוטומציה שנייה שעובדת בדיוק כמו מזג האוויר — שעון ← HTTP ← מייל — אבל מושכת שערי מטבע ושולחת אותם במייל מנוסח.</p>
+  <p>אותו שלד בדיוק כמו תרגיל 2. מה שמשתנה: רק ה-<b>URL</b> והשדות שבוחרים. נשתמש ב-API חינמי לשערי מטבע (בלי מפתח ובלי הרשמה).</p>
+  <ol class="steps">
+    <li>תרחיש חדש → מודול <span class="en">HTTP · Make a request</span>: <span class="en">Authentication type = No authentication</span>, <span class="en">Method = GET</span>, <span class="en">Parse response = Yes</span>, וה-URL למטה</li>
+    <li>לוחצים <span class="en">Run once</span> ובפלט מרחיבים את <code>rates</code> — צריך לראות <code>rates.ILS</code> עם מספר (כמה שקלים בדולר)</li>
+    <li>מוסיפים מודול <span class="en">Gmail</span> → <span class="en">Send an email</span> (אותו חיבור Google מתרגיל 2), <span class="en">To</span> = המייל שלכם, <span class="en">Subject</span> = "שערי הבוקר"</li>
+    <li>ב-<span class="en">Content</span> כותבים טקסט ו<b>בוחרים</b> את השדות (ה"בועות") — לא מקלידים:</li>
+  </ol>
+  <div class="copybox"><pre>https://api.frankfurter.dev/v1/latest?base=USD&symbols=ILS,EUR,GBP</pre></div>
+  <div class="copybox"><pre class="rtl">שערי הבוקר ({{date}}):
+💵 דולר: {{rates.ILS}} ₪
+💶 אירו: שווה {{rates.EUR}} דולר
+💷 ליש"ט: שווה {{rates.GBP}} דולר</pre></div>
+  <ol class="steps" start="5">
+    <li>מתזמנים <span class="en">Every day</span> בשעה <span class="en">08:00</span>, מריצים <span class="en">Run once</span> לבדיקה, ומדליקים <span class="en">ON</span></li>
+  </ol>
+  <div class="callout tip"><b>רוצים עוד מטבעות?</b>מוסיפים ל-<code>symbols</code> כל קוד מטבע מופרד בפסיק — למשל <code>symbols=ILS,EUR,GBP,JPY</code> יוסיף גם ין יפני. כל מטבע שמוסיפים מופיע כשדה חדש למיפוי (<code>rates.JPY</code>).</div>
+  <details class="hint"><summary>רמז: מה בעצם שונה ממזג האוויר?</summary><p style="margin:6px 0 0">כלום מהמבנה. אותו מודול HTTP, אותו Parse, אותו מיפוי לתוך מייל, אותו תזמון. רק הכתובת (<span class="en">frankfurter</span> במקום <span class="en">open-meteo</span>) ושמות השדות (<code>rates.ILS</code> במקום <code>current.temperature_2m</code>) שונים. זו המשמעות של "דפוס".</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>מודול ה-HTTP מחזיר JSON עם <code>rates.ILS</code> ומספר אמיתי</li>
+    <li>קיבלתי מייל עם שלושת השערים (לא <code>{{...}}</code> גולמי)</li>
+    <li>אני יכול להסביר במשפט מה השתנה מתרחיש מזג האוויר — ומה נשאר זהה</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exdollar"> סיימתי את הבונוס</label>
 </div>
 
 <div class="card ex" id="ex3">
