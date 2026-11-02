@@ -46,6 +46,10 @@
     <li><a href="#ex4"><span class="n">4</span><span class="t">תרחיש שני: שורה חדשה בגיליון → התראה</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex5"><span class="n">5</span><span class="t">דיבוג: התרחיש השבור</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex6"><span class="n">6</span><span class="t">ממפים תהליך אמיתי שלכם ל-Make</span><span class="pill home">📝 לבית</span></a></li>
+    <li><a href="#exsheetlog"><span class="n">📊</span><span class="t">בונוס: יומן מעקב יומי ב-Google Sheets</span><span class="pill">בונוס</span></a></li>
+    <li><a href="#exform"><span class="n">📋</span><span class="t">בונוס: טופס Google → התראה מיידית</span><span class="pill">בונוס</span></a></li>
+    <li><a href="#exrouter"><span class="n">🔀</span><span class="t">בונוס: Router — כמה פעולות בבת אחת</span><span class="pill">בונוס</span></a></li>
+    <li><a href="#exdog"><span class="n">🐶</span><span class="t">בונוס: תמונת כלב יומית (API עם תמונה)</span><span class="pill">בונוס</span></a></li>
   </ul>
 </section>
 
@@ -395,6 +399,76 @@ __DATE__  __ILS__  __EUR__  __GBP__
     <li>סימנתי שלב אחד שבו Claude יוסיף ערך בעתיד</li>
   </ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex6"> סיימתי את המשימה</label>
+</div>
+
+</section>
+
+<!-- ================= more modules (bonus) ================= -->
+<section class="blk" id="more">
+  <div class="kicker">בונוס מתקדם</div>
+  <h2>עוד מודולים ואוטומציות</h2>
+  <p class="lead">בניתם שעון ← HTTP ← מייל. עכשיו נחליף את ה<b>יעד</b> (לא רק מייל — גם גיליון), נחליף את ה<b>טריגר</b> (לא רק שעון — גם טופס), ונפצל ל<b>כמה פעולות</b> בבת אחת. אותו היגיון, עוד אבני לגו. הכול עם APIs חינמיים ובלי צילומים — פשוט תבנו.</p>
+
+<div class="card ex" id="exsheetlog">
+  <div class="ex-head"><span class="ex-num">📊</span><h3>בונוס: יומן מעקב יומי ב-Google Sheets</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill">מודול חדש: Sheets</span></div>
+  <p class="goal">במקום לשלוח מייל — <b>לכתוב שורה לגיליון</b> כל יום. אחרי שבוע יש לכם טבלה עם היסטוריה (ואפשר לגזור ממנה גרף). היעד השתנה, המבנה זהה.</p>
+  <ol class="steps">
+    <li>בגיליון חדש כתבו בשורה הראשונה כותרות: <code>תאריך</code> | <code>שער דולר</code></li>
+    <li>תרחיש חדש → <span class="en">HTTP</span> עם כתובת הדולר (למטה), <span class="en">Parse response = Yes</span>, <span class="en">Run once</span></li>
+    <li>מוסיפים מודול <span class="en">Google Sheets · Add a Row</span> → בוחרים את הגיליון, <span class="en">Table contains headers = Yes</span></li>
+    <li>ממפים לעמודות: <code>תאריך</code> ← <code>now</code> · <code>שער דולר</code> ← <code>rates.ILS</code></li>
+    <li>מתזמנים <span class="en">Daily</span> — כל בוקר נוספת שורה</li>
+  </ol>
+  <div class="copybox"><pre>https://api.frankfurter.dev/v1/latest?base=USD&symbols=ILS</pre></div>
+  <div class="callout tip"><b>המודול החדש — <span class="en">Add a Row</span>:</b>זה היעד הכי שימושי אחרי מייל. כל דבר שמגיע מ-API אפשר לתעד לגיליון, ומשם לגזור גרפים, ממוצעים והתראות. אותו מיפוי "בועות" בדיוק כמו במייל — רק שהשדות הם עמודות.</div>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exsheetlog"> סיימתי את הבונוס</label>
+</div>
+
+<div class="card ex" id="exform">
+  <div class="ex-head"><span class="ex-num">📋</span><h3>בונוס: טופס Google → התראה מיידית</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill">טריגר חדש: Forms</span></div>
+  <p class="goal">עד כה הטריגר היה <b>שעון</b>. הפעם הטריגר הוא <b>אירוע</b>: מישהו ממלא טופס → התרחיש רץ מיד. זה הדפוס שמאחורי "ליד חדש", "הרשמה", "פנייה מהאתר".</p>
+  <ol class="steps">
+    <li>צרו טופס ב-<span class="en">Google Forms</span> עם 2–3 שאלות (שם, מייל, הודעה)</li>
+    <li>תרחיש חדש → המודול הראשון: <span class="en">Google Forms · Watch Responses</span> → בוחרים את הטופס</li>
+    <li>מוסיפים <span class="en">Gmail · Send an email</span> אליכם, ובגוף המייל <b>ממפים את תשובות הטופס</b> (בועות)</li>
+    <li>מדליקים <span class="en">ON</span>, ממלאים את הטופס פעם אחת — ומקבלים מייל תוך שניות</li>
+  </ol>
+  <div class="callout tip"><b>טריגר מיידי מול תזמון:</b>מודול שמתחיל ב-<span class="en">Watch</span> לא מחכה לשעון — הוא "מקשיב" ורץ כשקורה משהו. אותו רעיון קיים ל-<span class="en">Watch New Rows</span> בגיליון (כמו בתרגיל 4) ול-<span class="en">Watch Emails</span> בתיבה.</div>
+  <details class="hint"><summary>רמז: הטופס כבר כותב לגיליון</summary><p style="margin:6px 0 0">לכל טופס Google יש גיליון תשובות מקושר. אפשר לכן גם לטרגר על <span class="en">Google Sheets · Watch New Rows</span> במקום — בדיוק מה שעשיתם בתרגיל 4. שתי דרכים, אותה תוצאה.</p></details>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exform"> סיימתי את הבונוס</label>
+</div>
+
+<div class="card ex" id="exrouter">
+  <div class="ex-head"><span class="ex-num">🔀</span><h3>בונוס: Router — פעולה אחת, כמה תוצאות</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 8 דקות</span><span class="pill">בינוני</span><span class="pill">מודול חדש: Router</span></div>
+  <p class="goal">למה לבחור בין מייל לגיליון? ה-<span class="en">Router</span> מפצל את הזרימה לכמה מסלולים שרצים <b>במקביל</b> — למשל גם לתעד לגיליון וגם לשלוח התראה.</p>
+  <ol class="steps">
+    <li>קחו תרחיש קיים (למשל הדולר) אחרי מודול ה-HTTP</li>
+    <li>מוסיפים <span class="en">Flow Control · Router</span> — נפתחים שני "ענפים"</li>
+    <li>ענף 1: <span class="en">Google Sheets · Add a Row</span> (תיעוד). ענף 2: <span class="en">Gmail</span> (התראה)</li>
+    <li><span class="en">Run once</span> — שניהם רצים מאותו נתון</li>
+  </ol>
+  <div class="callout tip"><b>פילטר על ענף:</b>אפשר לשים תנאי על כל ענף בנפרד — למשל "תמיד תעד לגיליון, אבל שלח מייל רק אם השער עבר 3.8". זה בדיוק השילוב של Router + פילטר (תרגיל 3).</div>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exrouter"> סיימתי את הבונוס</label>
+</div>
+
+<div class="card ex" id="exdog">
+  <div class="ex-head"><span class="ex-num">🐶</span><h3>בונוס: תמונת כלב יומית (API שמחזיר תמונה)</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 7 דקות</span><span class="pill">קל</span><span class="pill">API חדש + תמונה</span></div>
+  <p class="goal">רעיון חדש: ה-API מחזיר <b>כתובת של תמונה</b>, ואנחנו שותלים אותה ב-<code>&lt;img&gt;</code> בתוך המייל. ככה כל בוקר מגיעה תמונה אחרת — חינמי, בלי מפתח.</p>
+  <ol class="steps">
+    <li><span class="en">HTTP</span> עם הכתובת למטה, <span class="en">Parse response = Yes</span>, <span class="en">Run once</span> → בפלט תראו <code>message</code> עם כתובת תמונה</li>
+    <li>מודול <span class="en">Gmail</span>, <span class="en">Body type = Raw HTML</span>, ובתוכן שמים את ה-HTML למטה ו<b>ממפים את <code>message</code></b> לתוך ה-<code>src</code></li>
+  </ol>
+  <div class="copybox"><pre>https://dog.ceo/api/breeds/image/random</pre></div>
+  <div class="copybox"><pre class="rtl">&lt;div style="text-align:center;font-family:Arial"&gt;
+  &lt;h2&gt;🐶 הכלב של היום&lt;/h2&gt;
+  &lt;img src="{{message}}" width="400" style="border-radius:12px"&gt;
+&lt;/div&gt;</pre></div>
+  <div class="callout tip"><b>רוצים טקסט במקום תמונה?</b>נסו <code>https://icanhazdadjoke.com/</code> (עם Header: <code>Accept: application/json</code>) — מחזיר בדיחה יומית בשדה <code>joke</code>. אותו דפוס, יעד טקסט.</div>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exdog"> סיימתי את הבונוס</label>
 </div>
 
 </section>
