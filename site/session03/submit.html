@@ -12,9 +12,14 @@
 <style>
   .fld{margin:14px 0}
   .fld label{display:block;font-weight:700;margin-bottom:6px}
-  .fld input,.fld textarea{width:100%;font:inherit;color:var(--ink);background:var(--surface);
+  .fld input,.fld .rt{width:100%;font:inherit;color:var(--ink);background:var(--surface);
     border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-sizing:border-box}
-  .fld textarea{min-height:120px;resize:vertical;line-height:1.6}
+  .fld .rt{min-height:120px;line-height:1.7;overflow-wrap:break-word}
+  .fld .rt:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .fld .rt:empty:before{content:attr(data-ph);color:var(--ink-2);opacity:.75}
+  .fld .rt img{max-width:100%;height:auto;border-radius:8px;margin:8px 0;display:block;
+    border:1px solid var(--line)}
+  .rthint{font-size:13px;color:var(--ink-2);margin:2px 0 14px}
   .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
   @media (max-width:640px){.row3{grid-template-columns:1fr}}
   .exh{margin:22px 0 6px;font-weight:800;color:var(--accent)}
@@ -25,7 +30,9 @@
     .top{background:#fff!important;color:#000!important}
     .top *{color:#000!important}
     a[href]:after{content:""}
-    .fld input,.fld textarea{border:1px solid #999}
+    .fld input,.fld .rt{border:1px solid #999}
+    .fld .rt img{border:1px solid #ccc}
+    .rthint{display:none!important}
     body{background:#fff}
   }
 </style>
@@ -59,23 +66,25 @@
       <div class="fld"><label for="f_group">קבוצה</label><input id="f_group" data-k="group" type="text"></div>
     </div>
 
+    <div class="rthint no-print">💡 אפשר להדביק צילומי מסך ישירות לתוך כל תיבה — העתיקו תמונה (או צילום מסך) ולחצו <b>Ctrl/Cmd+V</b> בתוך התיבה. התמונה נשמרת ותופיע גם ב-PDF.</div>
+
     <div class="exh">תרגיל 1 — תכנון התרחיש על הנייר</div>
-    <div class="fld"><textarea data-k="ex1" placeholder="טריגר / מקור נתונים / עיבוד / פעולה — מה כתבתם לכל חלק?"></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex1" data-ph="טריגר / מקור נתונים / עיבוד / פעולה — מה כתבתם לכל חלק?"></div></div>
 
     <div class="exh">תרגיל 2 — בניית תרחיש מזג האוויר</div>
-    <div class="fld"><textarea data-k="ex2" placeholder="תארו את התרחיש שבניתם, והדביקו צילום מסך של ה-Scenario ושל המייל/השורה בגיליון."></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex2" data-ph="תארו את התרחיש שבניתם, והדביקו צילום מסך של ה-Scenario ושל המייל/השורה בגיליון."></div></div>
 
     <div class="exh">תרגיל 3 — הוספת פילטר גשם</div>
-    <div class="fld"><textarea data-k="ex3" placeholder="מה התנאי שהגדרתם? איך בדקתם שהוא עובד? צרפו צילום מסך של הפילטר."></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex3" data-ph="מה התנאי שהגדרתם? איך בדקתם שהוא עובד? צרפו צילום מסך של הפילטר."></div></div>
 
     <div class="exh">תרגיל 4 — תרחיש שורה חדשה בגיליון → התראה</div>
-    <div class="fld"><textarea data-k="ex4" placeholder="מה ההבדל בין הטריגר כאן לטריגר בתרגיל 2? צרפו צילום מסך של ההתראה שהתקבלה."></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex4" data-ph="מה ההבדל בין הטריגר כאן לטריגר בתרגיל 2? צרפו צילום מסך של ההתראה שהתקבלה."></div></div>
 
     <div class="exh">תרגיל 5 — דיבוג שלוש התקלות</div>
-    <div class="fld"><textarea data-k="ex5" placeholder="לכל תקלה (א', ב', ג'): מה הסימן ומה התיקון?"></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex5" data-ph="לכל תקלה (א', ב', ג'): מה הסימן ומה התיקון?"></div></div>
 
     <div class="exh">תרגיל 6 — מיפוי תהליך אמיתי שלי</div>
-    <div class="fld"><textarea data-k="ex6" placeholder="התהליך שבחרתי, הטבלה (טריגר/פעולות/פילטר/תוצאה), והשלב שבו Claude ייכנס בעתיד."></textarea></div>
+    <div class="fld"><div class="rt" contenteditable="true" data-k="ex6" data-ph="התהליך שבחרתי, הטבלה (טריגר/פעולות/פילטר/תוצאה), והשלב שבו Claude ייכנס בעתיד."></div></div>
   </div>
 </section>
 
@@ -89,15 +98,41 @@
   var t;
   function flash(msg){saved.textContent=msg;clearTimeout(t);t=setTimeout(function(){saved.textContent='';},1600);}
   var fields=document.querySelectorAll('[data-k]');
+  function isRich(el){return el.classList.contains('rt');}
+  function read(el){return isRich(el)?el.innerHTML:el.value;}
+  function write(el,v){if(isRich(el))el.innerHTML=v;else el.value=v;}
+  function save(el){
+    try{localStorage.setItem(KEY+el.dataset.k,read(el));flash('נשמר ✓');}
+    catch(e){flash('⚠️ אין מקום לשמור — התמונה גדולה מדי. נסו תמונה קטנה יותר.');}
+  }
   fields.forEach(function(el){
-    var k=KEY+el.dataset.k;
-    try{var v=localStorage.getItem(k);if(v!==null)el.value=v;}catch(e){}
-    el.addEventListener('input',function(){try{localStorage.setItem(k,el.value);flash('נשמר ✓');}catch(e){}});
+    try{var v=localStorage.getItem(KEY+el.dataset.k);if(v!==null)write(el,v);}catch(e){}
+    el.addEventListener('input',function(){save(el);});
+    if(isRich(el)){
+      // Paste: images → inline data-URL (so they persist + print); text → plain text, no foreign HTML.
+      el.addEventListener('paste',function(ev){
+        var dt=ev.clipboardData;if(!dt)return;
+        var imgItem=null,i;
+        for(i=0;i<dt.items.length;i++){if(dt.items[i].type.indexOf('image')===0){imgItem=dt.items[i];break;}}
+        if(imgItem){
+          ev.preventDefault();
+          var reader=new FileReader();
+          reader.onload=function(){
+            document.execCommand('insertHTML',false,'<img src="'+reader.result+'">');
+            save(el);
+          };
+          reader.readAsDataURL(imgItem.getAsFile());
+        }else{
+          ev.preventDefault();
+          document.execCommand('insertText',false,dt.getData('text/plain'));
+        }
+      });
+    }
   });
   document.getElementById('pdf').addEventListener('click',function(){window.print();});
   document.getElementById('clear').addEventListener('click',function(){
     if(!confirm('לאפס את כל השדות? אי אפשר לשחזר.'))return;
-    fields.forEach(function(el){el.value='';try{localStorage.removeItem(KEY+el.dataset.k);}catch(e){}});
+    fields.forEach(function(el){write(el,'');try{localStorage.removeItem(KEY+el.dataset.k);}catch(e){}});
     flash('אופס ✓');
   });
 })();
