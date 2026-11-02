@@ -41,6 +41,7 @@
     <li><a href="#excrypto"><span class="n">★</span><span class="t">בונוס: מחיר הקריפטו כל בוקר</span><span class="pill">בונוס</span></a></li>
     <li><a href="#exquote"><span class="n">★</span><span class="t">בונוס: עצה יומית במייל</span><span class="pill">בונוס</span></a></li>
     <li><a href="#exideas"><span class="n">💡</span><span class="t">רעיונות לאוטומציות משלכם + עוד APIs חינמיים</span><span class="pill">בבית</span></a></li>
+    <li><a href="#exhtml"><span class="n">✨</span><span class="t">שדרוג: מייל מעוצב ב-HTML עם Claude</span><span class="pill">בבית</span></a></li>
     <li><a href="#ex3"><span class="n">3</span><span class="t">מוסיפים תנאי: שולחים רק כשיורד גשם</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex4"><span class="n">4</span><span class="t">תרחיש שני: שורה חדשה בגיליון → התראה</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex5"><span class="n">5</span><span class="t">דיבוג: התרחיש השבור</span><span class="pill cls">בכיתה</span></a></li>
@@ -252,6 +253,44 @@ https://api.open-meteo.com/v1/forecast?latitude=31.79213&amp;longitude=34.64966&
   </ul>
   <div class="callout tip"><b>הכלל שמחבר הכול:</b>כל API שמחזיר <span class="en">JSON</span> ועונה ל-<span class="en">GET</span> בלי מפתח — מתחבר בדיוק כמו שלושת התרגילים. מצאתם אחד כזה? יש לכם אוטומציה.</div>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exideas"> בחרתי רעיון ובניתי אותו</label>
+</div>
+
+<div class="card ex" id="exhtml">
+  <div class="ex-head"><span class="ex-num">✨</span><h3>שדרוג: מייל מעוצב ב-HTML עם Claude</h3></div>
+  <div class="ex-meta"><span class="pill claude">⚡ רמה הבאה</span><span class="pill">⏱ 10 דקות</span><span class="pill">בבית</span></div>
+  <p class="goal">עד כה שלחנו מייל <b>טקסט פשוט</b>. אבל אחרי שיש לנו את הערכים ב-Make (שער, טמפרטורה, מחיר), אפשר לשלוח מייל <b>מעוצב ויפה</b> — וכאן Claude נכנס לראשונה לתוך הזרימה.</p>
+  <p>הטריק: המודול של Gmail יודע לשלוח <span class="en">HTML</span>, לא רק טקסט. צריך רק <b>גוף HTML מעוצב</b> — ואת זה Claude כותב לנו בשניות.</p>
+
+  <h4>הדרך הפשוטה: Claude כותב תבנית, אתם מדביקים ב-Make</h4>
+  <ol class="steps">
+    <li>מבקשים מ-Claude (בצ'אט) תבנית HTML — הפרומפט המוכן למטה</li>
+    <li>מעתיקים את ה-HTML שהוא מחזיר, ומדביקים אותו ב-<span class="en">Content</span> של מודול ה-Gmail (ודאו ש-<span class="en">Content type = HTML</span>)</li>
+    <li>בתבנית יש מצייני מקום כמו <code>__ILS__</code> — <b>מוחקים כל אחד ובמקומו בוחרים את הבועה</b> המתאימה (בדיוק כמו המיפוי הרגיל)</li>
+    <li><span class="en">Run once</span> → עכשיו המייל מגיע מעוצב, עם כרטיסייה וצבעים, במקום שורת טקסט</li>
+  </ol>
+  <p style="margin:12px 0 4px"><b>פרומפט מוכן ל-Claude</b> (העתיקו, התאימו לתרחיש שלכם):</p>
+  <div class="copybox"><pre class="rtl">כתוב לי גוף מייל ב-HTML מעוצב, בעברית ומימין לשמאל (dir="rtl"),
+לעדכון שערי מטבע יומי. עיצוב נקי ומודרני: כרטיסייה ממורכזת, רקע רך,
+כותרת, שלושה "כרטיסי שער" עם אימוג'י, ופוטר קטן. אינליין-CSS בלבד
+(שיעבוד בתוך Gmail), בלי קבצים חיצוניים.
+
+השאר את הערכים האלה כמצייני מקום שאחליף אח"כ, בדיוק ככה:
+__DATE__  __ILS__  __EUR__  __GBP__
+
+החזר לי רק את קוד ה-HTML, בלי הסבר.</pre></div>
+  <div class="callout tip"><b>למה מצייני מקום ולא הערכים עצמם?</b>כי הערכים משתנים כל בוקר. Claude בונה את ה<b>מעטפת</b> פעם אחת, ו-Make מזריק את ה<b>נתונים</b> החיים בכל הרצה. זה בדיוק ההפרדה בין עיצוב לתוכן.</div>
+
+  <details class="hint"><summary>הדרך הדינמית (מתקדם, טעימה למפגש הבא)</summary>
+    <p style="margin:6px 0 0">במקום תבנית קבועה, אפשר להוסיף ב-Make מודול <span class="en">Anthropic Claude</span> <b>בין</b> ה-HTML ל-Gmail: מעבירים לו את הערכים ומבקשים "נסח מהם מייל HTML יפה", והפלט שלו נכנס ל-Content של Gmail. ככה Claude כותב מחדש כל בוקר (אפשר אפילו: "אם הדולר עלה, כתוב בטון אופטימי"). זה כבר <span class="en">Claude API</span> — בדיוק מה שנפתח במפגש הבא.</p>
+  </details>
+
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>המייל שהגיע מעוצב (כרטיסייה/צבעים), לא שורת טקסט</li>
+    <li>הערכים אמיתיים מה-API — לא <code>__ILS__</code> ולא <code>{{...}}</code> גולמי</li>
+    <li>אני מבין את ההפרדה: Claude = המעטפת, Make = הנתונים החיים</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exhtml"> שלחתי מייל מעוצב</label>
 </div>
 
 <div class="card ex" id="ex3">
