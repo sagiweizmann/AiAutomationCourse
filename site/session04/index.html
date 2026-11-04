@@ -27,7 +27,7 @@
 </div></nav>
 <main class="wrap">
 
-<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/8</span></div></div>
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/12</span></div></div>
 
 <section class="blk" id="toc">
   <div class="kicker">תוכן העניינים</div>
@@ -40,6 +40,11 @@
     <li><a href="#ex3"><span class="n">3</span><span class="t">מודול AI ראשון: Haiku מסווג פנייה</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex4"><span class="n">4</span><span class="t">מייל אישי ללקוח — התרחיש המלא</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex5"><span class="n">5</span><span class="t">ענף שגיאה: לא נופלים בשקט</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#exweather"><span class="n">☀️</span><span class="t">AI על מפגש 3: מזג אוויר ← המלצה מעשית</span><span class="pill">AI</span></a></li>
+    <li><a href="#exdollar"><span class="n">💵</span><span class="t">AI על מפגש 3: שער הדולר ← מגמה ומסקנה</span><span class="pill">AI</span></a></li>
+    <li><a href="#exbrief"><span class="n">📰</span><span class="t">תדריך בוקר: שני מקורות, מייל אחד</span><span class="pill">AI</span></a></li>
+    <li><a href="#exdecide"><span class="n">🧭</span><span class="t">ה-AI מחליט אם בכלל לשלוח</span><span class="pill">AI</span></a></li>
+    <li><a href="#exmore"><span class="n">💡</span><span class="t">עוד רעיונות: AI על הבונוסים ממפגש 3</span><span class="pill">בבית</span></a></li>
     <li><a href="#ex6"><span class="n">6</span><span class="t">שדרוג לבחירה: HTML, טון לפי סוג או סיכום יומי</span><span class="pill home">📝 לבית</span></a></li>
     <li><a href="#exjson"><span class="n">★</span><span class="t">בונוס: קריאה אחת, שלוש תוצאות (JSON)</span><span class="pill">בונוס</span></a></li>
   </ul>
@@ -252,8 +257,161 @@
 
 </section>
 
-<!-- ================= block 3 ================= -->
-<div class="blockhead">חלק 3 · לבית ובונוס</div>
+<!-- ================= block 3: AI on session 3 scenarios ================= -->
+<div class="blockhead">חלק 3 · מוסיפים AI לתרחישים ממפגש 3</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="callout claude"><b>הרעיון: לא בונים מאפס — מוסיפים מוח</b>במפגש 3 בניתם תרחישים שמושכים <b>נתונים</b>: מזג אוויר, שער דולר. הם שלחו מספרים. עכשיו מוסיפים מודול AI אחד באמצע, והמספרים הופכים ל<b>מסקנות</b>: מה לעשות היום, מה המגמה, האם בכלל לשלוח. העסק שלנו כאן: "בית ועיצוב" ממפגש 3 — חנות רהיטים ששולחת הובלות כל יום ומייבאת סחורה בדולרים.</div>
+
+<div class="card ex" id="exweather">
+  <div class="ex-head"><span class="ex-num">☀️</span><h3>מזג אוויר → המלצה מעשית לצוות</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 12 דקות</span><span class="pill">קל</span><span class="pill">🤖 AI</span><span class="pill">ממשיך את מפגש 3</span></div>
+  <p class="goal">במפגש 3 הצוות קיבל "26 מעלות, 0 מ"מ". עכשיו הוא יקבל "יום רגיל להובלות, קחו מים לצוות — חם בצהריים". אותו נתון, תוספת של שיקול דעת.</p>
+  <ol class="steps">
+    <li>תרחיש חדש (או העתק של תרחיש מזג האוויר) ← <span class="en">HTTP · Make a request</span> עם הכתובת למטה (תחזית <b>יומית</b>: מקסימום, מינימום, גשם, סיכוי גשם, רוח)</li>
+    <li>הפעם <span class="en">Parse response = <b>No</b></span> — ה-AI יקרא את ה-JSON בעצמו, לא צריך לבחור שדות</li>
+    <li><span class="en">AI by Make · Simple Text Prompt</span>, Claude Haiku 5.5, ובשדה <span class="en">Text</span> את הפרומפט למטה. במקום <code>{{Data}}</code> בוחרים את הבועה <span class="en">Data</span> של מודול ה-HTTP</li>
+    <li><span class="en">Gmail · Send an email</span> אליכם (<span class="en">Raw HTML</span>), תוכן = <span class="en">Answer</span> ← <span class="en">Run once</span></li>
+  </ol>
+  <div class="copybox"><pre>https://api.open-meteo.com/v1/forecast?latitude=31.79213&longitude=34.64966&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max&timezone=Asia%2FJerusalem&forecast_days=1</pre></div>
+  <div class="copybox"><pre class="rtl">אתה עוזר התפעול של "בית ועיצוב" — חנות רהיטים ששולחת הובלות כל יום.
+לפניך תחזית מזג האוויר להיום באשדוד, בפורמט JSON.
+כתוב לצוות ההובלות הודעה קצרה (עד 4 שורות) בעברית:
+- שורה ראשונה: מזג האוויר במילים פשוטות (חום, גשם, רוח).
+- אחר כך: המלצה מעשית אחת או שתיים להובלות (כיסוי רהיטים, שעות מועדפות, מים לצוות בחום).
+- אם אין שום דבר מיוחד — כתוב בפשטות "יום רגיל להובלות".
+- השתמש רק בנתונים שב-JSON. אל תמציא נתונים.
+- כל שורה בתוך תגית &lt;p&gt;.
+
+התחזית:
+{{Data}}</pre></div>
+<figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-weather-raw.jpg" alt="פלט HTTP עם Parse response = No" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מההרצה שלנו: עם <span class="en">Parse = No</span> השדה <span class="en">Data</span> הוא טקסט (סימן <b>T</b>) — כל ה-JSON כמו שהוא.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-weather-ai.jpg" alt="התשובה של Haiku על תחזית היום" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">והתשובה של Haiku באותה הרצה: "מזג אוויר נעים, בין 17.5 ל-26.4 מעלות, בלי גשם, ורוח קלה עד 14.1 קמ"ש · יום רגיל להובלות". כל המספרים זהים ל-API. עלות: 1.32 קרדיטים.</figcaption></figure>
+  <div class="callout tip"><b>למה Parse = No?</b>במפגש 3 Make פירק את ה-JSON כדי שנבחר שדות. כאן התחזית מגיעה כמערכים (<code>"temperature_2m_max":[26.4]</code>) — מסורבל למיפוי. מודל שפה קורא JSON בלי בעיה, אז פשוט מעבירים לו את כל הטקסט.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>הגיע מייל של 2–4 שורות, עם המספרים האמיתיים של היום</li>
+    <li>יש בו המלצה שמתאימה למזג האוויר (ולא המלצת גשם ביום יבש)</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exweather"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="exdollar">
+  <div class="ex-head"><span class="ex-num">💵</span><h3>שער הדולר → מגמה ומסקנה למנהלת הרכש</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill">🤖 AI</span><span class="pill">ממשיך את מפגש 3</span></div>
+  <p class="goal">שער של יום אחד הוא מספר. שער של שבוע הוא <b>מגמה</b>. לוקחים את יומן הדולר בגיליון (כמו בבונוס "יומן מעקב" ממפגש 3), ו-Claude כותב ממנו מסקנה קצרה.</p>
+  <ol class="steps">
+    <li>גיליון <b>יומן דולר</b> עם הנתונים למטה (או היומן האמיתי שלכם ממפגש 3, אם כבר הצטברו בו ימים)</li>
+    <li>תרחיש חדש ← <span class="en">Google Sheets · Search Rows</span> על הגיליון (בלי פילטר, <span class="en">Limit = 7</span>)</li>
+    <li><span class="en">Tools · Text aggregator</span>: <span class="en">Source module</span> = Search Rows, <span class="en">Text</span> = <code>{{date}}: {{rate}}</code>, <span class="en">Row separator = New row</span> ← כל השורות הופכות לטקסט אחד</li>
+    <li><span class="en">Simple Text Prompt</span> (Haiku) עם הפרומפט למטה, ובמקום <code>{{text}}</code> הבועה <span class="en">text</span> של ה-aggregator</li>
+    <li><span class="en">Gmail · Send an email</span> אליכם, תוכן = <span class="en">Answer</span></li>
+  </ol>
+  <div class="copybox"><pre class="rtl">date	rate
+2026-10-28	3.121
+2026-10-29	3.118
+2026-10-30	3.130
+2026-11-02	3.139
+2026-11-03	3.157</pre></div>
+  <div class="copybox"><pre class="rtl">אתה אנליסט של "בית ועיצוב", שמייבאת רהיטים ומשלמת לספקים בדולרים.
+לפניך שער הדולר בימים האחרונים (תאריך: שער בשקלים):
+{{text}}
+
+כתוב סיכום קצר (עד 5 שורות) בעברית למנהלת הרכש:
+- מה המגמה: עולה, יורדת או יציבה.
+- השינוי בין היום הראשון לאחרון, בשקלים ובאחוזים.
+- משפט אחד: מה זה אומר על עלות הזמנה של 10,000 דולר מספק בחו"ל.
+- אל תיתן המלצות השקעה ואל תנבא את השער העתידי.
+- כל שורה בתוך תגית &lt;p&gt;.</pre></div>
+  <div class="callout warn"><b>מודל שפה הוא לא מחשבון</b>Haiku בדרך כלל יחשב נכון שינוי של חמישה מספרים — אבל לא תמיד. בדקו את המספר בעצמכם. כשהמספר חשוב באמת (כסף, חשבוניות): מחשבים בגיליון (<code>=(B6-B2)/B2</code>) או בפונקציה של Make, ונותנים ל-AI רק <b>להסביר</b>. הכלל: <b>Make מחשב, AI מסביר</b>.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>הסיכום אומר שהמגמה עולה, והשינוי בערך 0.036 ₪ (כ-1.15%)</li>
+    <li>יש משפט על הזמנה של 10,000$ (כ-360 ₪ יותר מאשר לפני שבוע)</li>
+    <li>אין המלצה "לקנות דולרים עכשיו" ואין ניבוי</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exdollar"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="exbrief">
+  <div class="ex-head"><span class="ex-num">📰</span><h3>תדריך בוקר: שני מקורות, מייל אחד</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill">🤖 AI</span></div>
+  <p class="goal">שני ה-APIs ממפגש 3 ביחד: מזג אוויר <b>וגם</b> דולר נכנסים לאותו פרומפט, ו-Claude כותב תדריך בוקר אחד — עם חלק להובלות וחלק לרכש.</p>
+  <ol class="steps">
+    <li><span class="en">HTTP</span> מזג אוויר (הכתובת מהתרגיל ☀️, <span class="en">Parse = No</span>)</li>
+    <li>מיד אחריו <span class="en">HTTP</span> שני — שער הדולר: <code>https://api.frankfurter.dev/v1/latest?base=USD&amp;symbols=ILS</code> (<span class="en">Parse = Yes</span>)</li>
+    <li><span class="en">Simple Text Prompt</span> עם הפרומפט למטה — בועות משני המודולים: <span class="en">Data</span> של מודול 1, ו-<span class="en">rates: ILS</span> ו-<span class="en">date</span> של מודול 2</li>
+    <li><span class="en">Gmail</span> אליכם, <span class="en">Raw HTML</span>, נושא: <code>תדריך בוקר · {{formatDate(now; "DD/MM")}}</code> ← <span class="en">Run once</span></li>
+  </ol>
+  <div class="copybox"><pre class="rtl">אתה כותב את "תדריך הבוקר" של "בית ועיצוב".
+נתונים:
+תחזית היום (JSON): {{1.data}}
+שער הדולר: {{2.data.rates.ILS}} ₪ (נכון לתאריך {{2.data.date}})
+
+כתוב תדריך של עד 6 שורות בעברית, עם שתי כותרות קטנות: "🚚 הובלות" ו-"💵 רכש".
+- תחת הובלות: מזג האוויר והמלצה אחת להובלות.
+- תחת רכש: השער היום, במשפט אחד, בלי תחזיות.
+- סיים בשורה "יום טוב!".
+- השתמש רק בנתונים שקיבלת. כותרות בתוך &lt;h3&gt;, כל שורה בתוך &lt;p&gt;.</pre></div>
+  <div class="callout tip"><b>מה חדש כאן</b>פרומפט אחד שמקבל נתונים <b>מכמה מודולים</b>. ככה בונים דוחות אמיתיים: מושכים מכמה מקומות, ונותנים ל-AI לחבר את הכול לסיפור אחד.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>במייל שתי כותרות, והמספרים (טמפרטורה, שער) זהים למה שה-APIs החזירו</li>
+    <li>תדריך אחד — לא שני מיילים נפרדים</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exbrief"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="exdecide">
+  <div class="ex-head"><span class="ex-num">🧭</span><h3>הצעה שלי: ה-AI מחליט אם בכלל לשלוח</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">מאתגר</span><span class="pill">🤖 AI</span><span class="pill">ממשיך את מפגש 3</span></div>
+  <p class="goal">במפגש 3 הפילטר היה כלל קבוע: <code>precipitation &gt; 0</code>. אבל להובלת רהיטים חשובים גם רוח חזקה וחום כבד. כאן ה-AI שוקל כמה תנאים ביחד, מחליט אם לשלוח — ו<b>מנמק</b>.</p>
+  <ol class="steps">
+    <li><span class="en">HTTP</span> מזג אוויר (תחזית יומית, <span class="en">Parse = No</span>)</li>
+    <li><span class="en">Simple Text Prompt</span> עם הפרומפט למטה — הוא מחזיר JSON</li>
+    <li><span class="en">JSON · Parse JSON</span> ← <span class="en">Data structure</span> ← <span class="en">Generate</span> מהדוגמה למטה</li>
+    <li>על הקו אחריו פילטר: <code>send</code> · <span class="en">Boolean operators: Equal to</span> · <code>true</code></li>
+    <li><span class="en">Gmail</span> לצוות (אליכם), תוכן = <code>message</code></li>
+    <li>בונוס: <span class="en">Router</span> אחרי ה-Parse, וענף שני שתמיד כותב לגיליון <code>date | send | reason</code> — יומן של כל ההחלטות</li>
+  </ol>
+  <div class="copybox"><pre class="rtl">אתה מחליט אם לשלוח התראת מזג אוויר לצוות ההובלות של "בית ועיצוב".
+שלח התראה רק אם יש משהו שמשפיע על הובלת רהיטים:
+גשם, או סיכוי גשם מעל 40%, או רוח מעל 30 קמ"ש, או חום מעל 32 מעלות.
+
+התחזית (JSON):
+{{Data}}
+
+החזר JSON תקין בלבד, בלי שום טקסט לפניו או אחריו:
+{"send": true או false, "reason": "הסיבה במשפט אחד", "message": "ההודעה לצוות, עד 3 שורות, או ריק אם לא שולחים"}</pre></div>
+  <div class="copybox"><pre>{"send": true, "reason": "צפויה רוח של 35 קמ\"ש", "message": "רוח חזקה היום — לקשור היטב פריטים גבוהים."}</pre></div>
+  <div class="callout tip"><b>מתי כלל קבוע, ומתי AI?</b>פילטר קבוע הוא <b>חינמי וצפוי</b> — מעולה כשיש תנאי אחד ברור. AI עולה קרדיט בכל ריצה, אבל יודע לשקול כמה תנאים, להתמודד עם מקרי קצה ולהסביר למה. אפשר גם לשלב: פילטר קבוע זול קודם, ו-AI רק כשהפילטר עבר.</div>
+  <details class="hint"><summary>רמז: איך בודקים ביום יבש ושקט?</summary><p style="margin:6px 0 0">שנו זמנית את הסף בפרומפט — למשל "חום מעל 20 מעלות" — והריצו שוב. עכשיו <code>send</code> צריך לחזור <code>true</code> עם נימוק על החום. אחר כך מחזירים ל-32.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check">
+    <li>ביום רגיל: <code>send = false</code>, יש נימוק, ולא נשלח מייל</li>
+    <li>עם סף מונמך: <code>send = true</code>, ומגיע מייל עם הודעה קצרה</li>
+    <li>אני יודע להסביר מתי הייתי מעדיף את הפילטר הקבוע ממפגש 3</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exdecide"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="exmore">
+  <div class="ex-head"><span class="ex-num">💡</span><h3>עוד רעיונות קצרים — AI על הבונוסים ממפגש 3</h3></div>
+  <div class="ex-meta"><span class="pill">לבחירה</span><span class="pill">בבית</span></div>
+  <div class="tbl"><table>
+    <tr><th>תרחיש ממפגש 3</th><th>מה ה-AI מוסיף</th></tr>
+    <tr><td>🧘 עצה יומית (Advice Slip, באנגלית)</td><td>מתרגם לעברית <b>ומתאים לעסק</b>: "איך העצה הזאת רלוונטית לחנות רהיטים?" — משפט אחד</td></tr>
+    <tr><td>₿ מחיר הקריפטו</td><td>עם יומן בגיליון: "מה השתנה מאתמול?" — אבל שוב, Make מחשב את השינוי, AI רק מנסח, ובלי המלצות קנייה</td></tr>
+    <tr><td>📊 יומן מזג האוויר בגיליון</td><td>פעם בשבוע: Search Rows ← Aggregator ← AI מסכם "כמה ימי גשם היו, ואיזה יום היה הכי קשה להובלות"</td></tr>
+    <tr><td>📋 טופס Google ← התראה</td><td>AI מסכם את הפנייה לשורה אחת ומסמן דחיפות: 🔴 / 🟡 / 🟢 — ההתראה נהיית שימושית יותר</td></tr>
+  </table></div>
+  <div class="callout claude"><b>הדפוס שחוזר בכל הרעיונות</b>נתונים (API / גיליון) ← <b>Make מכין ומחשב</b> ← <b>AI מסביר, מסכם או מחליט</b> ← פעולה. ברגע שהדפוס הזה ברור, כל תרחיש ישן שלכם הוא מועמד לשדרוג.</div>
+</div>
+
+</section>
+
+<!-- ================= block 4 ================= -->
+<div class="blockhead">חלק 4 · לבית ובונוס</div>
 <section class="blk" style="padding-top:6px">
 
 <div class="card ex home" id="ex6">

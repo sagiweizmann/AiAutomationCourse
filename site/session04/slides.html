@@ -1537,7 +1537,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>אחרי הבדיקה — לתקן את מה ששברו! שאלו מי שכח.</li></ul></aside>
 </section>
 
-<section class="slide ex22" data-min="2" data-block="5" data-title="תרגיל 6 · בית">
+<section class="slide ex22" data-min="1" data-block="5" data-title="תרגיל 6 · בית">
   <div class="exh"><span class="ex-num">6</span><h2>שדרוג לבחירה</h2><span class="grow"></span><span class="pill" style="font-size:16px">📝 לבית</span></div>
   <p class="s-lead">בוחרים שדרוג אחד לתרחיש המייל האישי.</p>
   <div class="s-body mid">
@@ -1550,6 +1550,34 @@ body.ov-on #ov{display:block}
   </div>
   <aside class="notes"><ul><li>משימת בית. מביאים צילום מסך של התרחיש + טיוטה אחת למפגש הבא.</li></ul></aside>
 </section>
+
+<section class="slide" data-min="1" data-block="5" data-title="בונוס: AI על מפגש 3">
+  <div class="s-kicker">בונוס · מוסיפים מוח לתרחישים ממפגש 3</div>
+  <h2>מספרים ← מסקנות: AI על מזג האוויר והדולר</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card" style="border-top:4px solid var(--p2)"><b>☀️ מזג אוויר ← המלצה</b><div class="muted" style="font-size:15px">התחזית היומית נכנסת כ-JSON (<span class="en">Parse = No</span>), ו-Haiku כותב לצוות ההובלות מה לעשות היום.</div></div>
+      <div class="card" style="border-top:4px solid var(--p4)"><b>💵 דולר ← מגמה</b><div class="muted" style="font-size:15px">יומן השער בגיליון ← <span class="en">Text aggregator</span> ← מסקנה למנהלת הרכש. בלי המלצות השקעה.</div></div>
+      <div class="card" style="border-top:4px solid var(--p5)"><b>📰 תדריך בוקר</b><div class="muted" style="font-size:15px">שני APIs לפרומפט אחד: חלק להובלות, חלק לרכש — מייל אחד.</div></div>
+      <div class="card" style="border-top:4px solid var(--claude)"><b>🧭 ה-AI מחליט אם לשלוח</b><div class="muted" style="font-size:15px">במקום <code>precipitation &gt; 0</code>: גשם, רוח וחום ביחד ← JSON עם <code>send</code> ונימוק.</div></div>
+    </div>
+    <div class="callout claude"><b>הכלל: Make מחשב, AI מסביר</b>מודל שפה טוב בלהסביר מספרים, פחות טוב בלחשב אותם. כשהמספר חשוב (כסף!) — מחשבים בגיליון או בפונקציה של Make, ונותנים ל-AI לנסח.</div>
+  </div>
+  <aside class="notes"><ul>
+    <li>ארבעה תרגילי בונוס בדף התרגול, עם פרומפטים מוכנים. כולם בונים על התרחישים שכבר יש לסטודנטים ממפגש 3.</li>
+    <li>התרגיל של מזג האוויר נבדק בהרצה אמיתית — השקף הבא.</li>
+  </ul></aside>
+</section>
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: מזג אוויר ← המלצה">
+  <div class="s-kicker">כך זה נראה ב-Make · מהריצה האמיתית</div>
+  <h2>מה Haiku עשה עם תחזית של היום</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:820px;margin:0 auto"><img src="../assets/make/s04-weather-ai.jpg" alt="פלט Haiku על תחזית מזג האוויר"><figcaption>"מזג אוויר נעים, בין 17.5 ל-26.4 מעלות, בלי גשם, ורוח קלה עד 14.1 קמ"ש · יום רגיל להובלות." כל המספרים מה-API, אפס המצאות — <b>1.32 קרדיטים</b>.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>שימו לב: ביום שקט הוא לא "ממציא" המלצה — כתב "יום רגיל להובלות", בדיוק לפי הכלל בפרומפט.</li></ul></aside>
+</section>
+
 
 <section class="slide" data-min="2" data-block="5" data-title="מה למדנו">
   <div class="s-kicker">סיכום</div>
