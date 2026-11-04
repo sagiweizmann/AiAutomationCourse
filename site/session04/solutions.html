@@ -202,6 +202,7 @@
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">☀️</span><h3>מזג אוויר → המלצה מעשית לצוות</h3></div>
   <div class="sol"><b>השרשרת</b><span class="en">HTTP</span> (תחזית יומית, <span class="en">Parse = No</span>) ← <span class="en">Simple Text Prompt</span> (Haiku 5.5, הפרומפט + הבועה <span class="en">Data</span>) ← <span class="en">Gmail · Send an email</span> (<span class="en">Raw HTML</span>, תוכן = <span class="en">Answer</span>).</div>
+<figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-weather-raw.jpg" alt="פלט HTTP עם Parse = No" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)"><span class="en">Parse = No</span>: השדה <span class="en">Data</span> הוא טקסט עם כל ה-JSON.</figcaption></figure>
   <p class="note">נבדק בהרצה אמיתית (4/11/2026). התשובה של Haiku:</p>
   <div class="mail">היום באשדוד: מזג אוויר נעים, בין 17.5 ל-26.4 מעלות, בלי גשם, ורוח קלה עד 14.1 קמ"ש.
 יום רגיל להובלות.</div>
@@ -216,12 +217,14 @@
 <section class="blk">
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">💵</span><h3>שער הדולר → מגמה ומסקנה</h3></div>
-  <div class="sol"><b>השרשרת</b><span class="en">Google Sheets · Search Rows</span> (יומן דולר, <span class="en">Limit = 7</span>) ← <span class="en">Tools · Text aggregator</span> (<code>{{date}}: {{rate}}</code>, שורה חדשה בין פריטים) ← <span class="en">Simple Text Prompt</span> ← <span class="en">Gmail</span>.</div>
+  <div class="sol"><b>השרשרת</b><span class="en">Google Sheets · Search Rows</span> (יומן דולר, <span class="en">Limit = 7</span>) ← <span class="en">Tools · Text aggregator</span> (<code>{{date}}: {{rate}}</code>; <span class="en">Row separator = New row</span> נמצא תחת <span class="en">Show advanced settings</span>) ← <span class="en">Simple Text Prompt</span> ← <span class="en">Gmail</span>.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-dollar-aggregator.jpg" alt="הגדרות Text aggregator" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">ה-aggregator מההרצה: 5 שורות מהגיליון ← טקסט אחד. בזכותו ה-AI רץ <b>פעם אחת</b> ולא חמש.</figcaption></figure>
   <div class="sol"><b>החשבון הנכון (לבדוק את ה-AI מולו)</b>מ-3.121 ל-3.157: עלייה של <b>0.036 ₪</b>, כלומר <b>1.15%</b>. הזמנה של 10,000$ עולה היום כ-<b>360 ₪ יותר</b> מאשר ב-28/10.</div>
-  <div class="mail">השער במגמת עלייה בחמשת ימי המסחר האחרונים.
-מ-3.121 ₪ ל-3.157 ₪ — עלייה של 0.036 ₪ (כ-1.15%).
-הזמנה של 10,000 דולר מספק בחו"ל עולה היום כ-360 ₪ יותר מאשר לפני שבוע.</div>
-  <p class="note">דוגמה לתשובה טובה. הניסוח אצלכם יהיה אחר — המספרים צריכים להיות אותם מספרים.</p>
+  <p class="note">נבדק בהרצה אמיתית. התשובה של Haiku:</p>
+  <div class="mail">המגמה: עולה, אם כי נרשמה ירידה קלה ביום 29.10. השער נע בין 3.118 ל-3.157 שקלים לדולר.
+בין 28.10 ל-3.11.2026 השער עלה ב-0.036 שקלים, כלומר בכ-1.15%, מ-3.121 ל-3.157 שקלים.
+משמעות: הזמנה של 10,000 דולר מספק בחו"ל עולה כעת כ-31,570 שקלים, לעומת כ-31,210 שקלים בתחילת התקופה, כלומר תוספת של כ-360 שקלים.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-dollar-ai.jpg" alt="פלט Haiku על מגמת הדולר" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">1 operation · 1.46 credits. כל המספרים נכונים, וגם הירידה הקטנה ב-29.10 זוהתה. אין המלצת השקעה.</figcaption></figure>
   <div class="fix">
     <div class="sol"><b>תקלה: ה-AI כתב "עלייה של 1.5%"</b>זו בדיוק הסיבה לכלל "Make מחשב, AI מסביר". הוסיפו לגיליון תא <code>=(B6-B2)/B2</code>, או חשבו ב-Make: <code>{{formatNumber((last - first) / first * 100; 2; ".")}}</code> — והעבירו ל-AI את התוצאה כנתון.</div>
     <div class="sol"><b>תקלה: ה-AI ממליץ "כדאי לקנות דולרים עכשיו"</b>חסרה (או לא מספיק חזקה) השורה "אל תיתן המלצות השקעה ואל תנבא". זה לא רק סגנון — זו אחריות: אוטומציה לא צריכה לייעץ ייעוץ פיננסי.</div>
@@ -232,13 +235,15 @@
 <section class="blk">
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">📰</span><h3>תדריך בוקר: שני מקורות, מייל אחד</h3></div>
-  <div class="sol"><b>השרשרת</b><span class="en">HTTP</span> מזג אוויר (<span class="en">Parse = No</span>) ← <span class="en">HTTP</span> דולר (<span class="en">Parse = Yes</span>) ← <span class="en">Simple Text Prompt</span> ← <span class="en">Gmail</span>. בפרומפט: <span class="en">Data</span> של מודול 1, ו-<span class="en">rates: ILS</span> ו-<span class="en">date</span> של מודול 2.</div>
+  <div class="sol"><b>השרשרת</b><span class="en">HTTP</span> מזג אוויר (<span class="en">Parse = No</span>) ← <span class="en">HTTP</span> דולר <code>open.er-api.com/v6/latest/USD</code> (<span class="en">Parse = Yes</span>) ← <span class="en">Simple Text Prompt</span> ← <span class="en">Gmail</span>. בפרומפט: <span class="en">Data</span> של מזג האוויר, ו-<span class="en">data: rates: ILS</span> של מודול הדולר.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-brief-canvas.jpg" alt="התרחיש של תדריך הבוקר" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מההרצה: מודול הדולר נוסף באמצע, ולכן הוא <b>3</b> — המספרים הם לפי סדר יצירה.</figcaption></figure>
+  <p class="note">נבדק בהרצה אמיתית. התשובה של Haiku (בלי התגיות):</p>
   <div class="mail">🚚 הובלות
-מזג אוויר נעים, 17.5–26.4 מעלות, בלי גשם — יום רגיל להובלות.
+מזג האוויר: מקסימום 26.4°C, מינימום 17.5°C, ללא משקעים (סיכוי 3%) ורוח עד 14.1 קמ"ש. המלצה: תנאים מתאימים להובלות, ומומלץ לתזמן אותן ללא חשש ממשקעים.
 💵 רכש
-שער הדולר היום: 3.157 ₪.
-יום טוב!</div>
-  <p class="note">דוגמה למבנה. בפועל הכותרות יגיעו כ-<code>&lt;h3&gt;</code> וכל שורה כ-<code>&lt;p&gt;</code>.</p>
+שער הדולר היום עומד על 3.164 ₪ לדולר.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-brief-ai.jpg" alt="התדריך ש-Haiku כתב" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">1 operation · 1.49 credits. הכותרות הגיעו כ-<code>&lt;h3&gt;</code> והשורות כ-<code>&lt;p&gt;</code>, כמו שביקשנו.</figcaption></figure>
+  <div class="sol"><b>תקלה: מודול הדולר נתקע ב-"Running…"</b>זה קרה לנו עם <span class="en">frankfurter</span> ביום הבדיקה — מהמחשב הוא ענה מיד, אבל מ-Make לא. עוצרים (<span class="en">Stop</span> / <span class="en">Force stop</span>) ומחליפים ל-<code>open.er-api.com/v6/latest/USD</code>. בתרחיש אמיתי: ענף שגיאה עם <span class="en">Break</span> (תרגיל 5).</div>
   <div class="sol"><b>למה שני HTTP ברצף ולא Router?</b>Router מפצל לענפים נפרדים — וכל ענף לא רואה את הנתונים של השני. כאן צריך את <b>שני</b> הנתונים באותו מודול AI, אז שמים את ה-HTTP-ים בשרשרת אחת.</div>
 </div>
 </section>
@@ -246,9 +251,12 @@
 <section class="blk">
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">🧭</span><h3>ה-AI מחליט אם בכלל לשלוח</h3></div>
-  <div class="sol"><b>השרשרת</b><span class="en">HTTP</span> (<span class="en">Parse = No</span>) ← <span class="en">Simple Text Prompt</span> (מחזיר JSON) ← <span class="en">JSON · Parse JSON</span> ← פילטר <code>send = true</code> ← <span class="en">Gmail</span>.</div>
-  <div class="sol"><b>מה צפוי ביום כמו 4/11</b>26.4 מעלות, 0 מ"מ, 3% סיכוי לגשם, רוח 14.1 קמ"ש — אף תנאי לא מתקיים, אז <code>{"send": false, "reason": "אין גשם, רוח חלשה וטמפרטורה נוחה", "message": ""}</code>. הפילטר עוצר, ולא נשלח מייל — וזו התוצאה הנכונה.</div>
-  <div class="sol"><b>הבדיקה עם סף מונמך</b>שינוי ל"חום מעל 20 מעלות" ← <code>send: true</code>, נימוק על 26.4 מעלות, והודעה כמו "חם יחסית היום — לדאוג למים לצוות בהובלות הצהריים".</div>
+  <div class="sol"><b>השרשרת</b><span class="en">HTTP</span> (<span class="en">Parse = No</span>) ← <span class="en">Simple Text Prompt</span> (מחזיר JSON) ← <span class="en">JSON · Parse JSON</span> (<span class="en">JSON string</span> = <span class="en">Answer</span>; <span class="en">Data structure</span> אפשר להשאיר ריק) ← פילטר <code>send = true</code> ← <span class="en">Gmail</span>.</div>
+  <div class="sol"><b>מה יצא בהרצה (4/11)</b>26.4 מעלות, 0 מ"מ, 3% סיכוי לגשם, רוח 14.1 קמ"ש — אף תנאי לא מתקיים. Haiku החזיר <code>send: false</code> עם הנימוק "אין גשם, סיכוי הגשם הוא 3%, הרוח עד 14.1 קמ"ש והטמפרטורה המקסימלית 26.4 מעלות, כך שאין תנאי שמשפיע על הובלת רהיטים". הפילטר עוצר, ולא נשלח מייל — וזו התוצאה הנכונה. <code>send</code> הגיע כ-Boolean אמיתי גם בלי <span class="en">Data structure</span>.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-decide-false.jpg" alt="Parse JSON עם send false" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט של Parse JSON ביום רגיל: <code>send: false</code>, נימוק, והודעה ריקה. 1 קרדיט ל-Parse.</figcaption></figure>
+  <div class="sol"><b>הבדיקה עם סף מונמך</b>שינוי המספר <b>בתוך הכלל</b> ל"חום מעל 20 מעלות" ← <code>send: true</code>, נימוק "צפויה טמפרטורה מקסימלית של 26.4 מעלות, מעל הסף של 20", והודעה "התראת חום לצוות ההובלות... יש לדאוג לשתייה, הפסקות והגנה מפני חום".</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-decide-true.jpg" alt="Parse JSON עם send true" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אותה תחזית, סף 20: <code>send: true</code> והודעה מוכנה לשליחה.</figcaption></figure>
+  <div class="sol"><b>תקלה: שיניתי את הסף ו-Haiku עדיין עונה false</b>קרה לנו: הוספנו שורה בסוף הפרומפט "בדיקה: הסף הוא 20 במקום 32" — ו-Haiku התעלם, כי היא סותרת כלל שכבר נאמר למעלה. מתקנים את המספר <b>בתוך הכלל עצמו</b>. לקח כללי: כשההוראות סותרות זו את זו, המודל לא תמיד בוחר את מה שהתכוונתם.</div>
   <div class="fix">
     <div class="sol"><b>תקלה: הפילטר לא עוצר אף פעם (או תמיד)</b>בדקו שהשוויתם עם <span class="en">Boolean operators</span>, ולא עם <span class="en">Text: Equal to</span> מול המילה "true". ב-<span class="en">Data structure</span> השדה <code>send</code> צריך להיות מסוג <span class="en">Boolean</span> — <span class="en">Generate</span> מהדוגמה עושה את זה לבד.</div>
     <div class="sol"><b>מתי בכל זאת פילטר קבוע?</b>אם החוק פשוט ("שלח אם יש גשם") — פילטר קבוע עדיף: חינמי, מיידי ו-100% צפוי. AI שווה את הקרדיט כשיש כמה תנאים שמשפיעים אחד על השני, או כשרוצים נימוק בשפה אנושית.</div>

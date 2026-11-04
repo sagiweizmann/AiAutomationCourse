@@ -303,7 +303,7 @@
   <ol class="steps">
     <li>גיליון <b>יומן דולר</b> עם הנתונים למטה (או היומן האמיתי שלכם ממפגש 3, אם כבר הצטברו בו ימים)</li>
     <li>תרחיש חדש ← <span class="en">Google Sheets · Search Rows</span> על הגיליון (בלי פילטר, <span class="en">Limit = 7</span>)</li>
-    <li><span class="en">Tools · Text aggregator</span>: <span class="en">Source module</span> = Search Rows, <span class="en">Text</span> = <code>{{date}}: {{rate}}</code>, <span class="en">Row separator = New row</span> ← כל השורות הופכות לטקסט אחד</li>
+    <li><span class="en">Tools · Text aggregator</span>: <span class="en">Source module</span> = Search Rows, <span class="en">Text</span> = <code>{{date}}: {{rate}}</code>. מדליקים <span class="en">Show advanced settings</span> ← <span class="en">Row separator = New row</span>. כל השורות הופכות לטקסט אחד</li>
     <li><span class="en">Simple Text Prompt</span> (Haiku) עם הפרומפט למטה, ובמקום <code>{{text}}</code> הבועה <span class="en">text</span> של ה-aggregator</li>
     <li><span class="en">Gmail · Send an email</span> אליכם, תוכן = <span class="en">Answer</span></li>
   </ol>
@@ -323,6 +323,8 @@
 - משפט אחד: מה זה אומר על עלות הזמנה של 10,000 דולר מספק בחו"ל.
 - אל תיתן המלצות השקעה ואל תנבא את השער העתידי.
 - כל שורה בתוך תגית &lt;p&gt;.</pre></div>
+<figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-dollar-aggregator.jpg" alt="הגדרות Text aggregator" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מההרצה שלנו: <span class="en">Row separator</span> מסתתר תחת <span class="en">Show advanced settings</span>.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-dollar-ai.jpg" alt="התשובה של Haiku על מגמת הדולר" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">והתשובה של Haiku: "המגמה: עולה... עלה ב-0.036 שקלים, כלומר בכ-1.15%... תוספת של כ-360 שקלים". הכול נכון — ובלי המלצת השקעה. 1.46 קרדיטים.</figcaption></figure>
   <div class="callout warn"><b>מודל שפה הוא לא מחשבון</b>Haiku בדרך כלל יחשב נכון שינוי של חמישה מספרים — אבל לא תמיד. בדקו את המספר בעצמכם. כשהמספר חשוב באמת (כסף, חשבוניות): מחשבים בגיליון (<code>=(B6-B2)/B2</code>) או בפונקציה של Make, ונותנים ל-AI רק <b>להסביר</b>. הכלל: <b>Make מחשב, AI מסביר</b>.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
@@ -339,20 +341,22 @@
   <p class="goal">שני ה-APIs ממפגש 3 ביחד: מזג אוויר <b>וגם</b> דולר נכנסים לאותו פרומפט, ו-Claude כותב תדריך בוקר אחד — עם חלק להובלות וחלק לרכש.</p>
   <ol class="steps">
     <li><span class="en">HTTP</span> מזג אוויר (הכתובת מהתרגיל ☀️, <span class="en">Parse = No</span>)</li>
-    <li>מיד אחריו <span class="en">HTTP</span> שני — שער הדולר: <code>https://api.frankfurter.dev/v1/latest?base=USD&amp;symbols=ILS</code> (<span class="en">Parse = Yes</span>)</li>
-    <li><span class="en">Simple Text Prompt</span> עם הפרומפט למטה — בועות משני המודולים: <span class="en">Data</span> של מודול 1, ו-<span class="en">rates: ILS</span> ו-<span class="en">date</span> של מודול 2</li>
+    <li>מיד אחריו <span class="en">HTTP</span> שני — שער הדולר: <code>https://open.er-api.com/v6/latest/USD</code> (<span class="en">Parse = Yes</span>). אפשר להוסיף אותו באמצע: קליק ימני על הקו ← <span class="en">Add module</span></li>
+    <li><span class="en">Simple Text Prompt</span> עם הפרומפט למטה — בועות משני המודולים: <span class="en">Data</span> של מזג האוויר, ו-<span class="en">rates: ILS</span> של מודול הדולר</li>
     <li><span class="en">Gmail</span> אליכם, <span class="en">Raw HTML</span>, נושא: <code>תדריך בוקר · {{formatDate(now; "DD/MM")}}</code> ← <span class="en">Run once</span></li>
   </ol>
   <div class="copybox"><pre class="rtl">אתה כותב את "תדריך הבוקר" של "בית ועיצוב".
 נתונים:
-תחזית היום (JSON): {{1.data}}
-שער הדולר: {{2.data.rates.ILS}} ₪ (נכון לתאריך {{2.data.date}})
+תחזית היום (JSON): {{Data של מזג האוויר}}
+שער הדולר היום (שקלים לדולר): {{rates: ILS של מודול הדולר}}
 
 כתוב תדריך של עד 6 שורות בעברית, עם שתי כותרות קטנות: "🚚 הובלות" ו-"💵 רכש".
 - תחת הובלות: מזג האוויר והמלצה אחת להובלות.
 - תחת רכש: השער היום, במשפט אחד, בלי תחזיות.
 - סיים בשורה "יום טוב!".
 - השתמש רק בנתונים שקיבלת. כותרות בתוך &lt;h3&gt;, כל שורה בתוך &lt;p&gt;.</pre></div>
+  <div class="callout warn"><b>שני דברים שגילינו בהרצה</b>(1) מספר המודול (<code>1.</code>, <code>3.</code>) נקבע לפי <b>סדר היצירה</b>, לא לפי המקום בשרשרת — מודול שהוספתם באמצע יכול לקבל את המספר 3. בוחרים בועות מהרשימה, ואל תסמכו על מספר מוקלד. (2) ביום הבדיקה Make לא הצליח להגיע ל-<span class="en">frankfurter</span> (הבקשה נתקעה), ולכן כאן <span class="en">open.er-api.com</span> — גם הוא חינמי ובלי מפתח, ויש בו <code>rates.ILS</code>. זה בדיוק למה צריך ענף שגיאה (תרגיל 5).</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start"><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-brief-canvas.jpg" alt="התרחיש של תדריך הבוקר" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">השרשרת: מזג אוויר (1) ← דולר (3) ← Haiku (2). שימו לב למספרים.</figcaption></figure><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-brief-ai.jpg" alt="התדריך ש-Haiku כתב" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">התדריך: כותרת "🚚 הובלות" עם התחזית והמלצה, כותרת "💵 רכש" עם 3.164 ₪. 1.49 קרדיטים.</figcaption></figure></div>
   <div class="callout tip"><b>מה חדש כאן</b>פרומפט אחד שמקבל נתונים <b>מכמה מודולים</b>. ככה בונים דוחות אמיתיים: מושכים מכמה מקומות, ונותנים ל-AI לחבר את הכול לסיפור אחד.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
@@ -369,7 +373,7 @@
   <ol class="steps">
     <li><span class="en">HTTP</span> מזג אוויר (תחזית יומית, <span class="en">Parse = No</span>)</li>
     <li><span class="en">Simple Text Prompt</span> עם הפרומפט למטה — הוא מחזיר JSON</li>
-    <li><span class="en">JSON · Parse JSON</span> ← <span class="en">Data structure</span> ← <span class="en">Generate</span> מהדוגמה למטה</li>
+    <li><span class="en">JSON · Parse JSON</span>, <span class="en">JSON string</span> = <span class="en">Answer</span>. את <span class="en">Data structure</span> אפשר להשאיר ריק — Make בונה את המבנה לבד מההרצה הראשונה (או <span class="en">Generate</span> מהדוגמה למטה)</li>
     <li>על הקו אחריו פילטר: <code>send</code> · <span class="en">Boolean operators: Equal to</span> · <code>true</code></li>
     <li><span class="en">Gmail</span> לצוות (אליכם), תוכן = <code>message</code></li>
     <li>בונוס: <span class="en">Router</span> אחרי ה-Parse, וענף שני שתמיד כותב לגיליון <code>date | send | reason</code> — יומן של כל ההחלטות</li>
@@ -385,7 +389,8 @@
 {"send": true או false, "reason": "הסיבה במשפט אחד", "message": "ההודעה לצוות, עד 3 שורות, או ריק אם לא שולחים"}</pre></div>
   <div class="copybox"><pre>{"send": true, "reason": "צפויה רוח של 35 קמ\"ש", "message": "רוח חזקה היום — לקשור היטב פריטים גבוהים."}</pre></div>
   <div class="callout tip"><b>מתי כלל קבוע, ומתי AI?</b>פילטר קבוע הוא <b>חינמי וצפוי</b> — מעולה כשיש תנאי אחד ברור. AI עולה קרדיט בכל ריצה, אבל יודע לשקול כמה תנאים, להתמודד עם מקרי קצה ולהסביר למה. אפשר גם לשלב: פילטר קבוע זול קודם, ו-AI רק כשהפילטר עבר.</div>
-  <details class="hint"><summary>רמז: איך בודקים ביום יבש ושקט?</summary><p style="margin:6px 0 0">שנו זמנית את הסף בפרומפט — למשל "חום מעל 20 מעלות" — והריצו שוב. עכשיו <code>send</code> צריך לחזור <code>true</code> עם נימוק על החום. אחר כך מחזירים ל-32.</p></details>
+  <details class="hint"><summary>רמז: איך בודקים ביום יבש ושקט?</summary><p style="margin:6px 0 0">שנו זמנית את המספר <b>בתוך הכלל עצמו</b> — "חום מעל <b>20</b> מעלות" במקום 32 — והריצו שוב. עכשיו <code>send</code> צריך לחזור <code>true</code> עם נימוק על החום. בדקנו: אם רק <b>מוסיפים</b> שורה בסוף כמו "בדיקה: הסף הוא 20", Haiku מתעלם ממנה, כי היא סותרת את הכלל שכבר נאמר. אחר כך מחזירים ל-32.</p></details>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start"><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-decide-false.jpg" alt="Parse JSON עם send false" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">יום רגיל (26.4°, 3% גשם, רוח 14.1): <code>send: false</code>, עם נימוק — ולא נשלח כלום.</figcaption></figure><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-decide-true.jpg" alt="Parse JSON עם send true" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אותה תחזית, סף חום 20: <code>send: true</code>, נימוק על 26.4°, והודעה לצוות על שתייה והפסקות.</figcaption></figure></div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
     <li>ביום רגיל: <code>send = false</code>, יש נימוק, ולא נשלח מייל</li>

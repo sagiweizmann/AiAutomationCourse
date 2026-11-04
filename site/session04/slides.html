@@ -851,7 +851,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="1" data-title="חבילות וקרדיטים">
+<section class="slide" data-min="3" data-block="1" data-title="חבילות וקרדיטים">
   <div class="s-kicker">איך Make סופר</div>
   <h2>חבילה (Bundle) = פריט אחד שעובר בפס</h2>
   <div class="s-body mid">
@@ -1122,7 +1122,7 @@ body.ov-on #ov{display:block}
   </ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="3" data-title="פרומפט בתוך אוטומציה">
+<section class="slide" data-min="3" data-block="3" data-title="פרומפט בתוך אוטומציה">
   <div class="s-kicker">הנדסת פרומפטים — גרסת אוטומציה</div>
   <h2>פרומפט לאוטומציה ≠ פרומפט לצ'אט</h2>
   <div class="s-body mid">
@@ -1577,6 +1577,28 @@ body.ov-on #ov{display:block}
   </div>
   <aside class="notes"><ul><li>שימו לב: ביום שקט הוא לא "ממציא" המלצה — כתב "יום רגיל להובלות", בדיוק לפי הכלל בפרומפט.</li></ul></aside>
 </section>
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: ה-AI מחליט">
+  <div class="s-kicker">כך זה נראה ב-Make · מהריצה האמיתית</div>
+  <h2>אותה תחזית, שני ספים — שתי החלטות</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start">
+      <figure class="shot" style="margin:0"><img style="max-height:330px;width:auto;display:block;margin:0 auto" src="../assets/make/s04-decide-false.jpg" alt="send false"><figcaption>סף חום 32: <code>send: false</code> + נימוק. לא נשלח כלום.</figcaption></figure>
+      <figure class="shot" style="margin:0"><img style="max-height:330px;width:auto;display:block;margin:0 auto" src="../assets/make/s04-decide-true.jpg" alt="send true"><figcaption>סף חום 20: <code>send: true</code> + הודעה לצוות על שתייה והפסקות.</figcaption></figure>
+    </div>
+  </div>
+  <aside class="notes"><ul><li>לקח מההרצה: הוספת שורה "בדיקה: הסף הוא 20" בסוף הפרומפט לא עבדה — Haiku נצמד לכלל המקורי. צריך לשנות את המספר בתוך הכלל. הוראות סותרות = תוצאה לא צפויה.</li><li>Parse JSON עבד גם בלי Data structure — send הגיע כ-Boolean.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: מגמת הדולר">
+  <div class="s-kicker">כך זה נראה ב-Make · מהריצה האמיתית</div>
+  <h2>חמש שורות בגיליון ← מסקנה אחת</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:820px;margin:0 auto"><img src="../assets/make/s04-dollar-ai.jpg" alt="פלט Haiku על מגמת הדולר"><figcaption>"המגמה: עולה... עלה ב-0.036 שקלים, כלומר בכ-1.15%... תוספת של כ-360 שקלים" — נכון, ובלי המלצת השקעה. Text aggregator איחד 5 שורות, וה-AI רץ פעם אחת: <b>1.46 קרדיטים</b>.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>Haiku חישב נכון הפעם — ועדיין הכלל הוא "Make מחשב, AI מסביר" כשמדובר בכסף.</li></ul></aside>
+</section>
+
 
 
 <section class="slide" data-min="2" data-block="5" data-title="מה למדנו">
