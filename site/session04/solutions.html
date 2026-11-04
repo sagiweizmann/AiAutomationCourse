@@ -94,7 +94,7 @@
   <div class="sol"><b>שרשרת המודולים</b>
     <ul class="steps">
       <li><span class="en">Sheets · Watch new rows</span> (כמו בתרגיל 2)</li>
-      <li><span class="en">Make AI Toolkit · Simple text prompt</span> — <span class="en">Make's AI Provider</span>, Claude Haiku 5.5. הוראות: הסיווג מדף התרגול. פרומפט: בועת <code>message</code> בלבד</li>
+      <li><span class="en">AI by Make · Simple Text Prompt</span> — <span class="en">Make's AI Provider (default)</span>, <span class="en">Anthropic: Claude Haiku 5.5</span>. בשדה <span class="en">Text</span>: הוראות הסיווג מדף התרגול, ומתחתן בועת <code>message</code></li>
       <li><span class="en">Router</span> עם שלושה ענפים:
         ענף "מכירות" — תשובת ה-AI <span class="en">Contains</span> <code>מכירות</code> ← מייל "ליד חדש" ·
         ענף "תלונה" — תשובת ה-AI <span class="en">Contains</span> <code>תלונה</code> ← מייל "⚠️ תלונה" ·
@@ -120,34 +120,42 @@
 <section class="blk">
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">4</span><h3>מייל אישי ללקוח — התרחיש המלא</h3></div>
-  <div class="sol"><b>מודול 1 · Google Sheets → Watch new rows</b>
-    גיליון <b>אוטומט · לידים</b>, <span class="en">Table contains headers = Yes</span>, <span class="en">Limit = 2</span>, התחלה מ-<span class="en">All</span>.</div>
+  <p class="note">הכול כאן נבדק בהרצה אמיתית ב-Make (נובמבר 2026), עם צילומי מסך מההרצה.</p>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-canvas-run.jpg" alt="התרחיש המלא אחרי הרצה" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">ארבעה מודולים, הכול ירוק: 2 חבילות עברו את הפילטר, וכל מודול אחריו רץ פעמיים.</figcaption></figure>
+  <div class="sol"><b>מודול 1 · Google Sheets → Watch New Rows</b>
+    גיליון <b>אוטומט · לידים</b>, <span class="en">Sheet1</span>, <span class="en">Table contains headers = Yes</span>, <span class="en">Limit = 2</span>. בשמירה: <span class="en">Choose where to start</span> ← <span class="en">All</span>.</div>
   <div class="sol"><b>פילטר על הקו · "יש הודעה"</b>
     <code>message</code> · <span class="en">Basic operators: Exists</span>. שורה בלי הודעה לא מגיעה ל-AI ולא עולה קרדיטים.</div>
-  <div class="sol"><b>מודול 2 · Make AI Toolkit → Simple text prompt</b>
-    חיבור <span class="en">Make's AI Provider</span>, Claude Haiku 5.5. ההוראות והפרומפט — בדיוק מדף התרגול, כשכל <code>{{...}}</code> בפרומפט הוחלף בבועה מהטריגר (<code>name</code>, <code>business</code>, <code>product</code>, <code>message</code>).</div>
-  <div class="sol"><b>מודול 3 · Gmail → Create a draft</b>
-    <span class="en">To</span> = בועת <code>email</code> · <span class="en">Subject</span> = <code>{{name}}, לגבי {{product}}</code> · <span class="en">Content</span> = בועת התשובה של מודול 2.</div>
-  <div class="sol"><b>מודול 4 · Google Sheets → Update a row</b>
+  <div class="sol"><b>מודול 2 · AI by Make → Simple Text Prompt</b>
+    <span class="en">Connection</span> = <span class="en">Make's AI Provider (default)</span> · <span class="en">Model</span> = <span class="en">Anthropic: Claude Haiku 5.5</span> · שדה <span class="en">Text</span> אחד: ההוראות מדף התרגול, ומתחתן נתוני הלקוח, כשכל <code>{{...}}</code> הוחלף בבועה מהטריגר (<code>name (A)</code>, <code>business (C)</code>, <code>product (D)</code>, <code>message (E)</code>).</div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-ai-prompt.jpg" alt="שדה Text עם ההוראות והבועות" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">שדה <span class="en">Text</span> אחרי ההגדרה: כללים למעלה, ארבע בועות ירוקות למטה.</figcaption></figure>
+  <div class="sol"><b>מודול 3 · Gmail → Create a draft email</b>
+    <span class="en">To</span> = בועת <code>email</code> · <span class="en">Subject</span> = <code>{{name}}, לגבי {{product}}</code> · <span class="en">Body type</span> = <b>Raw HTML</b> (ברירת המחדל היא <span class="en">Collection of contents</span>) · <span class="en">Content</span> = הבועה <span class="en">Answer</span> של מודול 2. בפעם הראשונה Make מבקש לעדכן את הרשאות חיבור ה-Gmail — <span class="en">Continue</span> ואישור בחלון של Google.</div>
+  <div class="sol"><b>מודול 4 · Google Sheets → Update a Row</b>
     אותו גיליון · <span class="en">Row number</span> = בועת <span class="en">Row number</span> ממודול 1 · <code>status</code> = <code>טיוטה מוכנה</code>. שאר העמודות ריקות — Update משנה רק את מה שמילאתם.</div>
 
-  <h4>טיוטות לדוגמה</h4>
-  <p class="note">כך נראה מייל טוב. אצלכם הניסוח יהיה אחר — זה תקין.</p>
-  <div class="mail">היי דנה,
-הזמנות בוואטסאפ בתקופת החגים — זה באמת כאוס, כשכל הודעה נקברת מתחת לעשר אחרות.
-מערכת ההזמנות שלנו מרכזת את כל ההזמנות במקום אחד, עם שם, כמות ושעת איסוף, כך שבערב חג רואים בדיוק מה צריך להכין. הלקוחות מזמינים בקישור, ואת מקבלת רשימה מסודרת במקום צ'אט.
-יש לך 15 דקות השבוע לשיחה קצרה? אשמח להראות איך זה נראה במאפייה.
+  <h4>מה Claude Haiku כתב בהרצה שלנו</h4>
+  <p class="note">הטקסט האמיתי מהטיוטות. אצלכם הניסוח יהיה אחר — ה-AI כותב כל פעם מחדש, וזה תקין.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start"><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-draft-dana.jpg" alt="הטיוטה של דנה ב-Gmail" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">דנה</figcaption></figure><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-draft-yossi.jpg" alt="הטיוטה של יוסי ב-Gmail" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">יוסי</figcaption></figure></div>
+  <div class="mail">שלום דנה,
+ציינת שההזמנות מגיעות אליכם בוואטסאפ, ובחגים זה נהיה כאוס מוחלט.
+מערכת ההזמנות מרכזת את כל ההזמנות במקום אחד ומסדרת אותן לפי תאריך ואיסוף. כך פחות הזמנות נופלות בין ההודעות, וגם בשיא החגים אפשר לדעת בדיוק מה צריך להכין.
+אשמח להציע שיחה קצרה של 15 דקות השבוע, כדי להבין איך זה יכול להתאים למאפייה שלכם ולענות על כל השאלות שיש לכם.
+בברכה,
 נועה, אוטומט</div>
-  <div class="mail">היי יוסי,
-לקוחות ששוכחים את הטיפול השנתי ואז מתקשרים בלחץ — מוכר מאוד במוסכים.
-מערכת התזכורות שלנו שולחת ללקוח הודעה אוטומטית לפני שמגיע מועד הטיפול, כך שהוא קובע תור מראש ואתה מקבל יומן מסודר במקום טלפונים של הרגע האחרון.
-יש לך 15 דקות השבוע לשיחה קצרה?
+  <div class="mail">שלום יוסי,
+תודה שהשארת פרטים באתר. אתה מתאר מצב מוכר: לקוחות שוכחים את הטיפול השנתי ואז מתקשרים בלחץ.
+מערכת התזכורות של אוטומט שולחת ללקוחות שלך הודעה מראש לפני מועד הטיפול השנתי, כך שהם מגיעים בזמן ולא נדחקים לרגע האחרון. בנוסף, המערכת עוזרת לך לנהל את לוח הזמנים של המוסך בצורה מסודרת ורגועה יותר.
+אשמח להציע שיחה של 15 דקות השבוע, כדי להבין את הצרכים של מוסך לוי ולהראות לך איך זה יכול להתאים לך. מתי נוח לך?
 נועה, אוטומט</div>
+  <div class="sol"><b>כמה זה עלה</b>מודול ה-AI: <b>2 operations · 3.26 credits</b> — כ-1.6 קרדיטים למייל. למייל של דנה: 565 טוקנים נכנסים, 1,094 יוצאים.</div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-ai-output.jpg" alt="פלט מודול ה-AI עם ספירת טוקנים" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט של מודול ה-AI: <span class="en">Answer</span> בפסקאות <code>&lt;p&gt;</code>, ולמטה <span class="en">Input/Output tokens</span>.</figcaption></figure>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-sheet-after.jpg" alt="הגיליון אחרי ההרצה" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">והגיליון: <code>status</code> = "טיוטה מוכנה" בשתי השורות.</figcaption></figure>
 
   <h4>בדיקת איכות — מה בודקים בכל טיוטה</h4>
   <div class="tbl"><table>
     <tr><th>כלל בהוראות</th><th>איך בודקים</th></tr>
-    <tr><td>פותח בשם הפרטי</td><td>"היי דנה" — לא "שלום דנה כהן" ולא "לקוח יקר"</td></tr>
+    <tr><td>פותח בשם הפרטי</td><td>"שלום דנה" / "היי דנה" — לא "דנה כהן" ולא "לקוח יקר"</td></tr>
     <tr><td>מתייחס למה שהלקוח כתב</td><td>דנה ← וואטסאפ וחגים. יוסי ← טיפול שנתי</td></tr>
     <tr><td>לא ממציא</td><td>אין מחיר, הנחה, "חודש חינם" או מועד התקנה</td></tr>
     <tr><td>רק גוף המייל</td><td>אין "בטח! הנה המייל:" ואין שורת "נושא:"</td></tr>
@@ -171,7 +179,7 @@
   <div class="ex-head"><span class="ex-num">5</span><h3>ענף שגיאה: לא נופלים בשקט</h3></div>
   <div class="sol"><b>המבנה</b>
     <ul class="steps">
-      <li>קליק ימני על מודול 3 (<span class="en">Gmail · Create a draft</span>) ← <span class="en">Add error handler</span></li>
+      <li>קליק ימני על מודול 3 (<span class="en">Gmail · Create a draft email</span>) ← <span class="en">Add error handler</span></li>
       <li>בענף: <span class="en">Gmail · Send an email</span> לכתובת שלכם — נושא <code>⚠️ לא נוצרה טיוטה ל-{{name}}</code>, גוף עם <code>{{error.message}}</code> (הבועה <span class="en">Error message</span> שמופיעה בענף השגיאה)</li>
       <li>סוף הענף: <span class="en">Ignore</span></li>
     </ul>
@@ -198,7 +206,7 @@
     מוסיפים להוראות לפני השורה האחרונה:
     <div class="mail">- החזר את גוף המייל כ-HTML בלבד: div חיצוני עם dir="rtl", עיצוב inline-CSS בלבד (בלי style ובלי קבצים חיצוניים), רוחב מקסימלי 560px, כותרת קטנה, פסקאות, וכפתור "לקביעת שיחה" בצבע #6236ff.
 - אל תעטוף את ה-HTML ב-```.</div>
-    וב-<span class="en">Gmail · Create a draft</span>: <span class="en">Body type = Raw HTML</span>, <span class="en">Content</span> = תשובת ה-AI. בודקים את הטיוטה ב-Gmail עצמו, לא בפלט של Make.</div>
+    וב-<span class="en">Gmail · Create a draft email</span>: <span class="en">Body type = Raw HTML</span>, <span class="en">Content</span> = תשובת ה-AI. בודקים את הטיוטה ב-Gmail עצמו, לא בפלט של Make.</div>
   <div class="sol"><b>🔀 טון לפי סוג</b>
     <ul class="steps">
       <li>Watch new rows ← מודול AI ראשון: סיווג (מתרגיל 3)</li>
@@ -212,7 +220,7 @@
       <li>תרחיש חדש, תזמון <span class="en">Every day 18:00</span></li>
       <li><span class="en">Google Sheets · Search rows</span> — גיליון הלידים, פילטר <code>status</code> = <code>טיוטה מוכנה</code></li>
       <li><span class="en">Tools · Text aggregator</span> — <span class="en">Source module</span> = Search rows, <span class="en">Text</span> = <code>{{name}} · {{business}} · {{product}} · {{message}}</code>, <span class="en">Row separator = New row</span></li>
-      <li><span class="en">Simple text prompt</span>: "סכם לבעל העסק את הלידים של היום בעד 5 שורות. סמן ב-🔥 את מי שנשמע הכי מוכן לקנות, וב-⚠️ את מי שדורש תשומת לב." פרומפט = הטקסט המאוחד</li>
+      <li><span class="en">Simple Text Prompt</span>: "סכם לבעל העסק את הלידים של היום בעד 5 שורות. סמן ב-🔥 את מי שנשמע הכי מוכן לקנות, וב-⚠️ את מי שדורש תשומת לב." פרומפט = הטקסט המאוחד</li>
       <li><span class="en">Gmail · Send an email</span> אליכם — "לידים היום"</li>
     </ul>
     שימו לב: ה-AI רץ <b>פעם אחת</b> על כל הלידים יחד — הרבה יותר זול ממודול AI לכל ליד. לסיכום של "היום בלבד" מוסיפים עמודת תאריך לגיליון ומסננים לפיה.</div>
@@ -224,7 +232,7 @@
 <div class="card ex">
   <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: קריאה אחת, שלוש תוצאות (JSON)</h3></div>
   <div class="sol"><b>השרשרת</b>
-    Watch new rows ← <span class="en">Simple text prompt</span> (עם הוראת ה-JSON כשורה אחרונה) ← <span class="en">JSON · Parse JSON</span> ← <span class="en">Create a draft</span> ← <span class="en">Update a row</span></div>
+    Watch new rows ← <span class="en">Simple Text Prompt</span> (עם הוראת ה-JSON כשורה אחרונה) ← <span class="en">JSON · Parse JSON</span> ← <span class="en">Create a draft email</span> ← <span class="en">Update a row</span></div>
   <div class="sol"><b>Parse JSON</b>
     <span class="en">JSON string</span> = בועת התשובה של מודול ה-AI. <span class="en">Data structure</span> שנוצר מהדוגמה (<span class="en">Generate</span>) עם שלושה שדות טקסט: <code>subject</code>, <code>body</code>, <code>category</code>.</div>
   <div class="sol"><b>המיפוי</b>

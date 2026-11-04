@@ -69,10 +69,12 @@
   <div class="callout warn"><b>אף לקוח אמיתי לא מקבל מייל</b>כל הכתובות בגיליון הן <b>שלכם</b> (עם <code>+</code>). Gmail מעביר את כולן לתיבה שלכם — כך אפשר לבדוק בלי לשלוח לאף אחד בטעות.</div>
   <h4>חיבור ל-AI המובנה של Make (פעם אחת)</h4>
   <ol class="steps">
-    <li>בתרחיש כלשהו: <b>+</b> ← <span class="en">AI by Make</span> ← <span class="en">Make AI Toolkit</span> ← <span class="en">Simple text prompt</span></li>
-    <li><span class="en">Create a connection</span> ← <span class="en">Make's AI Provider</span> ← מודל <b>Claude Haiku 5.5</b> ← <span class="en">Save</span></li>
+    <li>בתרחיש כלשהו: <b>+</b> ← קטגוריית <span class="en">AI by Make</span> ← <span class="en">Simple Text Prompt</span></li>
+    <li><span class="en">Connection</span>: <span class="en">Make's AI Provider (default)</span> — כבר קיים בכל חשבון, לא צריך ליצור</li>
+    <li><span class="en">Model</span>: מקלידים <b>Haiku</b> בחיפוש ← <span class="en">Anthropic: Claude Haiku 5.5</span></li>
   </ol>
-  <div class="callout tip"><b>בלי מפתח API ובלי כרטיס אשראי</b>ה-AI המובנה של Make לא צריך חשבון Anthropic. בתוכנית החינמית <span class="en">Simple text prompt</span> עובד עם Claude Haiku 4.5 ו-5.5. השימוש יורד מהקרדיטים החודשיים — מייל אישי עולה בערך 1–2 קרדיטים. יש גם מגבלה שבועית של 200,000 טוקנים נכנסים בתוכנית החינמית.</div>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-haiku-model.jpg" alt="בחירת Claude Haiku 5.5 ב-Make AI Toolkit" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מחשבון בתוכנית החינמית: תחת <span class="en">Anthropic</span> מופיעים Claude Haiku 5.5 ו-4.5, בלי תווית <span class="en">Paid</span>.</figcaption></figure>
+  <div class="callout tip"><b>בלי מפתח API ובלי כרטיס אשראי</b>ה-AI המובנה של Make לא צריך חשבון Anthropic. בתוכנית החינמית <span class="en">Simple Text Prompt</span> עובד עם Claude Haiku 4.5 ו-5.5. השימוש יורד מהקרדיטים החודשיים — מייל אישי עלה לנו בהרצה אמיתית כ-1.6 קרדיטים. יש גם מגבלה שבועית של 200,000 טוקנים נכנסים בתוכנית החינמית.</div>
   <ul class="check">
     <li>יש לי שני גיליונות עם נתוני דוגמה, והכתובות בגיליון הלידים הן שלי</li>
     <li>יצרתי חיבור <span class="en">Make's AI Provider</span> עם Claude Haiku</li>
@@ -141,9 +143,9 @@
   <div class="ex-meta"><span class="pill">⏱ 12 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span><span class="pill">🤖 AI</span></div>
   <p class="goal">בתרגיל 2 אדם מילא את עמודת <code>type</code>. עכשיו Claude Haiku קורא את ההודעה ומחליט לבד — וה-Router מנתב לפי ההחלטה שלו.</p>
   <ol class="steps">
-    <li>בתרחיש של תרגיל 2: קליק ימני על הקו שבין הטריגר ל-Router ← <span class="en">Add a module</span> ← <span class="en">Make AI Toolkit · Simple text prompt</span></li>
+    <li>בתרחיש של תרגיל 2: קליק ימני על הקו שבין הטריגר ל-Router ← <span class="en">Add a module</span> ← <span class="en">AI by Make · Simple Text Prompt</span></li>
     <li>חיבור: ה-<span class="en">Make's AI Provider</span> מההכנה, מודל <b>Claude Haiku 5.5</b></li>
-    <li>בשדה ההוראות — מדביקים את ההוראות למטה. בשדה הפרומפט — בוחרים את בועת <code>message</code></li>
+    <li>במודול יש שדה אחד, <span class="en">Text</span>: מדביקים את ההוראות למטה, ומתחתן בוחרים את בועת <code>message</code></li>
     <li>בפילטר של ענף 1: מחליפים את <code>type</code> ב<b>בועת התשובה של מודול ה-AI</b>, ומשנים ל-<span class="en">Contains</span> <code>מכירות</code></li>
     <li>מוסיפים ענף נוסף לתלונות: פילטר תשובת ה-AI <span class="en">Contains</span> <code>תלונה</code> ← מייל אליכם "⚠️ תלונה מ-{{name}}"</li>
     <li>מוחקים את עמודת <code>type</code> מהגיליון (או מתעלמים ממנה), מוסיפים פנייה חדשה ← <span class="en">Run once</span></li>
@@ -168,13 +170,16 @@
   <div class="ex-head"><span class="ex-num">4</span><h3>מייל אישי ללקוח — התרחיש המלא</h3></div>
   <div class="ex-meta"><span class="pill">⏱ 25 דקות</span><span class="pill">מאתגר</span><span class="pill cls">בכיתה</span><span class="pill">🤖 AI</span></div>
   <p class="goal">ליד חדש נכנס ← Claude Haiku קורא מה הוא כתב ומנסח מייל אישי ← המייל מחכה לכם כטיוטה ב-Gmail ← הגיליון מתעדכן. זה התרגיל המרכזי של היום.</p>
-  <div class="callout"><b>השרשרת</b>📋 <span class="en">Watch new rows</span> ← 🚦 פילטר ← 🤖 <span class="en">Simple text prompt</span> ← ✉️ <span class="en">Create a draft</span> ← 📝 <span class="en">Update a row</span></div>
+  <div class="callout"><b>השרשרת</b>📋 <span class="en">Watch New Rows</span> ← 🚦 פילטר ← 🤖 <span class="en">Simple Text Prompt</span> ← ✉️ <span class="en">Create a draft email</span> ← 📝 <span class="en">Update a Row</span></div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-canvas-run.jpg" alt="התרחיש המלא אחרי הרצה מוצלחת" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">התרחיש המלא מההרצה שלנו: ארבעה מודולים ירוקים, ו-2 חבילות (דנה ויוסי) עברו את הפילטר "יש הודעה".</figcaption></figure>
   <h4>1. הטריגר והפילטר</h4>
   <ol class="steps">
-    <li>תרחיש חדש ← <span class="en">Google Sheets · Watch new rows</span> על <b>אוטומט · לידים</b>, <span class="en">Limit = 2</span>, מתחילים מ-<span class="en">All</span></li>
-    <li>מוסיפים את מודול ה-AI, ועל הקו שלפניו פילטר: <code>message</code> <span class="en">Exists</span> — לא מבזבזים קרדיטים על שורות ריקות</li>
+    <li>תרחיש חדש ← <span class="en">Google Sheets · Watch New Rows</span> על <b>אוטומט · לידים</b>, <span class="en">Sheet1</span>, <span class="en">Limit = 2</span></li>
+    <li>ב-<span class="en">Save</span> נפתח <span class="en">Choose where to start</span> ← בוחרים <b>All</b> (כדי שהשורות הקיימות ייקלטו)</li>
+    <li>מוסיפים את מודול ה-AI, ועל הקו שלפניו (אייקון המפתח) פילטר: <code>message</code> <span class="en">Exists</span> — לא מבזבזים קרדיטים על שורות ריקות</li>
   </ol>
-  <h4>2. מודול ה-AI — ההוראות (קבועות)</h4>
+  <figure style="margin:10px auto 14px;max-width:640px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-watch-rows.jpg" alt="הגדרות Watch New Rows" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מודול 1: הגיליון, <span class="en">Sheet1</span>, כותרות = Yes, <span class="en">Limit = 2</span>.</figcaption></figure>
+  <h4>2. מודול ה-AI (Haiku 5.5) — שדה Text, חלק עליון: ההוראות</h4>
   <div class="copybox"><pre class="rtl">אתה נציג מכירות אדיב של "אוטומט" — מערכות דיגיטליות לעסקים קטנים.
 כתוב מייל תגובה קצר (עד 120 מילים) בעברית ללקוח שהשאיר פרטים באתר.
 - פתח בשם הפרטי של הלקוח.
@@ -187,7 +192,7 @@
 - המייל נשלח כ-HTML: כתוב כל פסקה בתוך תגית &lt;p&gt;.
 - חתום: "נועה, אוטומט".
 - החזר רק את גוף המייל, בלי שורת נושא ובלי הקדמה.</pre></div>
-  <h4>3. מודול ה-AI — הפרומפט (בועות)</h4>
+  <h4>3. אותו שדה Text, חלק תחתון: נתוני הלקוח (בועות)</h4>
   <div class="copybox"><pre class="rtl">פרטי הלקוח:
 שם: {{name}}
 עסק: {{business}}
@@ -198,12 +203,20 @@
 {{message}}
 &lt;/message&gt;</pre></div>
   <div class="callout warn"><b>את ה-<code>{{...}}</code> לא מקלידים</b>מעתיקים את הטקסט, מוחקים כל <code>{{...}}</code>, ובמקומו <b>בוחרים</b> את הבועה המתאימה מהטריגר. כך כל לקוח מקבל את הפרטים שלו.</div>
+  <div class="callout tip"><b>טיפ הקלדה</b>אם מדביקים טקסט והשורות מתחברות לשורה אחת — זה עדיין עובד, אבל לקריאוּת לחצו <span class="en">Enter</span> בין השורות.</div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-ai-prompt.jpg" alt="שדה Text עם ההוראות והבועות" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך זה נראה אצלנו: הכללים למעלה, ופרטי הלקוח עם ארבע בועות ירוקות למטה — הכול בשדה <span class="en">Text</span> אחד.</figcaption></figure>
   <h4>4. הטיוטה והעדכון</h4>
   <ol class="steps">
-    <li><span class="en">Gmail · Create a draft</span>: <span class="en">To</span> = בועת <code>email</code>, <span class="en">Subject</span> = <code>{{name}}, לגבי {{product}}</code>, <span class="en">Content</span> = בועת התשובה של מודול ה-AI</li>
-    <li><span class="en">Google Sheets · Update a row</span>: אותו גיליון, <span class="en">Row number</span> = בועת <span class="en">Row number</span> מהטריגר, <code>status</code> = <code>טיוטה מוכנה</code></li>
+    <li><span class="en">Gmail · Create a draft email</span>: <span class="en">To</span> = בועת <code>email</code>, <span class="en">Subject</span> = <code>{{name}}, לגבי {{product}}</code></li>
+    <li><span class="en">Body type</span> = <b>Raw HTML</b> (ברירת המחדל במודול הזה היא <span class="en">Collection of contents</span> — מחליפים), <span class="en">Content</span> = הבועה <span class="en">Answer</span> של מודול ה-AI</li>
+    <li><span class="en">Google Sheets · Update a Row</span>: אותו גיליון, <span class="en">Row number</span> = בועת <span class="en">Row number</span> מהטריגר, <code>status</code> = <code>טיוטה מוכנה</code></li>
     <li><span class="en">Run once</span> ← פותחים את <b>הטיוטות</b> ב-Gmail</li>
   </ol>
+  <div class="callout warn"><b>Make מבקש לעדכן הרשאות?</b>בפעם הראשונה שמשתמשים בטיוטות, חיבור ה-Gmail צריך הרשאה נוספת. לוחצים <span class="en">Continue</span> ומאשרים בחלון של Google — פעם אחת.</div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-gmail-draft.jpg" alt="הגדרות Create a draft email עם בועת Answer" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">מודול 3: <span class="en">To</span>, נושא, <span class="en">Raw HTML</span>, ו-<span class="en">Content</span> = <b>Answer</b>. בחלונית משמאל רואים גם כמה טוקנים ה-AI צרך.</figcaption></figure>
+  <p style="margin:12px 0 4px"><b>התוצאה מההרצה שלנו</b> — אותו תרחיש, שני מיילים שונים לגמרי:</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-items:start"><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-draft-dana.jpg" alt="טיוטה לדנה" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">דנה: וואטסאפ וכאוס בחגים.</figcaption></figure><figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-draft-yossi.jpg" alt="טיוטה ליוסי" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">יוסי: לקוחות ששוכחים טיפול שנתי.</figcaption></figure></div>
+  <figure style="margin:10px auto 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/make/s04-sheet-after.jpg" alt="גיליון הלידים אחרי ההרצה" style="display:block;width:100%;height:auto"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">והגיליון: <code>status</code> = "טיוטה מוכנה" בשתי השורות.</figcaption></figure>
   <div class="callout claude"><b>למה טיוטה ולא שליחה?</b>Human in the loop: ה-AI עושה את רוב העבודה, ואתם קוראים ולוחצים "שלח". רק אחרי עשרות טיוטות טובות שוקלים לעבור ל-<span class="en">Send an email</span>.</div>
   <details class="hint"><summary>רמז: הטיוטה מתחילה ב"בטח! הנה המייל:"</summary><p style="margin:6px 0 0">ה-AI הוסיף הקדמה. חזקו בהוראות את השורה האחרונה: "החזר רק את גוף המייל. התשובה מתחילה ישר בפנייה ללקוח בשמו." ואז <span class="en">Run once</span> שוב (מחקו קודם את הסטטוס בגיליון אם צריך, או הוסיפו שורה חדשה).</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
