@@ -165,14 +165,28 @@ email_html: מייל תשובה חם וקצר בעברית, כל פסקה בתו
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">6</span><h3>סטטוס משתנה ← פעולה</h3></div>
+  <div class="ex-head"><span class="ex-num">6</span><h3>סטטוס משתנה ← פעולה (נבנה ונבדק)</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מבנה</b><span class="en">Watch Board's Items by Column Values</span> (סטטוס) ← <span class="en">Router</span>:<br>
-    ענף 1 · פילטר: סטטוס = נוצר קשר ← Haiku: "נסח מייל המשך קצר ל-[שם] על [מוצר מבוקש], הצע להמשיך בטלפון" ← Create a draft email<br>
-    ענף 2 · פילטר: סטטוס = מתאים ← <span class="en">Create an Item</span> בלוח "עסקאות" (Item name = שם, ועמודות מוצר ואימייל)<br>
-    ענף 3 · פילטר: סטטוס = לא מתאים ← טיוטת מייל סגירה ← <span class="en">Move an Item Between Groups</span> ← "ארכיון"</div>
-    <p class="note">בונים את הפילטרים על הטקסט של התווית, לא על המספר שלה. אם התווית בלוח נקראת "מתאים" והפילטר בודק "מתאימה", הענף לא ירוץ לעולם.</p>
+    <div class="tbl"><table>
+      <tr><th>מודול</th><th>הגדרה</th></tr>
+      <tr><td><span class="en">Watch Board's Items by Column Values</span></td><td>סטטוס · Column Value = <b>נוצר קשר</b> · Watch = <b>New and Updated Items</b> · Limit 1</td></tr>
+      <tr><td><span class="en">Simple Text Prompt</span></td><td>Haiku 5.5 · מייל המשך ב-HTML, עם הסיכום מתרחיש 1</td></tr>
+      <tr><td><span class="en">Gmail · Create a draft email</span></td><td>נושא: <code>[Name], המשך לשיחה שלנו — בית ועיצוב</code> · Raw HTML</td></tr>
+      <tr><td><span class="en">Create an Update</span></td><td>Item ID = ID מהטריגר · "📨 … מחכה כטיוטה ב-Gmail לאישור"</td></tr>
+    </table></div>
+    <figure style="margin:10px auto 14px;max-width:560px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s05-f2-trigger-watch.jpg" alt="Watch = New and Updated Items" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">שינוי סטטוס הוא עדכון, לכן New and Updated Items.</figcaption></figure>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s05-f2-prompt.jpg" alt="הפרומפט של מייל ההמשך" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">ארבע בועות: שם, מוצר, ההודעה המקורית והסיכום שתרחיש 1 כתב ללוח.</figcaption></figure>
+    <figure style="margin:10px auto 14px;max-width:720px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s05-f2-canvas-run.jpg" alt="ארבעה מודולים אחרי ריצה" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הריצה על שירה: ארבעה מודולים ירוקים.</figcaption></figure>
+    <div class="sol"><b>✅ המייל ששירה קיבלה כטיוטה (ריצה אמיתית, 1.6 קרדיטים)</b><div class="mail">שירה שלום,
+תודה רבה על השיחה הנעימה עם הנציג שלנו. שמחים לדעת שהגעת אלינו בהמלצת חברה.
+כפי שביקשת, נבדוק עבורך את המחיר של מנורת הרצפה ואת ההנחה על שתי יחידות, ונחזור אלייך עם כל הפרטים.
+נשמח לקבוע עבורך ביקור באולם התצוגה שלנו או שיחת וידאו קצרה, לפי מה שנוח לך.
+איזה סגנון של מנורה מתאים לחלל שבו תרצי להציב אותה?
+בברכה,
+צוות בית ועיצוב</div></div>
+    <figure style="margin:10px auto 14px;max-width:560px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s05-f2-no-loop.jpg" alt="בדיקת לולאה" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Run this module only על הטריגר אחרי הריצה: אין נתונים חדשים. ההערה שהתרחיש הוסיף לא נחשבת עדכון של הפריט, ולכן אין לולאה.</figcaption></figure>
+    <p class="note">תכננו Router אחד לכל הסטטוסים, אבל המודול התקופתי צופה בערך אחד. לכל סטטוס: Clone לתרחיש. "מתאים" ← Create an Item בלוח "עסקאות" · "לא מתאים" ← טיוטת סגירה + Move an Item Between Groups.</p>
   </div>
 </div>
 </section>

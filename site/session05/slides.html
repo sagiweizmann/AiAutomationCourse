@@ -1340,23 +1340,55 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide" data-min="4" data-block="5" data-title="סטטוס משתנה ← פעולה">
-  <div class="s-kicker">תרחיש 2</div>
-  <h2>הנציג משנה סטטוס, Make פועל</h2>
+  <div class="s-kicker">תרחיש 2 · נבנה ונבדק</div>
+  <h2>הנציג מסמן "נוצר קשר", Make שולח המשך</h2>
   <div class="s-body mid">
     <div class="flowc">
-      <div><i>🔄</i><b>monday</b><span>Watch Board's Items by Column Values: סטטוס</span></div><div class="ar">⟵</div>
-      <div class="mid"><i>🔀</i><b>Router</b><span>לפי התווית החדשה</span></div><div class="ar">⟵</div>
-      <div><i>⚡</i><b>פעולה</b><span>לכל מסלול משהו אחר</span></div>
+      <div><i>🔄</i><b>monday</b><span>Watch Board's Items by Column Values: סטטוס = נוצר קשר</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🤖</i><b>Haiku</b><span>מייל המשך: תודה על השיחה, הזמנה לאולם התצוגה, שאלה פתוחה</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>✉️</i><b>Gmail</b><span>טיוטה: "שירה, המשך לשיחה שלנו"</span></div><div class="ar">⟵</div>
+      <div><i>💬</i><b>monday</b><span>הערה: "מייל המשך מחכה לאישור"</span></div>
     </div>
-    <div class="tbl"><table>
-      <tr><th>הסטטוס הפך ל…</th><th>מה קורה</th></tr>
-      <tr><td>נוצר קשר</td><td>Haiku מנסח מייל המשך עם סיכום השיחה ← טיוטה</td></tr>
-      <tr><td>מתאים</td><td>יוצרים פריט בלוח "עסקאות" (Create an Item) ← הודעה למנהל</td></tr>
-      <tr><td>לא מתאים</td><td>מייל סגירה מנומס ← העברה לקבוצת "ארכיון" (Move an Item Between Groups)</td></tr>
-    </table></div>
+    <div class="callout warn"><b>טריגר אחד = ערך אחד</b>המודול מקבל עמודה <b>וערך אחד</b> (Column Value = נוצר קשר), ו-Watch = <b>New and Updated Items</b>, כי שינוי סטטוס הוא עדכון. לסטטוס אחר ("מתאים", "לא מתאים") משכפלים את התרחיש (Clone) ומחליפים ערך ופעולה.</div>
   </div>
-  <aside class="notes"><ul><li>Router ממפגש 4. כל מסלול עם פילטר על הסטטוס.</li></ul></aside>
+  <aside class="notes"><ul>
+    <li>תכננו Router אחד לכל הסטטוסים, אבל המודול התקופתי צופה בערך אחד. הגרסה המיידית (Watch Board's Column Values) הייתה מאפשרת Router, אבל ה-Webhook לא עבד לנו.</li>
+    <li>בדקנו לולאה: אחרי שהתרחיש הוסיף הערה לשירה, הרצת הטריגר שוב לא החזירה אותה. הערה (Update) לא נחשבת עדכון של הפריט.</li>
+  </ul></aside>
 </section>
+
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: טריגר על ערך">
+  <div class="s-kicker">כך זה נראה · מהבנייה האמיתית</div>
+  <h2>Watch Board's Items by Column Values</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:620px;margin:0 auto"><img src="../assets/monday/s05-f2-trigger-column.jpg" alt="בחירת עמודת סטטוס ושדה Column Value"><figcaption>עמודה: <b>סטטוס</b>, ובשדה <span class="en">Column Value</span> כותבים את שם התווית (לא מספר).</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>כתוב בעזרה: "Use labels (e.g. Done) instead of numeric indices".</li></ul></aside>
+</section>
+
+
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: מייל ההמשך">
+  <div class="s-kicker">כך זה נראה · מהבנייה האמיתית</div>
+  <h2>מה Haiku כתב לשירה</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:680px;margin:0 auto"><img src="../assets/monday/s05-f2-ai-output.jpg" alt="פלט Haiku עם מייל המשך בעברית"><figcaption>"נבדוק עבורך את המחיר… ונחזור אלייך", הצעה לביקור או שיחת וידאו, ושאלה: "איזה סגנון של מנורה מתאים לחלל?". בלי מחיר ובלי הנחה ממוצאת. 1.6 קרדיטים.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>הפרומפט קיבל גם את הסיכום מהניתוח של תרחיש 1, מעמודת סיכום AI. תרחיש אחד מזין את השני דרך הלוח.</li></ul></aside>
+</section>
+
+
+
+<section class="slide" data-min="1" data-block="5" data-title="מסך: אין לולאה">
+  <div class="s-kicker">כך זה נראה · מהבנייה האמיתית</div>
+  <h2>בדיקת לולאה: הטריגר לא חוזר על שירה</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:620px;margin:0 auto"><img src="../assets/monday/s05-f2-no-loop.jpg" alt="הטריגר לא החזיר נתונים חדשים"><figcaption>אחרי שהתרחיש הוסיף הערה לשירה, Run this module only על הטריגר: "didn't return any new data". הערה לא נחשבת עדכון.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>תמיד לבדוק את זה לפני שמדליקים טריגר New and Updated.</li></ul></aside>
+</section>
+
 
 <section class="slide" data-min="3" data-block="5" data-title="לידים שנשכחו">
   <div class="s-kicker">תרחיש 3</div>
