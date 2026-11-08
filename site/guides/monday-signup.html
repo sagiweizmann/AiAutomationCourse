@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מדריך · הרשמה ל-monday CRM</title>
+<meta name="description" content="מדריך בעברית, עם צילומי מסך, להרשמה לניסיון החינמי של monday CRM, בניית לוח לידים, הוצאת טוקן API וחיבור ל-Make — הכנה למפגש 5.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+figure.shot{margin:16px auto;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{padding:9px 14px;font-size:14px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
+figure.shot.narrow{max-width:420px}
+figure.shot.mid{max-width:640px}
+.fieldlist{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.fieldlist li{padding:12px 14px;border-radius:12px;background:var(--surface-2)}
+.fieldlist b{color:var(--accent)}
+</style>
+</head>
+<body data-page="guide-monday-signup">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a> <span>›</span> <b>מדריך: הרשמה ל-monday CRM</b></div>
+  <h1>הרשמה ל-monday CRM, ולוח לידים ראשון</h1>
+  <p class="sub">מדריך צעד-אחר-צעד בעברית להכנה למפגש 5: פותחים ניסיון חינמי של monday CRM, מכירים את המסך, בונים לוח לידים לעסק "בית ועיצוב", מוציאים טוקן API ומחברים אותו ל-Make. כ-20 דקות.</p>
+</div></header>
+
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="../session05/index.html">🛠️ מפגש 5: תרגול</a>
+  <a href="../session05/slides.html">🎬 מפגש 5: מצגת</a>
+  <a href="monday-signup.html" class="on">🗂 הרשמה ל-monday</a>
+  <a href="make-signup.html">🧩 הרשמה ל-Make</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+
+<main class="wrap">
+
+<section class="blk">
+  <div class="kicker">לפני שמתחילים</div>
+  <h2>מה זה monday CRM, ולמה צריך חשבון</h2>
+  <div class="card">
+    <p style="margin-top:0"><span class="en">monday.com</span> היא פלטפורמה לניהול עבודה שנראית כמו גיליון: לוחות, שורות ועמודות. <span class="en">monday CRM</span> הוא המוצר שלה לניהול לקוחות ומכירות: לידים, אנשי קשר, עסקאות וצינור מכירות. במפגש 5 נחבר אותו ל-Make, ו-Claude Haiku ינתח כל ליד חדש, יכתוב חזרה ללוח וינסח לו מייל אישי.</p>
+    <ul class="fieldlist">
+      <li><b>💳 כמה זה עולה</b><br>ניסיון חינמי של 14 יום עם גישה מלאה, <b>בלי כרטיס אשראי</b> (כך כתוב בדף ההרשמה). אחרי זה צריך תוכנית בתשלום, או לעבור לתוכנית החינמית הכללית של monday, שמוגבלת יותר.</li>
+      <li><b>📅 מתי לפתוח</b><br>קרוב למפגש 5 — יום-יומיים לפני. כך הניסיון יחזיק גם את המפגש וגם את שבוע התרגול שאחריו.</li>
+      <li><b>🧰 מה צריך מראש</b><br>חשבון Google או אימייל שאפשר לפתוח עכשיו, חשבון Make פעיל (<a href="make-signup.html">מדריך ההרשמה ל-Make</a>), וכ-20 דקות.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 1</div>
+  <h2>כניסה לאתר ולחיצה על Get Started</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>גשו לכתובת <code>monday.com/crm</code></li>
+      <li>אם קופץ חלון עוגיות: <span class="en">Accept necessary cookies only</span> מספיק</li>
+      <li>לחצו על הכפתור השחור <span class="en">Get Started</span> (במרכז הדף או בפינה העליונה). אפשר לסמן קודם מה תרצו לעשות עם ה-CRM, למשל <span class="en">Find new leads</span> — זה לא חובה</li>
+    </ol>
+    <figure class="shot"><img src="../assets/monday/g-01-crm-home.jpg" alt="דף הבית של monday CRM עם כפתור Get Started"><figcaption>דף הבית של <span class="en">monday CRM</span>. מתחת לכפתור: <span class="en">Get full access. No credit card required.</span></figcaption></figure>
+    <div class="callout warn"><b>שימו לב: monday CRM, לא monday work management</b>ל-monday יש כמה מוצרים. הכתובת <code>monday.com/crm</code> פותחת את מוצר ה-CRM. אם נרשמתם דרך דף הבית הכללי, תקבלו את מוצר ניהול העבודה — גם הוא יעבוד לתרגילים, אבל עם פחות כלי מכירות.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 2</div>
+  <h2>בחירת דרך ההרשמה</h2>
+  <div class="card">
+    <ul class="fieldlist">
+      <li><b><span class="en">Continue with Google</span></b> — הכי מהיר. בוחרים חשבון Google, מאשרים, ונכנסים. אין סיסמה חדשה לזכור.</li>
+      <li><b>אימייל</b> — מקלידים כתובת בשדה <span class="en">name@company.com</span> ← <span class="en">Continue</span>, ובוחרים סיסמה. monday ישלח מייל אימות.</li>
+    </ul>
+    <figure class="shot narrow"><img src="../assets/monday/g-02-signup.jpg" alt="מסך ההרשמה של monday CRM: Continue with Google או אימייל"><figcaption>מסך ההרשמה: <span class="en">Get started - it's free. No credit card needed.</span></figcaption></figure>
+    <div class="callout tip"><b>כבר יש לכם חשבון monday?</b>לחצו <span class="en">Log in</span> בתחתית. אפשר להוסיף את מוצר ה-CRM לחשבון קיים, או לפתוח חשבון נפרד לקורס עם כתובת אחרת — כך הניסיון לא יתערבב עם העבודה.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 3</div>
+  <h2>שאלות ההיכרות</h2>
+  <div class="card">
+    <p style="margin-top:0">אחרי ההרשמה monday שואל כמה שאלות קצרות: על מה תעבדו, תפקיד, גודל הצוות, ולפעמים שם לחשבון. אין תשובה לא נכונה — ענו בקצרה.</p>
+    <ul class="fieldlist">
+      <li><b>שם החשבון</b><br>למשל <b>בית ועיצוב</b> או השם שלכם. הוא יופיע בכתובת (<code>השם-שלכם.monday.com</code>).</li>
+      <li><b>הזמנת חברי צוות</b><br>דלגו (<span class="en">Skip</span> / <span class="en">Remind me later</span>). לקורס לא צריך צוות.</li>
+      <li><b>תבניות ולוחות לדוגמה</b><br>אפשר לקבל אותם, אבל בשלב 5 נבנה לוח משלנו מאפס.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 4</div>
+  <h2>המסך הראשון: איפה מה</h2>
+  <div class="card">
+    <figure class="shot mid"><img src="../assets/monday/g-03-first-screen.jpg" alt="המסך הראשון ב-monday: סרגל צד, לוח לדוגמה וחלון Sidekick"><figcaption>המסך הראשון בחשבון שלנו: מימין סרגל הצד עם ה-<span class="en">Workspace</span> והלוחות, באמצע לוח לדוגמה, ומשמאל חלון <span class="en">Sidekick</span>.</figcaption></figure>
+    <ul class="fieldlist">
+      <li><b>Workspace</b> · סביבת עבודה שמכילה לוחות. אצלנו: <span class="en">Main workspace</span>.</li>
+      <li><b>Board · לוח</b> · טבלה אחת. כל לוח מופיע בסרגל הצד.</li>
+      <li><b>Item · פריט</b> · שורה בלוח. אצלנו: ליד אחד.</li>
+      <li><b>Column · עמודה</b> · שדה עם <b>סוג</b>: טקסט, אימייל, סטטוס, מספר.</li>
+      <li><b>Group · קבוצה</b> · קבוצת שורות בתוך לוח, למשל "לידים חדשים".</li>
+      <li><b>Update · עדכון</b> · הערה על פריט, כמו צ'אט. בבועה ליד שם הפריט.</li>
+    </ul>
+    <div class="callout warn"><b>Sidekick אוכל קרדיטים</b><span class="en">Sidekick</span> הוא ה-AI של monday. הוא יכול לבנות לוח מפרומפט, אבל משתמש בקרדיטי AI של monday. בהכנה שלנו, אחרי בניית לוח ו-3 פריטים, נשארו 57 קרדיטים. בנייה ידנית (שלב 5) לוקחת כמה דקות ולא עולה כלום.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 5</div>
+  <h2>בונים את לוח הלידים</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>בסרגל הצד: <b>+</b> ליד <span class="en">Content</span> ← <span class="en">Board</span> ← שם: <b>לידים · בית ועיצוב</b></li>
+      <li>משנים את שם הקבוצה הראשונה ל-<b>לידים חדשים</b> (לחיצה על השם)</li>
+      <li>משנים את שם העמודה הראשונה (<span class="en">Item</span>) ל-<b>שם הליד</b>: לחיצה כפולה על הכותרת</li>
+      <li>מוסיפים עמודות עם <b>+</b> בסוף שורת הכותרות. בוחרים <b>סוג</b> לכל עמודה לפי הטבלה</li>
+      <li>בעמודות מסוג <span class="en">Status</span>: שלוש הנקודות בכותרת ← <span class="en">Settings</span> ← <span class="en">Customize Status column</span> ← כותבים את התוויות</li>
+    </ol>
+    <div class="grid2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;align-items:start">
+      <figure class="shot" style="margin:12px 0"><img src="../assets/monday/g-04-add-board.jpg" alt="תפריט ההוספה בסרגל הצד עם Board"><figcaption>ה-<b>+</b> ליד <span class="en">Content</span> בסרגל הצד ← <span class="en">Board</span>.</figcaption></figure>
+      <figure class="shot" style="margin:12px 0"><img src="../assets/monday/g-05-column-types.jpg" alt="תפריט סוגי העמודות"><figcaption>ה-<b>+</b> בסוף שורת הכותרות. <span class="en">Status</span>, <span class="en">Text</span>, <span class="en">Dropdown</span>, <span class="en">Numbers</span> מופיעים מיד. <span class="en">Email</span>, <span class="en">Phone</span> ו-<span class="en">Long text</span> — מקלידים בשדה החיפוש למעלה, או <span class="en">More columns</span>.</figcaption></figure>
+    </div>
+    <div class="tbl" style="margin-top:12px"><table>
+      <tr><th>עמודה</th><th>סוג</th><th>תוויות / הערה</th></tr>
+      <tr><td>סטטוס</td><td>Status</td><td>ליד חדש · נוצר קשר · מתאים · לא מתאים</td></tr>
+      <tr><td>אימייל</td><td>Email</td><td></td></tr>
+      <tr><td>טלפון</td><td>Phone</td><td></td></tr>
+      <tr><td>מוצר מבוקש</td><td>Text</td><td></td></tr>
+      <tr><td>מקור</td><td>Dropdown</td><td>אתר · פייסבוק · אינסטגרם · המלצה</td></tr>
+      <tr><td>הודעה</td><td>Long text</td><td></td></tr>
+      <tr><td>נושא</td><td>Text</td><td>ימולא ע"י Make</td></tr>
+      <tr><td>דחיפות</td><td>Status</td><td>נמוכה · בינונית · גבוהה — <b>בדיוק כך</b></td></tr>
+      <tr><td>ציון</td><td>Numbers</td><td>ימולא ע"י Make</td></tr>
+      <tr><td>סיכום AI</td><td>Long text</td><td>ימולא ע"י Make</td></tr>
+    </table></div>
+    <figure class="shot"><img src="../assets/monday/s05-board-leads.jpg" alt="לוח לידים עם שלושה לידים"><figcaption>כך נראה הלוח עם שלושה לידים לדוגמה. את הלידים עצמם תמצאו בתרגיל 0 ב<a href="../session05/index.html#setup">דף התרגול</a>.</figcaption></figure>
+    <figure class="shot mid"><img src="../assets/monday/s05-status-labels.jpg" alt="הגדרת התוויות של עמודת דחיפות"><figcaption>הגדרת התוויות של עמודת "דחיפות": נמוכה, בינונית, גבוהה. Haiku יחזיר בדיוק את המילים האלה, אז הן חייבות להיות זהות.</figcaption></figure>
+    <div class="callout tip"><b>באימייל — הכתובת שלכם</b>בלידים לדוגמה כתבו בעמודת האימייל את הכתובת שלכם עם <code>+</code> (למשל <code>you+noa@gmail.com</code>). המיילים שהאוטומציה תנסח יגיעו אליכם, ולא לאף אחד אחר.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 6</div>
+  <h2>טוקן API: המפתח של Make ל-monday</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>לחצו על תמונת הפרופיל בפינה ← <span class="en">Developers</span> (נפתח בלשונית חדשה)</li>
+      <li>בתפריט: <span class="en">My access tokens</span> ← <span class="en">Show</span> ← <span class="en">Copy</span></li>
+      <li>אל תשמרו אותו בקובץ פתוח. מדביקים אותו פעם אחת ב-Make (שלב 7), ושם הוא נשמר</li>
+    </ol>
+    <figure class="shot mid"><img src="../assets/monday/s05-profile-menu-developers.jpg" alt="תפריט הפרופיל ב-monday עם Developers"><figcaption>תפריט הפרופיל: <span class="en">Developers</span> בעמודה הימנית. למעלה מופיע גם מונה קרדיטי ה-AI של monday.</figcaption></figure>
+    <div class="callout warn"><b>הטוקן הוא סיסמה</b>מי שמחזיק אותו יכול לקרוא, לשנות ולמחוק את כל הלוחות שלכם. לא שולחים אותו בוואטסאפ, לא מדביקים בצ'אט (גם לא בצ'אט עם AI), ולא מצלמים. דלף? באותו מסך: <span class="en">Regenerate</span>. הישן מפסיק לעבוד מיד, ומדביקים את החדש בחיבור ב-Make.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 7</div>
+  <h2>חיבור monday ל-Make</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>ב-Make: <span class="en">Create scenario</span> ← <b>+</b> ← מחפשים <b>monday</b> ← <span class="en">monday.com</span></li>
+      <li>בוחרים מודול כלשהו, למשל <span class="en">Watch Board's Items</span> (הגרסה <b>בלי</b> התווית <span class="en">Instant</span>)</li>
+      <li>ליד <span class="en">Connection</span>: <span class="en">Add</span> ← מדביקים את הטוקן בשדה <span class="en">API Key</span> ← <span class="en">Save</span></li>
+      <li>פותחים את <span class="en">Board ID</span>: אם רואים ברשימה את <b>לידים · בית ועיצוב</b> — החיבור עובד ✓</li>
+    </ol>
+    <figure class="shot mid"><img src="../assets/monday/s05-make-connection.jpg" alt="חלון Create a connection ב-Make עם שדה API Key"><figcaption>חלון החיבור ב-Make: שם לחיבור, ושדה <span class="en">API Key</span> לטוקן.</figcaption></figure>
+    <div class="callout claude"><b>זהו — monday מחובר ל-Make 🎉</b>מכאן ממשיכים ב<a href="../session05/index.html#ex1">תרגיל 1 בדף התרגול של מפגש 5</a>: טריגר שמזהה ליד חדש.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">תקלות נפוצות</div>
+  <h2>אם משהו נתקע</h2>
+  <div class="card">
+    <ul class="fieldlist">
+      <li><b>monday מחזיר אותי למסך ההתחברות שוב ושוב</b><br>קרה לנו בדפדפן מוגבל, אחרי רענון. התחברו מחדש עם Google או אימייל (לא בכפתור "כבר מחובר"), ואחרי שנכנסתם — עברו בין לוחות בלחיצות, בלי לרענן.</li>
+      <li><b>ב-Make לא מופיע הלוח ברשימה</b><br>בדקו שהדבקתם את הטוקן של החשבון הנכון, ושהלוח לא נמחק. לחצו על אייקון הרענון ליד הרשימה.</li>
+      <li><b>הכפתור Automate נעול</b><br>האוטומציות המובנות של monday מוגבלות בתוכנית החינמית. בניסיון של monday CRM הן פתוחות. בקורס עיקר העבודה ב-Make, כך שזה לא חוסם.</li>
+      <li><b>הניסיון נגמר</b><br>הלוחות שלכם נשארים. לפי תגובה של צוות monday בפורום המפתחים, הטוקן ממשיך לעבוד גם אחרי סוף הניסיון אם החשבון עובר לתוכנית החינמית — אבל זה לא נבדק אצלנו עם Make. אם משהו מפסיק לעבוד, בדקו קודם את החיבור ב-Make.</li>
+      <li><b>הטוקן דלף או הודבק בטעות</b><br><span class="en">Developers</span> ← <span class="en">My access tokens</span> ← <span class="en">Regenerate</span>, ואז מעדכנים את החיבור ב-Make (<span class="en">Credentials</span> בסרגל של Make).</li>
+      <li><b>נגמרו קרדיטי ה-AI של monday</b><br>הם רק ל-Sidekick ולכלי ה-AI של monday. ה-AI בקורס הוא Claude Haiku דרך Make, והוא לא משתמש בקרדיטים של monday.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="next">
+    <a href="../session05/index.html"><div class="card"><span style="font-size:26px">🛠️</span><div><small>המשך</small><div style="font-family:'Secular One';font-size:20px">תרגול מפגש 5</div></div></div></a>
+    <a href="make-signup.html"><div class="card"><span style="font-size:26px">🧩</span><div><small>עוד מדריך</small><div style="font-family:'Secular One';font-size:20px">הרשמה ל-Make</div></div></div></a>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מדריך: הרשמה ל-monday CRM</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
