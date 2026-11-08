@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 5 · סיכום</title>
+<meta name="description" content="סיכום מפגש 5: CRM ו-monday, טוקן API, Watch Board's Items, Claude Haiku מנתח לידים, עדכון עמודת סטטוס, טיוטת מייל והערה, ועוד אוטומציות לידים.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f8f4;--surface:#ffffff;--surface-2:#eef0ea;--ink:#111510;--ink-2:#666d66;--line:#e2e4dd;
+  --p1:#2457ff;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2457ff;--claude:#d97757;
+  --accent:#2457ff;--glow:rgba(36,87,255,.18);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#15171a;--code-ink:#e9ecec;
+  --shadow:0 1px 2px rgba(17,21,16,.04),0 10px 30px rgba(17,21,16,.06);--r:8px}
+:root[data-theme="dark"]{
+  --bg:#0e100e;--surface:#171a17;--surface-2:#1f231f;--ink:#f1f3ee;--ink-2:#9aa39a;--line:#2b2f2b;
+  --p1:#5b82ff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#5b82ff;--accent:#5b82ff;--glow:rgba(91,130,255,.28);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0b0a;--shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px rgba(0,0,0,.4)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,Assistant,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Manrope,Assistant,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.18;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:7px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+.top{background:var(--surface);color:var(--ink);position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.top::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:34px 34px;opacity:.6;pointer-events:none;-webkit-mask-image:radial-gradient(130% 120% at 100% 0%,#000,transparent 72%);mask-image:radial-gradient(130% 120% at 100% 0%,#000,transparent 72%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13px;color:var(--ink-2);display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:"JetBrains Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.05em}
+.crumbs a{color:var(--ink-2)}
+.crumbs b{color:var(--ink);font-weight:700}
+.top h1{font-size:clamp(27px,4vw,42px);margin:12px 0 6px;letter-spacing:-.03em}
+.top .sub{color:var(--ink-2);margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);border-radius:999px;padding:3px 12px;font-size:12.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;color:var(--accent);font-size:12.5px;text-transform:uppercase;letter-spacing:.09em;display:inline-flex;align-items:center;gap:7px}
+.kicker::before{content:"";width:7px;height:7px;border-radius:999px;background:var(--accent);flex:none}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.callout{border-radius:7px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:7px;background:var(--surface)}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.big{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.big .card{position:relative;overflow:hidden}
+.big .n{font-family:Manrope,Assistant,sans-serif;font-weight:800;font-size:54px;line-height:1;color:color-mix(in srgb,var(--c) 70%,transparent);position:absolute;top:8px;left:16px}
+.big b{display:block;font-size:18px;margin-bottom:6px;color:var(--c)}
+.gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gl div{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.gl b{display:block}
+.gl span{font-size:14.5px;color:var(--ink-2)}
+.rules{counter-reset:r;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.rules li{counter-increment:r;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.rules li::before{content:counter(r);flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:800}
+.score{display:flex;align-items:center;gap:14px;margin-top:14px}
+.score b{font-family:Manrope,Assistant,sans-serif;font-weight:800;font-size:30px}
+.nextup{display:flex;gap:16px;align-items:center;background:var(--ink);color:var(--surface);border:0}
+.nextup .e{font-size:40px}
+.nextup small{color:color-mix(in srgb,var(--surface) 65%,transparent)}
+@media (max-width:900px){.big{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.big,.gl{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){body{font-size:15.5px}.wrap{padding:0 16px}.card{padding:16px}}
+@media print{.tabs,.btn,.theme,.copy{display:none!important}.card{box-shadow:none;break-inside:avoid}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:inherit">מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</a><span>›</span><b>מפגש 5</b><span class="kind-badge">📌 סיכום</span></div>
+  <h1>סיכום מפגש 5: CRM עם monday + Make</h1>
+  <p class="sub">כל מה שחשוב לזכור בעמוד אחד: מה זה CRM, איך בונים לוח לידים ב-monday, איך מחברים אותו ל-Make, ואיך Claude Haiku מנתח כל ליד, כותב חזרה ללוח ומנסח מייל אישי.</p>
+</div></header>
+<nav class="tabs"><div class="wrap"><a href="../index.html">🏠 כל המפגשים</a><a href="index.html">🛠️ תרגול</a><a href="slides.html">🎬 מצגת</a><a href="summary.html" class="on">📌 סיכום</a><a href="solutions.html">✅ פתרונות</a><a href="../guides/make-signup.html">🧩 הרשמה ל-Make</a><button class="theme" aria-label="מצב תצוגה">🌓</button></div></nav>
+<main class="wrap">
+
+<section class="blk">
+  <div class="kicker">בשורה התחתונה</div>
+  <h2>שלושה רעיונות לקחת הביתה</h2>
+  <div class="big">
+    <div class="card" style="--c:var(--p1)"><span class="n">1</span><b>ה-CRM הוא הבית של הליד</b>גיליון שומר שורות. CRM שומר סטטוס, היסטוריה, הערות ומי מטפל. אוטומציה טובה מביאה את הליד הביתה ומגיבה כשהוא זז בצינור.</div>
+    <div class="card" style="--c:var(--claude)"><span class="n">2</span><b>קריאה אחת, הרבה תשובות</b>Haiku מחזיר JSON אחד עם נושא, דחיפות, ציון, סיכום ומייל. Parse JSON מפרק, וכל שדה נוחת בעמודה משלו.</div>
+    <div class="card" style="--c:var(--p2)"><span class="n">3</span><b>"הצלחה" ≠ הנתון נכתב</b>Make הראה ירוק, והדחיפות נשארה אפורה. תמיד פותחים את הלוח ובודקים, ומכירים את המלכודות: Index/Label, ה-Email הפנימי, Watch Updated.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">מילון מושגים</div>
+  <h2>מושגים מהמפגש</h2>
+  <div class="gl">
+    <div><b>CRM</b><span>מערכת לניהול קשרי לקוחות: לידים, אנשי קשר, עסקאות והיסטוריה</span></div>
+    <div><b>ליד (Lead)</b><span>מישהו שהתעניין ועוד לא בדקנו אם הוא רלוונטי</span></div>
+    <div><b>צינור מכירות (Pipeline)</b><span>השלבים שליד עובר: ליד חדש ← נוצר קשר ← מתאים / לא מתאים</span></div>
+    <div><b>Board · Item · Column</b><span>לוח, פריט (שורה) ועמודה עם סוג ב-monday</span></div>
+    <div><b>Status column</b><span>עמודה עם תוויות צבעוניות. ב-Make כותבים אליה עם Index/Label = Label</span></div>
+    <div><b>Update</b><span>הערה על פריט ב-monday, כמו צ'אט. Create an Update כותב אותה</span></div>
+    <div><b>טוקן API</b><span>הסיסמה של Make ל-monday. Developers ← My access tokens. דלף? Regenerate</span></div>
+    <div><b>Instant לעומת תקופתי</b><span>Webhook שמגיע מיד, או בדיקה כל 15 דקות. אצלנו עבד התקופתי</span></div>
+    <div><b>Mappable column values</b><span>העמודות של הפריט בשמות שלהן, מוכנות למיפוי. Dropdown מגיע רק כמספרים</span></div>
+    <div><b>Choose where to start</b><span>All לבדיקה עם הלידים הקיימים, From now on לעבודה אמיתית</span></div>
+    <div><b>Run this module only</b><span>בודקים מודול אחד עם ערכים שמקלידים, בלי להריץ את כל התרחיש</span></div>
+    <div><b>Sidekick</b><span>ה-AI של monday. בונה לוחות מפרומפט, אבל אוכל קרדיטי AI של monday</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">דף עזר</div>
+  <h2>המודולים של היום</h2>
+  <div class="tbl"><table>
+    <tr><th>מודול</th><th>מה עושה</th><th>הגדרה חשובה</th></tr>
+    <tr><td><span class="en">monday.com · Watch Board's Items</span></td><td>טריגר: פריטים חדשים בלוח</td><td>Watch = New Items · בלי Instant</td></tr>
+    <tr><td><span class="en">AI by Make · Simple Text Prompt</span></td><td>Haiku מחזיר JSON</td><td>Make's AI Provider · Claude Haiku 5.5</td></tr>
+    <tr><td><span class="en">JSON · Parse JSON</span></td><td>JSON ← בועות</td><td>Data structure מ-Generate</td></tr>
+    <tr><td><span class="en">monday.com · Update Column Values of a Specific Item</span></td><td>כותב לעמודות</td><td>סטטוס: Index/Label = Label</td></tr>
+    <tr><td><span class="en">Gmail · Create a draft email</span></td><td>טיוטה ללקוח</td><td>Raw HTML · div dir="rtl"</td></tr>
+    <tr><td><span class="en">monday.com · Create an Update</span></td><td>הערה על הליד</td><td>Item ID מהמודול הקודם</td></tr>
+    <tr><td><span class="en">Watch Board's Items by Column Values</span></td><td>טריגר: עמודה השתנתה</td><td>לתרחיש "סטטוס ← פעולה"</td></tr>
+    <tr><td><span class="en">Search Items in the Board by Column Values</span></td><td>מחפש פריטים</td><td>לידים שנשכחו · בדיקת כפילויות</td></tr>
+  </table></div>
+  <h4 class="mt">התרחיש המלא</h4>
+  <div class="copybox"><pre class="rtl">1. monday · Watch Board's Items (New Items)
+2. Make AI · Simple Text Prompt ← Haiku מחזיר JSON
+3. JSON · Parse JSON
+4. monday · Update Column Values ← נושא, דחיפות, ציון, סיכום AI
+5. Gmail · Create a draft email ← אל: אימייל › Email
+6. monday · Create an Update ← "🤖 ניתוח AI: …"
+עלות בריצה אמיתית: כ-6.5–6.8 קרדיטים לליד</pre></div>
+</section>
+
+<section class="blk">
+  <div class="kicker">כללי אצבע</div>
+  <h2>שישה כללים לאוטומציית לידים</h2>
+  <ol class="rules">
+    <li>מתכננים את עמודות הלוח <b>לפני</b> האוטומציה. כל שדה שה-AI מחזיר צריך עמודה מהסוג הנכון.</li>
+    <li>ערכים שה-AI מחזיר לעמודת סטטוס חייבים להיות <b>זהים בדיוק</b> לתוויות בלוח.</li>
+    <li>Watch = <b>New Items</b>. אם התרחיש מעדכן את הפריט, טריגר על עדכונים יפעיל אותו שוב ושוב.</li>
+    <li>טיוטה ללקוח, לא שליחה. וה-AI לא ממציא מחירים, מלאי או תאריכים.</li>
+    <li>"הצלחה" ב-Make היא לא ההוכחה. פותחים את הלוח ואת הטיוטות ובודקים.</li>
+    <li>הטוקן הוא סיסמה. התרחישים נשארים כבויים בתרגול, כי כל בדיקה עולה קרדיט.</li>
+  </ol>
+</section>
+
+<section class="blk">
+  <div class="kicker">בדיקה עצמית</div>
+  <h2>6 שאלות: מה נשאר לכם מהמפגש?</h2>
+  <div class="card q" data-a="1"><b>1. מה ההבדל בין ליד לעסקה ב-CRM?</b><div class="opts"><button class="opt">אין הבדל, אלה שני שמות לאותו דבר</button><button class="opt">ליד = מישהו שהתעניין ועוד לא נבדק. עסקה = הצעה ממשית עם מוצר וסכום</button><button class="opt">ליד הוא לקוח קבוע, עסקה היא לקוח חדש</button><button class="opt">עסקה היא ליד שביטל</button></div><div class="fb"><b>הסבר:</b> ליד הוא השלב הראשון בצינור. אחרי שבודקים שהוא מתאים הוא הופך לאיש קשר, וכשיש הצעה ממשית — לעסקה.</div></div>
+  <div class="card q" data-a="2"><b>2. למה בטריגר בוחרים Watch = New Items ולא New and Updated?</b><div class="opts"><button class="opt">כי New Items זול יותר</button><button class="opt">כי New and Updated לא קיים ב-monday</button><button class="opt">כי התרחיש מעדכן את הליד בעצמו, וטריגר על עדכונים היה מפעיל אותו שוב ושוב</button><button class="opt">כי אחרת לא רואים את העמודות</button></div><div class="fb"><b>הסבר:</b> מודול 4 כותב לעמודות של הליד. אם הטריגר צופה בעדכונים, העדכון הזה נראה כמו "ליד שעודכן", והתרחיש נכנס ללולאה.</div></div>
+  <div class="card q" data-a="0"><b>3. הריצה הצליחה, נושא וציון התמלאו, אבל עמודת הסטטוס "דחיפות" נשארה אפורה. מה בודקים קודם?</b><div class="opts"><button class="opt">ש-Index/Label מוגדר ל-Label, והבועה בשדה Label שמתחתיו, ושהערך זהה לתווית בלוח</button><button class="opt">להחליף את Haiku במודל חזק יותר</button><button class="opt">למחוק את העמודה וליצור מחדש</button><button class="opt">להפעיל את התרחיש (Active)</button></div><div class="fb"><b>הסבר:</b> זו בדיוק הטעות שעשינו: מיפינו את הבועה לתוך Index/Label עצמו. הוא רק בחירה בין Index ל-Label.</div></div>
+  <div class="card q" data-a="3"><b>4. בפלט של הטריגר יש Email: sagiweizmanns-team_pulse_…@euc1.mx.monday.com. מה זה?</b><div class="opts"><button class="opt">האימייל של הלקוח</button><button class="opt">האימייל שלכם</button><button class="opt">שגיאה ב-monday</button><button class="opt">כתובת פנימית של הפריט ב-monday. את האימייל של הלקוח לוקחים מ-Mappable column values › אימייל › Email</button></div><div class="fb"><b>הסבר:</b> לכל פריט ב-monday יש כתובת שאפשר לשלוח אליה מיילים שנכנסים כעדכון. אם תשלחו אליה את הטיוטה, היא תגיע ל-monday ולא ללקוח.</div></div>
+  <div class="card q" data-a="1"><b>5. למה מבקשים מ-Haiku JSON אחד עם כל השדות, ולא ארבע קריאות נפרדות?</b><div class="opts"><button class="opt">כי Make לא מאפשר יותר ממודול AI אחד</button><button class="opt">קריאה אחת זולה ומהירה יותר, וכל השדות מבוססים על אותה קריאה של הליד</button><button class="opt">כי JSON יפה יותר</button><button class="opt">כי monday מקבל רק JSON</button></div><div class="fb"><b>הסבר:</b> כל קריאה ל-AI עולה קרדיטים לפי אורך הטקסט. ארבע קריאות = ארבע פעמים לשלוח את אותה הודעה. Parse JSON מפרק את התשובה לבועות בחינם כמעט.</div></div>
+  <div class="card q" data-a="2"><b>6. הטוקן של monday הודבק בטעות בצ'אט קבוצתי. מה עושים?</b><div class="opts"><button class="opt">כלום, אף אחד לא ישתמש בו</button><button class="opt">מוחקים את ההודעה ושוכחים</button><button class="opt">Regenerate ב-Developers, ומעדכנים את החיבור ב-Make עם הטוקן החדש</button><button class="opt">מוחקים את החשבון</button></div><div class="fb"><b>הסבר:</b> מי שמחזיק את הטוקן יכול לקרוא ולשנות את כל הלוחות. Regenerate מבטל את הישן מיד. אחר כך מדביקים את החדש בחיבור ב-Make.</div></div>
+  <div class="card score"><span>הציון שלכם:</span><b id="sc">0/6</b><span class="muted" id="scm">ענו על השאלות כדי לראות</span></div>
+</section>
+
+<section class="blk">
+  <div class="card nextup"><span class="e">🧠</span><div><small>במפגש הבא · מפגש 6</small><div style="font-family:Manrope,Assistant,sans-serif;font-weight:800;font-size:22px">Workflows חכמים</div><small>חילוץ נתונים ממיילים, טפסים ומסמכים, ו-Claude API עם מפתח משלכם.</small></div></div>
+  <div class="callout tip"><b>משימה לפני המפגש הבא</b>השלימו את תרגילים 1–5 ותרגיל אחד מ-6 או 7. השאירו את התרחישים כבויים. כל התרגילים ב<a href="index.html">דף התרגול</a>.</div>
+</section>
+
+<section class="blk"><div class="callout"><b>להמשך תרגול</b>כל התרגילים של המפגש נמצאים ב<a href="index.html">דף התרגול</a>, והפתרונות המלאים עם צילומי מסך ב<a href="solutions.html">דף הפתרונות</a>.</div></section>
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 5 · סיכום</footer>
+<script>
+try{const t0=localStorage.getItem('aiac-site:theme');if(t0)document.documentElement.dataset.theme=t0;}catch(e){}
+document.querySelectorAll('.theme').forEach(b=>b.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('aiac-site:theme',r.dataset.theme)}catch(e){}});
+document.querySelectorAll('.copybox').forEach(box=>{const b=document.createElement('button');b.className='copy';b.textContent='העתקה';const src=box.querySelector('pre,.material');if(src&&(src.classList.contains('rtl')||src.classList.contains('material')))b.classList.add('dark');b.onclick=()=>{const t=src.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent='הועתק ✓';setTimeout(()=>b.textContent='העתקה',1500)}).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='הועתק ✓'}catch(e){}ta.remove();setTimeout(()=>b.textContent='העתקה',1500)})};box.appendChild(b);});
+document.querySelectorAll('.q').forEach(q=>{const ans=+q.dataset.a;q.querySelectorAll('.opt').forEach((o,i)=>o.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');o.classList.add(i===ans?'ok':'no');q.querySelectorAll('.opt')[ans].classList.add('ok');document.dispatchEvent(new Event('quizchange'));});});
+document.addEventListener('quizchange',()=>{const a=document.querySelectorAll('.q.answered').length;let c=0;document.querySelectorAll('.q.answered').forEach(q=>{if(!q.querySelector('.opt.no'))c++;});
+document.getElementById('sc').textContent=c+'/6';document.getElementById('scm').textContent=a<6?`ענית על ${a} מתוך 6`:(c>=5?'מצוין! אתם מוכנים למפגש הבא':c>=3?'טוב. כדאי לחזור על החלקים שטעיתם בהם':'כדאי לעבור שוב על ההרצאה');});
+</script>
+</body>
+</html>
