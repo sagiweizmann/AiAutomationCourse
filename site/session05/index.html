@@ -27,7 +27,7 @@
 </div></nav>
 <main class="wrap">
 
-<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/10</span></div></div>
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/11</span></div></div>
 
 <section class="blk" id="toc">
   <div class="kicker">תוכן העניינים</div>
@@ -42,6 +42,7 @@
     <li><a href="#ex5"><span class="n">5</span><span class="t">בדיקה מקצה לקצה עם ליד חדש</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex6"><span class="n">6</span><span class="t">סטטוס משתנה ← פעולה</span><span class="pill home">📝 לבית</span></a></li>
     <li><a href="#ex7"><span class="n">7</span><span class="t">לידים שנשכחו</span><span class="pill home">📝 לבית</span></a></li>
+    <li><a href="#ex10"><span class="n">8</span><span class="t">אותה פעולה פעמיים: Automate של monday מול Make</span><span class="pill home">📝 לבית</span></a></li>
     <li><a href="#ex8"><span class="n">★</span><span class="t">בונוס: דוח לידים יומי למנהל</span><span class="pill">בונוס</span></a></li>
     <li><a href="#ex9"><span class="n">★</span><span class="t">בונוס: בלי כפילויות</span><span class="pill">בונוס</span></a></li>
   </ul>
@@ -170,6 +171,7 @@ email_html: מייל תשובה חם וקצר בעברית, כל פסקה בתו
   </ol>
   <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s05-status-label-mapping.jpg" alt="Index/Label = Label ושדה Label עם Urgency" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הדרך הנכונה: Index/Label הוא רק בחירה. הבועה נכנסת לשדה Label שמתחתיו.</figcaption></figure>
   <div class="callout warn"><b>המלכודת שנפלנו בה</b>מיפינו את <span class="en">Urgency</span> ישר לתוך <span class="en">Index/Label</span>. Make הראה הצלחה, monday התעלם, והדחיפות נשארה אפורה. "הצלחה" ב-Make לא אומרת שהנתון נכתב: תמיד בודקים בלוח.</div>
+  <div class="callout tip"><b>Create Labels if Missing</b>בתחתית המודול. <b>Yes</b> = אם Haiku מחזיר תווית שלא קיימת בעמודה (למשל "דחוף" במקום "גבוהה"), monday יוצר אותה. נוח, אבל העמודה מתמלאת בתוויות כפולות. עדיף <b>No</b>, ופרומפט שמחזיר רק את שלוש התוויות המדויקות. אצלנו זה לא היה הפתרון: התוויות היו קיימות, והבעיה הייתה Index/Label.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check">
     <li>בלוח: נושא, ציון וסיכום התמלאו אצל הליד</li>
@@ -271,6 +273,42 @@ email_html: מייל תשובה חם וקצר בעברית, כל פסקה בתו
   </ol>
   <div class="callout tip"><b>פונקציה ממפגש 4</b><code>addDays(now; -2)</code> = לפני יומיים. בוחרים אותה מלשונית התאריכים בפאנל המיפוי.</div>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex7"> סיימתי את התרגיל</label>
+</div>
+
+<div class="card ex" id="ex10">
+  <div class="ex-head"><span class="ex-num">8</span><h3>אותה פעולה פעמיים: Automate של monday מול Make</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">קל</span><span class="pill home">📝 לבית</span></div>
+  <p class="goal">לבנות את אותה פעולה פשוטה בשני כלים, ולהחליט מתי כל אחד מתאים.</p>
+  <p style="margin:0 0 6px"><b>הפעולה:</b> כשסטטוס של ליד הופך ל-<b>מתאים</b>, הליד עובר לקבוצה חדשה בשם <b>מתאימים</b>.</p>
+  <h4>חלק א · בתוך monday</h4>
+  <ol class="steps">
+    <li>בלוח: <b>Add new group</b> ← קוראים לה <b>מתאימים</b></li>
+    <li>למעלה בלוח: <b>Automate</b> ← מחפשים מתכון בסגנון <span class="en">When status changes to something, move item to group</span></li>
+    <li>ממלאים: סטטוס ← <b>מתאים</b> · קבוצה ← <b>מתאימים</b> ← <b>Create automation</b></li>
+    <li>משנים סטטוס של ליד אחד ל"מתאים", ובודקים שהוא עבר קבוצה. כמה זמן זה לקח?</li>
+  </ol>
+  <h4>חלק ב · ב-Make</h4>
+  <ol class="steps">
+    <li>מכבים את האוטומציה של monday (כדי ששתיהן לא ירוצו יחד)</li>
+    <li>תרחיש חדש. טריגר: <span class="en">Watch Board's Items by Column Values</span></li>
+    <li>בטריגר: עמודה <b>סטטוס</b>, ערך <b>מתאים</b>, ו-Watch = <span class="en">New and Updated Items</span></li>
+    <li>מודול שני: <span class="en">Move an Item Between Groups</span>, עם ה-ID מהטריגר, וקבוצה <b>מתאימים</b></li>
+    <li>מחזירים את הליד לקבוצה המקורית, ו-<b>Run once</b></li>
+  </ol>
+  <h4>חלק ג · משווים</h4>
+  <div class="tbl"><table>
+    <tr><th></th><th>Automate של monday</th><th>Make</th></tr>
+    <tr><td>כמה זמן לקח לבנות?</td><td></td><td></td></tr>
+    <tr><td>כמה מהר זה קרה?</td><td></td><td></td></tr>
+    <tr><td>אפשר להוסיף Haiku / Gmail?</td><td></td><td></td></tr>
+    <tr><td>על מה משלמים?</td><td></td><td></td></tr>
+  </table></div>
+  <div class="callout tip"><b>אם Automate נעול</b>בתוכנית החינמית של monday האוטומציות מוגבלות או לא זמינות. בניסיון של monday CRM הן פתוחות. אם הכפתור נעול אצלכם, עשו רק את חלק ב, ובחלק ג כתבו מה הייתם מצפים.</div>
+  <ul class="check">
+    <li>הליד עבר לקבוצה "מתאימים" בשתי הדרכים</li>
+    <li>מילאתי את טבלת ההשוואה, ויש לי משפט אחד: מתי אבחר בכל כלי</li>
+  </ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex10"> סיימתי את התרגיל</label>
 </div>
 
 <div class="card ex" id="ex8">

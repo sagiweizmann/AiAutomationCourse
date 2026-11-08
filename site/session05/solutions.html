@@ -202,6 +202,24 @@ email_html: מייל תשובה חם וקצר בעברית, כל פסקה בתו
 </section>
 <section class="blk">
 <div class="card ex">
+  <div class="ex-head"><span class="ex-num">8</span><h3>Automate של monday מול Make</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ חלק א · monday</b>Automate ← מתכון "When status changes to something, move item to group" ← סטטוס = מתאים, קבוצה = מתאימים. הבנייה לוקחת כדקה, והפריט זז כמעט מיד.</div>
+    <div class="sol"><b>✅ חלק ב · Make</b><span class="en">Watch Board's Items by Column Values</span> (סטטוס = מתאים · New and Updated Items) ← <span class="en">Move an Item Between Groups</span> (Item ID = ID מהטריגר · Group = מתאימים). בנייה של כמה דקות, ובתרחיש דולק הוא בודק כל 15 דקות.</div>
+    <div class="tbl"><table>
+      <tr><th></th><th>Automate של monday</th><th>Make</th></tr>
+      <tr><td>זמן בנייה</td><td>כדקה, ממתכון מוכן</td><td>כמה דקות: טריגר, מודול, מיפוי</td></tr>
+      <tr><td>מהירות</td><td>כמעט מיידי</td><td>עד 15 דקות (בדיקה תקופתית)</td></tr>
+      <tr><td>AI ומערכות אחרות</td><td>רק מה שיש ב-monday</td><td>Haiku, Gmail, Sheets, כל מודול</td></tr>
+      <tr><td>על מה משלמים</td><td>מכסת פעולות אוטומציה של monday, לפי התוכנית</td><td>קרדיטים של Make, כולל בכל בדיקה</td></tr>
+    </table></div>
+    <p class="note">המסקנה: פעולה שכולה בתוך monday (להזיז, להודיע, לשנות עמודה) — Automate של monday. משהו שיוצא החוצה או צריך לחשוב (מייל, AI, גיליון, כמה מערכות) — Make. ואף פעם לא שתיהן על אותה פעולה, אחרת היא קורית פעמיים.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
   <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: דוח יומי ובלי כפילויות</h3></div>
   <div class="fix">
 
@@ -210,6 +228,7 @@ email_html: מייל תשובה חם וקצר בעברית, כל פסקה בתו
   </div>
 </div>
 </section>
+
 </main>
 <footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 5 · פתרונות</footer>
 <script src="../assets/site.js"></script>
