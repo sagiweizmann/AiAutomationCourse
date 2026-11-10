@@ -168,6 +168,31 @@
   </div>
 </div>
 </section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">9</span><h3>לידים מגיליון נכנסים ל-monday (נבנה ונבדק)</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>עמודה</th><th>שדה ב-Make</th><th>מה שמים</th><th>למה</th></tr>
+      <tr><td>שם הליד</td><td>Item Name</td><td>בועה <code>name</code></td><td>משתנה בכל שורה</td></tr>
+      <tr><td>אימייל</td><td>Email · Text</td><td>Email = בועה <code>email</code> · Text = בועה <code>name</code></td><td>Text הוא שם התצוגה של הקישור</td></tr>
+      <tr><td>טלפון</td><td>Phone Number · Country Short Name</td><td>בועה <code>phone</code> · <code>IL</code> (קבוע)</td><td>קוד מדינה בשתי אותיות, חובה</td></tr>
+      <tr><td>מוצר מבוקש</td><td>שדה אחד</td><td>בועה <code>product</code></td><td>עמודת Text</td></tr>
+      <tr><td>מקור</td><td>IDs / Labels</td><td>Labels: Map ← בועה <code>source</code> (או בחירה "אתר")</td><td>לא שניהם. Labels עוקף את IDs</td></tr>
+      <tr><td>הודעה</td><td>Text</td><td>בועה <code>message</code></td><td>Long text</td></tr>
+      <tr><td>סטטוס</td><td>Index / Label</td><td>Label = <b>ליד חדש</b> מהרשימה (קבוע)</td><td>כל ליד חדש מתחיל כאן. Index של "ליד חדש" הוא 7 — לא לנחש</td></tr>
+    </table></div>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-values-1.jpg" alt="שדות האימייל, ההודעה והטלפון" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אימייל: Email + Text. הודעה: Text. טלפון: Phone Number + Country Short Name.</figcaption></figure>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-values-3.jpg" alt="שדות הסטטוס" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">סטטוס ב-Create an Item: Index ו-Label כשדות נפרדים ("Provide either Index or Label but not both").</figcaption></figure>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-filled.jpg" alt="המודול ממולא" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך נראה המודול מלא בבדיקה שלנו (עם ערכים קבועים במקום בועות).</figcaption></figure>
+    <div class="sol"><b>✅ מה חזר (Get an Item על הליד החדש)</b>Name: יואב שרון · סטטוס: <b>ליד חדש</b> (Index: 7) · מוצר מבוקש: כורסת קטיפה ירוקה · אימייל, טלפון, מקור והודעה מלאים · נושא, דחיפות, ציון וסיכום AI — <b>ריקים</b>, וממתינים לתרחיש הלידים.</div>
+    <figure style="margin:10px auto 14px;max-width:560px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-index7.jpg" alt="Index 7" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט: סטטוס עם Index 7. לכן בוחרים Label.</figcaption></figure>
+    <p class="note">שימו לב: Create an Item מחזיר רק <code>ID</code>. אם צריך משהו מהפריט במודול הבא — לוקחים מהגיליון (המקור), או קוראים את הפריט עם Get an Item.</p>
+    <p class="note">חיבור שני התרחישים: תרחיש הלידים ממפגש 5 מסתכל על הלוח (New Items). ברגע שיואב נוצר, הריצה הבאה שלו תתפוס אותו. כך בונים שרשרת: טופס ← monday ← Haiku ← טיוטה.</p>
+  </div>
+</div>
+</section>
 </main>
 <footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 6 · פתרונות</footer>
 <script src="../assets/site.js"></script>

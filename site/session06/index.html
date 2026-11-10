@@ -35,7 +35,7 @@
 </div></nav>
 <main class="wrap">
 
-<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/9</span></div></div>
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/10</span></div></div>
 
 <section class="blk" id="toc">
   <div class="kicker">תוכן העניינים</div>
@@ -51,6 +51,7 @@
     <li><a href="#ex6"><span class="n">6</span><span class="t">אתגר דיבוג: חמש תקלות</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex7"><span class="n">7</span><span class="t">ליד בלי אימייל לא מפיל את הריצה</span><span class="pill home">📝 לבית</span></a></li>
     <li><a href="#ex8"><span class="n">8</span><span class="t">תרחיש 2, שדה אחרי שדה</span><span class="pill home">📝 לבית</span></a></li>
+    <li><a href="#ex9"><span class="n">9</span><span class="t">אוטומציה חדשה: לידים מגיליון נכנסים ל-monday</span><span class="pill home">📝 לבית</span></a></li>
   </ul>
 </section>
 <section class="blk">
@@ -250,6 +251,45 @@
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>הטבלה מלאה</li><li>יש לי שני תרחישים: נוצר קשר, לא מתאים — שניהם כבויים</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex8"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex9">
+  <div class="ex-head"><span class="ex-num">9</span><h3>אוטומציה חדשה: לידים מגיליון נכנסים ל-monday</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 35 דקות</span><span class="pill">בינוני</span><span class="pill home">📝 לבית</span></div>
+  <p class="goal">עד עכשיו קראנו מ-monday. הפעם כותבים אליו: ליד שנכנס לגיליון (כמו טופס באתר) נוצר כפריט חדש בלוח, עם כל העמודות בסוג הנכון. ואז תרחיש הלידים ממפגש 5 תופס אותו — שני תרחישים שעובדים יחד.</p>
+  <h4>חלק א · הגיליון</h4>
+  <ol class="steps">
+    <li>Google Sheet חדש בשם <b>בית ועיצוב · טופס אתר</b>. מדביקים בתא <code>A1</code> את הנתונים למטה, ומחליפים את האימייל בשלכם עם <code>+</code></li>
+  </ol>
+  <div class="copybox"><pre class="rtl">name	email	phone	product	source	message
+יואב שרון	you+yoav@gmail.com	0549998877	כורסת קטיפה ירוקה	אתר	ראיתי באתר את הכורסה הירוקה. יש אותה במלאי? אני צריך שתיים עד סוף החודש.</pre></div>
+  <h4>חלק ב · התרחיש</h4>
+  <ol class="steps">
+    <li>תרחיש חדש בשם <b>טופס אתר ← ליד ב-monday</b></li>
+    <li>טריגר: <span class="en">Google Sheets · Watch New Rows</span>, על הגיליון החדש</li>
+    <li>בטריגר: כותרות = <b>Yes</b>, Limit = <b>1</b>, ובשמירה: Choose where to start = <b>All</b></li>
+    <li>מודול שני: <span class="en">monday.com · Create an Item</span></li>
+    <li>ב-Item Name: הבועה <code>name</code>. ב-Board: הלוח. ב-Group: <b>לידים חדשים</b></li>
+    <li><span class="en">Columns</span>: מסמנים <b>אימייל, טלפון, מוצר מבוקש, מקור, הודעה, סטטוס</b>. רק אחרי הבחירה נפתחים השדות של <span class="en">Column Values</span></li>
+    <li>ממלאים כל עמודה לפי הסוג שלה (הטבלה למטה). מה שמגיע מהגיליון — בועה. מה שקבוע — בוחרים מרשימה</li>
+    <li><b>Run once</b> ← פותחים את הלוח: יואב שם, עם כל העמודות?</li>
+    <li>בונוס: פותחים את תרחיש הלידים ממפגש 5 ← Run once. Haiku מנתח את יואב, ונוצרת טיוטה</li>
+  </ol>
+  <figure style="margin:10px auto 14px;max-width:600px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-columns.jpg" alt="Create an Item עם Columns" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">ב-Create an Item בוחרים קודם אילו עמודות (Columns), ורק אז מופיעים השדות שלהן.</figcaption></figure>
+  <div class="tbl fill"><table>
+    <tr><th>עמודה בלוח</th><th>מה Make מציג</th><th>מה שמתי, ומאיפה</th></tr>
+    <tr><td>שם הליד</td><td>Item Name</td><td></td></tr>
+    <tr><td>אימייל</td><td>Email + Text</td><td></td></tr>
+    <tr><td>טלפון</td><td>Phone Number + Country Short Name</td><td></td></tr>
+    <tr><td>מוצר מבוקש</td><td>שדה אחד</td><td></td></tr>
+    <tr><td>מקור</td><td>IDs <b>או</b> Labels</td><td></td></tr>
+    <tr><td>הודעה</td><td>Text</td><td></td></tr>
+    <tr><td>סטטוס</td><td>Index <b>או</b> Label</td><td></td></tr>
+  </table></div>
+  <figure style="margin:10px auto 14px;max-width:600px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-create-values-2.jpg" alt="שדות הטלפון, המקור" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">טלפון: מספר + קוד מדינה בשתי אותיות. מקור (Dropdown): IDs או Labels — לא שניהם.</figcaption></figure>
+  <details class="hint"><summary>רמז: למה Label ולא Index בסטטוס?</summary><p style="margin:6px 0 0">בבדיקה שלנו, ה-Index של "ליד חדש" יצא <b>7</b> — לא 0 ולא 1. אי אפשר לנחש מספרים. שם התווית — כן.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>יואב נוצר בלוח עם אימייל, טלפון, מוצר, מקור, הודעה וסטטוס "ליד חדש"</li><li>הטבלה מלאה, ואני יודע/ת למה כל שדה ממופה או נבחר מרשימה</li><li>בונוס: תרחיש הלידים ממפגש 5 תפס את יואב וניתח אותו</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex9"> סיימתי את התרגיל</label>
 </div>
 </section>
 <section class="blk">
