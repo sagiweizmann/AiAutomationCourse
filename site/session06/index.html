@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 6 · תרגול</title>
+<meta name="description" content="תרגול מפגש 6: monday + Make לעומק — חיבורים ומפתח API, קריאת בועות, המתג Map, JSON ו-Data structure, בנייה מחדש עם הסבר לכל שדה, ואתגר דיבוג.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.fill td:last-child{min-width:160px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s06">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 6</b></div>
+  <h1>תרגול: monday + Make לעומק</h1>
+  <p class="sub">היום לא בונים משהו חדש. בונים שוב את תרחיש הלידים ממפגש 5, ובכל שדה עוצרים: מה הוא, מה בחרתי, ולמה. בכל תרגיל יש טבלה קטנה למילוי — מלאו אותה, זה העיקר. סמנו כל תרגיל שסיימתם: הסימון נשמר בדפדפן שלכם.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html" class="on">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html">✅ פתרונות</a>
+  <a href="../session05/index.html">⏪ מפגש 5</a>
+  <a href="../guides/monday-signup.html">🗂 הרשמה ל-monday</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/9</span></div></div>
+
+<section class="blk" id="toc">
+  <div class="kicker">תוכן העניינים</div>
+  <h2>מה יש בדף</h2>
+  <div class="callout claude" style="border-color:var(--claude)"><b>איך לעבוד עם הדף</b>בזוגות: אחד ליד המקלדת, השני שואל "למה?" על כל שדה. אם אתם לא יודעים לענות — זה הסימן לחזור לשקף המתאים במצגת. התשובות לכל הטבלאות ב<a href="solutions.html">דף הפתרונות</a>.</div>
+  <ul class="toc">
+    <li><a href="#setup"><span class="n">0</span><span class="t">הכנה: הלוח והתרחיש ממפגש 5</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex1"><span class="n">1</span><span class="t">חיבורים: מה כל חיבור, ואיך בודקים</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex2"><span class="n">2</span><span class="t">קוראים בועות: נתיב וסוג לכל שדה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex3"><span class="n">3</span><span class="t">מעבדת Map: מה קורה בלי Map ב-Item ID</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex4"><span class="n">4</span><span class="t">מעבדת JSON: שוברים בכוונה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex5"><span class="n">5</span><span class="t">בונים מחדש מאפס, עם "למה" לכל שדה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex6"><span class="n">6</span><span class="t">אתגר דיבוג: חמש תקלות</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex7"><span class="n">7</span><span class="t">ליד בלי אימייל לא מפיל את הריצה</span><span class="pill home">📝 לבית</span></a></li>
+    <li><a href="#ex8"><span class="n">8</span><span class="t">תרחיש 2, שדה אחרי שדה</span><span class="pill home">📝 לבית</span></a></li>
+  </ul>
+</section>
+<section class="blk">
+
+<div class="card ex" id="setup">
+  <div class="ex-head"><span class="ex-num">0</span><h3>הכנה: הלוח והתרחיש ממפגש 5</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 5 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">להגיע לתרגילים עם לוח שיש בו גם ליד עם אימייל וגם ליד בלי — כדי שנוכל לראות את השגיאה מהכיתה בעצמנו.</p>
+  <ol class="steps">
+    <li>פותחים את הלוח <b>לידים · בית ועיצוב</b> ממפגש 5. אין לכם? <a href="../guides/monday-signup.html">מדריך ההרשמה והלוח</a></li>
+    <li>מוסיפים ליד חדש: <b>מיכל לב</b> · מוצר: כורסה · הודעה: "יש משלוח לאילת?" · <b>בלי אימייל</b></li>
+    <li>ב-Make: פותחים את התרחיש ממפגש 5, ושומרים עותק: ⋮ ← <b>Clone</b> ← שם: <b>לידים · מעבדה</b>. היום עובדים רק על העותק</li>
+    <li>מוודאים שהעותק <b>Inactive</b></li>
+  </ol>
+  <div class="callout tip"><b>למה עותק?</b>בתרגילים 3–4 נשבור דברים בכוונה. התרחיש המקורי נשאר נקי.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>יש בלוח ליד אחד בלי אימייל</li><li>יש לי עותק "לידים · מעבדה", כבוי</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="setup"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex1">
+  <div class="ex-head"><span class="ex-num">1</span><h3>חיבורים: מה כל חיבור, ואיך בודקים</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">להבין שהטוקן נשמר פעם אחת, במקום אחד, ושלכל חיבור יש שיטה אחרת.</p>
+  <ol class="steps">
+    <li>בסרגל של Make: <b>Credentials</b> ← <b>Connections</b></li>
+    <li>לכל חיבור לוחצים <b>Verify</b>, ורושמים בטבלה</li>
+    <li>בחיבור של monday: ⋮ ← <b>Edit</b>. רואים את <span class="en">API Key</span> המוסתר — <b>לא משנים כלום</b> ← Close</li>
+    <li>פותחים מודול Gmail בתרחיש ומחפשים את ההודעה על <span class="en">reauthorize</span>. מה התאריך?</li>
+  </ol>
+  <figure style="margin:10px auto 14px;max-width:700px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-connections.jpg" alt="עמוד Connections" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Credentials ← Connections. המספר ליד אייקון השרשרת = בכמה תרחישים החיבור בשימוש.</figcaption></figure>
+  <div class="tbl fill"><table>
+    <tr><th>חיבור</th><th>שיטה (טוקן / OAuth / מובנה)</th><th>בכמה תרחישים</th><th>פג תוקף? מתי?</th></tr>
+    <tr><td>monday.com</td><td></td><td></td><td></td></tr>
+    <tr><td>Gmail</td><td></td><td></td><td></td></tr>
+    <tr><td>Make's AI Provider</td><td></td><td></td><td></td></tr>
+  </table></div>
+  <details class="hint"><summary>שאלה: הטוקן של monday דלף. מה שני הצעדים?</summary><p style="margin:6px 0 0">ענו בעצמכם לפני שפותחים את הפתרונות. רמז: צעד אחד ב-monday, צעד אחד ב-Make.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>הטבלה מלאה</li><li>אני יודע/ת להסביר למה הטוקן לא מופיע בתוך אף מודול</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex1"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex2">
+  <div class="ex-head"><span class="ex-num">2</span><h3>קוראים בועות: נתיב וסוג לכל שדה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">למצוא בעצמכם את הבועה הנכונה לכל עמודה, ולהבין מה הסמלים אומרים.</p>
+  <ol class="steps">
+    <li>בעותק: קליק ימני על הטריגר ← <b>Choose where to start</b> ← <b>All</b> ← <span class="en">Limit</span> = 1</li>
+    <li>קליק ימני על הטריגר ← <b>Run this module only</b></li>
+    <li>לוחצים על הבועה מעל הטריגר ← <span class="en">Output</span>. מוצאים כל שדה מהטבלה, ורושמים את הנתיב והסמל (T / # / D / {} / [])</li>
+  </ol>
+  <div class="tbl fill"><table>
+    <tr><th>מה צריך</th><th>הנתיב המלא</th><th>סמל</th></tr>
+    <tr><td>שם הליד</td><td></td><td></td></tr>
+    <tr><td>האימייל של הלקוח</td><td></td><td></td></tr>
+    <tr><td>טקסט ההודעה</td><td></td><td></td></tr>
+    <tr><td>המקור (אתר / אינסטגרם…)</td><td></td><td></td></tr>
+    <tr><td>מזהה הליד</td><td></td><td></td></tr>
+  </table></div>
+  <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-mapping-panel.jpg" alt="פאנל המיפוי" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך נראה הפאנל כשממפים: כל מודול קודם, והערך מהריצה האחרונה ליד כל בועה.</figcaption></figure>
+  <details class="hint"><summary>רמז: יש שני "Email"</summary><p style="margin:6px 0 0">אחד בראש הפלט, ואחד בתוך <span class="en">Mappable column values</span>. מה הערך של כל אחד?</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>מצאתי את כל חמשת הנתיבים</li><li>אני יודע/ת להסביר למה ה-Email שבראש הפלט הוא לא של הלקוח</li><li>אני יודע/ת למה "מקור" הוא [] ולא T</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex2"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex3">
+  <div class="ex-head"><span class="ex-num">3</span><h3>מעבדת Map: מה קורה בלי Map ב-Item ID</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לראות בעיניים למה Item ID חייב להיות ממופה, ולא נבחר מרשימה.</p>
+  <ol class="steps">
+    <li><b>לפני שמתחילים — תחזית:</b> אם Item ID יהיה תמיד "נועה ברק", מה יקרה כשליד חדש ייכנס? כתבו משפט</li>
+    <li>בעותק: מודול <b>Update Column Values</b> ← ב-<span class="en">Item ID</span> מכבים את <b>Map</b> ← בוחרים מהרשימה את <b>נועה ברק</b> ← Save</li>
+    <li>מוחקים את מודולים Gmail ו-Create an Update מהעותק (קליק ימני ← Delete), כדי לא ליצור טיוטות</li>
+    <li>Choose where to start ← Choose manually ← בוחרים את הליד שלפני <b>מיכל לב</b> ← <b>Run once</b></li>
+    <li>פותחים את הלוח: את מי עדכן Haiku? מה כתוב אצל נועה עכשיו?</li>
+    <li>מחזירים: Item ID ← <b>Map</b> דולק ← הבועה <code>ID</code> מהטריגר ← Save</li>
+  </ol>
+  <div class="tbl fill"><table>
+    <tr><th>שאלה</th><th>התשובה שלי</th></tr>
+    <tr><td>התחזית שלי</td><td></td></tr>
+    <tr><td>מה קרה בפועל</td><td></td></tr>
+    <tr><td>במשפט: מתי Map ומתי רשימה?</td><td></td></tr>
+  </table></div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>ראיתי שהניתוח של מיכל נכתב על השורה של נועה</li><li>החזרתי את Item ID ל-Map</li><li>אני יודע/ת לנסח את הכלל "קבוע ← רשימה, משתנה ← Map"</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex3"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex4">
+  <div class="ex-head"><span class="ex-num">4</span><h3>מעבדת JSON: שוברים בכוונה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לראות מה Parse JSON עושה עם JSON תקין, שבור, ועם מפתח בשם לא נכון.</p>
+  <ol class="steps">
+    <li>בעותק: קליק ימני על <b>Parse JSON</b> ← <b>Run this module only</b></li>
+    <li>בחלון שנפתח, ב-<span class="en">JSON string</span>, מדביקים את ניסוי א׳ ← OK. מה יצא?</li>
+    <li>שוב, עם ניסוי ב׳ (עטוף ב-```). מה ההודעה?</li>
+    <li>שוב, עם ניסוי ג׳ (<code>Topic</code> באות גדולה). איזה שדה יצא ריק?</li>
+  </ol>
+  <p style="margin:12px 0 4px"><b>ניסוי א׳ — תקין</b></p>
+  <div class="copybox"><pre>{"topic": "מחיר", "urgency": "בינונית", "score": 6, "summary": "בדיקה", "email_subject": "בדיקה", "email_html": "&lt;p&gt;בדיקה&lt;/p&gt;"}</pre></div>
+  <p style="margin:12px 0 4px"><b>ניסוי ב׳ — עטוף</b></p>
+  <div class="copybox"><pre>```json
+{"topic": "מחיר", "urgency": "בינונית", "score": 6}
+```</pre></div>
+  <p style="margin:12px 0 4px"><b>ניסוי ג׳ — אות גדולה</b></p>
+  <div class="copybox"><pre>{"Topic": "מחיר", "urgency": "בינונית", "score": 6}</pre></div>
+  <figure style="margin:10px auto 14px;max-width:560px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-ds-field.jpg" alt="השדה score בתבנית" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">רמז לניסוי ג׳: ה-Name של השדה בתבנית הוא בדיוק המפתח ב-JSON, כולל אותיות קטנות.</figcaption></figure>
+  <div class="tbl fill"><table>
+    <tr><th>ניסוי</th><th>מה קרה</th><th>למה</th></tr>
+    <tr><td>א׳</td><td></td><td></td></tr>
+    <tr><td>ב׳</td><td></td><td></td></tr>
+    <tr><td>ג׳</td><td></td><td></td></tr>
+  </table></div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>ראיתי שגיאה בניסוי ב׳</li><li>ראיתי ש-Topic יצא ריק בניסוי ג׳, ואני יודע/ת למה</li><li>אני יודע/ת איזו שורה בפרומפט מונעת כל אחד מהם</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex4"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex5">
+  <div class="ex-head"><span class="ex-num">5</span><h3>בונים מחדש מאפס, עם "למה" לכל שדה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 30 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">תרחיש חדש לגמרי, לא עותק. בכל שדה ממלאים בטבלה את הערך ואת הסיבה — לפני שעוברים לשדה הבא.</p>
+  <ol class="steps">
+    <li><b>Create scenario</b> ← שם: <b>לידים · בנייה מחדש</b></li>
+    <li>בונים את ששת המודולים לפי הסדר. בכל מודול: Connection קיים מהרשימה (לא Add חדש!)</li>
+    <li>ממלאים את הטבלה <b>תוך כדי</b>. אפשר להיעזר במצגת, לא בתרחיש הישן</li>
+    <li>Choose where to start ← Choose manually ← ליד אחד עם אימייל ← Run once ← בודקים בלוח וב-Gmail</li>
+  </ol>
+  <div class="tbl fill"><table>
+    <tr><th>מודול · שדה</th><th>הערך שבחרתי</th><th>למה</th></tr>
+    <tr><td>1 · Watch</td><td></td><td></td></tr>
+    <tr><td>1 · Limit</td><td></td><td></td></tr>
+    <tr><td>2 · Connection</td><td></td><td></td></tr>
+    <tr><td>2 · Model</td><td></td><td></td></tr>
+    <tr><td>3 · Data structure</td><td></td><td></td></tr>
+    <tr><td>3 · JSON string</td><td></td><td></td></tr>
+    <tr><td>4 · Item ID (Map?)</td><td></td><td></td></tr>
+    <tr><td>4 · דחיפות: Index/Label</td><td></td><td></td></tr>
+    <tr><td>4 · דחיפות: Label</td><td></td><td></td></tr>
+    <tr><td>4 · Create Labels if Missing</td><td></td><td></td></tr>
+    <tr><td>5 · To</td><td></td><td></td></tr>
+    <tr><td>5 · Body type</td><td></td><td></td></tr>
+    <tr><td>5 · Content</td><td></td><td></td></tr>
+    <tr><td>6 · Item ID</td><td></td><td></td></tr>
+  </table></div>
+  <div class="callout tip"><b>את הפרומפט</b>מעתיקים מ<a href="../session05/index.html#ex2">תרגיל 2 של מפגש 5</a>. את דוגמת ה-JSON ל-Generate — מאותו מקום.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>כל 14 השורות מלאות, גם ב"למה"</li><li>הריצה עברה: נושא, דחיפות צבועה, ציון, סיכום, טיוטה והערה</li><li>השתמשתי בחיבורים הקיימים, לא יצרתי חדשים</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex5"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex6">
+  <div class="ex-head"><span class="ex-num">6</span><h3>אתגר דיבוג: חמש תקלות</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">מתקדם</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לכל תיאור: איזה מודול, מה הסיבה, ומה התיקון. בלי לפתוח את הפתרונות.</p>
+  <div class="tbl fill"><table>
+    <tr><th>#</th><th>מה קרה</th><th>הסיבה והתיקון שלי</th></tr>
+    <tr><td>א</td><td>Run once, ושום דבר לא רץ: "The module didn't return any new data". בלוח יש 5 לידים</td><td></td></tr>
+    <tr><td>ב</td><td>הכול ירוק, אבל בלוח: הנושא של <b>כל</b> הלידים החדשים נכתב תמיד על אותה שורה</td><td></td></tr>
+    <tr><td>ג</td><td>טיוטה ב-Gmail נשלחה אל <span class="en">sagiweizmanns-team_pulse_…@euc1.mx.monday.com</span></td><td></td></tr>
+    <tr><td>ד</td><td>במייל רואים טקסט כזה: <code>&lt;p&gt;שלום נועה,&lt;/p&gt;&lt;p&gt;תודה…</code> עם התגיות עצמן</td><td></td></tr>
+    <tr><td>ה</td><td>Parse JSON אדום: <span class="en">Source is not valid JSON</span></td><td></td></tr>
+  </table></div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>כתבתי סיבה ותיקון לכל החמש</li><li>בדקתי את עצמי בדף הפתרונות</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex6"> סיימתי את התרגיל</label>
+</div>
+</section>
+<div class="blockhead">לבית</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex7">
+  <div class="ex-head"><span class="ex-num">7</span><h3>ליד בלי אימייל לא מפיל את הריצה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span><span class="pill home">📝 לבית</span></div>
+  <p class="goal">התיקון לשגיאה מהכיתה: לפני Gmail, Router שבודק אם יש אימייל. יש — טיוטה. אין — הערה בלוח "חסר אימייל".</p>
+  <ol class="steps">
+    <li>בתרחיש מתרגיל 5: קליק ימני על החיבור בין מודול 4 ל-Gmail ← <b>Add a router</b></li>
+    <li>מסלול 1 ← הקו ← <b>Set up a filter</b> ← שם: "יש אימייל" ← <span class="en">Condition</span>: <code>אימייל › Email</code> ← <b>Exists</b> (Basic operators) ← המשך ל-Gmail ול-Create an Update</li>
+    <li>מסלול 2 ← <span class="en">Fallback route</span> = Yes ← <span class="en">monday.com · Create an Update</span> ← Body: "⚠️ חסר אימייל — Haiku ניתח, אבל לא נוצרה טיוטה. סיכום: [Summary]"</li>
+    <li>Choose manually ← הליד שלפני <b>מיכל לב</b> ← Run once</li>
+  </ol>
+  <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-error-to.jpg" alt="השגיאה מהכיתה" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">זו השגיאה שתרגיל 7 מונע: Missing value of required parameter to.</figcaption></figure>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>מיכל עברה במסלול 2, וקיבלה הערה "חסר אימייל"</li><li>ליד עם אימייל עדיין מקבל טיוטה</li><li>אין Error ב-History</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex7"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex8">
+  <div class="ex-head"><span class="ex-num">8</span><h3>תרחיש 2, שדה אחרי שדה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span><span class="pill home">📝 לבית</span></div>
+  <p class="goal">לבנות מחדש את תרחיש 2 ממפגש 5 (סטטוס "נוצר קשר" ← מייל המשך), ולהסביר כל שדה — ואז לשכפל אותו ל"לא מתאים".</p>
+  <div class="tbl fill"><table>
+    <tr><th>שדה</th><th>הערך</th><th>למה</th></tr>
+    <tr><td>טריגר · Column ID</td><td></td><td></td></tr>
+    <tr><td>טריגר · Column Value</td><td></td><td></td></tr>
+    <tr><td>טריגר · Watch</td><td></td><td></td></tr>
+    <tr><td>למה אין לולאה, למרות New and Updated?</td><td></td><td></td></tr>
+    <tr><td>Haiku · למה מוסיפים את "סיכום AI › Text"?</td><td></td><td></td></tr>
+    <tr><td>Clone ל"לא מתאים" · מה משנים?</td><td></td><td></td></tr>
+  </table></div>
+  <div class="callout tip"><b>השלמה</b>את ההוראות המלאות של תרחיש 2 תמצאו ב<a href="../session05/index.html#ex6">תרגיל 6 של מפגש 5</a>.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>הטבלה מלאה</li><li>יש לי שני תרחישים: נוצר קשר, לא מתאים — שניהם כבויים</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex8"> סיימתי את התרגיל</label>
+</div>
+</section>
+<section class="blk">
+  <div class="kicker">לפני המפגש הבא</div>
+  <h2>משימה לבית</h2>
+  <div class="card">
+    <ul class="check">
+      <li>השלמתי את טבלת "למה" בתרגיל 5 עד הסוף</li>
+      <li>הוספתי את ה-Router של תרגיל 7, וליד בלי אימייל לא מפיל יותר את הריצה</li>
+      <li>כל התרחישים כבויים (Inactive)</li>
+    </ul>
+    <div class="callout tip"><b>מה במפגש הבא</b>Workflows חכמים: Claude API עם מפתח משלכם, וחילוץ נתונים ממיילים, טפסים ומסמכים.</div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 6 · תרגול</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

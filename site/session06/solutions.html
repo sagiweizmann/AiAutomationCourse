@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 6 · פתרונות</title>
+<meta name="description" content="פתרונות מפגש 6: טבלאות החיבורים, נתיבי הבועות, מעבדת Map, מעבדת JSON, טבלת ה"למה" המלאה לבנייה מחדש, ואתגר הדיבוג.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.fill td:last-child{min-width:160px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s06sol">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 6</b><span>›</span><b>פתרונות</b></div>
+  <h1>פתרונות: monday + Make לעומק</h1>
+  <p class="sub">התשובות לכל הטבלאות מדף התרגול. בטבלאות ה"למה" אין תשובה אחת נכונה במילים — חשוב שההסבר שלכם אומר את אותו רעיון.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html" class="on">✅ פתרונות</a>
+  <a href="../session05/index.html">⏪ מפגש 5</a>
+  <a href="../guides/monday-signup.html">🗂 הרשמה ל-monday</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">1</span><h3>חיבורים</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>חיבור</th><th>שיטה</th><th>פג תוקף?</th></tr>
+      <tr><td>monday.com</td><td>טוקן API (מפתח שמדביקים)</td><td>לא. רק כשעושים Regenerate</td></tr>
+      <tr><td>Gmail</td><td>OAuth (אישור בחלון של Google)</td><td>כן — בחשבון שלנו: May 1st 2027. לפני כן: Reauthorize</td></tr>
+      <tr><td>Make's AI Provider</td><td>מובנה ב-Make, בלי מפתח שלנו</td><td>לא. משלמים בקרדיטים</td></tr>
+    </table></div>
+    <figure style="margin:10px auto 14px;max-width:700px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-connection-verified.jpg" alt="Verified" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Verify על החיבור של monday: Verified ✓.</figcaption></figure>
+    <div class="sol"><b>✅ הטוקן דלף — שני צעדים</b>1. ב-monday: Developers ← My access tokens ← <b>Regenerate</b> (הישן מת מיד). 2. ב-Make: Credentials ← החיבור ← ⋮ ← <b>Edit</b> ← מדביקים את החדש ← Save. כל התרחישים ממשיכים לעבוד.</div>
+    <figure style="margin:10px auto 14px;max-width:600px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-connection-edit.jpg" alt="Edit" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">חלון Edit: השדה מוסתר, ו-Make מזהיר שהשינוי משפיע על כל התרחישים שמשתמשים בחיבור.</figcaption></figure>
+    <p class="note">למה הטוקן לא מופיע בתוך מודול? כי המודול שומר רק <b>איזה חיבור</b> לבחור. הטוקן עצמו שמור ב-Credentials. לכן משתפים תרחיש בלי לחשוף אותו.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">2</span><h3>קוראים בועות</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>מה צריך</th><th>הנתיב</th><th>סמל</th></tr>
+      <tr><td>שם הליד</td><td><code>Name</code></td><td>T</td></tr>
+      <tr><td>האימייל של הלקוח</td><td><code>Mappable column values › אימייל › Email</code></td><td>T (בתוך {})</td></tr>
+      <tr><td>טקסט ההודעה</td><td><code>Mappable column values › הודעה › Text</code></td><td>T (בתוך {})</td></tr>
+      <tr><td>המקור</td><td><code>Mappable column values › מקור › IDs[]</code></td><td>[] — רשימת מספרים</td></tr>
+      <tr><td>מזהה הליד</td><td><code>ID</code></td><td>T או # (מספר ארוך)</td></tr>
+    </table></div>
+    <div class="sol"><b>✅ למה ה-Email העליון לא של הלקוח</b>זו כתובת שמונדיי נותן לכל פריט, כדי שאפשר לשלוח אליה מיילים שנכנסים כהערה. הערך שלה נראה כמו <span class="en">…_pulse_3340…@euc1.mx.monday.com</span>. את האימייל של הלקוח שמרנו בעמודה, ולכן הוא בתוך Mappable column values.</div>
+    <div class="sol"><b>✅ למה "מקור" הוא []</b>עמודת Dropdown יכולה להחזיק כמה ערכים, ולכן monday מחזיר רשימה. והרשימה היא של <b>מספרים</b> (המזהים של האפשרויות), לא של המילים. לטקסט צריך <code>switch()</code>.</div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">3</span><h3>מעבדת Map</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מה קורה</b>Haiku מנתח את מיכל, אבל מודול 4 כותב את הנושא, הדחיפות, הציון והסיכום של מיכל <b>על השורה של נועה</b>. השורה של מיכל נשארת ריקה. כל ליד חדש ידרוס שוב את נועה.</div>
+    <div class="sol"><b>✅ הכלל</b>אם הערך <b>זהה בכל ריצה</b> (הלוח, העמודה, סוג הגוף של המייל) — בוחרים מרשימה. אם הוא <b>משתנה בכל ריצה</b> (איזה ליד, מה הדחיפות, למי לשלוח) — Map ובועה.</div>
+    <p class="note">לא לשכוח להחזיר: Item ID ← Map ← <code>ID</code> מהטריגר. ואת הנתונים של נועה אפשר לתקן בריצה רגילה עליה (Choose manually).</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">4</span><h3>מעבדת JSON</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>ניסוי</th><th>מה קרה</th><th>למה</th><th>השורה בפרומפט שמונעת</th></tr>
+      <tr><td>א׳</td><td>שש בועות עם ערכים</td><td>JSON נקי, המפתחות = Name בתבנית</td><td>—</td></tr>
+      <tr><td>ב׳</td><td>שגיאה: לא JSON תקין</td><td>``` הם לא JSON. Parse JSON מצפה ל-{ בהתחלה</td><td>"החזר JSON בלבד, בלי ``` ובלי טקסט נוסף"</td></tr>
+      <tr><td>ג׳</td><td>עובר, אבל Topic ריק</td><td>בתבנית ה-Name הוא <code>topic</code>. "Topic" ≠ "topic"</td><td>כתיבת שמות המפתחות בדיוק בפרומפט</td></tr>
+    </table></div>
+    <figure style="margin:10px auto 14px;max-width:600px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-ds-spec.jpg" alt="התבנית" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">התבנית "ניתוח ליד": שישה שדות, Strict = No.</figcaption></figure>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">5</span><h3>בונים מחדש — טבלת ה"למה"</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>מודול · שדה</th><th>הערך</th><th>למה</th></tr>
+      <tr><td>1 · Watch</td><td>New Items</td><td>רק לידים חדשים. Updated ← התרחיש מעדכן את הליד ומפעיל את עצמו שוב ושוב</td></tr>
+      <tr><td>1 · Limit</td><td>1 בבדיקות</td><td>ליד אחד בכל Run once = פחות קרדיטים אם משהו שבור</td></tr>
+      <tr><td>2 · Connection</td><td>Make's AI Provider (default)</td><td>בלי מפתח, בקרדיטים של Make</td></tr>
+      <tr><td>2 · Model</td><td>Claude Haiku 5.5</td><td>מהיר וזול, מספיק לסיווג ומייל קצר</td></tr>
+      <tr><td>3 · Data structure</td><td>"ניתוח ליד" מ-Generate</td><td>בועות מראש, ושמות זהים למפתחות</td></tr>
+      <tr><td>3 · JSON string</td><td><code>Answer</code> של Haiku</td><td>זה הטקסט שצריך לפרק</td></tr>
+      <tr><td>4 · Item ID</td><td>Map ← <code>ID</code> מהטריגר</td><td>לעדכן את הליד שנכנס, לא ליד קבוע</td></tr>
+      <tr><td>4 · דחיפות: Index/Label</td><td>Label (מרשימה)</td><td>זו בחירה: שולחים שם של תווית, לא מספר</td></tr>
+      <tr><td>4 · דחיפות: Label</td><td>Map ← <code>Urgency</code></td><td>הערך עצמו, משתנה בכל ליד</td></tr>
+      <tr><td>4 · Create Labels if Missing</td><td>No</td><td>אם Haiku טועה במילה — לא נרצה תווית חדשה בלוח</td></tr>
+      <tr><td>5 · To</td><td><code>אימייל › Email</code></td><td>האימייל של הלקוח מהעמודה, לא של הפריט</td></tr>
+      <tr><td>5 · Body type</td><td>Raw HTML</td><td>Haiku מחזיר &lt;p&gt;, ורוצים שיוצג כעיצוב</td></tr>
+      <tr><td>5 · Content</td><td>&lt;div dir="rtl"&gt; + Email HTML + &lt;/div&gt;</td><td>עברית מימין לשמאל ב-Gmail</td></tr>
+      <tr><td>6 · Item ID</td><td>Item ID של מודול 4 (או ID מהטריגר)</td><td>אותו ליד. שני הערכים זהים</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">6</span><h3>אתגר דיבוג</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>#</th><th>הסיבה</th><th>התיקון</th></tr>
+      <tr><td>א</td><td>הסימנייה של הטריגר כבר אחרי כל הלידים (או From now on)</td><td>Choose where to start ← All / Choose manually</td></tr>
+      <tr><td>ב</td><td>Item ID נבחר מרשימה (Map כבוי) — תרגיל 3</td><td>Map ← <code>ID</code> מהטריגר</td></tr>
+      <tr><td>ג</td><td>ב-To מופה ה-<code>Email</code> העליון של הפריט</td><td><code>Mappable column values › אימייל › Email</code></td></tr>
+      <tr><td>ד</td><td>Body type = Collection of contents (או Text)</td><td>Body type = Raw HTML</td></tr>
+      <tr><td>ה</td><td>Haiku עטף ב-``` או הוסיף טקסט, או ש-JSON string ממופה לשדה הלא נכון</td><td>לבדוק את Answer; לחזק את הפרומפט; JSON string = Answer</td></tr>
+    </table></div>
+    <figure style="margin:10px auto 14px;max-width:680px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/monday/s06-history.jpg" alt="History" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">בכל תקלה מתחילים כאן: History ← הריצה ← המודול האדום או הכתום.</figcaption></figure>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">7</span><h3>ליד בלי אימייל לא מפיל את הריצה</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>מודול 4 (Update) ← <b>Router</b>:<br>
+    מסלול 1 · פילטר "יש אימייל": <code>Mappable column values › אימייל › Email</code> · <b>Exists</b> ← Gmail ← Create an Update<br>
+    מסלול 2 · <b>Fallback route</b> ← Create an Update: "⚠️ חסר אימייל — Haiku ניתח, אבל לא נוצרה טיוטה. סיכום: [Summary]"</div>
+    <p class="note">למה לא פשוט פילטר בלי Router? כי אז ליד בלי אימייל פשוט "נעלם" בשקט, ואף אחד לא יודע שצריך להשיג לו כתובת. ההערה בלוח אומרת לנציג מה חסר.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">8</span><h3>תרחיש 2, שדה אחרי שדה</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שדה</th><th>הערך</th><th>למה</th></tr>
+      <tr><td>Column ID</td><td>סטטוס</td><td>העמודה שהנציג משנה</td></tr>
+      <tr><td>Column Value</td><td>נוצר קשר</td><td>המודול צופה בערך אחד. כתוב כמו התווית בלוח</td></tr>
+      <tr><td>Watch</td><td>New and Updated Items</td><td>שינוי סטטוס הוא <b>עדכון</b> של פריט קיים</td></tr>
+      <tr><td>למה אין לולאה</td><td>—</td><td>התרחיש רק מוסיף הערה (Update), וזה לא נחשב עדכון של הפריט. בדקנו: Run this module only החזיר "no new data"</td></tr>
+      <tr><td>סיכום AI › Text</td><td>בפרומפט</td><td>Haiku "זוכר" מה הלקוח רצה — תרחיש 1 כתב את זה ללוח, ותרחיש 2 קורא</td></tr>
+      <tr><td>Clone ל"לא מתאים"</td><td>Column Value = לא מתאים · פרומפט של מייל סגירה · נושא</td><td>טריגר אחד = ערך אחד</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 6 · פתרונות</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
