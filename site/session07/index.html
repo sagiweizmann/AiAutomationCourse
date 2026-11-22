@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 7 · תרגול</title>
+<meta name="description" content="תרגול מפגש 7: בוט Telegram, Make an API call, הודעה ממודול מוכן וב-HTTP, Webhook שמקבל ליד ל-monday, ושרשרת מלאה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.fill td:last-child{min-width:160px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s07">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 7</b></div>
+  <h1>תרגול: Make מתחבר לכל דבר</h1>
+  <p class="sub">היום אתם בונים לבד. כל תרגיל קצר, עם צעדים ברורים. ההסבר המלא במצגת, והפתרונות בדף הפתרונות. סמנו כל תרגיל שסיימתם: הסימון נשמר בדפדפן שלכם.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html" class="on">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html">✅ פתרונות</a>
+  <a href="../session06/summary.html">⏪ מפגש 6</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<div class="prog"><div class="card"><b>התקדמות</b><div class="bar"><i id="pbar"></i></div><span id="ptxt" class="muted">0/8</span></div></div>
+<section class="blk" id="toc">
+  <div class="kicker">תוכן העניינים</div>
+  <h2>מה יש בדף</h2>
+  <div class="callout claude" style="border-color:var(--claude)"><b>מה בונים</b>"בית ועיצוב" רוצה שנציג המכירות יקבל <b>הודעה בטלפון</b> על כל ליד חם, ושלידים מטופס באתר ייכנסו <b>מיד</b> ל-monday. ארבע הדרכים לחבר אפליקציה — בתרגיל אחד כל אחת.</div>
+  <ul class="toc">
+    <li><a href="#ex1"><span class="n">1</span><span class="t">פותחים בוט ב-Telegram</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex2"><span class="n">2</span><span class="t">Make an API call: מוצאים את ה-chat_id</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex3"><span class="n">3</span><span class="t">מודול מוכן: ליד חם ← הודעה לנציג</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex4"><span class="n">4</span><span class="t">HTTP: אותה הודעה, בלי מודול</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex5"><span class="n">5</span><span class="t">Webhook: ליד מ"טופס" נכנס ל-monday</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex6"><span class="n">6</span><span class="t">השרשרת המלאה</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex7"><span class="n">7</span><span class="t">אוטומציה לעסק שלכם</span><span class="pill home">📝 לבית</span></a></li>
+    <li><a href="#ex8"><span class="n">★</span><span class="t">בונוס: הודעה לבוט ← ליד ב-monday</span><span class="pill">בונוס</span></a></li>
+  </ul>
+</section>
+<section class="blk">
+
+<div class="card ex" id="ex1">
+  <div class="ex-head"><span class="ex-num">1</span><h3>פותחים בוט ב-Telegram</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 5 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">בוט משלכם, טוקן, ושיחה פתוחה איתו.</p>
+  <ol class="steps">
+    <li>ב-Telegram מחפשים <b>@BotFather</b> (עם ✔ כחול) ← Start</li>
+    <li>שולחים <code>/newbot</code> ← שם: <b>בית ועיצוב · לידים</b></li>
+    <li>שם משתמש שנגמר ב-<code>bot</code>, למשל <code>baitveitzuv_yourname_bot</code>. תפוס? מוסיפים מספר</li>
+    <li>BotFather שולח <b>טוקן</b>. מעתיקים אותו למקום בטוח זמני (לא לצ'אט!)</li>
+    <li>לוחצים על הקישור לבוט החדש ← <b>Start</b> (או שולחים <code>/start</code>)</li>
+  </ol>
+  <div class="callout warn"><b>הטוקן = סיסמה</b>דלף? ב-BotFather: <code>/revoke</code> ← בוחרים את הבוט ← טוקן חדש. ואז מעדכנים את החיבור ב-Make (Credentials ← Edit), כמו במפגש 6.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>יש לי בוט, והוא מופיע בצ'אטים שלי</li><li>שלחתי לו /start</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex1"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex2">
+  <div class="ex-head"><span class="ex-num">2</span><h3>Make an API call: מוצאים את ה-chat_id</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 10 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">להשתמש ב"דלת האחורית" של מודול: קריאה ל-API שאין לה מודול, דרך החיבור הקיים.</p>
+  <ol class="steps">
+    <li>ב-Make: תרחיש חדש ← <b>Telegram Bot</b> ← <span class="en">Make an API Call</span></li>
+    <li><span class="en">Connection</span> ← Add ← מדביקים את הטוקן ← Save</li>
+    <li><span class="en">URL</span>: <code>getUpdates</code> · <span class="en">Method</span>: <b>GET</b> ← Save</li>
+    <li>קליק ימני ← <b>Run this module only</b></li>
+    <li>בפלט: <span class="en">Body</span> ← <span class="en">result</span> ← <b>1</b> ← <span class="en">message</span> ← <span class="en">chat</span> ← <b>id</b>. רושמים את המספר</li>
+  </ol>
+  <details class="hint"><summary>result ריק?</summary><p style="margin:6px 0 0">לא שלחתם /start לבוט, או ששלחתם לבוט אחר. שלחו לו הודעה כלשהי, והריצו שוב.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>יש לי chat_id — מספר בלי מירכאות</li><li>אני יודע/ת להסביר למה זו דרך 2 ולא מודול מוכן</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex2"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex3">
+  <div class="ex-head"><span class="ex-num">3</span><h3>מודול מוכן: ליד חם ← הודעה לנציג</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">בתרחיש הלידים ממפגש 5: כשציון ≥ 8 — הודעת Telegram לנציג.</p>
+  <ol class="steps">
+    <li>פותחים את תרחיש הלידים (או עותק שלו, Clone)</li>
+    <li>קליק ימני על הקו שאחרי <span class="en">Update Column Values</span> ← <b>Add a router</b></li>
+    <li>מסלול חדש ← פילטר "ליד חם": <code>Score</code> · <span class="en">Numeric operators: Greater than or equal to</span> · <code>8</code></li>
+    <li>במסלול: <span class="en">Telegram Bot · Send a Text Message or a Reply</span> · <span class="en">Chat ID</span>: המספר מתרגיל 2</li>
+    <li><span class="en">Text</span>: הטקסט למטה, עם הבועות במקום הסוגריים</li>
+    <li>Choose where to start ← Choose manually ← ליד שהציון שלו גבוה (אורי) ← Run once</li>
+  </ol>
+  <div class="copybox"><pre class="rtl">🔥 ליד חם!
+שם: [Name]
+מוצר: [מוצר מבוקש]
+ציון: [Score]/10 · דחיפות: [Urgency]
+[Summary]</pre></div>
+  <div class="callout tip"><b>המסלולים האחרים</b>ה-Gmail וה-Create an Update ממשיכים במסלול השני (בלי פילטר), כדי שכל ליד יקבל טיוטה — וליד חם יקבל גם הודעה.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>קיבלתי הודעה בטלפון על ליד חם</li><li>ליד עם ציון נמוך לא שלח הודעה</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex3"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex4">
+  <div class="ex-head"><span class="ex-num">4</span><h3>HTTP: אותה הודעה, בלי מודול</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">לשלוח את אותה הודעה עם HTTP — כאילו אין ל-Telegram מודול ב-Make — ולהשוות.</p>
+  <ol class="steps">
+    <li>תרחיש חדש ← <span class="en">HTTP · Make a request</span></li>
+    <li><span class="en">URL</span>: <code>https://api.telegram.org/bot<b>הטוקן</b>/sendMessage</code> (שימו לב: <code>bot</code> צמוד לטוקן, בלי רווח)</li>
+    <li><span class="en">Method</span>: POST · תוכן מסוג <b>JSON</b> (application/json)</li>
+    <li>בתוכן: מדביקים את ה-JSON למטה, עם ה-chat_id שלכם</li>
+    <li>Parse response = Yes ← Run once ← הודעה בטלפון?</li>
+    <li>ממלאים את טבלת ההשוואה</li>
+  </ol>
+  <div class="copybox"><pre>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</pre></div>
+  <div class="tbl fill"><table>
+    <tr><th>שאלה</th><th>מודול מוכן</th><th>HTTP</th></tr>
+    <tr><td>איפה הטוקן?</td><td></td><td></td></tr>
+    <tr><td>מה קורה אם שוכחים chat_id?</td><td></td><td></td></tr>
+    <tr><td>מה היה קל יותר?</td><td></td><td></td></tr>
+  </table></div>
+  <details class="hint"><summary>קיבלתי "ok": false</summary><p style="margin:6px 0 0">קראו את <code>description</code> בתשובה. "Not Found" = טעות בכתובת או בטוקן. "chat not found" = chat_id שגוי. "Bad Request: message text is empty" = text ריק או JSON שבור.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>קיבלתי את ההודעה מ-HTTP</li><li>הטבלה מלאה</li><li>אני יודע/ת למה עדיף מודול מוכן כשיש</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex4"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex5">
+  <div class="ex-head"><span class="ex-num">5</span><h3>Webhook: ליד מ"טופס" נכנס ל-monday</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">Hoppscotch משחק את הטופס באתר. Make מקבל את הבקשה מיד, ויוצר ליד בלוח.</p>
+  <ol class="steps">
+    <li>תרחיש חדש ← <span class="en">Webhooks · Custom webhook</span> ← Add ← שם: <b>ליד מהאתר</b> ← Save ← <b>Copy address to clipboard</b></li>
+    <li>לוחצים <b>Run once</b> — Make מחכה לבקשה</li>
+    <li>ב-<a href="https://hoppscotch.io" target="_blank" rel="noopener">hoppscotch.io</a>: <b>POST</b> · מדביקים את הכתובת · <span class="en">Body</span> ← <span class="en">application/json</span> ← ה-JSON למטה ← <b>Send</b></li>
+    <li>ב-Make: הבועה מעל ה-Webhook מראה את הנתונים. עכשיו יש בועות name, email, product, message</li>
+    <li>מוסיפים <span class="en">monday.com · Create an Item</span> (כמו בתרגיל 9 של מפגש 6): Item Name ← name, ו-Columns: אימייל, מוצר מבוקש, הודעה, סטטוס = ליד חדש</li>
+    <li>Run once ← שוב Send ב-Hoppscotch ← הליד בלוח?</li>
+    <li>בונוס: מודול <span class="en">Webhooks · Webhook response</span> בסוף: Status 200, Body: <code>{"ok": true, "message": "תודה, נחזור אלייך"}</code>. ב-Hoppscotch תראו את התשובה</li>
+  </ol>
+  <div class="copybox"><pre>{"name": "תמר גולן", "email": "you+tamar@gmail.com", "product": "שולחן עבודה מעץ", "message": "יש משלוח לירושלים? צריכה עד יום חמישי."}</pre></div>
+  <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-setup.jpg" alt="Custom webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Custom webhook: הכתובת הייחודית — את זו מדביקים ב-Hoppscotch (או בטופס באתר).</figcaption></figure>
+  <details class="hint"><summary>שיניתי את השדות ב-JSON, ו-Make לא רואה אותם</summary><p style="margin:6px 0 0">פותחים את ה-Webhook ← <span class="en">Redetermine data structure</span> ← Send שוב מ-Hoppscotch.</p></details>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>תמר נוצרה בלוח עם אימייל, מוצר והודעה</li><li>אני יודע/ת להסביר מה ההבדל בין הטריגר הזה ל-Watch Board's Items</li><li>בדקתי את Webhooks ← Logs וראיתי את הבקשה</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex5"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex6">
+  <div class="ex-head"><span class="ex-num">6</span><h3>השרשרת המלאה</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">מתקדם</span><span class="pill cls">בכיתה</span></div>
+  <p class="goal">שלושה תרחישים שעובדים יחד: "טופס" ← monday ← Haiku ← Telegram + טיוטה.</p>
+  <ol class="steps">
+    <li>שולחים מ-Hoppscotch ליד <b>חם</b>: הודעה עם תאריך יעד קרוב ואיום במתחרה</li>
+    <li>תרחיש תרגיל 5 יוצר אותו בלוח (Run once)</li>
+    <li>תרחיש הלידים (תרגיל 3): Choose where to start ← Choose manually ← הליד שלפני ← Run once</li>
+    <li>בודקים: ניתוח בלוח · טיוטה ב-Gmail · הודעה בטלפון</li>
+  </ol>
+  <div class="copybox"><pre>{"name": "אבי כהן", "email": "you+avi@gmail.com", "product": "ספה פינתית", "message": "אנחנו נכנסים לדירה בעוד 10 ימים וצריכים ספה. אם אתם לא יכולים — נזמין מאיקאה."}</pre></div>
+  <div class="callout tip"><b>מה הופך את זה לאמיתי</b>אם שני התרחישים היו דולקים (Active), כל זה היה קורה לבד: ה-Webhook מיד, ותרחיש הלידים תוך 15 דקות. בתרגול — Run once, כדי לחסוך קרדיטים.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>ליד אחד עבר את כל השרשרת</li><li>קיבלתי הודעה בטלפון וטיוטה ב-Gmail</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex6"> סיימתי את התרגיל</label>
+</div>
+</section>
+<div class="blockhead">לבית ובונוס</div>
+<section class="blk" style="padding-top:6px">
+
+<div class="card ex" id="ex7">
+  <div class="ex-head"><span class="ex-num">7</span><h3>אוטומציה לעסק שלכם</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">קל</span><span class="pill home">📝 לבית</span></div>
+  <p class="goal">לבחור אוטומציה אחת מהגלריה (או משלכם) ולתכנן אותה עד הסוף — בלי לבנות עדיין.</p>
+  <div class="tbl fill"><table>
+    <tr><th>שאלה</th><th>התשובה שלי</th></tr>
+    <tr><td>מה האוטומציה עושה, במשפט אחד?</td><td></td></tr>
+    <tr><td>טריגר — ואיזה סוג (תזמון / Polling / Webhook)?</td><td></td></tr>
+    <tr><td>תנאי — מתי ממשיכים?</td><td></td></tr>
+    <tr><td>פעולות — מה קורה, ובאילו אפליקציות?</td><td></td></tr>
+    <tr><td>דפוס (התראה / סנכרון / העשרה / ניתוב / אישור / סיכום)</td><td></td></tr>
+    <tr><td>לכל אפליקציה: מודול מוכן / API call / HTTP / Webhook?</td><td></td></tr>
+    <tr><td>מה יכול להשתבש, ומה עושים?</td><td></td></tr>
+    <tr><td>כמה זמן זה חוסך בשבוע?</td><td></td></tr>
+  </table></div>
+  <div class="callout tip"><b>זה הבסיס לפרויקט הגמר</b>שמרו את הטבלה. במפגשים 13–15 תבנו את אחת מהן.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>הטבלה מלאה</li><li>בדקתי ב-Make שלכל אפליקציה יש מודול או API</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex7"> סיימתי את התרגיל</label>
+</div>
+<div class="card ex" id="ex8">
+  <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: הודעה לבוט ← ליד ב-monday</h3></div>
+  <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">מתקדם</span><span class="pill">בונוס</span></div>
+  <p class="goal">Webhook "אמיתי" מבחוץ: כל הודעה שנשלחת לבוט יוצרת ליד בלוח.</p>
+  <ol class="steps">
+    <li>תרחיש חדש ← <span class="en">Telegram Bot · Watch Updates</span> (Instant). Make רושם Webhook אצל Telegram לבד</li>
+    <li>Run once ← שולחים לבוט מהטלפון: "שמי דנה, מתעניינת בשולחן אוכל, dana@example.com"</li>
+    <li>Haiku: "חלץ מההודעה JSON: name, email, product" ← Parse JSON ← monday Create an Item</li>
+    <li>בונוס-בונוס: <span class="en">Send a Text Message or a Reply</span> חזרה לשולח: "תודה! קיבלנו, נחזור אלייך"</li>
+  </ol>
+  <div class="callout warn"><b>שימו לב</b>בוט עם Watch Updates לא יעבוד במקביל לבדיקת getUpdates מתרגיל 2: ברגע שיש Webhook, getUpdates מחזיר שגיאה. זה תקין — Telegram שולח לכתובת של Make במקום לשמור.</div>
+  <h4>איך יודעים שעשיתם טוב</h4>
+  <ul class="check"><li>הודעה לבוט יצרה ליד בלוח</li><li>הבוט ענה לשולח</li></ul>
+  <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex8"> סיימתי את התרגיל</label>
+</div>
+</section>
+<section class="blk">
+  <div class="kicker">לפני המפגש הבא</div>
+  <h2>משימה לבית</h2>
+  <div class="card">
+    <ul class="check">
+      <li>השלמתי את תרגילים 1–5</li>
+      <li>מילאתי את טבלת תרגיל 7 לאוטומציה מהעסק שלי</li>
+      <li>כל התרחישים כבויים, והטוקן של הבוט רק בחיבור</li>
+    </ul>
+    <div class="callout tip"><b>מה במפגש הבא</b>חילוץ נתונים ממסמכים ומיילים: חשבוניות, PDF וקבצים מצורפים.</div>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 7 · תרגול</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

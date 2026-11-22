@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 7 · פתרונות</title>
+<meta name="description" content="פתרונות מפגש 7: בוט Telegram, getUpdates, הודעה ממודול וב-HTTP, Webhook ל-monday, השרשרת המלאה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.fill td:last-child{min-width:160px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s07sol">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 7</b><span>›</span><b>פתרונות</b></div>
+  <h1>פתרונות: Make מתחבר לכל דבר</h1>
+  <p class="sub">ההגדרות לכל תרגיל, התשובות לטבלאות, והתקלות הנפוצות.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html" class="on">✅ פתרונות</a>
+  <a href="../session06/summary.html">⏪ מפגש 6</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">1</span><h3>פותחים בוט</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מה צריך להיות לכם</b>בוט עם שם משתמש שנגמר ב-bot, טוקן בצורה <code>1234567890:AAH…</code> (מספר, נקודתיים, מחרוזת), ושיחה פתוחה עם הבוט שבה שלחתם /start.</div>
+    <p class="note">BotFather אומר "Sorry, this username is already taken"? הוסיפו מספר או שם משלכם. שם התצוגה יכול להיות בעברית, שם המשתמש — רק אנגלית, ספרות וקו תחתון.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">2</span><h3>chat_id עם Make an API call</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שדה</th><th>ערך</th></tr>
+      <tr><td>Connection</td><td>החיבור עם הטוקן של הבוט</td></tr>
+      <tr><td>URL</td><td><code>getUpdates</code> (רק שם הפעולה — Make משלים את השאר)</td></tr>
+      <tr><td>Method</td><td>GET</td></tr>
+    </table></div>
+    <div class="sol"><b>✅ הנתיב לתשובה</b><code>Body › result › 1 › message › chat › id</code> — מספר חיובי (בקבוצה: שלילי).</div>
+    <p class="note">למה דרך 2? אין מודול "תן לי עדכונים כרשימה", אבל יש פעולה ב-API. Make an API call משתמש בחיבור הקיים — לא מדביקים את הטוקן בשום שדה.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">3</span><h3>ליד חם ← הודעה</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Watch Board's Items ← Haiku ← Parse JSON ← Update Column Values ← <b>Router</b>:<br>
+    מסלול 1 · פילטר <code>Score ≥ 8</code> ← Telegram Send a Text Message or a Reply<br>
+    מסלול 2 · בלי פילטר ← Gmail ← Create an Update</div>
+    <p class="note">הליד של אורי (ציון 9) שולח הודעה. נועה (7) — לא. אם שום ליד לא שולח: בדקו שהאופרטור הוא <b>Numeric</b> (Greater than or equal to) ולא Text, אחרת "9" ו-"8" מושווים כמחרוזות.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">4</span><h3>HTTP</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שדה</th><th>ערך</th></tr>
+      <tr><td>URL</td><td><code>https://api.telegram.org/bot&lt;TOKEN&gt;/sendMessage</code></td></tr>
+      <tr><td>Method</td><td>POST</td></tr>
+      <tr><td>Body</td><td>JSON: <code>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</code></td></tr>
+      <tr><td>Parse response</td><td>Yes</td></tr>
+    </table></div>
+    <div class="tbl"><table>
+      <tr><th>שאלה</th><th>מודול מוכן</th><th>HTTP</th></tr>
+      <tr><td>איפה הטוקן?</td><td>בחיבור (Credentials), מוסתר</td><td>בכתובת, גלוי בתרחיש</td></tr>
+      <tr><td>שוכחים chat_id?</td><td>Make לא נותן לשמור — שדה חובה</td><td>התרחיש רץ, Telegram מחזיר שגיאה 400</td></tr>
+      <tr><td>קל יותר?</td><td>כמעט תמיד</td><td>רק כשאין מודול, או שחסרה בו אפשרות</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">5</span><h3>Webhook ל-monday</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Custom webhook ← monday Create an Item ← (בונוס) Webhook response</div>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי Send ב-Hoppscotch: name, email, product, message כבועות.</figcaption></figure>
+    <div class="tbl"><table>
+      <tr><th>עמודה</th><th>ב-Create an Item</th></tr>
+      <tr><td>שם הליד</td><td>Item Name ← <code>name</code></td></tr>
+      <tr><td>אימייל</td><td>Email ← <code>email</code> · Text ← <code>name</code></td></tr>
+      <tr><td>מוצר מבוקש</td><td><code>product</code></td></tr>
+      <tr><td>הודעה</td><td>Text ← <code>message</code></td></tr>
+      <tr><td>סטטוס</td><td>Label = ליד חדש (מרשימה)</td></tr>
+    </table></div>
+    <p class="note">ההבדל מ-Watch Board's Items: שם Make שואל את monday כל 15 דקות. כאן מישהו מבחוץ שולח ל-Make, והתרחיש רץ מיד — ובלי לשלם על בדיקות ריקות.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">6</span><h3>השרשרת המלאה</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מה צריך לקרות לאבי</b>נוצר בלוח (תרגיל 5) ← Haiku: דחיפות גבוהה, ציון 8–9 (תאריך קרוב + איום במתחרה) ← טיוטה ב-Gmail ← הודעה בטלפון (תרגיל 3).</div>
+    <p class="note">שלושה דפוסים בשרשרת אחת: סנכרון (טופס ← monday), העשרה (Haiku), ניתוב + התראה (Router ← Telegram), ואישור (טיוטה).</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">7</span><h3>אוטומציה לעסק שלכם — דוגמה מלאה</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שאלה</th><th>דוגמה: קליניקה</th></tr>
+      <tr><td>מה היא עושה?</td><td>מטופל שביטל תור מקבל הודעה עם הצעה לתור חלופי</td></tr>
+      <tr><td>טריגר</td><td>🪝 Webhook ממערכת התורים ("תור בוטל")</td></tr>
+      <tr><td>תנאי</td><td>הביטול יותר מ-24 שעות מראש</td></tr>
+      <tr><td>פעולות</td><td>Google Calendar (חיפוש מקומות פנויים) ← Haiku (נוסח) ← WhatsApp / SMS</td></tr>
+      <tr><td>דפוס</td><td>התראה + העשרה</td></tr>
+      <tr><td>דרך חיבור</td><td>מערכת התורים: Webhook · Calendar: מודול · SMS: HTTP לספק</td></tr>
+      <tr><td>מה יכול להשתבש</td><td>אין מקום פנוי ← הודעה בלי הצעה + התראה למזכירה</td></tr>
+      <tr><td>חיסכון</td><td>~15 ביטולים בשבוע × 5 דקות = כשעה ורבע</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">★</span><h3>הודעה לבוט ← ליד</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Telegram Bot · Watch Updates ← Haiku (חילוץ JSON מ-<code>Message › Text</code>) ← Parse JSON ← monday Create an Item ← Telegram Send a Text Message (Chat ID = <code>Message › Chat › ID</code>)</div>
+    <p class="note">כאן ה-chat_id לא קבוע — הוא של מי ששלח. לכן ממפים אותו מהטריגר, ולא מקלידים מספר.</p>
+  </div>
+</div>
+</section>
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 7 · פתרונות</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
