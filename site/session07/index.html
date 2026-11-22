@@ -79,6 +79,7 @@
     <li>קליק ימני ← <b>Run this module only</b></li>
     <li>בפלט: <span class="en">Body</span> ← <span class="en">result</span> ← <b>1</b> ← <span class="en">message</span> ← <span class="en">chat</span> ← <b>id</b>. רושמים את המספר</li>
   </ol>
+  <figure style="margin:10px auto 14px;max-width:520px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-api-call.jpg" alt="פלט getUpdates" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הנתיב ל-chat_id בפלט של getUpdates. הפרטים האישיים מטושטשים.</figcaption></figure>
   <details class="hint"><summary>result ריק?</summary><p style="margin:6px 0 0">לא שלחתם /start לבוט, או ששלחתם לבוט אחר. שלחו לו הודעה כלשהי, והריצו שוב.</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>יש לי chat_id — מספר בלי מירכאות</li><li>אני יודע/ת להסביר למה זו דרך 2 ולא מודול מוכן</li></ul>
@@ -113,8 +114,9 @@
   <ol class="steps">
     <li>תרחיש חדש ← <span class="en">HTTP · Make a request</span></li>
     <li><span class="en">URL</span>: <code>https://api.telegram.org/bot<b>הטוקן</b>/sendMessage</code> (שימו לב: <code>bot</code> צמוד לטוקן, בלי רווח)</li>
-    <li><span class="en">Method</span>: POST · תוכן מסוג <b>JSON</b> (application/json)</li>
-    <li>בתוכן: מדביקים את ה-JSON למטה, עם ה-chat_id שלכם</li>
+    <li><span class="en">Authentication type</span>: No authentication · <span class="en">Method</span>: POST</li>
+    <li><span class="en">Body content type</span>: application/json · <span class="en">Body input method</span>: JSON string</li>
+    <li><span class="en">Body content</span>: מדביקים את ה-JSON למטה, עם ה-chat_id שלכם</li>
     <li>Parse response = Yes ← Run once ← הודעה בטלפון?</li>
     <li>ממלאים את טבלת ההשוואה</li>
   </ol>

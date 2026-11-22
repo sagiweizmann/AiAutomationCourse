@@ -65,6 +65,7 @@
   <div class="ex-head"><span class="ex-num">3</span><h3>ליד חם ← הודעה</h3></div>
   <div class="fix">
 
+    <figure style="margin:10px auto 14px;max-width:476px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-received.jpg" alt="ההודעה בבוט" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך ההודעה מגיעה לבוט ב-Telegram.</figcaption></figure>
     <div class="sol"><b>✅ מבנה</b>Watch Board's Items ← Haiku ← Parse JSON ← Update Column Values ← <b>Router</b>:<br>
     מסלול 1 · פילטר <code>Score ≥ 8</code> ← Telegram Send a Text Message or a Reply<br>
     מסלול 2 · בלי פילטר ← Gmail ← Create an Update</div>
@@ -81,9 +82,12 @@
       <tr><th>שדה</th><th>ערך</th></tr>
       <tr><td>URL</td><td><code>https://api.telegram.org/bot&lt;TOKEN&gt;/sendMessage</code></td></tr>
       <tr><td>Method</td><td>POST</td></tr>
-      <tr><td>Body</td><td>JSON: <code>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</code></td></tr>
+      <tr><td>Authentication type</td><td>No authentication</td></tr>
+      <tr><td>Body content type / input method</td><td>application/json · JSON string</td></tr>
+      <tr><td>Body content</td><td><code>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</code></td></tr>
       <tr><td>Parse response</td><td>Yes</td></tr>
     </table></div>
+    <figure style="margin:10px auto 14px;max-width:480px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/http-send.jpg" alt="HTTP sendMessage" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">ההגדרות ב-HTTP. בצילום יש &lt;TOKEN&gt; ו-&lt;CHAT_ID&gt;, אצלכם הערכים האמיתיים.</figcaption></figure>
     <div class="tbl"><table>
       <tr><th>שאלה</th><th>מודול מוכן</th><th>HTTP</th></tr>
       <tr><td>איפה הטוקן?</td><td>בחיבור (Credentials), מוסתר</td><td>בכתובת, גלוי בתרחיש</td></tr>

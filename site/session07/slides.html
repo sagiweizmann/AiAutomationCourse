@@ -1046,7 +1046,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>אותו עיקרון עובד עם Slack, Discord, Teams — רק מודול אחר.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="4" data-title="פותחים בוט">
+<section class="slide" data-min="3" data-block="4" data-title="פותחים בוט">
   <div class="s-kicker">צעד 1</div>
   <h2>פותחים בוט ב-BotFather</h2>
   <div class="s-body mid">
@@ -1062,7 +1062,17 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>כמו הטוקן של monday: מדביקים רק בחלון החיבור של Make.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="5" data-block="4" data-title="chat_id">
+
+<section class="slide" data-min="1" data-block="4" data-title="מסך: BotFather">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>כך נראה בוט חדש</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:520px;margin:0 auto"><img src="../assets/s07/tg-botfather.jpg" alt="שיחה עם BotFather: newbot, שם, שם משתמש, טוקן"><figcaption>/newbot ← שם תצוגה ← שם משתמש שנגמר ב-bot ← טוקן. הטוקן מטושטש בצילום, ואצלכם הוא יופיע בכתום.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>לחזור על האזהרה: הטוקן הוא סיסמה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="4" data-block="4" data-title="chat_id">
   <div class="s-kicker">צעד 2 · דרך 2 בפעולה</div>
   <h2>chat_id — למי לשלוח? (Make an API call)</h2>
   <div class="s-body mid">
@@ -1077,7 +1087,17 @@ body.ov-on #ov{display:block}
 </section>
 
 
-<section class="slide" data-min="5" data-block="4" data-title="מודול מוכן">
+
+<section class="slide" data-min="1" data-block="4" data-title="מסך: Make an API call">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>getUpdates דרך Make an API call</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:520px;margin:0 auto"><img src="../assets/s07/tg-api-call.jpg" alt="פלט getUpdates ב-Make"><figcaption>URL Method: <code>getUpdates</code> · Method: GET. בפלט: Body ← result ← 1 ← message ← chat ← <b>id</b>. הפרטים האישיים מטושטשים.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>result ריק? לא שלחו /start לבוט, או שהריצו פעמיים. שולחים לבוט עוד הודעה ומריצים שוב.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="4" data-block="4" data-title="מודול מוכן">
   <div class="s-kicker">צעד 3 · דרך 1</div>
   <h2>Send a Text Message or a Reply</h2>
   <div class="s-body mid">
@@ -1092,6 +1112,16 @@ body.ov-on #ov{display:block}
   </div>
   <aside class="notes"><ul><li>Parse mode HTML: אפשר &lt;b&gt;, &lt;i&gt;, &lt;a href&gt;. אם יש &lt; בטקסט של הלקוח — עלול להיכשל. אפשר לוותר על Parse mode.</li></ul></aside>
 </section>
+
+<section class="slide" data-min="1" data-block="4" data-title="מסך: מודול Telegram">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>ההודעה במודול המוכן</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:480px;margin:0 auto"><img src="../assets/s07/tg-send.jpg" alt="מודול Send a Text Message or a Reply"><figcaption>Connection, Chat ID ו-Text. שאר השדות אופציונליים.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>אחרי Run once ההודעה מגיעה לטלפון תוך שנייה.</li></ul></aside>
+</section>
+
 
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה 1">
@@ -1120,7 +1150,7 @@ Parameters:
   <aside class="notes"><ul><li>אל תפחדו מתיעוד באנגלית. מחפשים רק את חמשת הדברים האלה. אפשר גם לבקש מ-Claude: "תסביר לי את התיעוד הזה".</li></ul></aside>
 </section>
 
-<section class="slide" data-min="6" data-block="4" data-title="HTTP: אותה הודעה">
+<section class="slide" data-min="5" data-block="4" data-title="HTTP: אותה הודעה">
   <div class="s-kicker">דרך 3</div>
   <h2>HTTP · Make a request: אותה הודעה, בלי מודול</h2>
   <div class="s-body mid">
@@ -1128,8 +1158,10 @@ Parameters:
       <tr><th>שדה ב-HTTP</th><th>ערך</th></tr>
       <tr><td>URL</td><td class="en">https://api.telegram.org/bot&lt;TOKEN&gt;/sendMessage</td></tr>
       <tr><td>Method</td><td>POST</td></tr>
-      <tr><td>Body type / Content type</td><td>JSON (application/json)</td></tr>
-      <tr><td>Request content</td><td class="en">{"chat_id": 123456789, "text": "🔥 ליד חם: [Name]"}</td></tr>
+      <tr><td>Authentication type</td><td>No authentication</td></tr>
+      <tr><td>Body content type</td><td>application/json</td></tr>
+      <tr><td>Body input method</td><td>JSON string</td></tr>
+      <tr><td>Body content</td><td class="en">{"chat_id": 123456789, "text": "🔥 ליד חם: [Name]"}</td></tr>
       <tr><td>Parse response</td><td>Yes — כדי לקבל בועות מהתשובה</td></tr>
     </table></div>
     <div class="callout warn"><b>שימו לב: הטוקן בתוך הכתובת</b>ב-HTTP אין חיבור שמסתיר אותו. הוא גלוי בתרחיש לכל מי שרואה אותו. זה הסיבה שמודול מוכן עדיף כשיש. ב-API אחרים המפתח בא ב-Header (<code>Authorization: Bearer …</code>), וב-Make אפשר לשמור אותו כ-Key.</div>
@@ -1137,6 +1169,16 @@ Parameters:
   <aside class="notes"><ul><li>בדמו: מדביקים את הטוקן בעצמכם. בצילומי מסך — מסתירים.</li></ul></aside>
 </section>
 
+
+
+<section class="slide" data-min="1" data-block="4" data-title="מסך: HTTP">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>ההודעה ב-HTTP</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="max-width:480px;margin:0 auto"><img src="../assets/s07/http-send.jpg" alt="מודול HTTP Make a request עם sendMessage"><figcaption>Authentication type: No authentication · URL עם הטוקן · POST · application/json · JSON string.</figcaption></figure>
+  </div>
+  <aside class="notes"><ul><li>בצילום יש &lt;TOKEN&gt; ו-&lt;CHAT_ID&gt; במקום הערכים האמיתיים.</li></ul></aside>
+</section>
 
 <section class="slide" data-min="4" data-block="4" data-title="מודול או HTTP">
   <div class="s-kicker">השוואה</div>
