@@ -39,6 +39,7 @@
   <div class="kicker">תוכן העניינים</div>
   <h2>מה יש בדף</h2>
   <div class="callout claude" style="border-color:var(--claude)"><b>מה בונים</b>"בית ועיצוב" רוצה שנציג המכירות יקבל <b>הודעה בטלפון</b> על כל ליד חם, ושלידים מטופס באתר ייכנסו <b>מיד</b> ל-monday. ארבע הדרכים לחבר אפליקציה — בתרגיל אחד כל אחת.</div>
+  <div class="callout tip"><b>🤖 מדריך מלא עם צילומי מסך</b><a href="../guides/telegram-bot.html">בוט Telegram ו-Make</a> — כל השלבים של תרגילים 1–4, ותקלות נפוצות.</div>
   <ul class="toc">
     <li><a href="#ex1"><span class="n">1</span><span class="t">פותחים בוט ב-Telegram</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex2"><span class="n">2</span><span class="t">Make an API call: מוצאים את ה-chat_id</span><span class="pill cls">בכיתה</span></a></li>
@@ -63,6 +64,8 @@
     <li>BotFather שולח <b>טוקן</b>. מעתיקים אותו למקום בטוח זמני (לא לצ'אט!)</li>
     <li>לוחצים על הקישור לבוט החדש ← <b>Start</b> (או שולחים <code>/start</code>)</li>
   </ol>
+  <figure style="margin:10px auto 14px;max-width:500px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-botfather.jpg" alt="שיחה עם BotFather" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">/newbot ← שם ← שם משתמש שנגמר ב-bot ← טוקן (מטושטש כאן — אצלכם בכתום).</figcaption></figure>
+  <p class="note">תקועים? <a href="../guides/telegram-bot.html">המדריך המלא</a>, שלבים 1–2.</p>
   <div class="callout warn"><b>הטוקן = סיסמה</b>דלף? ב-BotFather: <code>/revoke</code> ← בוחרים את הבוט ← טוקן חדש. ואז מעדכנים את החיבור ב-Make (Credentials ← Edit), כמו במפגש 6.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>יש לי בוט, והוא מופיע בצ'אטים שלי</li><li>שלחתי לו /start</li></ul>
@@ -97,6 +100,8 @@
     <li><span class="en">Text</span>: הטקסט למטה, עם הבועות במקום הסוגריים</li>
     <li>Choose where to start ← Choose manually ← ליד שהציון שלו גבוה (אורי) ← Run once</li>
   </ol>
+  <figure style="margin:10px auto 14px;max-width:460px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-send.jpg" alt="Send a Text Message or a Reply" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Chat ID ו-Text. שאר השדות אופציונליים.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:476px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-received.jpg" alt="ההודעה בבוט" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">וכך ההודעה מגיעה ל-Telegram.</figcaption></figure>
   <div class="copybox"><pre class="rtl">🔥 ליד חם!
 שם: [Name]
 מוצר: [מוצר מבוקש]
@@ -120,6 +125,7 @@
     <li>Parse response = Yes ← Run once ← הודעה בטלפון?</li>
     <li>ממלאים את טבלת ההשוואה</li>
   </ol>
+  <figure style="margin:10px auto 14px;max-width:460px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/http-send.jpg" alt="HTTP sendMessage" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך נראה המודול. במקום &lt;TOKEN&gt; ו-&lt;CHAT_ID&gt; שמים את הערכים שלכם.</figcaption></figure>
   <div class="copybox"><pre>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</pre></div>
   <div class="tbl fill"><table>
     <tr><th>שאלה</th><th>מודול מוכן</th><th>HTTP</th></tr>
@@ -147,6 +153,7 @@
   </ol>
   <div class="copybox"><pre>{"name": "תמר גולן", "email": "you+tamar@gmail.com", "product": "שולחן עבודה מעץ", "message": "יש משלוח לירושלים? צריכה עד יום חמישי."}</pre></div>
   <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-setup.jpg" alt="Custom webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Custom webhook: הכתובת הייחודית — את זו מדביקים ב-Hoppscotch (או בטופס באתר).</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:480px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי השליחה מ-Hoppscotch: Make מזהה את השדות, ומעכשיו הם בועות למיפוי.</figcaption></figure>
   <details class="hint"><summary>שיניתי את השדות ב-JSON, ו-Make לא רואה אותם</summary><p style="margin:6px 0 0">פותחים את ה-Webhook ← <span class="en">Redetermine data structure</span> ← Send שוב מ-Hoppscotch.</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>תמר נוצרה בלוח עם אימייל, מוצר והודעה</li><li>אני יודע/ת להסביר מה ההבדל בין הטריגר הזה ל-Watch Board's Items</li><li>בדקתי את Webhooks ← Logs וראיתי את הבקשה</li></ul>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מדריך · בוט Telegram ו-Make</title>
+<meta name="description" content="מדריך בעברית, עם צילומי מסך: פותחים בוט Telegram ב-BotFather, מחברים ל-Make, מוצאים chat_id, שולחים הודעה במודול מוכן וב-HTTP — הכנה ותרגול למפגש 7.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+figure.shot{margin:16px auto;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+figure.shot img{display:block;width:100%;height:auto}
+figure.shot figcaption{padding:9px 14px;font-size:14px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
+figure.shot.narrow{max-width:420px}
+figure.shot.mid{max-width:640px}
+.fieldlist{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.fieldlist li{padding:12px 14px;border-radius:12px;background:var(--surface-2)}
+.fieldlist b{color:var(--accent)}
+</style>
+</head>
+<body data-page="guide-telegram-bot">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a> <span>›</span> <b>מדריך: בוט Telegram ו-Make</b></div>
+  <h1>בוט Telegram שמקבל הודעות מ-Make</h1>
+  <p class="sub">מדריך צעד-אחר-צעד למפגש 7: פותחים בוט ב-BotFather, מחברים אותו ל-Make, מוצאים את ה-chat_id שלכם, ושולחים הודעה — פעם במודול המוכן ופעם ב-HTTP. כ-15 דקות, בחינם.</p>
+</div></header>
+
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="../session07/index.html">🛠️ מפגש 7: תרגול</a>
+  <a href="../session07/slides.html">🎬 מפגש 7: מצגת</a>
+  <a href="telegram-bot.html" class="on">🤖 בוט Telegram</a>
+  <a href="make-signup.html">🧩 הרשמה ל-Make</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+
+<main class="wrap">
+
+<section class="blk">
+  <div class="kicker">לפני שמתחילים</div>
+  <h2>מה זה בוט, ולמה Telegram</h2>
+  <div class="card">
+    <p style="margin-top:0">בוט ב-Telegram הוא "משתמש" שמנוהל על ידי תוכנה ולא על ידי אדם. אפשר לשלוח לו הודעות, והוא יכול לשלוח הודעות לכם. בקורס הבוט הוא <b>ערוץ התראות</b>: כשנכנס ליד חם, Make שולח דרכו הודעה לטלפון של הנציג תוך שנייה.</p>
+    <ul class="fieldlist">
+      <li><b>💳 כמה זה עולה</b><br>כלום. פתיחת בוט ושליחת הודעות דרך ה-API של Telegram חינמיות. ב-Make כל שליחה היא פעולה אחת (קרדיט אחד).</li>
+      <li><b>🧰 מה צריך מראש</b><br>חשבון Telegram (באפליקציה בטלפון, או במחשב ב-<code>web.telegram.org</code> אחרי סריקת QR מהטלפון), וחשבון Make פעיל (<a href="make-signup.html">מדריך ההרשמה ל-Make</a>).</li>
+      <li><b>🔑 שלושה מושגים</b><br><b>BotFather</b> — הבוט הרשמי של Telegram שיוצר בוטים. <b>טוקן</b> — המפתח של הבוט, Make משתמש בו כדי לדבר בשמו. <b>chat_id</b> — המספר של השיחה שאליה שולחים, כמו "כתובת" של הנמען.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 1</div>
+  <h2>פותחים בוט ב-BotFather</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>ב-Telegram לוחצים על החיפוש ומקלידים <b>BotFather</b>. בוחרים את זה עם ✔ כחול (יש התחזויות — בלי ✔ לא נוגעים)</li>
+      <li>לוחצים <span class="en">Start</span>, ואז שולחים <code>/newbot</code></li>
+      <li>BotFather שואל על <b>שם תצוגה</b>: כותבים מה שרוצים, גם בעברית. למשל <i>לידים · בית ועיצוב</i></li>
+      <li>אחר כך על <b>שם משתמש</b>: באנגלית, בלי רווחים, וחייב להיגמר ב-<code>bot</code>. למשל <code>beit_design_leads_bot</code></li>
+      <li>אם השם תפוס ("Sorry, this username is already taken") — מוסיפים מספר או את השם שלכם, ומנסים שוב</li>
+      <li>BotFather עונה "Done! Congratulations" עם <b>הטוקן</b> בכתום (נראה כך: <code>123456789:AAE…</code>). לוחצים עליו כדי להעתיק</li>
+    </ol>
+    <figure class="shot narrow"><img src="../assets/s07/tg-botfather.jpg" alt="השיחה עם BotFather: newbot, שם, שם משתמש וטוקן"><figcaption>השיחה המלאה עם BotFather. הטוקן מטושטש כאן — אצלכם הוא מופיע בכתום.</figcaption></figure>
+    <div class="callout warn"><b>הטוקן הוא סיסמה</b>מי שמחזיק אותו שולט בבוט: קורא הודעות ושולח בשמו. לא שולחים אותו בוואטסאפ, לא מדביקים בצ'אט (גם לא בצ'אט עם AI), ולא מצלמים. דלף? ב-BotFather: <code>/revoke</code> ← בוחרים את הבוט ← מקבלים טוקן חדש, והישן מפסיק לעבוד מיד. אחר כך מעדכנים את החיבור ב-Make.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 2</div>
+  <h2>שולחים לבוט /start</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>בהודעה של BotFather לוחצים על הקישור <code>t.me/שם_הבוט_שלכם</code></li>
+      <li>נפתחת שיחה ריקה עם הבוט ("No messages here yet"). לוחצים <span class="en">START</span> בתחתית</li>
+      <li>שולחים לו עוד הודעה קצרה, למשל "שלום בוט"</li>
+    </ol>
+    <div class="callout tip"><b>למה זה חובה</b>בוט לא יכול לפנות ראשון לאף אחד. רק אחרי שכתבתם לו, Telegram מרשה לו לשלוח לכם הודעות — ורק אז ה-chat_id שלכם מופיע אצלו (שלב 4).</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 3</div>
+  <h2>מחברים את הבוט ל-Make</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>ב-Make: <span class="en">Create scenario</span> ← <b>+</b> ← מחפשים <b>telegram</b> ← <span class="en">Telegram Bot</span></li>
+      <li>לוחצים <span class="en">Show more</span> ובוחרים <span class="en">Make an API Call</span></li>
+      <li>ליד <span class="en">Connection</span>: <span class="en">Create a connection</span></li>
+      <li>מדביקים את הטוקן בשדה <span class="en">Token</span> ← <span class="en">Save</span></li>
+    </ol>
+    <figure class="shot narrow"><img src="../assets/s07/tg-connection.jpg" alt="חלון Create a connection של Telegram Bot ב-Make עם שדה Token"><figcaption>חלון החיבור: שם לחיבור (אפשר להשאיר), ושדה <span class="en">Token</span>. את החיבור יוצרים פעם אחת, ומכאן כל מודול Telegram משתמש בו.</figcaption></figure>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 4</div>
+  <h2>מוצאים את ה-chat_id עם getUpdates</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>באותו מודול: <span class="en">URL Method</span> = <code>getUpdates</code> · <span class="en">Method</span> = <span class="en">GET</span> ← <span class="en">Save</span></li>
+      <li><span class="en">Run once</span> ← לוחצים על הבועה שמעל המודול</li>
+      <li>ב-<span class="en">Output</span> פותחים: <span class="en">Body</span> ← <span class="en">result</span> ← <b>1</b> ← <span class="en">message</span> ← <span class="en">chat</span> ← <b>id</b></li>
+      <li>רושמים את המספר. זה ה-chat_id שלכם (מספר בלבד, בלי רווחים)</li>
+    </ol>
+    <figure class="shot narrow"><img src="../assets/s07/tg-api-call.jpg" alt="פלט getUpdates ב-Make עם הנתיב ל-chat id"><figcaption>הפלט של getUpdates. הפרטים האישיים מטושטשים — אצלכם יופיעו השם, שם המשתמש וה-id שלכם.</figcaption></figure>
+    <div class="callout tip"><b>result ריק?</b>Telegram שומר הודעות לבוט רק לזמן קצר, ואחרי שקראו אותן הוא לא מחזיר אותן שוב. שלחו לבוט עוד הודעה ב-Telegram, והריצו שוב.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 5</div>
+  <h2>שולחים הודעה במודול המוכן</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>מוסיפים מודול: <span class="en">Telegram Bot</span> ← <span class="en">Send a Text Message or a Reply</span></li>
+      <li><span class="en">Connection</span>: החיבור משלב 3</li>
+      <li><span class="en">Chat ID</span>: המספר משלב 4</li>
+      <li><span class="en">Text</span>: ההודעה. אפשר טקסט קבוע, או בועות מהמודולים הקודמים (שם הליד, ציון, מוצר)</li>
+      <li><span class="en">Save</span> ← <span class="en">Run once</span> ← בודקים בטלפון</li>
+    </ol>
+    <figure class="shot narrow"><img src="../assets/s07/tg-send.jpg" alt="מודול Send a Text Message or a Reply עם Chat ID ו-Text"><figcaption>שלושה שדות חובה: <span class="en">Connection</span>, <span class="en">Chat ID</span> (מטושטש כאן) ו-<span class="en">Text</span>. שאר השדות אופציונליים.</figcaption></figure>
+    <figure class="shot narrow"><img src="../assets/s07/tg-received.jpg" alt="ההודעה מ-Make מגיעה לבוט ב-Telegram"><figcaption>וכך זה מגיע ל-Telegram, שנייה אחרי <span class="en">Run once</span>.</figcaption></figure>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">שלב 6 · להבנה</div>
+  <h2>אותה הודעה ב-HTTP, בלי המודול</h2>
+  <div class="card">
+    <p style="margin-top:0">המודול המוכן הוא בעצם עטיפה לקריאת API. כדי לראות מה קורה מתחת, שולחים את אותה הודעה עם <span class="en">HTTP · Make a request</span> — כאילו ל-Telegram לא היה מודול ב-Make.</p>
+    <ol class="steps">
+      <li><span class="en">Authentication type</span>: <span class="en">No authentication</span></li>
+      <li><span class="en">URL</span>: <code>https://api.telegram.org/bot<b>הטוקן</b>/sendMessage</code> — המילה <code>bot</code> צמודה לטוקן, בלי רווח</li>
+      <li><span class="en">Method</span>: <span class="en">POST</span></li>
+      <li><span class="en">Body content type</span>: <span class="en">application/json</span> · <span class="en">Body input method</span>: <span class="en">JSON string</span></li>
+      <li><span class="en">Body content</span>: <code>{"chat_id": 123456789, "text": "שלום מ-HTTP 👋"}</code> — עם ה-chat_id שלכם</li>
+      <li><span class="en">Run once</span> ← עוד הודעה בטלפון</li>
+    </ol>
+    <figure class="shot narrow"><img src="../assets/s07/http-send.jpg" alt="מודול HTTP עם sendMessage"><figcaption>כך נראה המודול. במקום <code>&lt;TOKEN&gt;</code> ו-<code>&lt;CHAT_ID&gt;</code> שמים את הערכים שלכם.</figcaption></figure>
+    <div class="callout warn"><b>שימו לב: ב-HTTP הטוקן גלוי</b>הוא יושב בכתובת, וכל מי שרואה את התרחיש רואה אותו. לכן כשיש מודול מוכן — משתמשים בו. HTTP שומרים למקרים שאין מודול, או שחסרה בו אפשרות.</div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="kicker">תקלות נפוצות</div>
+  <h2>אם משהו נתקע</h2>
+  <div class="card">
+    <ul class="fieldlist">
+      <li><b>result ריק ב-getUpdates</b><br>לא שלחתם /start, שלחתם לבוט אחר, או שההודעות כבר נקראו. שלחו לבוט הודעה חדשה והריצו שוב.</li>
+      <li><b>Bad Request: chat not found</b><br>ה-chat_id שגוי, או שהמשתמש לא כתב לבוט אף פעם. העתיקו שוב את <span class="en">chat → id</span> מ-getUpdates.</li>
+      <li><b>Unauthorized (401)</b><br>הטוקן שגוי או בוטל ב-<code>/revoke</code>. ב-HTTP: בדקו שאין רווח בין <code>bot</code> לטוקן. במודול: <span class="en">Credentials</span> ← החיבור ← <span class="en">Reauthorize</span> עם הטוקן החדש.</li>
+      <li><b>Conflict (409) ב-getUpdates</b><br>לבוט כבר מוגדר Webhook — למשל אחרי שיצרתם טריגר <span class="en">Watch Updates</span>. כל עוד הוא קיים, getUpdates לא עובד. את ה-chat_id אפשר לקחת מהפלט של <span class="en">Watch Updates</span> עצמו.</li>
+      <li><b>ההודעה הגיעה, אבל בלי עיצוב</b><br>כדי להדגיש טקסט: <span class="en">Parse Mode</span> = <span class="en">HTML</span>, ובטקסט <code>&lt;b&gt;ליד חם&lt;/b&gt;</code>.</li>
+      <li><b>רוצים לשלוח לקבוצה</b><br>מוסיפים את הבוט לקבוצה, כותבים בה הודעה, ומריצים getUpdates. ה-chat_id של קבוצה מתחיל במינוס (למשל <code>-100…</code>) — מעתיקים אותו כולל המינוס.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="next">
+    <a href="../session07/index.html"><div class="card"><span style="font-size:26px">🛠️</span><div><small>המשך</small><div style="font-family:'Secular One';font-size:20px">תרגול מפגש 7</div></div></div></a>
+    <a href="make-signup.html"><div class="card"><span style="font-size:26px">🧩</span><div><small>עוד מדריך</small><div style="font-family:'Secular One';font-size:20px">הרשמה ל-Make</div></div></div></a>
+  </div>
+</section>
+
+</main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מדריך: בוט Telegram ו-Make</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
