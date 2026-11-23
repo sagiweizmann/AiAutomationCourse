@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מפגש 7 · פתרונות</title>
-<meta name="description" content="פתרונות מפגש 7: בוט Telegram, getUpdates, הודעה ממודול וב-HTTP, Webhook ל-monday, השרשרת המלאה.">
+<meta name="description" content="פתרונות מפגש 7: Webhook ל-monday, ראוטר לידים ל-Telegram ול-Google Sheets, בוט מלאי מהגיליון, ותרגילי החזרה.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -36,7 +36,71 @@
 
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">1</span><h3>פותחים בוט</h3></div>
+  <div class="ex-head"><span class="ex-num">1</span><h3>Webhook ל-monday</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Custom webhook ← monday Create an Item ← (בונוס) Webhook response</div>
+    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי Send ב-Hoppscotch: name, email, product, message כבועות.</figcaption></figure>
+    <div class="tbl"><table>
+      <tr><th>עמודה</th><th>ב-Create an Item</th></tr>
+      <tr><td>שם הליד</td><td>Item Name ← <code>name</code></td></tr>
+      <tr><td>אימייל</td><td>Email ← <code>email</code> · Text ← <code>name</code></td></tr>
+      <tr><td>מוצר מבוקש</td><td><code>product</code></td></tr>
+      <tr><td>הודעה</td><td>Text ← <code>message</code></td></tr>
+      <tr><td>סטטוס</td><td>Label = ליד חדש (מרשימה)</td></tr>
+    </table></div>
+    <p class="note">ההבדל מ-Watch Board's Items: שם Make שואל את monday כל 15 דקות. כאן מישהו מבחוץ שולח ל-Make, והתרחיש רץ מיד — ובלי לשלם על בדיקות ריקות.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">2</span><h3>ראוטר חכם</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Custom webhook ← <b>Router</b>:<br>
+    🔥 <b>ליד חם</b> · פילטר: <code>budget</code> Numeric Greater than <code>5000</code> <b>OR</b> <code>urgent</code> Boolean Equal to <code>true</code> ← Telegram Send a Text Message ← Webhook response ("תוך שעה")<br>
+    📋 <b>לגיליון</b> · Fallback route ← Google Sheets Add a Row ← Webhook response ("תוך 2 ימי עסקים")</div>
+    <div class="tbl"><table>
+      <tr><th>ליד</th><th>לאן</th><th>למה</th></tr>
+      <tr><td>A · רונית · 42,000 · לא דחוף</td><td>🔥 טלפון</td><td>התקציב מעל 5000</td></tr>
+      <tr><td>B · יוסי · 800 · דחוף</td><td>🔥 טלפון</td><td>תקציב קטן, אבל urgent = true — ומספיק תנאי אחד (OR)</td></tr>
+      <tr><td>C · מיכל · 1,500 · לא דחוף</td><td>📋 גיליון</td><td>אף תנאי לא מתקיים ← Fallback</td></tr>
+      <tr><td>D · דני · 5,000 · לא דחוף</td><td>📋 גיליון</td><td><b>המלכודת:</b> Greater than = "גדול מ-", ו-5000 לא גדול מ-5000. רוצים לכלול? Greater than or equal to</td></tr>
+    </table></div>
+    <div class="tbl"><table>
+      <tr><th>עמודה בגיליון</th><th>ב-Add a Row</th></tr>
+      <tr><td>תאריך</td><td><code>now</code> (או <code>formatDate(now; DD/MM/YYYY HH:mm)</code>)</td></tr>
+      <tr><td>שם · אימייל · מוצר · תקציב</td><td><code>name</code> · <code>email</code> · <code>product</code> · <code>budget</code></td></tr>
+    </table></div>
+    <p class="note"><b>אתגר VIP:</b> מסלול 💎 עם פילטר <code>budget &gt; 30000</code>. רונית תעבור גם ב-🔥 וגם ב-💎 — ב-Router כל מסלול שהפילטר שלו מתקיים רץ, לפי הסדר. רק ה-Fallback רץ "כשאף אחד לא". ובקשה אחת מקבלת תשובה אחת — לכן במסלול VIP לא שמים Webhook response נוסף.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">3</span><h3>בוט מלאי</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Telegram Bot · Watch Updates ← Google Sheets · Search Rows (מוצר Contains <code>Message › Text</code>, Limit 1) ← <b>Router</b>:<br>
+    ✅ <code>מלאי</code> Numeric Greater than <code>0</code> ← Send a Text Message (Chat ID = <code>Message › Chat › ID</code>)<br>
+    😕 <code>מלאי</code> Numeric Equal to <code>0</code> ← Send a Text Message (אותו Chat ID)</div>
+    <div class="tbl"><table>
+      <tr><th>שולחים לבוט</th><th>הבוט עונה</th></tr>
+      <tr><td>ספה</td><td>ספה פינתית: ₪6900 · יש 2 במלאי ✅</td></tr>
+      <tr><td>שולחן</td><td>שולחן עבודה מעץ (השורה הראשונה שמכילה "שולחן" — Limit 1)</td></tr>
+      <tr><td>כורסה</td><td>כורסה אזל מהמלאי 😕</td></tr>
+      <tr><td>מזרן</td><td>שום תשובה — Search Rows החזיר 0 bundles, והתרחיש עצר שם</td></tr>
+    </table></div>
+    <p class="note"><b>למה Chat ID מהטריגר?</b> בתרגיל 6 שלחנו תמיד לעצמנו — chat_id קבוע. כאן עונים למי ששאל, וכל לקוח הוא chat אחר. אם מקלידים את המספר שלכם, השותף ישאל ואתם תקבלו את התשובה.</p>
+    <p class="note"><b>אתגר 2 (/הכל):</b> Router ראשון אחרי הטריגר. מסלול "/הכל": פילטר <code>Message › Text</code> Text Equal to <code>/הכל</code> ← Search Rows בלי פילטר ← Text aggregator (Source module: Search Rows · Row separator: New row · Text: בועות מוצר, מחיר ומלאי) ← Send a Text Message עם <code>text</code> מה-aggregator. מסלול שני: Fallback ← החיפוש הרגיל.</p>
+    <p class="note"><b>אתגר 3 ("לא מצאתי"):</b> אחרי Search Rows שמים Array aggregator, ואחריו Router: מסלול "לא נמצא" עם פילטר <code>length(Array) = 0</code>. כך יש פלט גם כשהחיפוש ריק. בדקו בפלט של ה-aggregator בריצה עם "מזרן" לפני שבונים.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">4</span><h3>חזרה · פותחים בוט</h3></div>
   <div class="fix">
 
     <div class="sol"><b>✅ מה צריך להיות לכם</b>בוט עם שם משתמש שנגמר ב-bot, טוקן בצורה <code>1234567890:AAH…</code> (מספר, נקודתיים, מחרוזת), ושיחה פתוחה עם הבוט שבה שלחתם /start.</div>
@@ -46,7 +110,7 @@
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">2</span><h3>chat_id עם Make an API call</h3></div>
+  <div class="ex-head"><span class="ex-num">5</span><h3>חזרה · chat_id עם Make an API call</h3></div>
   <div class="fix">
 
     <div class="tbl"><table>
@@ -62,7 +126,7 @@
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">3</span><h3>ליד חם ← הודעה</h3></div>
+  <div class="ex-head"><span class="ex-num">6</span><h3>חזרה · ליד חם ← הודעה</h3></div>
   <div class="fix">
 
     <figure style="margin:10px auto 14px;max-width:476px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-received.jpg" alt="ההודעה בבוט" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך ההודעה מגיעה לבוט ב-Telegram.</figcaption></figure>
@@ -75,7 +139,7 @@
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">4</span><h3>HTTP</h3></div>
+  <div class="ex-head"><span class="ex-num">7</span><h3>חזרה · HTTP</h3></div>
   <div class="fix">
 
     <div class="tbl"><table>
@@ -99,36 +163,17 @@
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">5</span><h3>Webhook ל-monday</h3></div>
+  <div class="ex-head"><span class="ex-num">8</span><h3>חזרה · השרשרת המלאה</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מבנה</b>Custom webhook ← monday Create an Item ← (בונוס) Webhook response</div>
-    <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי Send ב-Hoppscotch: name, email, product, message כבועות.</figcaption></figure>
-    <div class="tbl"><table>
-      <tr><th>עמודה</th><th>ב-Create an Item</th></tr>
-      <tr><td>שם הליד</td><td>Item Name ← <code>name</code></td></tr>
-      <tr><td>אימייל</td><td>Email ← <code>email</code> · Text ← <code>name</code></td></tr>
-      <tr><td>מוצר מבוקש</td><td><code>product</code></td></tr>
-      <tr><td>הודעה</td><td>Text ← <code>message</code></td></tr>
-      <tr><td>סטטוס</td><td>Label = ליד חדש (מרשימה)</td></tr>
-    </table></div>
-    <p class="note">ההבדל מ-Watch Board's Items: שם Make שואל את monday כל 15 דקות. כאן מישהו מבחוץ שולח ל-Make, והתרחיש רץ מיד — ובלי לשלם על בדיקות ריקות.</p>
-  </div>
-</div>
-</section>
-<section class="blk">
-<div class="card ex">
-  <div class="ex-head"><span class="ex-num">6</span><h3>השרשרת המלאה</h3></div>
-  <div class="fix">
-
-    <div class="sol"><b>✅ מה צריך לקרות לאבי</b>נוצר בלוח (תרגיל 5) ← Haiku: דחיפות גבוהה, ציון 8–9 (תאריך קרוב + איום במתחרה) ← טיוטה ב-Gmail ← הודעה בטלפון (תרגיל 3).</div>
+    <div class="sol"><b>✅ מה צריך לקרות לאבי</b>נוצר בלוח (תרגיל 1) ← Haiku: דחיפות גבוהה, ציון 8–9 (תאריך קרוב + איום במתחרה) ← טיוטה ב-Gmail ← הודעה בטלפון (תרגיל 6).</div>
     <p class="note">שלושה דפוסים בשרשרת אחת: סנכרון (טופס ← monday), העשרה (Haiku), ניתוב + התראה (Router ← Telegram), ואישור (טיוטה).</p>
   </div>
 </div>
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">7</span><h3>אוטומציה לעסק שלכם — דוגמה מלאה</h3></div>
+  <div class="ex-head"><span class="ex-num">9</span><h3>אוטומציה לעסק שלכם — דוגמה מלאה</h3></div>
   <div class="fix">
 
     <div class="tbl"><table>
