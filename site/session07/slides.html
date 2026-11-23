@@ -1200,7 +1200,7 @@ Parameters:
 <section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · Webhooks">
   <div class="s-kicker">בלוק 5</div>
   <h1>Webhooks: כשהאפליקציה מצלצלת</h1>
-  <p class="sub">מה זה, מה יש בבקשה, תור ותשובה, אבטחה — ואז בונים: Hoppscotch ← Make ← ליד חדש ב-monday.</p>
+  <p class="sub">מה זה, מה יש בבקשה, תור ותשובה, אבטחה — ואז בונים: Hoppscotch ← Make ← ליד חדש ב-Google Sheets.</p>
   <aside class="notes"><ul><li>Webhook הוא המושג הכי חשוב היום. לאט.</li></ul></aside>
 </section>
 
@@ -1290,14 +1290,14 @@ Parameters:
 
 <section class="slide" data-min="6" data-block="5" data-title="בונים Webhook">
   <div class="s-kicker">דוגמה · אני מדגים, אתם בונים בתרגול</div>
-  <h2>Hoppscotch ← Make ← ליד חדש ב-monday</h2>
+  <h2>Hoppscotch ← Make ← ליד חדש בגיליון</h2>
   <div class="s-body mid">
     <ol class="steps" style="--bc:var(--p2)">
       <li>תרחיש חדש ← <span class="en">Webhooks · Custom webhook</span> ← Add ← שם: "ליד מהאתר" ← <b>Copy address</b></li>
       <li><b>Run once</b> — Make מחכה לבקשה</li>
       <li>ב-Hoppscotch: POST לכתובת · Body ← JSON: <code>{"name": "תמר גולן", "email": "…", "product": "שולחן", "message": "…"}</code> ← Send</li>
       <li>ב-Make: "Successfully determined" — עכשיו יש בועות name, email…</li>
-      <li>מוסיפים <span class="en">monday · Create an Item</span> (ממפגש 6) וממפים את הבועות לעמודות</li>
+      <li>מוסיפים <span class="en">Google Sheets · Add a Row</span> וממפים את הבועות לעמודות</li>
       <li>בונוס: <span class="en">Webhook response</span>: <code>{"ok": true, "message": "תודה, נחזור אלייך"}</code></li>
     </ol>
   </div>
@@ -1419,12 +1419,12 @@ Parameters:
   <div class="s-body mid">
     <div class="tbl"><table>
       <tr><th>#</th><th>תרגיל</th></tr>
-      <tr><td>1</td><td>Webhook: Hoppscotch ← ליד חדש ב-monday</td></tr>
+      <tr><td>1</td><td>Webhook: Hoppscotch ← ליד חדש ב-Google Sheets</td></tr>
       <tr><td>2</td><td>ראוטר חכם: ליד גדול או דחוף ← Telegram, השאר ← Google Sheets · 🎲 מנחשים לאן כל ליד יגיע</td></tr>
       <tr><td>3</td><td>בוט מלאי: שואלים את הבוט על מוצר, הוא עונה מהגיליון · בזוגות</td></tr>
-      <tr><td>4–8</td><td>חזרה על מה שעשינו בכיתה: בוט, chat_id, מודול מוכן, HTTP, השרשרת המלאה</td></tr>
+      <tr><td>4–8</td><td>חזרה על מה שעשינו בכיתה: בוט, chat_id, ליד חם ← Telegram, HTTP, השרשרת המלאה</td></tr>
       <tr><td>9 · 📝 בית</td><td>אוטומציה מהגלריה לעסק שלכם: טריגר, תנאי, פעולה, דפוס, דרך חיבור</td></tr>
-      <tr><td>⭐ בונוס</td><td>הודעה לבוט ← ליד ב-monday (Telegram Watch Updates)</td></tr>
+      <tr><td>⭐ בונוס</td><td>הודעה לבוט ← ליד בגיליון (Telegram Watch Updates)</td></tr>
     </table></div>
   </div>
   <aside class="notes"><ul><li>דף התרגול: מפגש 7 ← תרגול. ההוראות שם מלאות, הפתרונות בדף הפתרונות.</li></ul></aside>

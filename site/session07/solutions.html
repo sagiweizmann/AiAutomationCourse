@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מפגש 7 · פתרונות</title>
-<meta name="description" content="פתרונות מפגש 7: Webhook ל-monday, ראוטר לידים ל-Telegram ול-Google Sheets, בוט מלאי מהגיליון, ותרגילי החזרה.">
+<meta name="description" content="פתרונות מפגש 7: Webhook ל-Google Sheets, ראוטר לידים ל-Telegram ול-Google Sheets, בוט מלאי מהגיליון, ותרגילי החזרה.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -36,20 +36,19 @@
 
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">1</span><h3>Webhook ל-monday</h3></div>
+  <div class="ex-head"><span class="ex-num">1</span><h3>Webhook ל-Google Sheets</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מבנה</b>Custom webhook ← monday Create an Item ← (בונוס) Webhook response</div>
+    <div class="sol"><b>✅ מבנה</b>Custom webhook ← Google Sheets Add a Row ← (בונוס) Webhook response</div>
     <figure style="margin:10px auto 14px;max-width:620px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי Send ב-Hoppscotch: name, email, product, message כבועות.</figcaption></figure>
     <div class="tbl"><table>
-      <tr><th>עמודה</th><th>ב-Create an Item</th></tr>
-      <tr><td>שם הליד</td><td>Item Name ← <code>name</code></td></tr>
-      <tr><td>אימייל</td><td>Email ← <code>email</code> · Text ← <code>name</code></td></tr>
-      <tr><td>מוצר מבוקש</td><td><code>product</code></td></tr>
-      <tr><td>הודעה</td><td>Text ← <code>message</code></td></tr>
-      <tr><td>סטטוס</td><td>Label = ליד חדש (מרשימה)</td></tr>
+      <tr><th>עמודה בגיליון</th><th>ב-Add a Row</th></tr>
+      <tr><td>תאריך</td><td><code>now</code></td></tr>
+      <tr><td>שם · אימייל · מוצר · הודעה</td><td><code>name</code> · <code>email</code> · <code>product</code> · <code>message</code></td></tr>
+      <tr><td>סטטוס</td><td>ליד חדש (טקסט קבוע)</td></tr>
     </table></div>
-    <p class="note">ההבדל מ-Watch Board's Items: שם Make שואל את monday כל 15 דקות. כאן מישהו מבחוץ שולח ל-Make, והתרחיש רץ מיד — ובלי לשלם על בדיקות ריקות.</p>
+    <p class="note">ההבדל מ-Watch New Rows: שם Make שואל את הגיליון כל 15 דקות "יש שורה חדשה?". כאן מישהו מבחוץ שולח ל-Make, והתרחיש רץ מיד — ובלי לשלם על בדיקות ריקות.</p>
+    <p class="note">העמודות ריקות ב-Add a Row? Make קורא את הכותרות רק אם <b>Table contains headers = Yes</b> ושורה 1 כבר מלאה לפני שבוחרים את הגיליון.</p>
   </div>
 </div>
 </section>
@@ -130,10 +129,10 @@
   <div class="fix">
 
     <figure style="margin:10px auto 14px;max-width:476px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-received.jpg" alt="ההודעה בבוט" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך ההודעה מגיעה לבוט ב-Telegram.</figcaption></figure>
-    <div class="sol"><b>✅ מבנה</b>Watch Board's Items ← Haiku ← Parse JSON ← Update Column Values ← <b>Router</b>:<br>
-    מסלול 1 · פילטר <code>Score ≥ 8</code> ← Telegram Send a Text Message or a Reply<br>
-    מסלול 2 · בלי פילטר ← Gmail ← Create an Update</div>
-    <p class="note">הליד של אורי (ציון 9) שולח הודעה. נועה (7) — לא. אם שום ליד לא שולח: בדקו שהאופרטור הוא <b>Numeric</b> (Greater than or equal to) ולא Text, אחרת "9" ו-"8" מושווים כמחרוזות.</p>
+    <div class="sol"><b>✅ מבנה</b>Google Sheets Watch New Rows ← Claude Haiku ← Parse JSON ← Google Sheets Update a Row (ציון, סיכום) ← <b>Router</b>:<br>
+    מסלול 1 · פילטר <code>score ≥ 8</code> ← Telegram Send a Text Message or a Reply</div>
+    <p class="note">ב-Update a Row: <span class="en">Row number</span> מגיע מהטריגר (<code>Row number</code>), אחרת Make לא יודע איזו שורה לעדכן.</p>
+    <p class="note">אף ליד לא שולח הודעה? בדקו שהאופרטור הוא <b>Numeric</b> (Greater than or equal to) ולא Text, אחרת "9" ו-"8" מושווים כמחרוזות. ובדקו ב-Parse JSON ש-score יצא מספר.</p>
   </div>
 </div>
 </section>
@@ -166,8 +165,8 @@
   <div class="ex-head"><span class="ex-num">8</span><h3>חזרה · השרשרת המלאה</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מה צריך לקרות לאבי</b>נוצר בלוח (תרגיל 1) ← Haiku: דחיפות גבוהה, ציון 8–9 (תאריך קרוב + איום במתחרה) ← טיוטה ב-Gmail ← הודעה בטלפון (תרגיל 6).</div>
-    <p class="note">שלושה דפוסים בשרשרת אחת: סנכרון (טופס ← monday), העשרה (Haiku), ניתוב + התראה (Router ← Telegram), ואישור (טיוטה).</p>
+    <div class="sol"><b>✅ מה צריך לקרות לאבי</b>שורה חדשה בגיליון (תרגיל 1) ← Haiku: דחיפות גבוהה, ציון 8–9 (תאריך קרוב + איום במתחרה) ← ציון וסיכום בגיליון ← הודעה בטלפון (תרגיל 6).</div>
+    <p class="note">שלושה דפוסים בשרשרת אחת: סנכרון (טופס ← גיליון), העשרה (Haiku), ניתוב + התראה (Router ← Telegram).</p>
   </div>
 </div>
 </section>
@@ -195,7 +194,7 @@
   <div class="ex-head"><span class="ex-num">★</span><h3>הודעה לבוט ← ליד</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מבנה</b>Telegram Bot · Watch Updates ← Haiku (חילוץ JSON מ-<code>Message › Text</code>) ← Parse JSON ← monday Create an Item ← Telegram Send a Text Message (Chat ID = <code>Message › Chat › ID</code>)</div>
+    <div class="sol"><b>✅ מבנה</b>Telegram Bot · Watch Updates ← Haiku (חילוץ JSON מ-<code>Message › Text</code>) ← Parse JSON ← Google Sheets Add a Row ← Telegram Send a Text Message (Chat ID = <code>Message › Chat › ID</code>)</div>
     <p class="note">כאן ה-chat_id לא קבוע — הוא של מי ששלח. לכן ממפים אותו מהטריגר, ולא מקלידים מספר.</p>
   </div>
 </div>

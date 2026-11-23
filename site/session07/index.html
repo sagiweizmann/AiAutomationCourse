@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מפגש 7 · תרגול</title>
-<meta name="description" content="תרגול מפגש 7: Webhook מ-Hoppscotch ל-monday, ראוטר ששולח לידים חמים ל-Telegram ואת השאר ל-Google Sheets, ובוט מלאי שעונה מהגיליון.">
+<meta name="description" content="תרגול מפגש 7: Webhook מ-Hoppscotch ל-Google Sheets, ראוטר ששולח לידים חמים ל-Telegram ואת השאר ל-Google Sheets, ובוט מלאי שעונה מהגיליון.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -38,34 +38,35 @@
 <section class="blk" id="toc">
   <div class="kicker">תוכן העניינים</div>
   <h2>מה יש בדף</h2>
-  <div class="callout claude" style="border-color:var(--claude)"><b>מה בונים</b>שעה של בנייה לבד, שלושה תרגילים: ליד מ"טופס" נכנס ל-monday, ראוטר שמחליט לבד מה דחוף, ובוט שעונה ללקוחות מתוך גיליון המלאי. את הבוט וההודעה הראשונה בנינו ביחד בכיתה — הם בסוף הדף, לחזרה.</div>
+  <div class="callout claude" style="border-color:var(--claude)"><b>מה בונים</b>שעה של בנייה לבד, שלושה תרגילים: ליד מ"טופס" נכנס לגיליון, ראוטר שמחליט לבד מה דחוף, ובוט שעונה ללקוחות מתוך גיליון המלאי. את הבוט וההודעה הראשונה בנינו ביחד בכיתה — הם בסוף הדף, לחזרה.</div>
   <div class="callout tip"><b>🤖 מדריך מלא עם צילומי מסך</b><a href="../guides/telegram-bot.html">בוט Telegram ו-Make</a> — כל השלבים של פתיחת הבוט והחיבור ל-Make, ותקלות נפוצות.</div>
   <ul class="toc">
-    <li><a href="#ex1"><span class="n">1</span><span class="t">Webhook: ליד מ"טופס" נכנס ל-monday</span><span class="pill cls">בכיתה</span></a></li>
+    <li><a href="#ex1"><span class="n">1</span><span class="t">Webhook: ליד מ"טופס" נכנס ל-Google Sheets</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex2"><span class="n">2</span><span class="t">ראוטר חכם: ליד חם לטלפון, השאר לגיליון</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex3"><span class="n">3</span><span class="t">בוט מלאי: שואלים את הבוט, הוא עונה מהגיליון</span><span class="pill cls">בכיתה</span></a></li>
     <li><a href="#ex4"><span class="n">4</span><span class="t">חזרה · פותחים בוט ב-Telegram</span><span class="pill">עשינו בכיתה</span></a></li>
     <li><a href="#ex5"><span class="n">5</span><span class="t">חזרה · Make an API call: chat_id</span><span class="pill">עשינו בכיתה</span></a></li>
-    <li><a href="#ex6"><span class="n">6</span><span class="t">חזרה · מודול מוכן: ליד חם ← הודעה</span><span class="pill">עשינו בכיתה</span></a></li>
+    <li><a href="#ex6"><span class="n">6</span><span class="t">חזרה · ליד חם ← הודעה לנציג</span><span class="pill">עשינו בכיתה</span></a></li>
     <li><a href="#ex7"><span class="n">7</span><span class="t">חזרה · HTTP: אותה הודעה, בלי מודול</span><span class="pill">עשינו בכיתה</span></a></li>
     <li><a href="#ex8"><span class="n">8</span><span class="t">חזרה · השרשרת המלאה</span><span class="pill">עשינו בכיתה</span></a></li>
     <li><a href="#ex9"><span class="n">9</span><span class="t">אוטומציה לעסק שלכם</span><span class="pill home">📝 לבית</span></a></li>
-    <li><a href="#exb"><span class="n">★</span><span class="t">בונוס: הודעה לבוט ← ליד ב-monday</span><span class="pill">בונוס</span></a></li>
+    <li><a href="#exb"><span class="n">★</span><span class="t">בונוס: הודעה לבוט ← ליד בגיליון</span><span class="pill">בונוס</span></a></li>
   </ul>
 </section>
 <section class="blk">
 
 <div class="card ex" id="ex1">
-  <div class="ex-head"><span class="ex-num">1</span><h3>Webhook: ליד מ"טופס" נכנס ל-monday</h3></div>
+  <div class="ex-head"><span class="ex-num">1</span><h3>Webhook: ליד מ"טופס" נכנס ל-Google Sheets</h3></div>
   <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
-  <p class="goal">Hoppscotch משחק את הטופס באתר. Make מקבל את הבקשה מיד, ויוצר ליד בלוח.</p>
+  <p class="goal">Hoppscotch משחק את הטופס באתר. Make מקבל את הבקשה מיד, ומוסיף את הליד כשורה בגיליון.</p>
   <ol class="steps">
-    <li>תרחיש חדש ← <span class="en">Webhooks · Custom webhook</span> ← Add ← שם: <b>ליד מהאתר</b> ← Save ← <b>Copy address to clipboard</b></li>
+    <li>ב-Google Sheets: גיליון חדש <b>לידים מהאתר</b>, ובשורה 1 הכותרות: <code>תאריך · שם · אימייל · מוצר · הודעה · סטטוס</code></li>
+    <li>ב-Make: תרחיש חדש ← <span class="en">Webhooks · Custom webhook</span> ← Add ← שם: <b>ליד מהאתר</b> ← Save ← <b>Copy address to clipboard</b></li>
     <li>לוחצים <b>Run once</b> — Make מחכה לבקשה</li>
     <li>ב-<a href="https://hoppscotch.io" target="_blank" rel="noopener">hoppscotch.io</a>: <b>POST</b> · מדביקים את הכתובת · <span class="en">Body</span> ← <span class="en">application/json</span> ← ה-JSON למטה ← <b>Send</b></li>
     <li>ב-Make: הבועה מעל ה-Webhook מראה את הנתונים. עכשיו יש בועות name, email, product, message</li>
-    <li>מוסיפים <span class="en">monday.com · Create an Item</span> (כמו בתרגיל 9 של מפגש 6): Item Name ← name, ו-Columns: אימייל, מוצר מבוקש, הודעה, סטטוס = ליד חדש</li>
-    <li>Run once ← שוב Send ב-Hoppscotch ← הליד בלוח?</li>
+    <li>מוסיפים <span class="en">Google Sheets · Add a Row</span> ← הגיליון <b>לידים מהאתר</b> ← <span class="en">Table contains headers</span>: Yes ← ממפים: תאריך = <code>now</code>, שם ← name, אימייל ← email, מוצר ← product, הודעה ← message, סטטוס = <b>ליד חדש</b> (מקלידים)</li>
+    <li>Run once ← שוב Send ב-Hoppscotch ← השורה של תמר בגיליון?</li>
     <li>בונוס: מודול <span class="en">Webhooks · Webhook response</span> בסוף: Status 200, Body: <code>{"ok": true, "message": "תודה, נחזור אלייך"}</code>. ב-Hoppscotch תראו את התשובה</li>
   </ol>
   <div class="copybox"><pre>{"name": "תמר גולן", "email": "you+tamar@gmail.com", "product": "שולחן עבודה מעץ", "message": "יש משלוח לירושלים? צריכה עד יום חמישי."}</pre></div>
@@ -73,7 +74,7 @@
   <figure style="margin:10px auto 14px;max-width:480px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/webhook-output.jpg" alt="פלט ה-Webhook" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי השליחה מ-Hoppscotch: Make מזהה את השדות, ומעכשיו הם בועות למיפוי.</figcaption></figure>
   <details class="hint"><summary>שיניתי את השדות ב-JSON, ו-Make לא רואה אותם</summary><p style="margin:6px 0 0">פותחים את ה-Webhook ← <span class="en">Redetermine data structure</span> ← Send שוב מ-Hoppscotch.</p></details>
   <h4>איך יודעים שעשיתם טוב</h4>
-  <ul class="check"><li>תמר נוצרה בלוח עם אימייל, מוצר והודעה</li><li>אני יודע/ת להסביר מה ההבדל בין הטריגר הזה ל-Watch Board's Items</li><li>בדקתי את Webhooks ← Logs וראיתי את הבקשה</li></ul>
+  <ul class="check"><li>תמר נוספה לגיליון עם אימייל, מוצר והודעה</li><li>אני יודע/ת להסביר מה ההבדל בין הטריגר הזה ל-Watch New Rows של Google Sheets</li><li>בדקתי את Webhooks ← Logs וראיתי את הבקשה</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex1"> סיימתי את התרגיל</label>
 </div>
 <div class="card ex" id="ex2">
@@ -193,27 +194,33 @@ D  {"name": "דני לוי", "email": "you+dani@gmail.com", "product": "שולח
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex5"> סיימתי את התרגיל</label>
 </div>
 <div class="card ex" id="ex6">
-  <div class="ex-head"><span class="ex-num">6</span><h3>מודול מוכן: ליד חם ← הודעה לנציג</h3></div>
+  <div class="ex-head"><span class="ex-num">6</span><h3>ליד חם ← הודעה לנציג</h3></div>
   <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill">עשינו בכיתה</span></div>
-  <p class="goal">בתרחיש הלידים ממפגש 5: כשציון ≥ 8 — הודעת Telegram לנציג.</p>
+  <p class="goal">כל שורה חדשה בגיליון הלידים: Haiku נותן ציון, וכשהציון ≥ 8 — הודעת Telegram לנציג.</p>
   <ol class="steps">
-    <li>פותחים את תרחיש הלידים (או עותק שלו, Clone)</li>
-    <li>קליק ימני על הקו שאחרי <span class="en">Update Column Values</span> ← <b>Add a router</b></li>
-    <li>מסלול חדש ← פילטר "ליד חם": <code>Score</code> · <span class="en">Numeric operators: Greater than or equal to</span> · <code>8</code></li>
-    <li>במסלול: <span class="en">Telegram Bot · Send a Text Message or a Reply</span> · <span class="en">Chat ID</span>: המספר מתרגיל 5</li>
-    <li><span class="en">Text</span>: הטקסט למטה, עם הבועות במקום הסוגריים</li>
-    <li>Choose where to start ← Choose manually ← ליד שהציון שלו גבוה (אורי) ← Run once</li>
+    <li>בגיליון <b>לידים מהאתר</b> (תרגיל 1) מוסיפים שתי כותרות: <code>ציון</code> ו-<code>סיכום</code></li>
+    <li>תרחיש חדש ← <span class="en">Google Sheets · Watch New Rows</span> ← הגיליון ← <span class="en">Table contains headers</span>: Yes ← Limit: 1</li>
+    <li>מוסיפים <b>Claude Haiku</b> (כמו במפגש 5) עם הפרומפט למטה, ואחריו <span class="en">JSON · Parse JSON</span></li>
+    <li><span class="en">Google Sheets · Update a Row</span> ← <span class="en">Row number</span> מהטריגר ← ציון ← <code>score</code>, סיכום ← <code>summary</code></li>
+    <li>קליק ימני על הקו שאחרי Update a Row ← <b>Add a router</b> ← מסלול עם פילטר "ליד חם": <code>score</code> · <span class="en">Numeric operators: Greater than or equal to</span> · <code>8</code></li>
+    <li>במסלול: <span class="en">Telegram Bot · Send a Text Message or a Reply</span> · <span class="en">Chat ID</span>: המספר מתרגיל 5 · <span class="en">Text</span>: הטקסט למטה, עם הבועות במקום הסוגריים</li>
+    <li>Choose where to start ← Choose manually ← בוחרים שורה ← Run once</li>
   </ol>
+  <div class="copybox"><pre class="rtl">דרג את הליד מ-1 עד 10 לפי דחיפות וסיכוי לסגירה.
+מוצר: [מוצר]
+הודעה: [הודעה]
+החזר JSON בלבד, ו-summary במשפט אחד בעברית:
+<span dir="ltr">{"score": 0, "urgency": "high/medium/low", "summary": "..."}</span></pre></div>
   <figure style="margin:10px auto 14px;max-width:460px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-send.jpg" alt="Send a Text Message or a Reply" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Chat ID ו-Text. שאר השדות אופציונליים.</figcaption></figure>
   <figure style="margin:10px auto 14px;max-width:476px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s07/tg-received.jpg" alt="ההודעה בבוט" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">וכך ההודעה מגיעה ל-Telegram.</figcaption></figure>
   <div class="copybox"><pre class="rtl">🔥 ליד חם!
-שם: [Name]
-מוצר: [מוצר מבוקש]
-ציון: [Score]/10 · דחיפות: [Urgency]
-[Summary]</pre></div>
-  <div class="callout tip"><b>המסלולים האחרים</b>ה-Gmail וה-Create an Update ממשיכים במסלול השני (בלי פילטר), כדי שכל ליד יקבל טיוטה — וליד חם יקבל גם הודעה.</div>
+שם: [שם]
+מוצר: [מוצר]
+ציון: [score]/10 · דחיפות: [urgency]
+[summary]</pre></div>
+  <div class="callout tip"><b>אין לכם Haiku?</b>אפשר בלי AI: פילטר על המילה "דחוף" בהודעה (<span class="en">Text operators: Contains</span>) במקום על הציון. הרעיון זהה — Router שמחליט מי מקבל הודעה.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
-  <ul class="check"><li>קיבלתי הודעה בטלפון על ליד חם</li><li>ליד עם ציון נמוך לא שלח הודעה</li></ul>
+  <ul class="check"><li>קיבלתי הודעה בטלפון על ליד חם</li><li>הציון והסיכום נכתבו בגיליון</li><li>ליד עם ציון נמוך לא שלח הודעה</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex6"> סיימתי את התרגיל</label>
 </div>
 <div class="card ex" id="ex7">
@@ -245,17 +252,17 @@ D  {"name": "דני לוי", "email": "you+dani@gmail.com", "product": "שולח
 <div class="card ex" id="ex8">
   <div class="ex-head"><span class="ex-num">8</span><h3>השרשרת המלאה</h3></div>
   <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">מתקדם</span><span class="pill">עשינו בכיתה</span></div>
-  <p class="goal">שלושה תרחישים שעובדים יחד: "טופס" ← monday ← Haiku ← Telegram + טיוטה.</p>
+  <p class="goal">שני תרחישים שעובדים יחד: "טופס" ← גיליון ← Haiku ← Telegram.</p>
   <ol class="steps">
     <li>שולחים מ-Hoppscotch ליד <b>חם</b>: הודעה עם תאריך יעד קרוב ואיום במתחרה</li>
-    <li>תרחיש תרגיל 1 יוצר אותו בלוח (Run once)</li>
-    <li>תרחיש הלידים (תרגיל 6): Choose where to start ← Choose manually ← הליד שלפני ← Run once</li>
-    <li>בודקים: ניתוח בלוח · טיוטה ב-Gmail · הודעה בטלפון</li>
+    <li>תרחיש תרגיל 1 מוסיף אותו לגיליון (Run once)</li>
+    <li>תרחיש הליד החם (תרגיל 6): Choose where to start ← Choose manually ← השורה של אבי ← Run once</li>
+    <li>בודקים: ציון וסיכום בגיליון · הודעה בטלפון</li>
   </ol>
   <div class="copybox"><pre>{"name": "אבי כהן", "email": "you+avi@gmail.com", "product": "ספה פינתית", "message": "אנחנו נכנסים לדירה בעוד 10 ימים וצריכים ספה. אם אתם לא יכולים — נזמין מאיקאה."}</pre></div>
-  <div class="callout tip"><b>מה הופך את זה לאמיתי</b>אם שני התרחישים היו דולקים (Active), כל זה היה קורה לבד: ה-Webhook מיד, ותרחיש הלידים תוך 15 דקות. בתרגול — Run once, כדי לחסוך קרדיטים.</div>
+  <div class="callout tip"><b>מה הופך את זה לאמיתי</b>אם שני התרחישים היו דולקים (Active), כל זה היה קורה לבד: ה-Webhook מיד, ו-Watch New Rows תוך 15 דקות. בתרגול — Run once, כדי לחסוך קרדיטים.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
-  <ul class="check"><li>ליד אחד עבר את כל השרשרת</li><li>קיבלתי הודעה בטלפון וטיוטה ב-Gmail</li></ul>
+  <ul class="check"><li>ליד אחד עבר את כל השרשרת</li><li>קיבלתי הודעה בטלפון, והציון נכתב בגיליון</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex8"> סיימתי את התרגיל</label>
 </div>
 </section>
@@ -283,18 +290,18 @@ D  {"name": "דני לוי", "email": "you+dani@gmail.com", "product": "שולח
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex9"> סיימתי את התרגיל</label>
 </div>
 <div class="card ex" id="exb">
-  <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: הודעה לבוט ← ליד ב-monday</h3></div>
+  <div class="ex-head"><span class="ex-num">★</span><h3>בונוס: הודעה לבוט ← ליד בגיליון</h3></div>
   <div class="ex-meta"><span class="pill">⏱ 20 דקות</span><span class="pill">מתקדם</span><span class="pill">בונוס</span></div>
-  <p class="goal">Webhook "אמיתי" מבחוץ: כל הודעה שנשלחת לבוט יוצרת ליד בלוח.</p>
+  <p class="goal">Webhook "אמיתי" מבחוץ: כל הודעה שנשלחת לבוט הופכת לשורה בגיליון הלידים.</p>
   <ol class="steps">
     <li>תרחיש חדש ← <span class="en">Telegram Bot · Watch Updates</span> (Instant). Make רושם Webhook אצל Telegram לבד</li>
     <li>Run once ← שולחים לבוט מהטלפון: "שמי דנה, מתעניינת בשולחן אוכל, dana@example.com"</li>
-    <li>Haiku: "חלץ מההודעה JSON: name, email, product" ← Parse JSON ← monday Create an Item</li>
+    <li>Haiku: "חלץ מההודעה JSON: name, email, product" ← Parse JSON ← Google Sheets Add a Row לגיליון <b>לידים מהאתר</b></li>
     <li>בונוס-בונוס: <span class="en">Send a Text Message or a Reply</span> חזרה לשולח: "תודה! קיבלנו, נחזור אלייך"</li>
   </ol>
   <div class="callout warn"><b>שימו לב</b>בוט עם Watch Updates לא יעבוד במקביל לבדיקת getUpdates מתרגיל 5: ברגע שיש Webhook, getUpdates מחזיר שגיאה. ואם תרגיל 3 (בוט מלאי) עדיין רשום על אותו בוט — כבו אותו קודם, לבוט יש Webhook אחד בלבד. זה תקין — Telegram שולח לכתובת של Make במקום לשמור.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
-  <ul class="check"><li>הודעה לבוט יצרה ליד בלוח</li><li>הבוט ענה לשולח</li></ul>
+  <ul class="check"><li>הודעה לבוט הוסיפה שורה לגיליון</li><li>הבוט ענה לשולח</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="exb"> סיימתי את התרגיל</label>
 </div>
 </section>
