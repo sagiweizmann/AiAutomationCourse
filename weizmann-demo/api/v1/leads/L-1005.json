@@ -1,0 +1,11 @@
+{
+  "id": "L-1005",
+  "created_at": "2026-11-17T14:55:00+02:00",
+  "name": "מיכל אורן",
+  "email": "michal.oren@example.com",
+  "phone": "054-3332211",
+  "product": "מדף ספרים",
+  "message": "יש לכם מדף ספרים בצבע לבן? רוחב של בערך 80 ס\"מ.",
+  "source": "facebook",
+  "budget": 700
+}

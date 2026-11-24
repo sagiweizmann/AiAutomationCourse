@@ -1,0 +1,11 @@
+{
+  "id": "L-1024",
+  "created_at": "2026-11-20T14:40:00+02:00",
+  "name": "גלית",
+  "email": "galit.s@example.com",
+  "phone": "050 909 0909",
+  "product": "ספה פינתית",
+  "message": "יש בכחול?",
+  "source": "whatsapp",
+  "budget": null
+}

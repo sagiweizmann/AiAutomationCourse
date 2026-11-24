@@ -1,0 +1,9 @@
+{
+  "name": "בית ועיצוב · Demo API",
+  "version": 1,
+  "endpoints": {
+    "leads": "leads/page-1.json",
+    "lead": "leads/{id}.json",
+    "products": "products.json"
+  }
+}

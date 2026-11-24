@@ -1,0 +1,11 @@
+{
+  "id": "L-1031",
+  "created_at": "2026-11-23T08:45:00+02:00",
+  "name": "Dmitri Volkov",
+  "email": "dmitri.v@example.com",
+  "phone": "053-1717171",
+  "product": "шкаф",
+  "message": "Нужен шкаф 3 двери, белый, срочно — переезжаем в пятницу.",
+  "source": "website",
+  "budget": 5500
+}

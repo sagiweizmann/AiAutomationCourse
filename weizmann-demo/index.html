@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>בית ועיצוב · אתר הדגמה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#2b2520;--ink2:#6f655c;--line:#e7dfd4;--acc:#b5651d;--acc2:#2f6f62;--ok:#2f7d4f;--err:#b3261e;--code:#f3eee6}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1815;--card:#24201c;--ink:#f1ebe3;--ink2:#b3a89c;--line:#3a332c;--acc:#e08b45;--acc2:#5fb3a2;--ok:#6cc58f;--err:#f28b82;--code:#2d2823}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Assistant,system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+.demo{background:var(--acc2);color:#fff;text-align:center;padding:8px 16px;font-size:15px}
+header{padding:28px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:28px;letter-spacing:-.5px}.logo span{color:var(--acc)}
+nav a{color:var(--ink2);text-decoration:none;margin-inline-start:18px;font-weight:600}nav a:hover{color:var(--acc)}
+.hero{padding:26px 0 10px}.hero h1{font-size:clamp(30px,5vw,44px);line-height:1.15;margin:0 0 10px}.hero p{color:var(--ink2);margin:0;max-width:620px}
+section{margin:34px 0}
+h2{font-size:26px;margin:0 0 6px}.sub{color:var(--ink2);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:700px){.grid{grid-template-columns:1fr}nav{display:none}}
+label{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+.full{grid-column:1/-1}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 22px;background:var(--acc);color:#fff;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:7px 14px;font-weight:600}
+button:disabled{opacity:.5;cursor:default}
+.msg{margin-top:12px;font-weight:600}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
+details.set{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+details.set summary{cursor:pointer;color:var(--acc2);font-weight:700}
+code,pre{font-family:ui-monospace,Menlo,monospace;font-size:14px;background:var(--code);border-radius:6px}
+code{padding:1px 6px;direction:ltr;unicode-bidi:embed}
+pre{padding:12px;overflow:auto;direction:ltr;text-align:left;margin:8px 0 0}
+.ep{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.ep code{flex:1;min-width:0;overflow-wrap:anywhere}
+.method{font:700 12px ui-monospace,monospace;background:var(--acc2);color:#fff;border-radius:5px;padding:2px 7px}
+.tbl{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card)}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{background:var(--code);font-weight:700;white-space:nowrap}
+td.m{min-width:260px;max-width:380px}td.n{white-space:nowrap}
+.null{color:var(--ink2);font-style:italic}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.prod{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.prod b{display:block}.prod .p{color:var(--acc);font-weight:700}.prod .s{font-size:14px;color:var(--ink2)}
+footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
+.hp{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<div class="demo">🎓 אתר הדגמה לתרגול בקורס אוטומציה עם AI · העסק פיקטיבי · אל תזינו פרטים אמיתיים</div>
+<div class="wrap">
+<header>
+  <div class="logo">בית <span>ו</span>עיצוב</div>
+  <nav><a href="#products">מוצרים</a><a href="#contact">צור קשר</a><a href="#api">API</a></nav>
+</header>
+
+<div class="hero">
+  <h1>רהיטים שעושים בית.</h1>
+  <p>ספות, שולחנות, מטבחים ותאורה. משלוח לכל הארץ, הרכבה בבית, ונציג שחוזר אליכם מהר.</p>
+</div>
+
+<section id="products">
+  <h2>המוצרים שלנו</h2>
+  <p class="sub">נטען מתוך <code>api/v1/products.json</code></p>
+  <div class="products" id="prods"></div>
+</section>
+
+<section id="contact">
+  <h2>צור קשר</h2>
+  <p class="sub">השאירו פרטים ונציג יחזור אליכם.</p>
+  <form class="card" id="form" novalidate>
+    <div class="grid">
+      <div><label for="f-name">שם מלא</label><input id="f-name" name="name" required maxlength="80"></div>
+      <div><label for="f-email">אימייל</label><input id="f-email" name="email" type="email" maxlength="120" placeholder="you+test@gmail.com"></div>
+      <div><label for="f-phone">טלפון</label><input id="f-phone" name="phone" type="tel" maxlength="30"></div>
+      <div><label for="f-product">מוצר</label><select id="f-product" name="product"><option value="">בחרו מוצר</option></select></div>
+      <div><label for="f-budget">תקציב משוער (₪)</label><input id="f-budget" name="budget" type="number" min="0" step="100"></div>
+      <div><label for="f-source">איך שמעתם עלינו?</label><select id="f-source" name="source">
+        <option value="website">אתר</option><option value="instagram">אינסטגרם</option><option value="facebook">פייסבוק</option>
+        <option value="whatsapp">וואטסאפ</option><option value="referral">המלצה</option><option value="linkedin">לינקדאין</option></select></div>
+      <div class="full"><label for="f-message">הודעה</label><textarea id="f-message" name="message" maxlength="1500" required></textarea></div>
+      <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+    </div>
+    <div style="margin-top:14px"><button type="submit" id="send">שליחה</button></div>
+    <div class="msg" id="msg" role="status"></div>
+
+    <details class="set" id="set">
+      <summary>⚙️ לתלמידים: לאן הטופס שולח?</summary>
+      <p>מדביקים כאן את כתובת ה-<b>Custom webhook</b> שלכם מ-Make. הכתובת נשמרת רק בדפדפן שלכם, וכל שליחה של הטופס מגיעה ישר לתרחיש שלכם.</p>
+      <div class="ep"><input id="hook" dir="ltr" placeholder="https://hook.eu2.make.com/..." style="flex:1"><button type="button" class="ghost" id="hook-save">שמירה</button></div>
+      <p class="sub" style="margin:6px 0 0">הטופס שולח את השדות <code>name</code> <code>email</code> <code>phone</code> <code>product</code> <code>budget</code> <code>source</code> <code>message</code> <code>created_at</code> בפורמט טופס רגיל (form-urlencoded). ב-Make מקבלים אותם כבועות.</p>
+    </details>
+  </form>
+</section>
+
+<section id="api">
+  <h2>מסד הנתונים · API</h2>
+  <p class="sub">כל הלידים שכבר נכנסו לאתר. אפשר למשוך אותם מ-Make עם <b>HTTP · Make a request</b>, Method <b>GET</b>.</p>
+  <div class="card">
+    <div class="ep"><span class="method">GET</span><code id="u-leads"></code><button type="button" class="ghost" data-copy="u-leads">העתקה</button></div>
+    <div class="ep"><span class="method">GET</span><code id="u-lead"></code><button type="button" class="ghost" data-copy="u-lead">העתקה</button></div>
+    <div class="ep"><span class="method">GET</span><code id="u-prods"></code><button type="button" class="ghost" data-copy="u-prods">העתקה</button></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">איך נראית התשובה?</summary>
+<pre>{
+  "page": 1, "per_page": 10, "total": 32, "total_pages": 4,
+  "has_more": true, "next_page": "page-2.json",
+  "leads": [
+    { "id": "L-1001", "created_at": "2026-11-17T08:12:00+02:00",
+      "name": "...", "email": "...", "phone": "...", "product": "...",
+      "message": "...", "source": "website", "budget": 40000 }
+  ]
+}</pre>
+    <p class="sub" style="margin:8px 0 0">שדה ריק מגיע כ-<code>null</code>. הלידים לא נקיים: יש כפילויות, שפות אחרות, ספאם, פניות שירות ומה לא. בדיוק כמו בעסק אמיתי.</p>
+    </details>
+  </div>
+  <div class="tbl" style="margin-top:14px"><table>
+    <thead><tr><th>id</th><th>תאריך</th><th>שם</th><th>אימייל</th><th>טלפון</th><th>מוצר</th><th>תקציב</th><th>מקור</th><th>הודעה</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="9">טוען…</td></tr></tbody>
+  </table></div>
+  <div class="pager"><button type="button" class="ghost" id="prev">הקודם →</button><span id="pinfo"></span><button type="button" class="ghost" id="next">← הבא</button></div>
+</section>
+
+<footer>בית ועיצוב הוא עסק פיקטיבי לתרגול · weizmann.ai</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const base = new URL('api/v1/', location.href).href;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const val = v => v === null || v === undefined ? '<span class="null">null</span>' : esc(v);
+const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } },
+                set(k,v){ try { localStorage.setItem(k, v); } catch(e){} } };
+
+$('u-leads').textContent = base + 'leads/page-1.json';
+$('u-lead').textContent  = base + 'leads/L-1001.json';
+$('u-prods').textContent = base + 'products.json';
+document.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => {
+  navigator.clipboard.writeText($(b.dataset.copy).textContent).then(() => { b.textContent = '✓'; setTimeout(() => b.textContent = 'העתקה', 1200); });
+});
+
+// products
+fetch(base + 'products.json').then(r => r.json()).then(d => {
+  $('prods').innerHTML = d.products.map(p => `<div class="prod"><b>${esc(p.name)}</b><span class="p">${p.price ? '₪' + p.price.toLocaleString('he-IL') : 'בהזמנה אישית'}</span><div class="s">${p.stock === null ? 'לפי הזמנה' : p.stock > 0 ? 'במלאי: ' + p.stock : 'אזל מהמלאי'}</div></div>`).join('');
+  d.products.forEach(p => $('f-product').add(new Option(p.name, p.name)));
+  $('f-product').add(new Option('אחר', 'אחר'));
+}).catch(() => { $('prods').textContent = 'לא הצלחנו לטעון מוצרים.'; });
+
+// leads table
+let page = 1, pages = 1;
+function load(p){
+  fetch(base + 'leads/page-' + p + '.json').then(r => r.json()).then(d => {
+    page = d.page; pages = d.total_pages;
+    $('rows').innerHTML = d.leads.map(l => `<tr><td class="n">${l.id}</td><td class="n">${esc(l.created_at.slice(0,16).replace('T',' '))}</td><td class="n">${val(l.name)}</td><td dir="ltr">${val(l.email)}</td><td class="n" dir="ltr">${val(l.phone)}</td><td>${val(l.product)}</td><td class="n">${l.budget === null ? val(null) : '₪' + l.budget.toLocaleString('he-IL')}</td><td>${val(l.source)}</td><td class="m">${val(l.message)}</td></tr>`).join('');
+    $('pinfo').textContent = `עמוד ${page} מתוך ${pages} · ${d.total} לידים`;
+    $('prev').disabled = page <= 1; $('next').disabled = page >= pages;
+  }).catch(() => { $('rows').innerHTML = '<tr><td colspan="9">לא הצלחנו לטעון את הלידים.</td></tr>'; });
+}
+$('prev').onclick = () => load(page - 1);
+$('next').onclick = () => load(page + 1);
+load(1);
+
+// webhook target
+$('hook').value = store.get('demoHook');
+if (!$('hook').value) $('set').open = true;
+$('hook-save').onclick = () => {
+  const u = $('hook').value.trim();
+  if (u && !/^https:\/\//.test(u)) { say('הכתובת צריכה להתחיל ב-https://', 'err'); return; }
+  store.set('demoHook', u); say(u ? 'נשמר. עכשיו הטופס שולח לתרחיש שלכם.' : 'הכתובת נמחקה.', 'ok');
+};
+function say(t, cls){ $('msg').textContent = t; $('msg').className = 'msg ' + cls; }
+
+// submit: form-urlencoded + no-cors = a "simple" request any Make webhook accepts (the response can't be read)
+$('form').onsubmit = async e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  if (f.get('company')) return;                       // honeypot
+  if (!f.get('name').trim() || !f.get('message').trim()) { say('צריך לפחות שם והודעה.', 'err'); return; }
+  const hook = store.get('demoHook');
+  if (!hook) { $('set').open = true; say('קודם מדביקים כתובת Webhook למטה ושומרים.', 'err'); return; }
+  f.delete('company'); f.set('created_at', new Date().toISOString());
+  $('send').disabled = true; say('שולח…', '');
+  try {
+    await fetch(hook, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(f) });
+    say('תודה! הפנייה נשלחה. בדקו ב-Make שהיא הגיעה.', 'ok'); e.target.reset();
+  } catch (err) { say('השליחה נכשלה. בדקו את הכתובת והחיבור לאינטרנט.', 'err'); }
+  $('send').disabled = false;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "page": 4,
+  "per_page": 10,
+  "total": 32,
+  "total_pages": 4,
+  "has_more": false,
+  "next_page": null,
+  "leads": [
+    {
+      "id": "L-1031",
+      "created_at": "2026-11-23T08:45:00+02:00",
+      "name": "Dmitri Volkov",
+      "email": "dmitri.v@example.com",
+      "phone": "053-1717171",
+      "product": "шкаф",
+      "message": "Нужен шкаф 3 двери, белый, срочно — переезжаем в пятницу.",
+      "source": "website",
+      "budget": 5500
+    },
+    {
+      "id": "L-1032",
+      "created_at": "2026-11-23T15:20:00+02:00",
+      "name": "רותם",
+      "email": "rotem.a@example.com",
+      "phone": "052-1818181",
+      "product": "מדף ספרים",
+      "message": "רק שאלה — אתם גם מרכיבים בבית או שזה עליי?",
+      "source": "instagram",
+      "budget": 650
+    }
+  ]
+}

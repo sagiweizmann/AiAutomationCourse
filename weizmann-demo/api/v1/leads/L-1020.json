@@ -1,0 +1,11 @@
+{
+  "id": "L-1020",
+  "created_at": "2026-11-20T08:00:00+02:00",
+  "name": "משה",
+  "email": "moshe1960@example.com",
+  "phone": null,
+  "product": "כיסא אוכל",
+  "message": "כמה כיסאות",
+  "source": "website",
+  "budget": null
+}

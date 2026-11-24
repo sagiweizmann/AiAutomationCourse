@@ -1,0 +1,11 @@
+{
+  "id": "L-1006",
+  "created_at": "2026-11-17T16:30:00+02:00",
+  "name": "דני לוי",
+  "email": "dani.levi@example.com",
+  "phone": "052-9876543",
+  "product": "שולחן אוכל",
+  "message": "מתעניין בשולחן האוכל מעץ אלון. כמה זמן אספקה?",
+  "source": "website",
+  "budget": 5000
+}

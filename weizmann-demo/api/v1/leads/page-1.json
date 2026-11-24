@@ -1,0 +1,120 @@
+{
+  "page": 1,
+  "per_page": 10,
+  "total": 32,
+  "total_pages": 4,
+  "has_more": true,
+  "next_page": "page-2.json",
+  "leads": [
+    {
+      "id": "L-1001",
+      "created_at": "2026-11-17T08:12:00+02:00",
+      "name": "רונית שמש",
+      "email": "ronit.shemesh@example.com",
+      "phone": "050-1234567",
+      "product": "מטבח מלא",
+      "message": "אנחנו משפצים את הדירה ומחפשים מטבח מלא. התקציב בסביבות 40 אלף. אפשר לתאם פגישה בשבוע הבא?",
+      "source": "website",
+      "budget": 40000
+    },
+    {
+      "id": "L-1002",
+      "created_at": "2026-11-17T09:40:00+02:00",
+      "name": "יוסי מזרחי",
+      "email": "yossi.m@example.com",
+      "phone": "0527654321",
+      "product": "כיסא משרדי",
+      "message": "דחוף!!! הכיסא שלי נשבר ואני עובד מהבית. יש משהו שמגיע עד מחר?",
+      "source": "instagram",
+      "budget": 1000
+    },
+    {
+      "id": "L-1003",
+      "created_at": "2026-11-17T11:03:00+02:00",
+      "name": "Michael Brown",
+      "email": "mike.brown@example.com",
+      "phone": "+44 7700 900123",
+      "product": "Dining table",
+      "message": "Hi, do you ship to Eilat? I need a dining table for 8 people before the holidays. Budget around 5k.",
+      "source": "website",
+      "budget": 5000
+    },
+    {
+      "id": "L-1004",
+      "created_at": "2026-11-17T12:20:00+02:00",
+      "name": "SEO Expert",
+      "email": "rank.top@example.net",
+      "phone": null,
+      "product": null,
+      "message": "Hello sir, I can make your website #1 on Google in 7 days!!! Cheap price, contact me now on WhatsApp.",
+      "source": "website",
+      "budget": null
+    },
+    {
+      "id": "L-1005",
+      "created_at": "2026-11-17T14:55:00+02:00",
+      "name": "מיכל אורן",
+      "email": "michal.oren@example.com",
+      "phone": "054-3332211",
+      "product": "מדף ספרים",
+      "message": "יש לכם מדף ספרים בצבע לבן? רוחב של בערך 80 ס\"מ.",
+      "source": "facebook",
+      "budget": 700
+    },
+    {
+      "id": "L-1006",
+      "created_at": "2026-11-17T16:30:00+02:00",
+      "name": "דני לוי",
+      "email": "dani.levi@example.com",
+      "phone": "052-9876543",
+      "product": "שולחן אוכל",
+      "message": "מתעניין בשולחן האוכל מעץ אלון. כמה זמן אספקה?",
+      "source": "website",
+      "budget": 5000
+    },
+    {
+      "id": "L-1007",
+      "created_at": "2026-11-18T08:05:00+02:00",
+      "name": "Анна Коган",
+      "email": "anna.kogan@example.com",
+      "phone": "053-1112233",
+      "product": "Диван",
+      "message": "Здравствуйте! Интересует угловой диван серого цвета. Есть ли доставка в Хайфу и сколько стоит?",
+      "source": "website",
+      "budget": 7000
+    },
+    {
+      "id": "L-1008",
+      "created_at": "2026-11-18T09:15:00+02:00",
+      "name": "תמר גולן",
+      "email": "tamar.golan@example.com",
+      "phone": "050-5556677",
+      "product": "שולחן עבודה",
+      "message": "יש משלוח לירושלים? צריכה עד יום חמישי.",
+      "source": "website",
+      "budget": 1500
+    },
+    {
+      "id": "L-1009",
+      "created_at": "2026-11-18T10:42:00+02:00",
+      "name": "אבי כהן",
+      "email": "avi.cohen@example.com",
+      "phone": "058-4443322",
+      "product": "ספה פינתית",
+      "message": "אנחנו נכנסים לדירה בעוד 10 ימים וצריכים ספה. אם אתם לא יכולים — נזמין מאיקאה.",
+      "source": "whatsapp",
+      "budget": 8000
+    },
+    {
+      "id": "L-1010",
+      "created_at": "2026-11-18T11:11:00+02:00",
+      "name": "בדיקה",
+      "email": "test@test.com",
+      "phone": "1234",
+      "product": "test",
+      "message": "test test",
+      "source": "website",
+      "budget": null
+    }
+  ]
+}

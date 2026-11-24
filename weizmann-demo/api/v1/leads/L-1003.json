@@ -1,0 +1,11 @@
+{
+  "id": "L-1003",
+  "created_at": "2026-11-17T11:03:00+02:00",
+  "name": "Michael Brown",
+  "email": "mike.brown@example.com",
+  "phone": "+44 7700 900123",
+  "product": "Dining table",
+  "message": "Hi, do you ship to Eilat? I need a dining table for 8 people before the holidays. Budget around 5k.",
+  "source": "website",
+  "budget": 5000
+}
