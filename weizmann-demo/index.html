@@ -45,7 +45,9 @@ th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;vert
 th{background:var(--code);font-weight:700;white-space:nowrap}
 td.m{min-width:260px;max-width:380px}td.n{white-space:nowrap}
 .null{color:var(--ink2);font-style:italic}
-.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px}
+.tools{display:flex;gap:10px;flex-wrap:wrap}.tools input[type=search]{flex:1;min-width:220px}.tools select{width:auto}
+.chk{display:flex;align-items:center;gap:6px;font-weight:600;margin:0}.chk input{width:auto}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 14px}.stat b{font-size:22px;display:block;line-height:1.2}.stat span{font-size:13px;color:var(--ink2)}
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .prod{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 .prod b{display:block}.prod .p{color:var(--acc);font-weight:700}.prod .s{font-size:14px;color:var(--ink2)}
@@ -58,7 +60,7 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
 <div class="wrap">
 <header>
   <div class="logo">בית <span>ו</span>עיצוב</div>
-  <nav><a href="#products">מוצרים</a><a href="#contact">צור קשר</a><a href="#api">API</a></nav>
+  <nav><a href="#products">מוצרים</a><a href="#contact">צור קשר</a><a href="#leads">הלידים</a><a href="#api">API</a></nav>
 </header>
 
 <div class="hero">
@@ -100,6 +102,22 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
   </form>
 </section>
 
+<section id="leads">
+  <h2>הלידים שנכנסו לאתר</h2>
+  <p class="sub">כל הפניות שבמסד הנתונים, כמו שה-API מחזיר אותן.</p>
+  <div class="stats" id="stats"></div>
+  <div class="tools">
+    <input id="q" type="search" placeholder="חיפוש בשם, מייל, מוצר או הודעה…">
+    <select id="src"><option value="">כל המקורות</option></select>
+    <label class="chk"><input type="checkbox" id="nomail"> רק בלי מייל</label>
+  </div>
+  <div class="tbl" style="margin-top:12px"><table>
+    <thead><tr><th>id</th><th>תאריך</th><th>שם</th><th>אימייל</th><th>טלפון</th><th>מוצר</th><th>תקציב</th><th>מקור</th><th>הודעה</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="9">טוען…</td></tr></tbody>
+  </table></div>
+  <p class="sub" id="count" style="margin-top:8px"></p>
+</section>
+
 <section id="api">
   <h2>מסד הנתונים · API</h2>
   <p class="sub">כל הלידים שכבר נכנסו לאתר. אפשר למשוך אותם מ-Make עם <b>HTTP · Make a request</b>, Method <b>GET</b>.</p>
@@ -120,11 +138,7 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
     <p class="sub" style="margin:8px 0 0">שדה ריק מגיע כ-<code>null</code>. הלידים לא נקיים: יש כפילויות, שפות אחרות, ספאם, פניות שירות ומה לא. בדיוק כמו בעסק אמיתי.</p>
     </details>
   </div>
-  <div class="tbl" style="margin-top:14px"><table>
-    <thead><tr><th>id</th><th>תאריך</th><th>שם</th><th>אימייל</th><th>טלפון</th><th>מוצר</th><th>תקציב</th><th>מקור</th><th>הודעה</th></tr></thead>
-    <tbody id="rows"><tr><td colspan="9">טוען…</td></tr></tbody>
-  </table></div>
-  <div class="pager"><button type="button" class="ghost" id="prev">הקודם →</button><span id="pinfo"></span><button type="button" class="ghost" id="next">← הבא</button></div>
+</div>
 </section>
 
 <footer>בית ועיצוב הוא עסק פיקטיבי לתרגול · weizmann.ai</footer>
@@ -152,19 +166,32 @@ fetch(base + 'products.json').then(r => r.json()).then(d => {
   $('f-product').add(new Option('אחר', 'אחר'));
 }).catch(() => { $('prods').textContent = 'לא הצלחנו לטעון מוצרים.'; });
 
-// leads table
-let page = 1, pages = 1;
-function load(p){
-  fetch(base + 'leads/page-' + p + '.json').then(r => r.json()).then(d => {
-    page = d.page; pages = d.total_pages;
-    $('rows').innerHTML = d.leads.map(l => `<tr><td class="n">${l.id}</td><td class="n">${esc(l.created_at.slice(0,16).replace('T',' '))}</td><td class="n">${val(l.name)}</td><td dir="ltr">${val(l.email)}</td><td class="n" dir="ltr">${val(l.phone)}</td><td>${val(l.product)}</td><td class="n">${l.budget === null ? val(null) : '₪' + l.budget.toLocaleString('he-IL')}</td><td>${val(l.source)}</td><td class="m">${val(l.message)}</td></tr>`).join('');
-    $('pinfo').textContent = `עמוד ${page} מתוך ${pages} · ${d.total} לידים`;
-    $('prev').disabled = page <= 1; $('next').disabled = page >= pages;
-  }).catch(() => { $('rows').innerHTML = '<tr><td colspan="9">לא הצלחנו לטעון את הלידים.</td></tr>'; });
+// leads: read every API page (follows next_page, like a Make scenario would), then filter locally
+let all = [];
+async function loadAll(){
+  let url = base + 'leads/page-1.json';
+  while (url) {
+    const d = await (await fetch(url)).json();
+    all = all.concat(d.leads);
+    url = d.next_page ? new URL(d.next_page, url).href : null;
+  }
+  const srcs = [...new Set(all.map(l => l.source).filter(Boolean))];
+  srcs.forEach(x => $('src').add(new Option(x, x)));
+  const n = f => all.filter(f).length;
+  $('stats').innerHTML = [[all.length,'לידים'],[new Set(all.map(l => l.email).filter(Boolean)).size,'מיילים שונים'],
+    [n(l => !l.email),'בלי מייל'],[n(l => l.budget >= 5000),'תקציב 5,000+'],[srcs.length,'מקורות']]
+    .map(([v,t]) => `<div class="stat"><b>${v}</b><span>${t}</span></div>`).join('');
+  render();
 }
-$('prev').onclick = () => load(page - 1);
-$('next').onclick = () => load(page + 1);
-load(1);
+function render(){
+  const q = $('q').value.trim().toLowerCase(), src = $('src').value, nm = $('nomail').checked;
+  const list = all.filter(l => (!src || l.source === src) && (!nm || !l.email) &&
+    (!q || [l.name,l.email,l.product,l.message].some(v => v && v.toLowerCase().includes(q))));
+  $('rows').innerHTML = list.map(l => `<tr><td class="n">${l.id}</td><td class="n">${esc(l.created_at.slice(0,16).replace('T',' '))}</td><td class="n">${val(l.name)}</td><td dir="ltr">${val(l.email)}</td><td class="n" dir="ltr">${val(l.phone)}</td><td>${val(l.product)}</td><td class="n">${l.budget === null ? val(null) : '₪' + l.budget.toLocaleString('he-IL')}</td><td>${val(l.source)}</td><td class="m">${val(l.message)}</td></tr>`).join('') || '<tr><td colspan="9">אין לידים שמתאימים לחיפוש.</td></tr>';
+  $('count').textContent = `מוצגים ${list.length} מתוך ${all.length}`;
+}
+['q','src','nomail'].forEach(id => $(id).addEventListener('input', render));
+loadAll().catch(() => { $('rows').innerHTML = '<tr><td colspan="9">לא הצלחנו לטעון את הלידים.</td></tr>'; });
 
 // webhook target
 $('hook').value = store.get('demoHook');
