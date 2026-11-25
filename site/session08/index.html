@@ -65,9 +65,12 @@
     <li>מוסיפים <span class="en">Google Sheets · Add a Row</span> ← <b>לידים גולמיים</b> ← ממפים את הבועות שאחרי ה-Iterator: id, created_at, name…</li>
     <li>Run once ← 10 שורות בגיליון?</li>
   </ol>
+  <figure style="margin:10px auto 14px;max-width:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/http-setup.jpg" alt="HTTP Make a request" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">HTTP: No authentication · URL של עמוד 1 · GET.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:480px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/http-leads.jpg" alt="פלט ה-HTTP" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">הפלט: Data › leads עם 10 לידים, ו-has_more: true. קרדיט אחד.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/iterator-setup.jpg" alt="Iterator" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Iterator: Array = הבועה leads[].</figcaption></figure>
   <details class="hint"><summary>אני לא רואה בועות של name, email אחרי ה-Iterator</summary><p style="margin:6px 0 0">הריצו את ה-HTTP פעם אחת (Run this module only) לפני שמגדירים את ה-Iterator. Make לומד את המבנה מהפלט.</p></details>
   <details class="hint"><summary>תקציב ריק בחלק מהשורות</summary><p style="margin:6px 0 0">זה נכון! ב-API שדה בלי ערך מגיע כ-<code>null</code>. בגיליון הוא נשאר ריק.</p></details>
-  <div class="callout tip"><b>אתגר: כל 4 העמודים</b>לפני ה-HTTP: <span class="en">Flow Control · Repeater</span> · Repeats: <b>4</b>. ב-URL של ה-HTTP: <code>…/leads/page-</code> ואז הבועה <code>i</code> של ה-Repeater, ואז <code>.json</code>. Run once ← 32 שורות. כמה פעולות (operations) עלתה הריצה? בדקו ב-History.</div>
+  <div class="callout tip"><b>אתגר: כל 4 העמודים</b>לפני ה-HTTP: <span class="en">Flow Control · Repeater</span> · Repeats: <b>4</b>. ב-URL של ה-HTTP: <code>…/leads/page-</code> ואז הבועה <code>i</code> של ה-Repeater, ואז <code>.json</code>. Run once ← 32 שורות. כמה פעולות (operations) עלתה הריצה? בדקו ב-History.<br><b>דרך נוספת:</b> ב-HTTP עצמו יש <span class="en">Pagination type</span> (Offset · Page · URL-based) — נסו אותה במקום Repeater.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>10 לידים נכנסו לגיליון</li><li>אני יודע/ת להסביר מה ה-Iterator עשה</li><li>ראיתי את has_more ו-total_pages בפלט</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex1"> סיימתי את התרגיל</label>
@@ -100,6 +103,9 @@
     <tr><td>L-1020</td><td>"כמה כיסאות"</td><td></td><td></td><td></td></tr>
     <tr><td><b>דיוק</b></td><td></td><td></td><td>__/10</td><td>__/10</td></tr>
   </table></div>
+  <figure style="margin:10px auto 14px;max-width:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/categorize-setup-a.jpg" alt="הגדרות Categorize text" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Categorize text: Model Claude Haiku 5.5, הבועה message, וקטגוריות עם תיאור.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:430px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/categorize-injection.jpg" alt="פלט Categorize text" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך נראה הפלט: הקטגוריה, והסבר באנגלית. כאן L-1014 זוהה כספאם.</figcaption></figure>
+  <details class="hint"><summary>הקטגוריה חוזרת עם כל התיאור ("ספאם: פרסומת, הצעות…")</summary><p style="margin:6px 0 0">זה קורה. בפילטר אחרי המודול השתמשו ב-<span class="en">Text: Starts with</span> ספאם, ולא ב-Equal to.</p></details>
   <details class="hint"><summary>על מה מתווכחים?</summary><p style="margin:6px 0 0">L-1012 (ליד או תלונה?), L-1014 (ספאם או לא ברור?), L-1020 (ליד או לא ברור?). אין תשובה אחת נכונה — <b>אתם</b> מחליטים, וכותבים את ההחלטה בתיאור הקטגוריה. זה בדיוק מה שהתיאור בשביל.</p></details>
   <div class="callout tip"><b>תחרות</b>מי מגיע ראשון ל-10/10 לפי מפתח התשובות בדף הפתרונות? מותר לשנות רק תיאורים, לא את רשימת הלידים.</div>
   <h4>איך יודעים שעשיתם טוב</h4>
@@ -112,8 +118,8 @@
   <p class="goal">ליד שלא בעברית: הנציג מקבל ב-Telegram סיכום בעברית, וטיוטת תשובה בשפה של הלקוח.</p>
   <ol class="steps">
     <li>תרחיש חדש: HTTP <code>https://weizmann.ai/demo/api/v1/leads/page-1.json</code> ← Iterator</li>
-    <li><span class="en">Make AI Toolkit · Identify language</span> · <span class="en">Text to identify</span>: <code>message</code> ← Run once. מה חזר? קוד (he, ru) או שם (Hebrew, Russian)?</li>
-    <li>פילטר אחרי Identify language: השפה <span class="en">Text: Not equal to</span> עברית (בדיוק כמו שחזר בפלט)</li>
+    <li><span class="en">Make AI Toolkit · Simple Text Prompt</span> · Haiku · Text: <code>באיזו שפה כתובה ההודעה? ענה רק בשתי אותיות: he, en, ru או ar. ההודעה:</code> ואחריו הבועה <code>message</code></li>
+    <li>פילטר אחרי המודול: <code>Answer</code> · <span class="en">Text: Not equal to</span> · <code>he</code></li>
     <li><span class="en">Make AI Toolkit · Translate text</span> · Text: <code>message</code> · Target language: <b>Hebrew</b></li>
     <li><span class="en">Make AI Toolkit · Simple Text Prompt</span> · Haiku · Text: הפרומפט למטה</li>
     <li><span class="en">Telegram Bot · Send a Text Message or a Reply</span> לעצמכם: שם · שפה · התרגום · הטיוטה</li>
@@ -123,7 +129,9 @@
 כתוב בשפה של ההודעה המקורית.
 אל תבטיח מחירים, הנחות או תאריכי אספקה. הצע לתאם שיחה.
 ההודעה: [message]</pre></div>
-  <details class="hint"><summary>קיבלתי הודעות גם על לידים בעברית</summary><p style="margin:6px 0 0">הפילטר משווה לטקסט לא נכון. פתחו את הפלט של Identify language בליד עברי, והעתיקו בדיוק את הערך (אותיות גדולות/קטנות, קוד או שם).</p></details>
+  <figure style="margin:10px auto 14px;max-width:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/translate-setup.jpg" alt="Translate text" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Translate text: Text = message · Target language: Hebrew.</figcaption></figure>
+  <details class="hint"><summary>למה לא Identify language?</summary><p style="margin:6px 0 0">ניסינו בהכנת השיעור: על הליד ברוסית (L-1031) הוא החזיר <code>&lt;UNKNOWN&gt;</code>. פרומפט קצר שמחזיר שתי אותיות אמין יותר, ואתם קובעים בדיוק מה יחזור. רוצים לנסות בעצמכם? הוסיפו אותו ובדקו מה יוצא.</p></details>
+  <details class="hint"><summary>קיבלתי הודעות גם על לידים בעברית</summary><p style="margin:6px 0 0">בדקו מה בדיוק חזר ב-Answer (אולי "he." עם נקודה, או רווח). חזקו בפרומפט "רק שתי אותיות, בלי שום תו נוסף", או השתמשו ב-<span class="en">Text: Does not contain</span> he.</p></details>
   <div class="callout tip"><b>אתגר</b>הריצו על <code>page-2.json</code>: יש שם אנגלית (L-1017) וערבית (L-1019). והאם הטיוטה לערבית יצאה מימין לשמאל ב-Telegram?</div>
   <h4>איך יודעים שעשיתם טוב</h4>
   <ul class="check"><li>קיבלתי ב-Telegram את הליד ברוסית ואת הליד באנגלית</li><li>הטיוטה בשפה של הלקוח</li><li>לידים בעברית לא עברו את הפילטר</li></ul>
@@ -160,11 +168,14 @@
 - אל תנחש. חסר מידע: null, ו-confidence נמוך
 - דחיפות high: תאריך יעד קרוב, איום במתחרה, או לקוח כועס
 - בשדה summary_he: משפט אחד בעברית לנציג</pre></div>
+  <figure style="margin:10px auto 14px;max-width:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/prompt-setup.jpg" alt="הפרומפט ב-Make" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">כך נראה הפרומפט אחרי ההקלדה: 1. Data = הקטלוג, והבועות של הליד בתוך &lt;message&gt;.</figcaption></figure>
+  <figure style="margin:10px auto 14px;max-width:430px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/parse-json-service.jpg" alt="פלט Parse JSON" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">אחרי Parse JSON: כל שדה הוא בועה. כאן L-1029: service, high, ותקציב ריק.</figcaption></figure>
+  <div class="callout tip"><b>טריק להקלדת בועות</b>במקום לחפש כל בועה בחלון המיפוי, אפשר להקליד <code>{{3.name}}</code>, <code>{{3.message}}</code>, <code>{{1.data}}</code> — Make הופך אותן לבועות לבד. המספר = מספר המודול.</div>
   <details class="hint"><summary>Parse JSON נכשל: "Source is not valid JSON"</summary><p style="margin:6px 0 0">פתחו את התשובה של ה-AI ב-History. כמעט תמיד יש משהו לפני או אחרי ה-JSON (למשל <code>```json</code>). חזקו בפרומפט: "בלי שום טקסט לפני או אחרי, בלי ```". בתרגיל 6 נוסיף error handler.</p></details>
   <details class="hint"><summary>ה-AI כתב product_id "P-13" או "כורסה"</summary><p style="margin:6px 0 0">בדקו שהקטלוג באמת נכנס לפרומפט (Parse response = No ב-HTTP הראשון, והבועה Data ולא משהו אחר). בלי קטלוג — אין לו איך לדעת.</p></details>
   <div class="callout tip"><b>אתגר: שתי דוגמאות</b>הוסיפו לפרומפט שתי דוגמאות (few-shot) — את L-1024 ואת L-1029 עם התשובה שאתם רוצים. השתנו התוצאות בלידים אחרים?</div>
   <h4>איך יודעים שעשיתם טוב</h4>
-  <ul class="check"><li>10 שורות בגיליון ניתוח, כל עמודה מלאה או ריקה בכוונה</li><li>L-1024 קיבל confidence נמוך</li><li>L-1029 סווג service ולא lead</li><li>אין product_id שלא קיים בקטלוג</li></ul>
+  <ul class="check"><li>10 שורות בגיליון ניתוח, כל עמודה מלאה או ריקה בכוונה</li><li>בדקתי את ה-confidence של L-1024 — וחשבתי אם הוא הגיוני</li><li>L-1029 סווג service ולא lead</li><li>אין product_id שלא קיים בקטלוג</li></ul>
   <label class="donebox"><input type="checkbox" class="done-ex" data-ex="ex4"> סיימתי את התרגיל</label>
 </div>
 <div class="card ex" id="ex5">

@@ -64,6 +64,7 @@
       <tr><td>L-1019</td><td>ליד</td><td>בערבית</td></tr>
       <tr><td>L-1020</td><td>לא ברור</td><td>גם "ליד" מקובל. "כמה כיסאות" — כוונה לקנות, אבל בלי שום פרט</td></tr>
     </table></div>
+    <p class="note"><b>בהרצה שלנו</b> (עם התיאורים למטה, Haiku 5.5): 10/10 — L-1014 סווג ספאם, L-1012 ליד, L-1020 ליד. 12.28 קרדיטים ל-10 לידים.</p>
     <div class="sol"><b>✅ תיאורים שמביאים ל-10/10</b>
     ליד · "מישהו שרוצה לקנות, מבקש מחיר או זמינות — גם אם הוא מתלונן שלא חזרו אליו"<br>
     שירות · "לקוח שכבר קנה, עם בעיה במוצר, במשלוח או בהזמנה קיימת"<br>
@@ -78,7 +79,8 @@
   <div class="ex-head"><span class="ex-num">3</span><h3>ליד מכל שפה</h3></div>
   <div class="fix">
 
-    <div class="sol"><b>✅ מבנה</b>HTTP ← Iterator ← Identify language ← פילטר (≠ עברית) ← Translate text (Hebrew) ← Simple Text Prompt (טיוטה) ← Telegram</div>
+    <div class="sol"><b>✅ מבנה</b>HTTP ← Iterator ← Simple Text Prompt (קוד שפה) ← פילטר (Answer ≠ he) ← Translate text (Hebrew) ← Simple Text Prompt (טיוטה) ← Telegram</div>
+    <figure style="margin:10px auto 14px;max-width:430px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/translate-output.jpg" alt="תרגום לעברית" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Translate text על הליד ברוסית L-1031: "צריך ארון עם 3 דלתות, לבן, דחוף — אנחנו עוברים דירה ביום שישי." 1.11 קרדיטים.</figcaption></figure>
     <div class="tbl"><table>
       <tr><th>עמוד</th><th>לידים שעוברים את הפילטר</th></tr>
       <tr><td>page-1</td><td>L-1003 (אנגלית) · L-1007 (רוסית). L-1004 (SEO, אנגלית) — גם עובר! ספאם הוא לא שאלה של שפה</td></tr>
@@ -90,24 +92,25 @@
 </section>
 <section class="blk">
 <div class="card ex">
-  <div class="ex-head"><span class="ex-num">4</span><h3>חוזה JSON + קטלוג · תשובות סבירות לעמוד 3</h3></div>
+  <div class="ex-head"><span class="ex-num">4</span><h3>חוזה JSON + קטלוג · מה יצא בהרצה אמיתית</h3></div>
   <div class="fix">
 
     <div class="sol"><b>✅ מבנה</b>HTTP products.json (Parse: No) ← HTTP page-3.json (Parse: Yes) ← Iterator ← Simple Text Prompt ← Parse JSON ← Add a Row</div>
     <div class="tbl"><table>
       <tr><th>id</th><th>type</th><th>product_id</th><th>budget</th><th>urgency</th><th>confidence</th></tr>
-      <tr><td>L-1021 קרן</td><td>lead</td><td>P-02</td><td>6000</td><td>medium</td><td>גבוה</td></tr>
-      <tr><td>L-1022 crypto</td><td>spam</td><td>null</td><td>null</td><td>low</td><td>גבוה</td></tr>
-      <tr><td>L-1023 אורי</td><td>lead</td><td>P-04</td><td>4500</td><td>high</td><td>גבוה</td></tr>
-      <tr><td>L-1024 גלית</td><td>unclear / lead</td><td>P-01</td><td>null</td><td>low</td><td><b>נמוך</b></td></tr>
-      <tr><td>L-1025 Yossi</td><td>lead</td><td>P-07</td><td>900</td><td>high</td><td>גבוה · language: en</td></tr>
-      <tr><td>L-1026 הדס</td><td>lead</td><td>P-12</td><td>60000</td><td>low</td><td>גבוה</td></tr>
-      <tr><td>L-1027 איתי</td><td>lead</td><td>P-03</td><td>2400</td><td>low</td><td>גבוה — והמלאי 0!</td></tr>
-      <tr><td>L-1028 ליאת</td><td>lead</td><td>P-06</td><td>4800</td><td>medium</td><td>גבוה</td></tr>
-      <tr><td>L-1029 אלון</td><td><b>service</b></td><td>P-09</td><td>null</td><td>high</td><td>גבוה</td></tr>
-      <tr><td>L-1030 נטע</td><td>lead</td><td>P-01</td><td>7000</td><td>medium / high</td><td>גבוה</td></tr>
+      <tr><td>L-1021 קרן</td><td>lead</td><td>P-02</td><td>6000</td><td>medium</td><td>0.9</td></tr>
+      <tr><td>L-1022 crypto</td><td>spam</td><td>null</td><td>null</td><td>low</td><td>0.95</td></tr>
+      <tr><td>L-1023 אורי</td><td>lead</td><td>P-04</td><td>4500</td><td>high</td><td>0.95</td></tr>
+      <tr><td>L-1024 גלית</td><td>lead</td><td>P-01</td><td>null</td><td>low</td><td><b>0.85</b> — גבוה מדי!</td></tr>
+      <tr><td>L-1025 Yossi</td><td>lead</td><td>P-07</td><td>900</td><td>high</td><td>0.85 · language: en</td></tr>
+      <tr><td>L-1026 הדס</td><td>lead</td><td>P-12</td><td>60000</td><td>low</td><td>0.9</td></tr>
+      <tr><td>L-1027 איתי</td><td>lead</td><td>P-03</td><td>2400</td><td>low</td><td>0.9 · "שאזלה מהמלאי"</td></tr>
+      <tr><td>L-1028 ליאת</td><td>lead</td><td>P-06</td><td>4800</td><td>medium</td><td>0.85 · "המלאי 3 יחידות בלבד"</td></tr>
+      <tr><td>L-1029 אלון</td><td><b>service</b></td><td>P-09</td><td>null</td><td>high</td><td>0.9</td></tr>
+      <tr><td>L-1030 נטע</td><td>lead</td><td>P-01</td><td>7000</td><td>high</td><td>0.95</td></tr>
     </table></div>
-    <p class="note">התשובות שלכם יכולות להיות קצת שונות (medium במקום high). מה שחשוב: אין product_id שלא בקטלוג, L-1029 הוא service, ו-L-1024 עם confidence נמוך. L-1025: יוסי כבר פנה ב-L-1002 — את זה ה-AI לא יכול לדעת. בשביל זה Search Rows לפי email (אתגר תרגיל 6).</p>
+    <figure style="margin:10px auto 14px;max-width:430px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s08/prompt-answer.jpg" alt="תשובת ה-AI" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">L-1028: ה-AI השתמש בקטלוג וכתב שבמלאי יש רק 3 שולחנות — המידע הגיע מ-products.json.</figcaption></figure>
+    <p class="note">כך יצא בהרצה שלנו (10 לידים = 13.25 קרדיטים). אצלכם יכול לצאת קצת שונה. מה שחשוב: אין product_id שלא בקטלוג, ו-L-1029 הוא service. <b>L-1024 קיבל 0.85</b> למרות שאין תקציב ואין צבע — בדיוק בשביל זה אתגר ה-few-shot: מוסיפים אותו כדוגמה עם confidence 0.3, ומריצים שוב. L-1025: יוסי כבר פנה ב-L-1002 — את זה ה-AI לא יכול לדעת. בשביל זה Search Rows לפי email (אתגר תרגיל 6).</p>
   </div>
 </div>
 </section>
@@ -136,11 +139,11 @@
     🔥 lead + high + confidence ≥ 0.7 ← Telegram · 🛠️ service ← Telegram · 🤔 confidence &lt; 0.5 ← Telegram · 🗑️ spam/job ← כלום · 📋 Fallback ← יש email ← Gmail draft</div>
     <div class="tbl"><table>
       <tr><th>מסלול</th><th>לידים מעמוד 3 (בערך)</th></tr>
-      <tr><td>🔥 ליד חם</td><td>L-1023 אורי · L-1025 Yossi · אולי L-1030 נטע</td></tr>
+      <tr><td>🔥 ליד חם</td><td>L-1023 אורי · L-1025 Yossi · L-1030 נטע</td></tr>
       <tr><td>🛠️ שירות</td><td>L-1029 אלון</td></tr>
-      <tr><td>🤔 לא בטוח</td><td>L-1024 גלית</td></tr>
+      <tr><td>🤔 לא בטוח</td><td>L-1024 גלית — רק אחרי שהוספתם few-shot (בלעדיו קיבלה 0.85)</td></tr>
       <tr><td>🗑️ ספאם</td><td>L-1022</td></tr>
-      <tr><td>📋 השאר</td><td>L-1021, L-1026, L-1027, L-1028 (+ L-1030 אם medium)</td></tr>
+      <tr><td>📋 השאר</td><td>L-1021, L-1026, L-1027, L-1028</td></tr>
     </table></div>
     <p class="note"><b>הפילטר "חדש":</b> אם אצלכם Search Rows עוצר כשהוא לא מוצא כלום, אפשר להחליף אותו ב-<span class="en">Google Sheets · Search Rows (Advanced)</span> או לשים <span class="en">Array aggregator</span> אחריו ולבדוק <code>length(Array) = 0</code>. בדקו בפלט מה קורה בליד חדש לפני שבונים את הפילטר.</p>
     <p class="note"><b>Fallback:</b> ב-Router, לוחצים על הקו ← Set up a filter ← <span class="en">Fallback route</span>: Yes. הוא רץ רק כשאף מסלול אחר לא התאים.</p>

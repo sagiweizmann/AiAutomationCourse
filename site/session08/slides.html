@@ -793,13 +793,13 @@ body.ov-on #ov{display:block}
   <div class="s-body mid">
     <div class="agenda">
       <div class="ag" style="--c:var(--p1)"><div class="t">0:00–0:08</div><b>פתיחה</b><span>מה עשינו עם AI עד עכשיו</span></div>
-      <div class="ag" style="--c:var(--claude)"><div class="t">0:08–0:30</div><b>7 משימות של AI</b><span>ו-Make AI Toolkit</span></div>
-      <div class="ag" style="--c:var(--p2)"><div class="t">0:30–0:50</div><b>האתר והנתונים</b><span>API, עמודים, Iterator</span></div>
-      <div class="ag" style="--c:var(--p4)"><div class="t">0:50–1:00</div><b>הפסקה 1</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--p5)"><div class="t">1:00–1:24</div><b>פלט שאפשר לסמוך עליו</b><span>חוזה JSON, בדיקות, שגיאות</span></div>
-      <div class="ag" style="--c:var(--p3)"><div class="t">1:24–1:54</div><b>כשה-AI טועה + הפייפליין</b><span>אדם בתהליך, Prompt Injection</span></div>
-      <div class="ag" style="--c:var(--p4)"><div class="t">1:54–2:04</div><b>הפסקה 2</b><span>10 דקות</span></div>
-      <div class="ag" style="--c:var(--p1)"><div class="t">2:04–3:00</div><b>תרגול</b><span>47 דקות בנייה</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">0:08–0:34</div><b>7 משימות של AI</b><span>ו-Make AI Toolkit, בתרחישים אמיתיים</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">0:34–0:56</div><b>האתר והנתונים</b><span>API, עמודים, Iterator</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">0:56–1:06</div><b>הפסקה 1</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p5)"><div class="t">1:06–1:32</div><b>פלט שאפשר לסמוך עליו</b><span>חוזה JSON, בדיקות, שגיאות</span></div>
+      <div class="ag" style="--c:var(--p3)"><div class="t">1:32–2:02</div><b>כשה-AI טועה + הפייפליין</b><span>אדם בתהליך, Prompt Injection</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">2:02–2:12</div><b>הפסקה 2</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">2:12–3:00</div><b>תרגול</b><span>39 דקות בנייה</span></div>
     </div>
   </div>
   <aside class="notes"><ul><li>היום הרבה בנייה. כל הדגמה קצרה, והתרגול ארוך.</li></ul></aside>
@@ -828,7 +828,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>הרעיון: מפרקים "תטפל בליד" למשימות קטנות. כל משימה = מודול אחד.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="2" data-title="7 המשימות">
+<section class="slide" data-min="3" data-block="2" data-title="7 המשימות">
   <div class="s-kicker">המפה</div>
   <h2>שבע משימות שחוזרות בכל עסק</h2>
   <div class="s-body mid">
@@ -860,12 +860,37 @@ body.ov-on #ov{display:block}
       <tr><td>😊 רגש</td><td><span class="en">Analyze sentiment</span></td><td>הטקסט · "להחזיר תיאור?"</td></tr>
       <tr><td>✍️⚖️ כל השאר</td><td><span class="en">Simple Text Prompt</span></td><td>מודל · פרומפט — כמו במפגש 4</td></tr>
     </table></div>
-    <div class="callout tip"><b>איפה זה?</b>מוסיפים מודול ← מחפשים <b>AI</b> ← <span class="en">Make AI Toolkit</span>. אותו חיבור מובנה כמו במפגש 4 (Make's AI Provider), בלי מפתח. בתוכנית החינמית: Haiku.</div>
+    <div class="callout tip"><b>איפה זה?</b>מוסיפים מודול ← <b>AI by Make</b> (בתפריט הצד) או מחפשים <span class="en">Make AI Toolkit</span>. Connection: <span class="en">Make's AI Provider</span> — בלי מפתח, כמו במפגש 4. Model: <b>Claude Haiku 5.5</b>.</div>
   </div>
   <aside class="notes"><ul><li>האפליקציה נקראה פעם AI by Make. בתיעוד היום: Make AI Toolkit.</li><li>כל קריאה עולה קרדיטים — כמו כל מודול AI.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="2" data-title="מודול מוכן או פרומפט">
+<section class="slide" data-min="2" data-block="2" data-title="Make AI Toolkit · מסך">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>AI by Make: הכול במקום אחד</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/ai-by-make.jpg" alt="AI by Make בתפריט הצד: סוכן, פרומפט, חיפוש ברשת, ומודולי טקסט" style="max-height:430px;object-fit:contain"><figcaption>AI by Make בתפריט הצד: סוכן, פרומפט, חיפוש ברשת, ומודולי טקסט</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/toolkit-modules.jpg" alt="Make AI Toolkit: התווית Tokens = משלמים לפי אורך הטקסט" style="max-height:430px;object-fit:contain"><figcaption>Make AI Toolkit: התווית Tokens = משלמים לפי אורך הטקסט</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>שתי דרכים להגיע לאותם מודולים. בתמונה מימין רואים גם "Web search" ו-"Run an agent" — סוכנים במפגש 10.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="גם מסמכים ותמונות">
+  <div class="s-kicker">מה עוד יש שם</div>
+  <h2>גם מסמכים ותמונות — בלי מפתח</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>מודול ב-AI by Make</th><th>מה הוא עושה</th><th>עלות (לפי Make)</th></tr>
+      <tr><td><span class="en">Extract text from a document</span></td><td>טקסט מכל מסמך (PDF, Word…)</td><td>לפי עמוד</td></tr>
+      <tr><td><span class="en">Extract information from an invoice</span></td><td>ספק, תאריך, סכום, מע"מ מחשבונית</td><td>10 קרדיטים</td></tr>
+      <tr><td><span class="en">Extract information from a receipt</span></td><td>אותו דבר מקבלה</td><td>10 קרדיטים</td></tr>
+      <tr><td><span class="en">Describe an image</span> · <span class="en">Extract text from an image</span></td><td>מה רואים בתמונה · טקסט מתמונה (גם כתב יד)</td><td>2 קרדיטים</td></tr>
+    </table></div>
+    <div class="callout tip"><b>רעיון לבית</b>מצלמים קבלה ← שולחים לבוט Telegram ← <span class="en">Extract information from a receipt</span> ← שורה בגיליון ההוצאות. 10 קרדיטים לקבלה — שווה לבדוק לפני שמפעילים על מאות.</div>
+  </div>
+  <aside class="notes"><ul><li>המחירים כפי שמופיעים בתפריט של Make בזמן הכנת השיעור. בודקים שוב לפני שימוש.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="מודול מוכן או פרומפט">
   <div class="s-kicker">החלטה</div>
   <h2>מודול מוכן או Simple Text Prompt?</h2>
   <div class="s-body mid">
@@ -878,7 +903,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>עלות: שלושה מודולים = שלוש קריאות. פרומפט אחד עם JSON = קריאה אחת. טרייד-אוף בין פשטות לעלות.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="2" data-title="הדגמה: Categorize text">
+<section class="slide" data-min="3" data-block="2" data-title="הדגמה: Categorize text">
   <div class="s-kicker">הדגמה · 4 דקות</div>
   <h2>מסווגים פנייה במודול אחד</h2>
   <div class="s-body mid">
@@ -898,32 +923,43 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>להראות את ההסבר שחוזר. שאלו: מה הוא יעשה עם "יש בכחול?" — ליד או לא ברור?</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="2" data-title="הדגמה: Extract information">
-  <div class="s-kicker">הדגמה · 3 דקות</div>
-  <h2>מחלצים שדות מטקסט חופשי</h2>
+<section class="slide" data-min="2" data-block="2" data-title="Categorize text · הגדרות">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>ההגדרות: מודל, טקסט, וחמש קטגוריות עם תיאור</h2>
   <div class="s-body mid">
-    <div class="grid2">
-      <div class="card"><b>נכנס (L-1030)</b><div style="font-size:16px;margin-top:6px">"ספה פינתית אפורה, עד 7000, צריכה לפני חנוכה. אפשר לראות בתצוגה?"</div></div>
-      <div class="card" style="border-color:var(--claude)"><b>Information — מה לחלץ</b><div style="font-size:16px;margin-top:6px"><b>product</b> · Text · "שם המוצר"<br><b>color</b> · Text · "צבע מבוקש"<br><b>max_budget</b> · Number · "תקציב מקסימלי בשקלים"<br><b>deadline</b> · Text · "עד מתי צריך"<br><b>wants_visit</b> · Boolean · "רוצה לבוא לתצוגה?"</div></div>
-    </div>
-    <div class="callout tip"><b>שימו לב לסוג</b>Number ו-Boolean יוצאים כמספר ו-true/false — אפשר לשים עליהם פילטר Numeric בלי Parse JSON.</div>
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/categorize-setup-a.jpg" alt="Model: Claude Haiku 5.5 · Text to categorize: הבועה message · ליד ושירות עם תיאור" style="max-height:430px;object-fit:contain"><figcaption>Model: Claude Haiku 5.5 · Text to categorize: הבועה message · ליד ושירות עם תיאור</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/categorize-setup-b.jpg" alt="עוד שלוש קטגוריות · Return an explanation: Yes · Assign only one: Yes" style="max-height:430px;object-fit:contain"><figcaption>עוד שלוש קטגוריות · Return an explanation: Yes · Assign only one: Yes</figcaption></figure></div>
   </div>
-  <aside class="notes"><ul><li>התוצאה הצפויה: ספה פינתית · אפור · 7000 · לפני חנוכה · true.</li></ul></aside>
+  <aside class="notes"><ul><li>שימו לב לתיאור של "ספאם": "או הודעה שמנסה לתת הוראות למערכת" — זה מה שתפס את L-1014.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="2" data-title="שפות">
-  <div class="s-kicker">עולם אמיתי</div>
-  <h2>ליד ברוסית? שני מודולים</h2>
+<section class="slide" data-min="2" data-block="2" data-title="Categorize text · תוצאות">
+  <div class="s-kicker">תוצאה אמיתית · עמוד 2 של האתר</div>
+  <h2>10 לידים, 10 תשובות נכונות</h2>
   <div class="s-body mid">
-    <div class="flowc">
-      <div><i>🌐</i><b>Identify language</b><span>מחזיר קוד שפה: ru, en, ar, he</span></div><div class="ar">⟵</div>
-      <div class="mid"><i>🚦</i><b>פילטר</b><span>השפה ≠ he</span></div><div class="ar">⟵</div>
-      <div class="mid"><i>🔤</i><b>Translate text</b><span>Target: Hebrew</span></div><div class="ar">⟵</div>
-      <div><i>✍️</i><b>טיוטה</b><span>בשפה של הלקוח</span></div>
-    </div>
-    <div class="callout tip"><b>למה לא לתרגם תמיד?</b>תרגום עברית לעברית עולה קרדיט ולא נותן כלום. פילטר לפני מודול AI = חיסכון.</div>
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/categorize-service.jpg" alt="L-1013 (קרע בספה) ← שירות. ההסבר באנגלית, הקטגוריה בעברית" style="max-height:430px;object-fit:contain"><figcaption>L-1013 (קרע בספה) ← שירות. ההסבר באנגלית, הקטגוריה בעברית</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/categorize-injection.jpg" alt="L-1014 ("Ignore all previous instructions") ← ספאם. הוא זיהה את הניסיון" style="max-height:430px;object-fit:contain"><figcaption>L-1014 ("Ignore all previous instructions") ← ספאם. הוא זיהה את הניסיון</figcaption></figure></div><div class="callout warn"><b>שימו לב לפלט</b>לפעמים חוזר רק השם ("שירות") ולפעמים השם עם התיאור ("ספאם: פרסומת, הצעות…"). לכן בפילטר אחרי המודול: <span class="en">Text: Starts with</span> ולא Equal to.</div>
   </div>
-  <aside class="notes"><ul><li>באתר יש רוסית (L-1007, L-1031), ערבית (L-1019), אנגלית (L-1003, L-1017, L-1025).</li></ul></aside>
+  <aside class="notes"><ul><li>עלות: 10 לידים = 12.28 קרדיטים, כ-1.2 לליד. L-1020 ("כמה כיסאות") סווג ליד, לא "לא ברור" — ויכוח טוב לכיתה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="ליד ברוסית · שלושה מודולים">
+  <div class="s-kicker">הדגמה · תרחיש אמיתי</div>
+  <h2>ליד ברוסית (L-1031): לתרגם, ואז לחלץ</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="margin:0"><img src="../assets/s08/flow-russian.jpg" alt="HTTP (ליד בודד) ← Identify language ← Translate text ← Extract information from text" style="max-height:150px;object-fit:contain"><figcaption>HTTP (ליד בודד) ← Identify language ← Translate text ← Extract information from text</figcaption></figure>
+    <div class="grid2" style="align-items:start;margin-top:10px"><figure class="shot" style="margin:0"><img src="../assets/s08/translate-output.jpg" alt="Translate text → Hebrew: "צריך ארון עם 3 דלתות, לבן, דחוף — אנחנו עוברים דירה ביום שישי." · 1.11 קרדיטים" style="max-height:200px;object-fit:contain"><figcaption>Translate text → Hebrew: "צריך ארון עם 3 דלתות, לבן, דחוף — אנחנו עוברים דירה ביום שישי." · 1.11 קרדיטים</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/extract-output.jpg" alt="Extract information על התרגום: product, color, deadline (Text) · urgent (Boolean = true) · 1.22 קרדיטים" style="max-height:260px;object-fit:contain"><figcaption>Extract information על התרגום: product, color, deadline (Text) · urgent (Boolean = true) · 1.22 קרדיטים</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>ה-HTTP מושך ליד אחד: <code>…/leads/L-1031.json</code>. אחרי התרגום, Extract information עובד על עברית.</li><li>urgent יצא true כ-Boolean — אפשר לשים עליו פילטר בלי Parse JSON.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="2" data-title="Identify language · הפתעה">
+  <div class="s-kicker">לקח מהבדיקה</div>
+  <h2>Identify language החזיר: &lt;UNKNOWN&gt;</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s08/identify-unknown.jpg" alt="על אותו ליד ברוסית — בלי שפה. 1.09 קרדיטים" style="max-height:220px;object-fit:contain"><figcaption>על אותו ליד ברוסית — בלי שפה. 1.09 קרדיטים</figcaption></figure>
+      <div class="card"><b>מה לומדים מזה</b><div style="font-size:17px;margin-top:6px">גם מודול מוכן יכול לפספס. <b>תמיד בודקים את הפלט</b> לפני שבונים עליו פילטר.<br><br>הפתרון בתרגול: Simple Text Prompt שמחזיר רק קוד (he / en / ru / ar), או שדה <code>language</code> בתוך חוזה ה-JSON.</div></div>
+    </div>
+  </div>
+  <aside class="notes"><ul><li>זה קרה באמת בהכנת השיעור. Translate text הבין שזו רוסית ותרגם מצוין — רק הזיהוי נכשל.</li></ul></aside>
 </section>
 
 <!-- ============================== BLOCK 3 · THE SITE + DATA ============================== -->
@@ -934,7 +970,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>פתחו את weizmann.ai/demo על המסך.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="3" data-title="הכירו את האתר">
+<section class="slide" data-min="3" data-block="3" data-title="הכירו את האתר">
   <div class="s-kicker">האתר</div>
   <h2>שלוש דרכים לקבל לידים מאותו אתר</h2>
   <div class="s-body mid">
@@ -949,7 +985,25 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>הראו את החיפוש: "ספה" מוצא 5 — אבל לא את הליד ברוסית (Диван). זו בדיוק הסיבה ל-AI.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="6" data-block="3" data-title="מה לא בסדר בלידים">
+<section class="slide" data-min="2" data-block="3" data-title="האתר · צילומים">
+  <div class="s-kicker">weizmann.ai/demo</div>
+  <h2>החנות, והלידים שכבר נכנסו</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/demo-home.jpg" alt="המוצרים — נטענים מ-products.json (מחיר ומלאי)" style="max-height:430px;object-fit:contain"><figcaption>המוצרים — נטענים מ-products.json (מחיר ומלאי)</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/demo-leads.jpg" alt=""הלידים שנכנסו לאתר": 32 פניות, חיפוש וסינון" style="max-height:430px;object-fit:contain"><figcaption>"הלידים שנכנסו לאתר": 32 פניות, חיפוש וסינון</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>בקשו מהכיתה לחפש "ספה" — ולשים לב שהליד ברוסית (Диван) לא נמצא.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="3" data-title="האתר · טופס ו-API">
+  <div class="s-kicker">weizmann.ai/demo</div>
+  <h2>הטופס שולח ל-Webhook שלכם, וה-API מחזיר JSON</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/demo-form.jpg" alt="צור קשר · ⚙️ לתלמידים: מדביקים כתובת Custom webhook" style="max-height:430px;object-fit:contain"><figcaption>צור קשר · ⚙️ לתלמידים: מדביקים כתובת Custom webhook</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/demo-api.jpg" alt="שלוש כתובות GET, ודוגמה לתשובה" style="max-height:430px;object-fit:contain"><figcaption>שלוש כתובות GET, ודוגמה לתשובה</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>הטופס = Webhook (מפגש 7). ה-API = HTTP. שתי דרכים לקבל את אותם לידים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="5" data-block="3" data-title="מה לא בסדר בלידים">
   <div class="s-kicker">פעילות · 6 דקות</div>
   <h2>מה לא בסדר בלידים האלה?</h2>
   <div class="s-body mid">
@@ -966,7 +1020,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>תשובות: כפילות (L-1001) + לקוחה כועסת · Prompt Injection · מייל שבור · אין מידע · לא ליד — פניית שירות דחופה.</li><li>עוד: L-1010 test, L-1016 קורות חיים, L-1025 יוסי פעמיים בשתי שפות, L-1011 בלי מייל.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="5" data-block="3" data-title="HTTP + Iterator">
+<section class="slide" data-min="3" data-block="3" data-title="HTTP + Iterator">
   <div class="s-kicker">הדגמה · 5 דקות</div>
   <h2>מושכים את הלידים: HTTP ← Iterator</h2>
   <div class="s-body mid">
@@ -982,13 +1036,31 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>מפגש 6: הסמל [] = מערך. כאן רואים למה זה חשוב.</li><li>10 לידים = 10 הרצות של כל מודול אחרי ה-Iterator. עם AI — 10 קריאות.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="3" data-title="עמודים">
+<section class="slide" data-min="2" data-block="3" data-title="HTTP + Iterator · מסך">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>HTTP: כתובת ו-GET. הפלט: leads עם 10 פריטים</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/http-setup.jpg" alt="Authentication: No authentication · URL · Method: GET" style="max-height:430px;object-fit:contain"><figcaption>Authentication: No authentication · URL · Method: GET</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/http-leads.jpg" alt="Data › leads (Array) › 1: id, name, email… · has_more: true · 1 קרדיט" style="max-height:430px;object-fit:contain"><figcaption>Data › leads (Array) › 1: id, name, email… · has_more: true · 1 קרדיט</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>Parse response: Yes (ברירת מחדל) — בזכותו Data מתפרק לשדות.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="1" data-block="3" data-title="Iterator · מסך">
+  <div class="s-kicker">כך זה נראה ב-Make</div>
+  <h2>Iterator על leads — ומכאן כל מודול רץ 10 פעמים</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/iterator-setup.jpg" alt="Array: הבועה leads[] מה-HTTP" style="max-height:430px;object-fit:contain"><figcaption>Array: הבועה leads[] מה-HTTP</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/flow-categorize.jpg" alt="HTTP (1) ← Iterator (1) ← Make AI Toolkit (10)" style="max-height:430px;object-fit:contain"><figcaption>HTTP (1) ← Iterator (1) ← Make AI Toolkit (10)</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>המספר הקטן מעל כל מודול = כמה פעמים רץ. 1, 1, 10.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="עמודים">
   <div class="s-kicker">סיבוך אמיתי</div>
   <h2>יש עוד עמודים: has_more</h2>
   <div class="s-body mid">
     <div class="grid2">
       <div class="card"><b>מה ה-API אומר</b><div style="font-size:16px;margin-top:6px"><code>"total": 32</code> · <code>"total_pages": 4</code><br><code>"has_more": true</code> · <code>"next_page": "page-2.json"</code></div></div>
-      <div class="card" style="border-color:var(--p2)"><b>מה עושים ב-Make</b><div style="font-size:16px;margin-top:6px"><span class="en">Flow Control · Repeater</span> · Repeats: <b>4</b><br>← HTTP עם URL: <code>…/page-{{i}}.json</code><br>← Iterator ← …</div></div>
+      <div class="card" style="border-color:var(--p2)"><b>מה עושים ב-Make</b><div style="font-size:16px;margin-top:6px"><b>דרך 1:</b> <span class="en">Flow Control · Repeater</span> (Repeats: 4) ← HTTP עם <code>…/page-{{i}}.json</code><br><b>דרך 2:</b> ב-HTTP עצמו יש <span class="en">Pagination type</span>: Offset · Page · URL-based. Make מביא את כל העמודים לבד</div></div>
     </div>
     <div class="callout warn"><b>זהירות עם קרדיטים</b>32 לידים × 3 מודולי AI = כמעט 100 קריאות. בבנייה עובדים על עמוד 1 בלבד. כל הארבעה — רק כשהכול עובד.</div>
   </div>
@@ -1011,7 +1083,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>במפגש 5 ביקשנו JSON. היום: חוזה מלא, ומה עושים כשהוא נשבר.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="5" data-block="4" data-title="חוזה JSON">
+<section class="slide" data-min="4" data-block="4" data-title="חוזה JSON">
   <div class="s-kicker">כלל 1</div>
   <h2>חוזה JSON: לא "תחזיר JSON" — בדיוק איזה</h2>
   <div class="s-body mid">
@@ -1036,6 +1108,24 @@ body.ov-on #ov{display:block}
     <div class="callout tip"><b>זה RAG בקטן</b>לתת ל-AI מידע מהעסק בתוך הפרומפט. במפגש 9 נעשה את זה עם מאות מסמכים.</div>
   </div>
   <aside class="notes"><ul><li>טעות נפוצה: HTTP של הקטלוג אחרי ה-Iterator = 32 בקשות במקום אחת.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="חוזה JSON · מסך">
+  <div class="s-kicker">תרחיש אמיתי · עמוד 3 של האתר</div>
+  <h2>הפרומפט, והתשובה שחזרה</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/prompt-setup.jpg" alt="Simple Text Prompt: הקטלוג (1. Data), תגיות &lt;message&gt;, חוזה ה-JSON, כללים" style="max-height:430px;object-fit:contain"><figcaption>Simple Text Prompt: הקטלוג (1. Data), תגיות &lt;message&gt;, חוזה ה-JSON, כללים</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/prompt-answer.jpg" alt="ליד L-1028: lead · P-06 · 4800 — והוא אפילו כתב שבמלאי יש רק 3 שולחנות" style="max-height:430px;object-fit:contain"><figcaption>ליד L-1028: lead · P-06 · 4800 — והוא אפילו כתב שבמלאי יש רק 3 שולחנות</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>הבועות נכנסו בהקלדה: {{1.data}}, {{3.name}}, {{3.message}}… — Make הופך אותן לבועות לבד. 10 לידים = 13.25 קרדיטים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="Parse JSON · מסך">
+  <div class="s-kicker">תרחיש אמיתי</div>
+  <h2>Parse JSON: מטקסט לבועות שאפשר לסנן</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s08/flow-contract.jpg" alt="HTTP קטלוג ← HTTP לידים ← Iterator ← Simple Text Prompt ← Parse JSON" style="max-height:430px;object-fit:contain"><figcaption>HTTP קטלוג ← HTTP לידים ← Iterator ← Simple Text Prompt ← Parse JSON</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s08/parse-json-service.jpg" alt="L-1029 (הזמנה שלא הגיעה): type = service · urgency = high · budget ריק (null)" style="max-height:430px;object-fit:contain"><figcaption>L-1029 (הזמנה שלא הגיעה): type = service · urgency = high · budget ריק (null)</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>בלי Data structure — Make בנה את המבנה לבד מהריצה הראשונה. budget ו-confidence יצאו כמספרים (#).</li></ul></aside>
 </section>
 
 <section class="slide" data-min="2" data-block="4" data-title="דוגמאות בפרומפט">
@@ -1082,7 +1172,7 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>טריק: Haiku מסווג את כולם, ורק לידים חמים הולכים ל-Sonnet לכתיבת טיוטה.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="5" data-block="4" data-title="כשה-JSON נשבר">
+<section class="slide" data-min="4" data-block="4" data-title="כשה-JSON נשבר">
   <div class="s-kicker">כלל 5</div>
   <h2>כשה-JSON נשבר: Error handler</h2>
   <div class="s-body mid">
@@ -1220,24 +1310,26 @@ body.ov-on #ov{display:block}
 </section>
 
 <section class="slide" data-min="4" data-block="6" data-title="כמה זה עולה">
-  <div class="s-kicker">חשבון</div>
+  <div class="s-kicker">חשבון אמיתי · מהתרחישים של היום</div>
   <h2>כמה עולה ליד?</h2>
   <div class="s-body mid">
     <div class="tbl"><table>
-      <tr><th>שלב</th><th>לכל ליד</th></tr>
-      <tr><td>HTTP + Iterator + Search Rows</td><td>~3 קרדיטים</td></tr>
-      <tr><td>Simple Text Prompt (Haiku)</td><td>תלוי באורך — בדקו ב-History</td></tr>
-      <tr><td>Parse JSON + Router + פעולה + תיעוד</td><td>~4 קרדיטים</td></tr>
+      <tr><th>מודול</th><th>מה מדדנו</th><th>לליד</th></tr>
+      <tr><td>HTTP · Iterator · Parse JSON</td><td>קרדיט לכל הפעלה</td><td>~1 לכל מודול</td></tr>
+      <tr><td>Categorize text (Haiku)</td><td>10 לידים = 12.28</td><td>~1.2</td></tr>
+      <tr><td>Simple Text Prompt + קטלוג (Haiku)</td><td>10 לידים = 13.25 · ~1,200 טוקנים נכנסים, ~430 יוצאים</td><td>~1.3</td></tr>
+      <tr><td>Translate · Identify language · Extract</td><td>1.11 · 1.09 · 1.22</td><td>~1.1 כל אחד</td></tr>
+      <tr><td>חשבונית / קבלה</td><td>לפי התפריט של Make</td><td>10</td></tr>
     </table></div>
-    <div class="callout tip"><b>איך מוזילים</b>פילטר לפני AI (ספאם ברור, id שכבר טופל) · קריאת AI אחת עם JSON במקום שלוש · קטלוג פעם אחת לפני ה-Iterator · בבנייה — עמוד 1 בלבד.</div>
+    <div class="callout tip"><b>החשבון</b>פייפליין עם ~6 מודולים ≈ 7 קרדיטים לליד. 32 לידים ≈ 220 קרדיטים — כמעט רבע מ-1,000 החודשיים בתוכנית החינמית. לכן: פילטר לפני AI, קריאה אחת עם JSON, ועמוד 1 בבנייה.</div>
   </div>
-  <aside class="notes"><ul><li>פתחו History של ריצה אמיתית והראו את העלות של כל מודול. המספרים משתנים — תמיד בודקים.</li></ul></aside>
+  <aside class="notes"><ul><li>המספרים מההכנה של השיעור — פתחו History והראו את העלות ליד כל מודול.</li></ul></aside>
 </section>
 
 <section class="slide brk" data-min="10" data-block="0" data-title="הפסקה 2">
   <div class="s-kicker">הפסקה 2 מתוך 2</div>
   <h1>ה-AI מוכן לעבודה 🤖<br>הפסקה — 10 דקות</h1>
-  <p class="sub">כשחוזרים: 47 דקות תרגול.</p>
+  <p class="sub">כשחוזרים: 39 דקות תרגול.</p>
   <div class="timer" data-sec="600" data-auto></div>
   <aside class="notes"><ul><li>להזכיר: עובדים על עמוד 1 בלבד, כדי לחסוך קרדיטים.</li></ul></aside>
 </section>
@@ -1282,15 +1374,15 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>אם יש זמן: הדגמה קצרה ב-Claude עם Connector של Gmail.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="47" data-block="7" data-title="זמן תרגול">
-  <div class="s-kicker">תרגול · 47 דקות</div>
+<section class="slide" data-min="39" data-block="7" data-title="זמן תרגול">
+  <div class="s-kicker">תרגול · 39 דקות</div>
   <h2>בונים בעצמכם</h2>
   <div class="s-body mid">
     <div class="grid2">
       <div class="card"><b>🎯 בכיתה</b><div style="font-size:16px;margin-top:6px">תרגילים 1–5, בזוגות. בתרגיל 2 — מי מגיע ראשון ל-10/10?</div></div>
       <div class="card" style="border-color:var(--p2)"><b>⚡ סיימתם?</b><div style="font-size:16px;margin-top:6px">תרגיל 6 (הפייפליין המלא), ואז הבונוס.</div></div>
     </div>
-    <div class="timer" data-sec="2820"></div>
+    <div class="timer" data-sec="2340"></div>
     <div class="callout tip"><b>כשנתקעים</b>מה נכנס? מה יצא? (מפגש 6) · AI מחזיר שטויות? קודם קראו את הפלט שלו ב-History · עמוד 1 בלבד!</div>
   </div>
   <aside class="notes"><ul><li>לעבור בין הזוגות. לשאול: "מה ה-confidence שלך על L-1020?"</li></ul></aside>
