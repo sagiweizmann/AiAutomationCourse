@@ -51,6 +51,8 @@ td.m{min-width:260px;max-width:380px}td.n{white-space:nowrap}
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .prod{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 .prod b{display:block}.prod .p{color:var(--acc);font-weight:700}.prod .s{font-size:14px;color:var(--ink2)}
+a.dl{display:inline-block;background:var(--acc);color:#fff;font-weight:700;border-radius:10px;padding:10px 18px;text-decoration:none}
+.callout-mini{margin-top:10px;font-size:15px;color:var(--ink2)}
 footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
 .hp{position:absolute;left:-9999px}
 </style>
@@ -60,7 +62,7 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
 <div class="wrap">
 <header>
   <div class="logo">בית <span>ו</span>עיצוב</div>
-  <nav><a href="#products">מוצרים</a><a href="#contact">צור קשר</a><a href="#leads">הלידים</a><a href="#api">API</a></nav>
+  <nav><a href="#products">מוצרים</a><a href="#contact">צור קשר</a><a href="#leads">הלידים</a><a href="#kb">מאגר הידע</a><a href="#api">API</a></nav>
 </header>
 
 <div class="hero">
@@ -118,6 +120,20 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
   <p class="sub" id="count" style="margin-top:8px"></p>
 </section>
 
+<section id="kb">
+  <h2>מאגר הידע של העסק</h2>
+  <p class="sub">כל מה שנציג צריך לדעת: משלוחים, החזרות, אחריות, תשלומים ועוד. כל שורה היא קטע אחד, עם המקור שלו.</p>
+  <div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <a class="dl" href="knowledge.csv" download>⬇️ הורדת המאגר (CSV)</a>
+    <span class="sub" style="margin:0">ב-Google Sheets: File ← Import ← Upload ← בוחרים את הקובץ ← <b>Replace current sheet</b></span>
+  </div>
+  <div class="callout-mini">⚠️ המאגר לא נקי: יש בו מידע ישן, כפילות ושורה בלי מילות מפתח. מצאו אותן לפני שבונים עליו.</div>
+  <div class="tbl" style="margin-top:12px"><table>
+    <thead><tr><th>id</th><th>נושא</th><th>מילות מפתח</th><th>טקסט</th><th>מקור</th><th>עודכן</th></tr></thead>
+    <tbody id="kbrows"><tr><td colspan="6">טוען…</td></tr></tbody>
+  </table></div>
+</section>
+
 <section id="api">
   <h2>מסד הנתונים · API</h2>
   <p class="sub">כל הלידים שכבר נכנסו לאתר. אפשר למשוך אותם מ-Make עם <b>HTTP · Make a request</b>, Method <b>GET</b>.</p>
@@ -125,6 +141,7 @@ footer{color:var(--ink2);font-size:14px;text-align:center;padding:30px 0}
     <div class="ep"><span class="method">GET</span><code id="u-leads"></code><button type="button" class="ghost" data-copy="u-leads">העתקה</button></div>
     <div class="ep"><span class="method">GET</span><code id="u-lead"></code><button type="button" class="ghost" data-copy="u-lead">העתקה</button></div>
     <div class="ep"><span class="method">GET</span><code id="u-prods"></code><button type="button" class="ghost" data-copy="u-prods">העתקה</button></div>
+    <div class="ep"><span class="method">GET</span><code id="u-kb"></code><button type="button" class="ghost" data-copy="u-kb">העתקה</button></div>
     <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">איך נראית התשובה?</summary>
 <pre>{
   "page": 1, "per_page": 10, "total": 32, "total_pages": 4,
@@ -155,6 +172,7 @@ const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch(e){ 
 $('u-leads').textContent = base + 'leads/page-1.json';
 $('u-lead').textContent  = base + 'leads/L-1001.json';
 $('u-prods').textContent = base + 'products.json';
+$('u-kb').textContent = base + 'knowledge.json';
 document.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => {
   navigator.clipboard.writeText($(b.dataset.copy).textContent).then(() => { b.textContent = '✓'; setTimeout(() => b.textContent = 'העתקה', 1200); });
 });
@@ -192,6 +210,11 @@ function render(){
 }
 ['q','src','nomail'].forEach(id => $(id).addEventListener('input', render));
 loadAll().catch(() => { $('rows').innerHTML = '<tr><td colspan="9">לא הצלחנו לטעון את הלידים.</td></tr>'; });
+
+// knowledge base
+fetch(base + 'knowledge.json').then(r => r.json()).then(d => {
+  $('kbrows').innerHTML = d.items.map(k => `<tr><td class="n">${k.id}</td><td class="n">${esc(k.topic)}</td><td>${k.keywords ? esc(k.keywords) : val(null)}</td><td class="m">${esc(k.text)}</td><td>${esc(k.source)}</td><td class="n">${k.updated}</td></tr>`).join('');
+}).catch(() => { $('kbrows').innerHTML = '<tr><td colspan="6">לא הצלחנו לטעון את המאגר.</td></tr>'; });
 
 // webhook target
 $('hook').value = store.get('demoHook');

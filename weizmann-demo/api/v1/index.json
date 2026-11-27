@@ -4,6 +4,8 @@
   "endpoints": {
     "leads": "leads/page-1.json",
     "lead": "leads/{id}.json",
-    "products": "products.json"
+    "products": "products.json",
+    "knowledge": "knowledge.json",
+    "knowledge_csv": "../../knowledge.csv"
   }
 }
