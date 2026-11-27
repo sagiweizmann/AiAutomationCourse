@@ -151,8 +151,8 @@
   <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">קל</span><span class="pill cls">בכיתה</span></div>
   <p class="goal">אותו מאגר, בלי לבנות כלום. מה Claude Project עושה טוב יותר — ומה לא?</p>
   <ol class="steps">
-    <li>Claude Desktop ← Projects ← פרויקט חדש: <b>בית ועיצוב · שירות</b></li>
-    <li>Project knowledge ← מעלים את <code>knowledge.csv</code> (הנקי, מתרגיל 1: File ← Download ← CSV)</li>
+    <li>Claude ← Projects ← <b>New project</b>: <b>בית ועיצוב · שירות</b></li>
+    <li>Context ← + ← <b>Upload from device</b> ← <code>knowledge.csv</code> (הנקי, מתרגיל 1: File ← Download ← CSV). או Add text content ומדביקים</li>
     <li>Instructions: "אתה נציג של בית ועיצוב. ענה רק לפי קבצי הפרויקט. אם אין מידע — כתוב שתעביר לנציג. בסוף כל תשובה ציין את מזהה הקטע (K-xx)."</li>
     <li>שואלים את 6 השאלות מתרגיל 3</li>
   </ol>
@@ -172,8 +172,8 @@
   <div class="ex-meta"><span class="pill">⏱ 15 דקות</span><span class="pill">בינוני</span><span class="pill cls">בכיתה</span></div>
   <p class="goal">מלמדים את Claude פעם אחת איך "בית ועיצוב" עונה ללקוחות — ומשתמשים בזה בכל שיחה.</p>
   <ol class="steps">
-    <li>Settings ← Capabilities ← <b>Code execution and file creation</b>: פעיל</li>
-    <li>Customize ← Skills ← + ← <b>Create skill</b> ← מתארים ל-Claude את הכללים למטה, והוא כותב את ה-Skill</li>
+    <li>Settings ← Capabilities ← <b>Code execution and file creation</b>: פעיל (כתוב שם: "Required for skills")</li>
+    <li><b>Plugins</b> (בסרגל הצד) ← <b>Add</b> ← <b>Create with Claude</b> ← מתארים את הכללים למטה ← Claude כותב SKILL.md ← <b>Save plugin</b></li>
     <li>בשיחה חדשה (לא בפרויקט): "תנסח תשובה ללקוחה שכתבה: ראיתי את הספה האפורה, אפשר לקבל אותה בכחול?" — האם הסגנון הופעל?</li>
   </ol>
   <div class="copybox"><pre class="rtl">שם: תשובה בסגנון בית ועיצוב
@@ -193,7 +193,7 @@
   <ol class="steps">
     <li>ב-Make: בתרחיש תרגיל 2 ← הכפתור <b>I/O</b> (Scenario inputs and outputs) ← Input: <code>question</code> (Text) · Output: <code>answer</code></li>
     <li>Scheduling: <b>On demand</b> ← הפעלה (Active)</li>
-    <li>ב-Claude: Connectors ← Browse ← <b>Make</b> ← + ← מתחברים ומאשרים</li>
+    <li>ב-Claude: <b>Plugins</b> ← מחפשים <b>Make</b> ← המחבר של Make ← <b>Connect</b> ← מתחברים ומאשרים</li>
     <li>בשיחה: "תריץ את תרחיש עוזר הידע של בית ועיצוב עם השאלה: מה מדיניות האחריות?"</li>
   </ol>
   <div class="callout warn"><b>לא נבדק בכיתה</b>החיבור תלוי בהרשאות ובגרסה. אם Claude לא רואה את התרחיש — בדקו שהוא Active, On demand, ועם inputs/outputs. ובסוף: לכבות את התרחיש.</div>

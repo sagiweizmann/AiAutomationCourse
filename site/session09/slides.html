@@ -1092,8 +1092,8 @@ body.ov-on #ov{display:block}
 <section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · Claude Desktop">
   <div class="s-kicker">בלוק 5</div>
   <h1>Claude Desktop: עוזר שעושה עבודה</h1>
-  <p class="sub">מה שבנינו ב-Make בשעה — ועוד דברים שאי אפשר לבנות שם.</p>
-  <aside class="notes"><ul><li>המסכים באפליקציה מתעדכנים לעיתים קרובות. אם משהו נראה אחרת — חפשו לפי השם.</li></ul></aside>
+  <p class="sub">מה שבנינו ב-Make בשעה — ועוד דברים שאי אפשר לבנות שם. כל המסכים צולמו ב-claude.ai (אותם מסכים באפליקציה).</p>
+  <aside class="notes"><ul><li>הצילומים מחשבון חינמי. בתשלום יש גם Scheduled ו-Cowork מלא.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="5" data-title="Make או Claude">
@@ -1113,36 +1113,127 @@ body.ov-on #ov{display:block}
   <aside class="notes"><ul><li>המסר: לא "או-או". Claude הוא מקום העבודה, Make הוא המנוע שרץ ברקע.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="4" data-block="5" data-title="Projects">
-  <div class="s-kicker">Projects = RAG מוכן</div>
-  <h2>Projects: מאגר ידע + הוראות, בלי לבנות כלום</h2>
+<section class="slide" data-min="2" data-block="5" data-title="Project · יצירה">
+  <div class="s-kicker">Projects · שלב 1</div>
+  <h2>יוצרים פרויקט</h2>
   <div class="s-body mid">
-    <ol class="steps" style="--bc:var(--claude)">
-      <li>Projects ← פרויקט חדש: <b>בית ועיצוב · שירות לקוחות</b></li>
-      <li>Project knowledge ← מעלים את <code>knowledge.csv</code> (וגם PDF, Word, Excel, תמונות — עד 30MB לקובץ)</li>
-      <li>Instructions: "אתה נציג של בית ועיצוב. ענה רק לפי קבצי הפרויקט. אם אין מידע — אמור שתעביר לנציג. ציין את המקור."</li>
-      <li>שואלים את אותן ארבע שאלות מהבדיקות</li>
-    </ol>
-    <div class="callout tip"><b>ה-RAG מובנה</b>בתוכניות בתשלום, כשהידע בפרויקט גדל ומתקרב לגבול, Claude עובר אוטומטית למצב RAG — מחפש בקבצים במקום לקרוא הכול. עד פי 10 יותר תוכן. בלי הגדרה.</div>
-    <div class="callout warn"><b>ההבדל מ-Make</b>Project הוא בשבילכם, בשיחה. לקוח לא יכול לפנות אליו. בשביל לקוחות — התרחיש שבנינו.</div>
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-project-new.jpg" alt="Projects ← New project ← שם ומטרה" style="max-height:420px;object-fit:contain"><figcaption>Projects ← New project ← שם ומטרה</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-project-empty.jpg" alt="הפרויקט הריק: תיבת שיחה, Instructions, ו-Context לידע. ליד Chat — הכפתור Cowork" style="max-height:420px;object-fit:contain"><figcaption>הפרויקט הריק: תיבת שיחה, Instructions, ו-Context לידע. ליד Chat — הכפתור Cowork</figcaption></figure></div>
   </div>
-  <aside class="notes"><ul><li>לכל Project יש גם זיכרון נפרד משלו. הגבלות: בחינם עד 5 פרויקטים.</li></ul></aside>
+  <aside class="notes"><ul><li>"I'll keep what you add here in mind in every chat inside it" — כל שיחה בפרויקט רואה את ההוראות והידע.</li></ul></aside>
 </section>
 
-<section class="slide" data-min="3" data-block="5" data-title="Skills">
-  <div class="s-kicker">Skills</div>
-  <h2>Skills: מלמדים את Claude תהליך פעם אחת</h2>
+<section class="slide" data-min="2" data-block="5" data-title="Project · הוראות וידע">
+  <div class="s-kicker">Projects · שלב 2</div>
+  <h2>הוראות, ואיך מוסיפים ידע</h2>
   <div class="s-body mid">
-    <div class="grid2">
-      <div class="card"><b>מה זה</b><div style="font-size:16px;margin-top:6px">תיקייה עם קובץ <code>SKILL.md</code>: הוראות, דוגמאות, ולפעמים קבצים. Claude טוען אותה לבד כשהיא רלוונטית.<br><br>מובנים: Excel, Word, PowerPoint, PDF.</div></div>
-      <div class="card" style="border-color:var(--claude)"><b>דוגמה: "תשובה בסגנון בית ועיצוב"</b><div style="font-size:16px;margin-top:6px">טון חם וקצר · תמיד מציעים פגישה בתצוגה · אף פעם לא מבטיחים הנחה מעל 5% · חתימה קבועה.<br>מעכשיו כל טיוטה שתבקשו — בסגנון הזה.</div></div>
-    </div>
-    <ol class="steps" style="--bc:var(--claude);margin-top:10px">
-      <li>Settings ← Capabilities ← להפעיל <b>Code execution and file creation</b> (נדרש ל-Skills)</li>
-      <li>Customize ← Skills ← + ← Create skill (Claude יעזור לכתוב) או Upload a skill (קובץ zip)</li>
-    </ol>
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-instructions.jpg" alt="Instructions: אותם כללים כמו בפרומפט של Make — רק מהידע, "לא יודע", העדכני מנצח, [K-xx · מקור]" style="max-height:420px;object-fit:contain"><figcaption>Instructions: אותם כללים כמו בפרומפט של Make — רק מהידע, "לא יודע", העדכני מנצח, [K-xx · מקור]</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-context-menu.jpg" alt="Context ← +: העלאה מהמחשב (PDF, Word, Excel, CSV…), הדבקת טקסט, או GitHub" style="max-height:420px;object-fit:contain"><figcaption>Context ← +: העלאה מהמחשב (PDF, Word, Excel, CSV…), הדבקת טקסט, או GitHub</figcaption></figure></div>
   </div>
-  <aside class="notes"><ul><li>Skill = "נוהל עבודה" שכתבתם פעם אחת. כמו Project instructions, אבל עובד בכל שיחה.</li></ul></aside>
+  <aside class="notes"><ul><li>שימו לב: ההוראות כאן מחליפות את הפרומפט השני שבנינו ב-Make. ואין צורך בפרומפט הראשון (מילת מפתח) — Claude מחפש לבד.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Project · המאגר">
+  <div class="s-kicker">Projects · שלב 3</div>
+  <h2>מוסיפים את המאגר</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-add-text.jpg" alt="Add text content: הדבקנו את knowledge.csv כטקסט (אפשר גם Upload from device)" style="max-height:420px;object-fit:contain"><figcaption>Add text content: הדבקנו את knowledge.csv כטקסט (אפשר גם Upload from device)</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-project-ready.jpg" alt="המאגר בפרויקט: knowledge.csv · 4.6 kB · "1% of project capacity used"" style="max-height:420px;object-fit:contain"><figcaption>המאגר בפרויקט: knowledge.csv · 4.6 kB · "1% of project capacity used"</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>1% — המאגר שלנו קטן מאוד. בתוכניות בתשלום, כשמתקרבים לגבול, Claude עובר אוטומטית ל-RAG ומחזיק עד פי 10.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Project · שואלים">
+  <div class="s-kicker">Projects · שלב 4</div>
+  <h2>אותן שאלות — בלי לבנות כלום</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-chat.jpg" alt="שיחה בתוך הפרויקט: משלוח לחיפה, מזרנים, ושאלה עם שני נושאים" style="max-height:470px;object-fit:contain"><figcaption>שיחה בתוך הפרויקט: משלוח לחיפה, מזרנים, ושאלה עם שני נושאים</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px"><b>משלוח לחיפה</b> — 149 ₪, עם [K-01 · מדיניות משלוחים, סעיף 1] ✅<br><b>מזרנים</b> — "אין לי מידע על זה, מעביר לנציג." ✅<br><b>משלוח והרכבה של מדף</b> — 149 + 120 = 269 ₪, עם שני מקורות ✅</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>Sonnet 5.5 בחשבון חינמי. אותן תשובות כמו ב-Make — בלי מודול אחד.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Project · איפה הוא טוב יותר">
+  <div class="s-kicker">Projects · מה הוא עושה ש-Make לא</div>
+  <h2>שני נושאים, שפה אחרת</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-two-topics.jpg" alt="שאלה עם שני נושאים: חיבר משלוח (K-01) והרכבה (K-04) לתשובה אחת. ב-Make מצאנו רק נושא אחד" style="max-height:420px;object-fit:contain"><figcaption>שאלה עם שני נושאים: חיבר משלוח (K-01) והרכבה (K-04) לתשובה אחת. ב-Make מצאנו רק נושא אחד</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-russian.jpg" alt="שאלה ברוסית: ענה ברוסית, וחיבר את מדיניות ההחזרות (K-05) עם הצבעים בהזמנה אישית (K-13)" style="max-height:420px;object-fit:contain"><figcaption>שאלה ברוסית: ענה ברוסית, וחיבר את מדיניות ההחזרות (K-05) עם הצבעים בהזמנה אישית (K-13)</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>למה? Project רואה את כל המאגר (הוא קטן), ולא תלוי במילת מפתח אחת. במאגר ענק — גם הוא מחפש, אבל לפי משמעות.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Project · סתירה">
+  <div class="s-kicker">Projects · מידע סותר</div>
+  <h2>שעות פתיחה: בחר נכון, ובלי המספר המוזר</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-hours.jpg" alt="עד 14:00 [K-10 · דף יצירת קשר]" style="max-height:200px;object-fit:contain"><figcaption>עד 14:00 [K-10 · דף יצירת קשר]</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">אותה סתירה (K-10 מול K-21) — Claude בחר את העדכני, וציטט את המקור בלי "46235": הוא קרא את הקובץ המקורי, לא את הגיליון שהפך תאריכים למספרים.<br><br><b>ובכל זאת:</b> מאגר נקי עדיף. לא בונים על זה ש-AI יבחר נכון.</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>השוו לבדיקה 4 ב-Make.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Make מול Project">
+  <div class="s-kicker">השוואה</div>
+  <h2>Make או Project — מה למדנו מהבדיקות?</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th></th><th>🟣 עוזר הידע ב-Make</th><th>🟠 Claude Project</th></tr>
+      <tr><td>שאלה רגילה</td><td>✅ עם מקור</td><td>✅ עם מקור</td></tr>
+      <tr><td>"לא במאגר"</td><td>✅ "מעביר לנציג"</td><td>✅ "מעביר לנציג"</td></tr>
+      <tr><td>שני נושאים בשאלה</td><td>❌ רק אחד</td><td>✅ שניהם</td></tr>
+      <tr><td>שפה אחרת</td><td>✅ מצא, ענה בעברית</td><td>✅ ענה בשפת השאלה</td></tr>
+      <tr><td>לקוח יכול לשאול לבד</td><td>✅ Webhook / Telegram / טופס</td><td>❌ רק אתם, בשיחה</td></tr>
+      <tr><td>עלות</td><td>~6 קרדיטים לשאלה</td><td>כלול במנוי</td></tr>
+      <tr><td>זמן בנייה</td><td>שעה</td><td>5 דקות</td></tr>
+    </table></div>
+    <div class="callout tip"><b>השורה התחתונה</b>Project — לכם, לעבודה היומיומית. Make — ללקוחות, 24/7. ובמפגש 10: סוכן שמשלב את שניהם.</div>
+  </div>
+  <aside class="notes"><ul><li>שאלו את הכיתה: באיזה מהם הייתם משתמשים לשירות לקוחות בוואטסאפ? ולמה?</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Plugins">
+  <div class="s-kicker">Plugins</div>
+  <h2>Plugins: מחברים ו-Skills במקום אחד</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-plugins.jpg" alt="Plugins ← All / Connectors / Skills. למעלה: הפלאגינים שלכם. למטה: הנפוצים" style="max-height:470px;object-fit:contain"><figcaption>Plugins ← All / Connectors / Skills. למעלה: הפלאגינים שלכם. למטה: הנפוצים</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">בגרסה העדכנית Connectors ו-Skills יושבים יחד תחת <b>Plugins</b> בסרגל הצד. Google Drive, Gmail, Calendar, Microsoft 365, Google Sheets, Canva — מתחברים בלחיצה.<br><br>בהגדרות כתוב במפורש: "Skills have moved to Plugins".</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>אם באפליקציה שלכם עדיין רואים Customize — זה אותו מקום בשם הישן.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="Skills · מאיפה">
+  <div class="s-kicker">Skills · שלב 1</div>
+  <h2>Skills: מוכנים, או שיוצרים לבד</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-skills.jpg" alt="הלשונית Skills: Skills מוכנים (Design, Small Business, Marketing…)" style="max-height:420px;object-fit:contain"><figcaption>הלשונית Skills: Skills מוכנים (Design, Small Business, Marketing…)</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-add-menu.jpg" alt="Add ← Create with Claude: מתארים במילים, ו-Claude כותב את ה-Skill" style="max-height:420px;object-fit:contain"><figcaption>Add ← Create with Claude: מתארים במילים, ו-Claude כותב את ה-Skill</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>Upload plugin — מעלים קובץ zip מוכן. Create with Claude — הכי קל לתלמידים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Skills · יצירה">
+  <div class="s-kicker">Skills · שלב 2</div>
+  <h2>Claude כותב את ה-Skill</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-skill-created.jpg" alt="ביקשנו "תשובה בסגנון בית ועיצוב" עם הכללים — Claude יצר SKILL.md, הסביר מה הוסיף, ו-Save plugin" style="max-height:470px;object-fit:contain"><figcaption>ביקשנו "תשובה בסגנון בית ועיצוב" עם הכללים — Claude יצר SKILL.md, הסביר מה הוסיף, ו-Save plugin</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">בצד ימין — הקובץ עצמו: <b>Description</b> (מתי להפעיל, כולל "even if they only say תענה לו") ו<b>כללי חובה</b>: טון חם, שם פרטי, עד 4 משפטים, הזמנה לתצוגה, ולעולם לא להבטיח הנחה/תאריך/מלאי.<br><br>הוא אפילו הוסיף דברים שלא ביקשנו: מה עושים כשאין שם, ולקוח כועס.</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>שמרנו עם Save plugin → "Plugin saved".</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Skills · בשימוש">
+  <div class="s-kicker">Skills · שלב 3</div>
+  <h2>שיחה חדשה — וה-Skill נטען לבד</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-skill-used.jpg" alt=""Read the brand reply skill before drafting · SKILL.md" — ואז טיוטה לנטע" style="max-height:300px;object-fit:contain"><figcaption>"Read the brand reply skill before drafting · SKILL.md" — ואז טיוטה לנטע</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">ביקשנו רק "תנסח תשובה ללקוחה נטע…". Claude טען את ה-Skill בעצמו: פנה בשם, הציע תצוגה ושיחה, <b>לא הבטיח</b> כחול עד חנוכה ולא הנחה, וחתם "חם, צוות בית ועיצוב 🛋️".<br><br>ובסוף — הערה לנו: "השארתי את הנושאים פתוחים… אין לי אישור על אף אחד מהם."</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>זה בדיוק ההבדל בין Skill לפרומפט: לא צריך לזכור להדביק אותו.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="הגדרות">
+  <div class="s-kicker">Settings · Capabilities</div>
+  <h2>שתי הגדרות שחשוב להכיר</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-settings-code.jpg" alt="Code execution and file creation — "Required for skills". בלי זה אין Skills" style="max-height:420px;object-fit:contain"><figcaption>Code execution and file creation — "Required for skills". בלי זה אין Skills</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-settings-memory.jpg" alt="Memory: Generate memory from chats — Claude זוכר בין שיחות (כאן כבוי)" style="max-height:420px;object-fit:contain"><figcaption>Memory: Generate memory from chats — Claude זוכר בין שיחות (כאן כבוי)</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>Settings ← Capabilities. בתוכניות בתשלום יש גם "Search and reference chats". בעבודה עם מידע רגיש — שיחה זמנית (אייקון הרוח).</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="5" data-title="משימות מתוזמנות">
@@ -1157,7 +1248,7 @@ body.ov-on #ov{display:block}
     <div class="card" style="margin-top:10px"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"כל יום ראשון ב-8:00: עבור על קבצי הפרויקט 'בית ועיצוב', ובדוק אם יש מידע שסותר או ישן יותר משנה. תן לי רשימה של מה לתקן."<br>← בדיקת איכות אוטומטית למאגר הידע.</div></div>
     <div class="callout tip"><b>איפה זה רץ</b>בענן כברירת מחדל — גם כשהמחשב כבוי. אם בוחרים תיקייה במחשב, המשימה רצה רק כשהמחשב דולק והאפליקציה פתוחה.</div>
   </div>
-  <aside class="notes"><ul><li>זמין בתוכניות בתשלום. כל הרצה נפתחת כשיחה נפרדת שאפשר לקרוא.</li></ul></aside>
+  <aside class="notes"><ul><li>זמין רק בתוכניות בתשלום — בחשבון החינמי שצילמנו אין Scheduled בסרגל. כל הרצה נפתחת כשיחה נפרדת.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="5" data-title="Cowork">
@@ -1170,34 +1261,17 @@ body.ov-on #ov{display:block}
     </div>
     <div class="callout warn"><b>הרשאות</b>שלושה מצבים: Manual (מאשרים כל צעד), Auto, Skip. Claude שואל לפני מחיקה. מתחילים ב-Manual.</div>
   </div>
-  <aside class="notes"><ul><li>זה כבר "סוכן" — נדבר על זה לעומק במפגש 10.</li></ul></aside>
+  <aside class="notes"><ul><li>בצילומים של הפרויקט רואים ליד Chat את הכפתור Cowork. בתוכניות בתשלום — לוחצים ועוברים למצב עבודה על קבצים. מפגש 10.</li></ul></aside>
 </section>
 
 <section class="slide" data-min="3" data-block="5" data-title="Claude + Make">
   <div class="s-kicker">החיבור</div>
   <h2>Make כמחבר בתוך Claude</h2>
   <div class="s-body mid">
-    <ol class="steps" style="--bc:var(--claude)">
-      <li>ב-Claude: Customize (או Settings) ← <b>Connectors</b> ← Browse ← מחפשים <b>Make</b> ← +</li>
-      <li>מתחברים ל-Make, בוחרים ארגון והרשאות ← Allow. בלי כתובת ובלי מפתח</li>
-      <li>בשיחה: "תריץ את תרחיש עוזר הידע עם השאלה: מה מדיניות ההחזרות?"</li>
-    </ol>
-    <div class="callout tip"><b>מה צריך בתרחיש</b>כדי ש-Claude יוכל להריץ: התרחיש פעיל (Active), מתוזמן <b>On demand</b>, ועם Scenario inputs/outputs מוגדרים (הכפתור I/O בסרגל התחתון). הרצת תרחישים — בכל תוכניות Make. ניהול תרחישים מ-Claude — רק בתוכנית בתשלום.</div>
-    <div class="callout tip"><b>וגם</b>Make MCP Toolboxes: בוחרים בדיוק אילו תרחישים Claude יכול להפעיל, וכל אחד — קריאה בלבד או גם כתיבה. מוסיפים ב-Claude כ-Custom connector.</div>
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/cl-make-search.jpg" alt="Plugins ← חיפוש "Make": מחבר (Connector), ומחבר + Skills" style="max-height:420px;object-fit:contain"><figcaption>Plugins ← חיפוש "Make": מחבר (Connector), ומחבר + Skills</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/cl-make-connector.jpg" alt="דף המחבר: mcp.make.com · 67 כלים — scenarios_list, scenarios_create, scenarios_activate… · Connect" style="max-height:420px;object-fit:contain"><figcaption>דף המחבר: mcp.make.com · 67 כלים — scenarios_list, scenarios_create, scenarios_activate… · Connect</figcaption></figure></div>
+    <div class="callout tip"><b>מה Claude יכול לעשות</b>לראות, ליצור, לעדכן ולהפעיל תרחישים — מתוך שיחה. להרצת תרחיש: Active + On demand + Scenario inputs/outputs (הכפתור I/O). ניהול תרחישים — תוכנית Make בתשלום.</div>
   </div>
-  <aside class="notes"><ul><li>את החיבור עצמו לא בדקנו בכיתה עם התרחיש של היום — זה תרגיל בונוס.</li></ul></aside>
-</section>
-
-<section class="slide" data-min="2" data-block="5" data-title="זיכרון">
-  <div class="s-kicker">Memory</div>
-  <h2>Claude זוכר — וזה גם דורש תשומת לב</h2>
-  <div class="s-body mid">
-    <div class="grid2">
-      <div class="card"><b>🧠 מה הוא זוכר</b><div style="font-size:16px;margin-top:6px">דברים משיחות קודמות (תפקיד, העדפות, פרויקטים). לכל Project — זיכרון נפרד.<br>Settings ← Your Claude ← "Generate memory from chats".</div></div>
-      <div class="card" style="border-color:var(--p4)"><b>👻 שיחה זמנית</b><div style="font-size:16px;margin-top:6px">אייקון הרוח: שיחה שלא נשמרת בהיסטוריה ולא בזיכרון. למידע רגיש של לקוחות.</div></div>
-    </div>
-  </div>
-  <aside class="notes"><ul><li>בארגון (Team/Enterprise) — המנהל קובע אם הזיכרון פעיל.</li></ul></aside>
+  <aside class="notes"><ul><li>לוחצים Connect ← מתחברים ל-Make ומאשרים. לא חיברנו בהדגמה — זה דורש התחברות לחשבון Make.</li></ul></aside>
 </section>
 
 <section class="slide divider" data-min="1" data-block="6" data-title="בלוק 6 · תרגול">

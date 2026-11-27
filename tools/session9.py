@@ -223,7 +223,7 @@ B.append('''
 </section>''')
 
 # ================================================================== BLOCK 5
-B.append(divider(5, 'בלוק 5 · Claude Desktop', 'Claude Desktop: עוזר שעושה עבודה', 'מה שבנינו ב-Make בשעה — ועוד דברים שאי אפשר לבנות שם.', 'המסכים באפליקציה מתעדכנים לעיתים קרובות. אם משהו נראה אחרת — חפשו לפי השם.'))
+B.append(divider(5, 'בלוק 5 · Claude Desktop', 'Claude Desktop: עוזר שעושה עבודה', 'מה שבנינו ב-Make בשעה — ועוד דברים שאי אפשר לבנות שם. כל המסכים צולמו ב-claude.ai (אותם מסכים באפליקציה).', 'הצילומים מחשבון חינמי. בתשלום יש גם Scheduled ו-Cowork מלא.'))
 B.append(slide(5, 'Make או Claude', 'החלטה', 'מתי Make, ומתי Claude Desktop?', '''    <div class="tbl"><table>
       <tr><th>המצב</th><th>הכלי</th></tr>
       <tr><td>תהליך קבוע שרץ לבד, בלי אדם, על כל ליד/שאלה</td><td>🟣 Make</td></tr>
@@ -233,22 +233,50 @@ B.append(slide(5, 'Make או Claude', 'החלטה', 'מתי Make, ומתי Claud
       <tr><td>לעבוד על קבצים במחשב (לסדר, לסכם, ליצור דוחות)</td><td>🟠 Claude · Cowork</td></tr>
       <tr><td>רוצה להפעיל את התרחישים שלי מתוך שיחה</td><td>🟣+🟠 Make כמחבר ב-Claude</td></tr>
     </table></div>''', 'המסר: לא "או-או". Claude הוא מקום העבודה, Make הוא המנוע שרץ ברקע.', 3))
-B.append(slide(5, 'Projects', 'Projects = RAG מוכן', 'Projects: מאגר ידע + הוראות, בלי לבנות כלום', '''    <ol class="steps" style="--bc:var(--claude)">
-      <li>Projects ← פרויקט חדש: <b>בית ועיצוב · שירות לקוחות</b></li>
-      <li>Project knowledge ← מעלים את <code>knowledge.csv</code> (וגם PDF, Word, Excel, תמונות — עד 30MB לקובץ)</li>
-      <li>Instructions: "אתה נציג של בית ועיצוב. ענה רק לפי קבצי הפרויקט. אם אין מידע — אמור שתעביר לנציג. ציין את המקור."</li>
-      <li>שואלים את אותן ארבע שאלות מהבדיקות</li>
-    </ol>''' + tip('ה-RAG מובנה', 'בתוכניות בתשלום, כשהידע בפרויקט גדל ומתקרב לגבול, Claude עובר אוטומטית למצב RAG — מחפש בקבצים במקום לקרוא הכול. עד פי 10 יותר תוכן. בלי הגדרה.') +
-    tip('ההבדל מ-Make', 'Project הוא בשבילכם, בשיחה. לקוח לא יכול לפנות אליו. בשביל לקוחות — התרחיש שבנינו.', 'warn'),
-    'לכל Project יש גם זיכרון נפרד משלו. הגבלות: בחינם עד 5 פרויקטים.', 4))
-B.append(slide(5, 'Skills', 'Skills', 'Skills: מלמדים את Claude תהליך פעם אחת', '''    <div class="grid2">
-      <div class="card"><b>מה זה</b><div style="font-size:16px;margin-top:6px">תיקייה עם קובץ <code>SKILL.md</code>: הוראות, דוגמאות, ולפעמים קבצים. Claude טוען אותה לבד כשהיא רלוונטית.<br><br>מובנים: Excel, Word, PowerPoint, PDF.</div></div>
-      <div class="card" style="border-color:var(--claude)"><b>דוגמה: "תשובה בסגנון בית ועיצוב"</b><div style="font-size:16px;margin-top:6px">טון חם וקצר · תמיד מציעים פגישה בתצוגה · אף פעם לא מבטיחים הנחה מעל 5% · חתימה קבועה.<br>מעכשיו כל טיוטה שתבקשו — בסגנון הזה.</div></div>
-    </div>
-    <ol class="steps" style="--bc:var(--claude);margin-top:10px">
-      <li>Settings ← Capabilities ← להפעיל <b>Code execution and file creation</b> (נדרש ל-Skills)</li>
-      <li>Customize ← Skills ← + ← Create skill (Claude יעזור לכתוב) או Upload a skill (קובץ zip)</li>
-    </ol>''', 'Skill = "נוהל עבודה" שכתבתם פעם אחת. כמו Project instructions, אבל עובד בכל שיחה.', 3))
+B.append(two(5, 'Project · יצירה', 'Projects · שלב 1', 'יוצרים פרויקט', 'cl-project-new', 'Projects ← New project ← שם ומטרה',
+    'cl-project-empty', 'הפרויקט הריק: תיבת שיחה, Instructions, ו-Context לידע. ליד Chat — הכפתור Cowork',
+    '"I\'ll keep what you add here in mind in every chat inside it" — כל שיחה בפרויקט רואה את ההוראות והידע.', 2))
+B.append(two(5, 'Project · הוראות וידע', 'Projects · שלב 2', 'הוראות, ואיך מוסיפים ידע', 'cl-instructions', 'Instructions: אותם כללים כמו בפרומפט של Make — רק מהידע, "לא יודע", העדכני מנצח, [K-xx · מקור]',
+    'cl-context-menu', 'Context ← +: העלאה מהמחשב (PDF, Word, Excel, CSV…), הדבקת טקסט, או GitHub',
+    'שימו לב: ההוראות כאן מחליפות את הפרומפט השני שבנינו ב-Make. ואין צורך בפרומפט הראשון (מילת מפתח) — Claude מחפש לבד.', 2))
+B.append(two(5, 'Project · המאגר', 'Projects · שלב 3', 'מוסיפים את המאגר', 'cl-add-text', 'Add text content: הדבקנו את knowledge.csv כטקסט (אפשר גם Upload from device)',
+    'cl-project-ready', 'המאגר בפרויקט: knowledge.csv · 4.6 kB · "1% of project capacity used"',
+    '1% — המאגר שלנו קטן מאוד. בתוכניות בתשלום, כשמתקרבים לגבול, Claude עובר אוטומטית ל-RAG ומחזיק עד פי 10.', 2))
+B.append(one(5, 'Project · שואלים', 'Projects · שלב 4', 'אותן שאלות — בלי לבנות כלום', 'cl-chat', 'שיחה בתוך הפרויקט: משלוח לחיפה, מזרנים, ושאלה עם שני נושאים',
+    '<b>משלוח לחיפה</b> — 149 ₪, עם [K-01 · מדיניות משלוחים, סעיף 1] ✅<br><b>מזרנים</b> — "אין לי מידע על זה, מעביר לנציג." ✅<br><b>משלוח והרכבה של מדף</b> — 149 + 120 = 269 ₪, עם שני מקורות ✅',
+    'Sonnet 5.5 בחשבון חינמי. אותן תשובות כמו ב-Make — בלי מודול אחד.', 3, 470))
+B.append(two(5, 'Project · איפה הוא טוב יותר', 'Projects · מה הוא עושה ש-Make לא', 'שני נושאים, שפה אחרת', 'cl-two-topics', 'שאלה עם שני נושאים: חיבר משלוח (K-01) והרכבה (K-04) לתשובה אחת. ב-Make מצאנו רק נושא אחד',
+    'cl-russian', 'שאלה ברוסית: ענה ברוסית, וחיבר את מדיניות ההחזרות (K-05) עם הצבעים בהזמנה אישית (K-13)',
+    'למה? Project רואה את כל המאגר (הוא קטן), ולא תלוי במילת מפתח אחת. במאגר ענק — גם הוא מחפש, אבל לפי משמעות.', 3))
+B.append(one(5, 'Project · סתירה', 'Projects · מידע סותר', 'שעות פתיחה: בחר נכון, ובלי המספר המוזר', 'cl-hours', 'עד 14:00 [K-10 · דף יצירת קשר]',
+    'אותה סתירה (K-10 מול K-21) — Claude בחר את העדכני, וציטט את המקור בלי "46235": הוא קרא את הקובץ המקורי, לא את הגיליון שהפך תאריכים למספרים.<br><br><b>ובכל זאת:</b> מאגר נקי עדיף. לא בונים על זה ש-AI יבחר נכון.',
+    'השוו לבדיקה 4 ב-Make.', 2, 200))
+B.append(slide(5, 'Make מול Project', 'השוואה', 'Make או Project — מה למדנו מהבדיקות?', '''    <div class="tbl"><table>
+      <tr><th></th><th>🟣 עוזר הידע ב-Make</th><th>🟠 Claude Project</th></tr>
+      <tr><td>שאלה רגילה</td><td>✅ עם מקור</td><td>✅ עם מקור</td></tr>
+      <tr><td>"לא במאגר"</td><td>✅ "מעביר לנציג"</td><td>✅ "מעביר לנציג"</td></tr>
+      <tr><td>שני נושאים בשאלה</td><td>❌ רק אחד</td><td>✅ שניהם</td></tr>
+      <tr><td>שפה אחרת</td><td>✅ מצא, ענה בעברית</td><td>✅ ענה בשפת השאלה</td></tr>
+      <tr><td>לקוח יכול לשאול לבד</td><td>✅ Webhook / Telegram / טופס</td><td>❌ רק אתם, בשיחה</td></tr>
+      <tr><td>עלות</td><td>~6 קרדיטים לשאלה</td><td>כלול במנוי</td></tr>
+      <tr><td>זמן בנייה</td><td>שעה</td><td>5 דקות</td></tr>
+    </table></div>''' + tip('השורה התחתונה', 'Project — לכם, לעבודה היומיומית. Make — ללקוחות, 24/7. ובמפגש 10: סוכן שמשלב את שניהם.'),
+    'שאלו את הכיתה: באיזה מהם הייתם משתמשים לשירות לקוחות בוואטסאפ? ולמה?', 3))
+B.append(one(5, 'Plugins', 'Plugins', 'Plugins: מחברים ו-Skills במקום אחד', 'cl-plugins', 'Plugins ← All / Connectors / Skills. למעלה: הפלאגינים שלכם. למטה: הנפוצים',
+    'בגרסה העדכנית Connectors ו-Skills יושבים יחד תחת <b>Plugins</b> בסרגל הצד. Google Drive, Gmail, Calendar, Microsoft 365, Google Sheets, Canva — מתחברים בלחיצה.<br><br>בהגדרות כתוב במפורש: "Skills have moved to Plugins".',
+    'אם באפליקציה שלכם עדיין רואים Customize — זה אותו מקום בשם הישן.', 2, 470))
+B.append(two(5, 'Skills · מאיפה', 'Skills · שלב 1', 'Skills: מוכנים, או שיוצרים לבד', 'cl-skills', 'הלשונית Skills: Skills מוכנים (Design, Small Business, Marketing…)',
+    'cl-add-menu', 'Add ← Create with Claude: מתארים במילים, ו-Claude כותב את ה-Skill',
+    'Upload plugin — מעלים קובץ zip מוכן. Create with Claude — הכי קל לתלמידים.', 2))
+B.append(one(5, 'Skills · יצירה', 'Skills · שלב 2', 'Claude כותב את ה-Skill', 'cl-skill-created', 'ביקשנו "תשובה בסגנון בית ועיצוב" עם הכללים — Claude יצר SKILL.md, הסביר מה הוסיף, ו-Save plugin',
+    'בצד ימין — הקובץ עצמו: <b>Description</b> (מתי להפעיל, כולל "even if they only say תענה לו") ו<b>כללי חובה</b>: טון חם, שם פרטי, עד 4 משפטים, הזמנה לתצוגה, ולעולם לא להבטיח הנחה/תאריך/מלאי.<br><br>הוא אפילו הוסיף דברים שלא ביקשנו: מה עושים כשאין שם, ולקוח כועס.',
+    'שמרנו עם Save plugin → "Plugin saved".', 3, 470))
+B.append(one(5, 'Skills · בשימוש', 'Skills · שלב 3', 'שיחה חדשה — וה-Skill נטען לבד', 'cl-skill-used', '"Read the brand reply skill before drafting · SKILL.md" — ואז טיוטה לנטע',
+    'ביקשנו רק "תנסח תשובה ללקוחה נטע…". Claude טען את ה-Skill בעצמו: פנה בשם, הציע תצוגה ושיחה, <b>לא הבטיח</b> כחול עד חנוכה ולא הנחה, וחתם "חם, צוות בית ועיצוב 🛋️".<br><br>ובסוף — הערה לנו: "השארתי את הנושאים פתוחים… אין לי אישור על אף אחד מהם."',
+    'זה בדיוק ההבדל בין Skill לפרומפט: לא צריך לזכור להדביק אותו.', 3, 300))
+B.append(two(5, 'הגדרות', 'Settings · Capabilities', 'שתי הגדרות שחשוב להכיר', 'cl-settings-code', 'Code execution and file creation — "Required for skills". בלי זה אין Skills',
+    'cl-settings-memory', 'Memory: Generate memory from chats — Claude זוכר בין שיחות (כאן כבוי)',
+    'Settings ← Capabilities. בתוכניות בתשלום יש גם "Search and reference chats". בעבודה עם מידע רגיש — שיחה זמנית (אייקון הרוח).', 2))
 B.append(slide(5, 'משימות מתוזמנות', 'Scheduled tasks', 'משימות מתוזמנות: Claude עובד גם כשאתם לא', '''    <ol class="steps" style="--bc:var(--p3)">
       <li>בסרגל הצד: <b>Scheduled</b> ← New task</li>
       <li>Create with Claude (מתארים במילים) או Set up manually: שם, פרומפט, תדירות (שעתי, יומי, שבועי, ימי חול)</li>
@@ -256,24 +284,16 @@ B.append(slide(5, 'משימות מתוזמנות', 'Scheduled tasks', 'משימ�
     </ol>
     <div class="card" style="margin-top:10px"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"כל יום ראשון ב-8:00: עבור על קבצי הפרויקט 'בית ועיצוב', ובדוק אם יש מידע שסותר או ישן יותר משנה. תן לי רשימה של מה לתקן."<br>← בדיקת איכות אוטומטית למאגר הידע.</div></div>''' +
     tip('איפה זה רץ', 'בענן כברירת מחדל — גם כשהמחשב כבוי. אם בוחרים תיקייה במחשב, המשימה רצה רק כשהמחשב דולק והאפליקציה פתוחה.'),
-    'זמין בתוכניות בתשלום. כל הרצה נפתחת כשיחה נפרדת שאפשר לקרוא.', 3))
+    'זמין רק בתוכניות בתשלום — בחשבון החינמי שצילמנו אין Scheduled בסרגל. כל הרצה נפתחת כשיחה נפרדת.', 3))
 B.append(slide(5, 'Cowork', 'Cowork', 'Cowork: Claude שעובד על הקבצים שלכם', '''    <div class="grid2">
       <div class="card"><b>מה זה</b><div style="font-size:16px;margin-top:6px">מתארים תוצאה ← Claude מציג תוכנית ← מבצע: קורא וכותב קבצים בתיקייה שנתתם, יוצר Excel עם נוסחאות, מסמכים ומצגות, משתמש במחברים ובדפדפן.</div></div>
       <div class="card" style="border-color:var(--p3)"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"בתיקיית 'חשבוניות נובמבר' יש 40 קבצי PDF. צור קובץ Excel עם ספק, תאריך, סכום ומע״מ לכל אחת, וסכום כולל בסוף."</div></div>
     </div>''' + tip('הרשאות', 'שלושה מצבים: Manual (מאשרים כל צעד), Auto, Skip. Claude שואל לפני מחיקה. מתחילים ב-Manual.', 'warn'),
-    'זה כבר "סוכן" — נדבר על זה לעומק במפגש 10.', 3))
-B.append(slide(5, 'Claude + Make', 'החיבור', 'Make כמחבר בתוך Claude', '''    <ol class="steps" style="--bc:var(--claude)">
-      <li>ב-Claude: Customize (או Settings) ← <b>Connectors</b> ← Browse ← מחפשים <b>Make</b> ← +</li>
-      <li>מתחברים ל-Make, בוחרים ארגון והרשאות ← Allow. בלי כתובת ובלי מפתח</li>
-      <li>בשיחה: "תריץ את תרחיש עוזר הידע עם השאלה: מה מדיניות ההחזרות?"</li>
-    </ol>''' + tip('מה צריך בתרחיש', 'כדי ש-Claude יוכל להריץ: התרחיש פעיל (Active), מתוזמן <b>On demand</b>, ועם Scenario inputs/outputs מוגדרים (הכפתור I/O בסרגל התחתון). הרצת תרחישים — בכל תוכניות Make. ניהול תרחישים מ-Claude — רק בתוכנית בתשלום.') +
-    tip('וגם', 'Make MCP Toolboxes: בוחרים בדיוק אילו תרחישים Claude יכול להפעיל, וכל אחד — קריאה בלבד או גם כתיבה. מוסיפים ב-Claude כ-Custom connector.'),
-    'את החיבור עצמו לא בדקנו בכיתה עם התרחיש של היום — זה תרגיל בונוס.', 3))
-B.append(slide(5, 'זיכרון', 'Memory', 'Claude זוכר — וזה גם דורש תשומת לב', '''    <div class="grid2">
-      <div class="card"><b>🧠 מה הוא זוכר</b><div style="font-size:16px;margin-top:6px">דברים משיחות קודמות (תפקיד, העדפות, פרויקטים). לכל Project — זיכרון נפרד.<br>Settings ← Your Claude ← "Generate memory from chats".</div></div>
-      <div class="card" style="border-color:var(--p4)"><b>👻 שיחה זמנית</b><div style="font-size:16px;margin-top:6px">אייקון הרוח: שיחה שלא נשמרת בהיסטוריה ולא בזיכרון. למידע רגיש של לקוחות.</div></div>
-    </div>''', 'בארגון (Team/Enterprise) — המנהל קובע אם הזיכרון פעיל.', 2))
-
+    'בצילומים של הפרויקט רואים ליד Chat את הכפתור Cowork. בתוכניות בתשלום — לוחצים ועוברים למצב עבודה על קבצים. מפגש 10.', 3))
+B.append(two(5, 'Claude + Make', 'החיבור', 'Make כמחבר בתוך Claude', 'cl-make-search', 'Plugins ← חיפוש "Make": מחבר (Connector), ומחבר + Skills',
+    'cl-make-connector', 'דף המחבר: mcp.make.com · 67 כלים — scenarios_list, scenarios_create, scenarios_activate… · Connect',
+    'לוחצים Connect ← מתחברים ל-Make ומאשרים. לא חיברנו בהדגמה — זה דורש התחברות לחשבון Make.', 3,
+    tip('מה Claude יכול לעשות', 'לראות, ליצור, לעדכן ולהפעיל תרחישים — מתוך שיחה. להרצת תרחיש: Active + On demand + Scenario inputs/outputs (הכפתור I/O). ניהול תרחישים — תוכנית Make בתשלום.') ))
 # ================================================================== BLOCK 6
 B.append(divider(6, 'בלוק 6 · תרגול', 'אתם בונים', 'מייבאים, מנקים, בונים עוזר ידע, ומשווים ל-Claude Project.', 'בזוגות. תרגיל 4 (Telegram) למי שהספיק.'))
 B.append(slide(6, 'התרגילים', 'תרגול', 'התרגילים של היום', '''    <div class="tbl"><table>
@@ -471,8 +491,8 @@ P += ex('ex4', '4', '🤖 הבוט עונה ב-Telegram', meta('20 דקות', '�
 P += ex('ex5', '5', '📁 Claude Project מול Make', meta('15 דקות', 'קל', CLS),
   'אותו מאגר, בלי לבנות כלום. מה Claude Project עושה טוב יותר — ומה לא?',
   '''  <ol class="steps">
-    <li>Claude Desktop ← Projects ← פרויקט חדש: <b>בית ועיצוב · שירות</b></li>
-    <li>Project knowledge ← מעלים את <code>knowledge.csv</code> (הנקי, מתרגיל 1: File ← Download ← CSV)</li>
+    <li>Claude ← Projects ← <b>New project</b>: <b>בית ועיצוב · שירות</b></li>
+    <li>Context ← + ← <b>Upload from device</b> ← <code>knowledge.csv</code> (הנקי, מתרגיל 1: File ← Download ← CSV). או Add text content ומדביקים</li>
     <li>Instructions: "אתה נציג של בית ועיצוב. ענה רק לפי קבצי הפרויקט. אם אין מידע — כתוב שתעביר לנציג. בסוף כל תשובה ציין את מזהה הקטע (K-xx)."</li>
     <li>שואלים את 6 השאלות מתרגיל 3</li>
   </ol>
@@ -488,8 +508,8 @@ P += ex('ex5', '5', '📁 Claude Project מול Make', meta('15 דקות', 'קל
 P += ex('ex6', '6', '✍️ Skill: תשובה בסגנון בית ועיצוב', meta('15 דקות', 'בינוני', CLS),
   'מלמדים את Claude פעם אחת איך "בית ועיצוב" עונה ללקוחות — ומשתמשים בזה בכל שיחה.',
   '''  <ol class="steps">
-    <li>Settings ← Capabilities ← <b>Code execution and file creation</b>: פעיל</li>
-    <li>Customize ← Skills ← + ← <b>Create skill</b> ← מתארים ל-Claude את הכללים למטה, והוא כותב את ה-Skill</li>
+    <li>Settings ← Capabilities ← <b>Code execution and file creation</b>: פעיל (כתוב שם: "Required for skills")</li>
+    <li><b>Plugins</b> (בסרגל הצד) ← <b>Add</b> ← <b>Create with Claude</b> ← מתארים את הכללים למטה ← Claude כותב SKILL.md ← <b>Save plugin</b></li>
     <li>בשיחה חדשה (לא בפרויקט): "תנסח תשובה ללקוחה שכתבה: ראיתי את הספה האפורה, אפשר לקבל אותה בכחול?" — האם הסגנון הופעל?</li>
   </ol>
   <div class="copybox"><pre class="rtl">שם: תשובה בסגנון בית ועיצוב
@@ -505,7 +525,7 @@ P += ex('exb', '★', 'בונוס: Claude מפעיל את התרחיש', meta('2
   '''  <ol class="steps">
     <li>ב-Make: בתרחיש תרגיל 2 ← הכפתור <b>I/O</b> (Scenario inputs and outputs) ← Input: <code>question</code> (Text) · Output: <code>answer</code></li>
     <li>Scheduling: <b>On demand</b> ← הפעלה (Active)</li>
-    <li>ב-Claude: Connectors ← Browse ← <b>Make</b> ← + ← מתחברים ומאשרים</li>
+    <li>ב-Claude: <b>Plugins</b> ← מחפשים <b>Make</b> ← המחבר של Make ← <b>Connect</b> ← מתחברים ומאשרים</li>
     <li>בשיחה: "תריץ את תרחיש עוזר הידע של בית ועיצוב עם השאלה: מה מדיניות האחריות?"</li>
   </ol>
   <div class="callout warn"><b>לא נבדק בכיתה</b>החיבור תלוי בהרשאות ובגרסה. אם Claude לא רואה את התרחיש — בדקו שהוא Active, On demand, ועם inputs/outputs. ובסוף: לכבות את התרחיש.</div>''',
@@ -591,8 +611,8 @@ S += card('4', 'Telegram', '''
 S += card('5', 'Claude Project מול Make', '''
     <div class="tbl"><table>
       <tr><th>שאלה</th><th>Make</th><th>Claude Project</th></tr>
-      <tr><td>דיוק</td><td>טוב, כל עוד מילת המפתח נכונה</td><td>בדרך כלל טוב יותר — קורא את כל המאגר (מאגר קטן) או מחפש לפי משמעות</td></tr>
-      <tr><td>שאלה עם שני נושאים</td><td>מוצא רק אחד</td><td>עונה על שניהם</td></tr>
+      <tr><td>דיוק</td><td>טוב, כל עוד מילת המפתח נכונה</td><td>בהדגמה: כל 5 השאלות נכונות, עם [K-xx · מקור]</td></tr>
+      <tr><td>שאלה עם שני נושאים</td><td>מוצא רק אחד</td><td>"משלוח והרכבה של מדף ב-650" → 149 + 120 = 269 ₪, שני מקורות</td></tr>
       <tr><td>לקוח יכול להשתמש?</td><td>כן — Webhook, טופס, Telegram</td><td>לא — רק אתם, בשיחה</td></tr>
       <tr><td>עדכון מאגר</td><td>משנים את הגיליון — מיד</td><td>מעלים קובץ מחדש לפרויקט</td></tr>
     </table></div>''')
