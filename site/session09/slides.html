@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 9 · מצגת · RAG ו-Claude Desktop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== tokens + components copied from session01_lecture.html ===== */
+:root{
+  --bg:#f6f5fb;--surface:#fff;--surface-2:#f0eef8;--ink:#16142a;--ink-2:#55526e;--line:#e2dfee;
+  --p1:#6d5dfc;--p2:#0ea5a4;--p3:#e2486f;--p4:#f59e0b;--p5:#2563eb;--claude:#d97757;
+  --accent:#6d5dfc;--glow:rgba(109,93,252,.22);--good:#16a34a;--bad:#dc2626;
+  --code-bg:#1b1834;--code-ink:#e9e6ff;
+  --shadow:0 1px 2px rgba(22,20,42,.05),0 8px 28px rgba(22,20,42,.07);--r:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{
+  --bg:#0d0c1a;--surface:#16142a;--surface-2:#1e1b38;--ink:#eeecff;--ink-2:#a7a3c7;--line:#2c2950;
+  --p1:#8b7dff;--p2:#2dd4bf;--p3:#fb7194;--p4:#fbbf24;--p5:#60a5fa;--accent:#8b7dff;--glow:rgba(139,125,255,.3);
+  --good:#4ade80;--bad:#f87171;--code-bg:#0a0916;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Secular One",Heebo,sans-serif;font-weight:400;line-height:1.25;margin:0}
+h4{margin:0 0 6px;font-size:17px}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.en,code,pre{direction:ltr;unicode-bidi:isolate}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
+pre{font-family:"JetBrains Mono",ui-monospace,monospace;background:var(--code-bg);color:var(--code-ink);padding:16px 18px;border-radius:14px;overflow-x:auto;font-size:14px;line-height:1.65;text-align:left;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+pre.rtl{direction:rtl;unicode-bidi:plaintext;text-align:start;font-family:Heebo,sans-serif;font-size:15px}
+.copybox pre{padding-top:40px}
+/* top */
+.top{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 300px at 90% -20%,rgba(34,211,238,.25),transparent 60%),radial-gradient(600px 300px at 0% 120%,rgba(226,72,111,.22),transparent 60%)}
+.top .wrap{position:relative;padding-top:26px;padding-bottom:30px}
+.crumbs{font-size:13.5px;color:#bdb7ea;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs b{color:#fff;font-weight:700}
+.top h1{font-size:clamp(26px,4vw,40px);margin:12px 0 6px}
+.top .sub{color:#cfcaf5;margin:0;max-width:720px}
+.kind-badge{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px 12px;font-size:13.5px;font-weight:700}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;padding-top:8px;padding-bottom:8px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.tabs a{flex:none;text-decoration:none;color:var(--ink-2);font-weight:500;font-size:15px;padding:7px 14px;border-radius:10px}
+.tabs a.on{background:var(--ink);color:var(--bg)}
+.tabs a:not(.on):hover{background:var(--surface-2);color:var(--ink)}
+.tabs .theme{margin-inline-start:auto;flex:none;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:5px 11px;cursor:pointer;font:inherit;font-size:14px}
+/* layout */
+main{padding-bottom:40px}
+section.blk{padding:44px 0 6px;scroll-margin-top:60px}
+.kicker{font-weight:700;color:var(--accent);font-size:14px;letter-spacing:.4px}
+.blk>h2{font-size:clamp(23px,3vw,31px);margin:4px 0 10px}
+.lead{color:var(--ink-2);margin:0 0 18px;max-width:780px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{margin-top:14px}
+.muted{color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.pill.claude{background:color-mix(in srgb,var(--claude) 16%,var(--surface));color:var(--claude)}
+.callout{border-radius:14px;padding:14px 18px;background:var(--surface-2);border-inline-start:4px solid var(--accent);margin:14px 0}
+.callout.tip{border-color:var(--p2)}.callout.warn{border-color:var(--p4)}.callout.claude{border-color:var(--claude);background:color-mix(in srgb,var(--claude) 9%,var(--surface))}
+.callout b:first-child{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tbl table th:first-child{border-top-right-radius:14px}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:14.5px;padding:9px 16px;border-radius:11px;background:var(--accent);color:#fff;display:inline-flex;gap:6px;align-items:center;transition:.2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* sim */
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.sim-head{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,var(--surface)),var(--surface))}
+.sim-head .tag{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:7px;padding:2px 8px}
+.sim-head h3{font-size:19px}
+.sim-body{padding:18px 20px 20px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* exercises */
+.ex{margin-top:16px}
+.ex-head{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.ex-num{flex:none;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;font-family:"Secular One";font-size:19px}
+.ex-head h3{font-size:20px}
+.ex-meta{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px}
+.deliver{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:15px}
+.deliver::before{content:"📦 תוצר: ";font-weight:800}
+.copybox{position:relative}
+.copybox .copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;font:inherit;font-size:12.5px;padding:2px 9px;cursor:pointer}
+.copybox pre.rtl + .copy,.copybox .copy.dark{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.material{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;white-space:pre-wrap}
+.check{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 8px;border-radius:10px}
+.check li:hover{background:var(--surface-2)}
+.check li::before{content:"";flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin-top:4px}
+.check li.done::before{background:var(--p2);border-color:var(--p2);box-shadow:inset 0 0 0 3px var(--surface)}
+.check li.done{color:var(--ink-2)}
+details.hint{margin-top:10px;background:var(--surface-2);border-radius:12px;padding:8px 14px}
+details.hint summary{cursor:pointer;font-weight:700;color:var(--accent)}
+/* quiz */
+.q{margin-top:12px}
+.q .opts{display:grid;gap:8px;margin-top:8px}
+.q button.opt{text-align:right;font:inherit;background:var(--surface-2);border:2px solid transparent;color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;transition:.2s}
+.q button.opt:hover{border-color:var(--line)}
+.q button.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.q button.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.q .fb{margin-top:8px;font-size:15px;display:none}
+.q.answered .fb{display:block}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px}
+.next a{flex:1;min-width:220px;text-decoration:none;color:inherit}
+.next .card{display:flex;gap:12px;align-items:center}
+.next small{color:var(--ink-2);display:block}
+footer{padding:30px 0;text-align:center;color:var(--ink-2);font-size:13.5px}
+
+/* next-token */
+.nt-text{font-size:20px;line-height:1.9;padding:14px 18px;border-radius:14px;background:var(--surface-2);min-height:64px}
+.nt-text .new{background:color-mix(in srgb,var(--accent) 22%,transparent);border-radius:6px;padding:0 4px;animation:pop .5s}
+@keyframes pop{from{background:var(--accent);color:#fff}}
+.nt-cands{display:grid;gap:8px;margin-top:14px}
+.cand{display:grid;grid-template-columns:110px minmax(0,1fr) 54px;gap:10px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:10px;border:0;background:none;font:inherit;color:inherit;text-align:right}
+.cand:hover{background:var(--surface-2)}
+.cand .w{font-weight:700}
+.cand .barw{height:22px;border-radius:7px;background:var(--surface-2);overflow:hidden}
+.cand .bar{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--p1),var(--p5));transition:width .45s}
+.cand.weird .bar{background:linear-gradient(90deg,var(--p3),var(--p4))}
+.cand .pc{font-weight:800;font-size:14px;text-align:left;direction:ltr}
+.temp{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:14px;border:1px solid var(--line)}
+.temp input{width:100%;accent-color:var(--accent)}
+.temp .tv{font-weight:800;direction:ltr;min-width:36px;text-align:center}
+.temp-note{font-size:14px;color:var(--ink-2);margin-top:6px}
+/* tokens */
+.tok-in{width:100%;min-height:84px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:inherit;padding:12px 14px;resize:vertical}
+.toks{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;min-height:40px}
+.tk{padding:2px 6px;border-radius:6px;font-size:15px;white-space:pre}
+.tok-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.ts{padding:12px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ts b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ts span{font-size:13px;color:var(--ink-2)}
+.ctx{margin-top:14px}
+.ctx-bar{height:18px;border-radius:99px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.ctx-bar div{height:100%;transition:width .5s}
+.ctx-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:6px}
+.ctx-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+/* capabilities */
+.cap{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.cap .e{font-size:24px}
+.cap b{display:block;margin:4px 0}
+.cap span{font-size:14.5px;color:var(--ink-2)}
+.cap.lim{border-color:color-mix(in srgb,var(--p3) 40%,var(--line))}
+/* hallucination */
+.hal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}
+.bubble{border-radius:16px;padding:14px 16px;font-size:15.5px}
+.bubble.user{background:var(--surface-2)}
+.bubble.bot{background:color-mix(in srgb,var(--claude) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 35%,transparent)}
+.bubble small{display:block;font-weight:800;font-size:12.5px;color:var(--ink-2);margin-bottom:4px}
+.verdict{margin-top:10px;font-weight:700;font-size:14.5px}
+.verdict.bad{color:var(--bad)}.verdict.good{color:var(--good)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* prompt builder */
+.pb{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:18px}
+.parts{display:grid;gap:8px}
+.part{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;border:2px solid var(--line);cursor:pointer;background:var(--surface);font:inherit;color:inherit;text-align:right;transition:.2s}
+.part .dot{width:14px;height:14px;border-radius:5px;background:var(--c);flex:none;opacity:.35;transition:.2s}
+.part.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.part.on .dot{opacity:1}
+.part b{font-size:15px}
+.part small{display:block;color:var(--ink-2);font-size:12.5px}
+.pv{border-radius:14px;background:var(--surface-2);padding:14px 16px;font-size:15px;min-height:120px}
+.pv span{display:block;border-inline-start:4px solid var(--c);padding-inline-start:10px;margin-bottom:8px;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.meter{display:flex;gap:4px;margin:12px 0 6px}
+.meter i{flex:1;height:10px;border-radius:4px;background:var(--surface-2);transition:.3s}
+.meter i.on{background:var(--mc)}
+.out-lbl{font-weight:800;font-size:14px;margin-top:10px}
+.outbox{border-radius:14px;padding:14px 16px;font-size:15px;background:color-mix(in srgb,var(--claude) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--claude) 30%,transparent);white-space:pre-wrap;min-height:90px}
+/* json */
+.jx{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);gap:12px;align-items:stretch}
+.mail{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px}
+.mail mark{background:transparent;color:inherit;border-radius:5px;transition:.35s;padding:0 2px}
+.mail mark.hl{background:color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 0 0 2px var(--c)}
+.arrow{display:grid;place-items:center;font-size:30px;color:var(--accent)}
+.json{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:13.5px;direction:ltr;text-align:left;line-height:1.8;min-height:200px}
+.json .ln{white-space:pre;opacity:0;transform:translateX(-6px);transition:.35s}
+.json .ln.show{opacity:1;transform:none}
+.json .k{color:#a5b4fc}.json .s{color:#fcd34d}.json .n{color:#5eead4}
+.sheet{margin-top:14px}
+.sheet table{font-size:14px}
+.sheet tr.newrow td{animation:rowin .7s}
+@keyframes rowin{from{background:color-mix(in srgb,var(--p2) 35%,transparent)}}
+/* claude tiles */
+.ctile{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.ctile .mock{height:120px;border-radius:12px;background:var(--surface-2);margin-bottom:12px;position:relative;overflow:hidden;padding:10px}
+.mock .l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent);margin:6px 0}
+.mock .b1{width:60%;margin-inline-start:auto;background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.mock .b2{width:75%;background:color-mix(in srgb,var(--claude) 35%,transparent)}
+.mock .side{position:absolute;inset:10px auto 10px 10px;width:34%;border-radius:8px;background:var(--surface);border:1px dashed var(--line);padding:6px}
+.mock .doc{height:14px;border-radius:4px;background:color-mix(in srgb,var(--p2) 30%,transparent);margin:5px 0}
+.mock .art{position:absolute;inset:10px 10px 10px auto;width:46%;border-radius:8px;background:var(--surface);border:1px solid var(--line);padding:8px}
+.mock .art .bar{height:10px;border-radius:4px;margin:6px 0;background:linear-gradient(90deg,var(--p1),var(--p5))}
+.ctile b{font-size:17px}
+.ctile p{margin:4px 0 0;font-size:14.5px;color:var(--ink-2)}
+.when{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--claude)}
+/* flow */
+.flow svg{width:100%;height:auto;display:block}
+.flow .lk{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+
+/* ===================== deck ===================== */
+html,body{height:100%;overflow:hidden;scroll-behavior:auto}
+body{background:color-mix(in srgb,var(--bg) 86%,var(--ink));font-size:20px;line-height:1.6}
+#deck{position:fixed;inset:0;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%);transform-origin:50% 50%}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;padding:38px 60px 50px;background:var(--bg);overflow:hidden;box-shadow:0 10px 50px rgba(0,0,0,.2)}
+.slide.on{display:flex}
+.slide::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--bc,var(--accent))}
+.slide[data-block="1"]{--bc:var(--p1)}.slide[data-block="2"]{--bc:var(--p2)}.slide[data-block="3"]{--bc:var(--claude)}
+.aside,.notes{display:none}
+.sfoot{position:absolute;bottom:16px;inset-inline:60px;display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);opacity:.75;pointer-events:none}
+.sfoot b{font-weight:700;direction:ltr;visibility:hidden}
+.s-kicker{font-weight:800;color:var(--bc,var(--accent));font-size:16px;letter-spacing:.3px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.slide h2{font-size:40px;margin:2px 0 12px}
+.s-lead{font-size:21px;color:var(--ink-2);margin:0 0 16px;max-width:1060px;line-height:1.55}
+.s-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+.s-body.mid{justify-content:center}
+.pts{list-style:none;margin:0;padding:0;display:grid;gap:16px;font-size:24px;line-height:1.45}
+.pts li{display:flex;gap:14px;align-items:flex-start}
+.pts li::before{content:"";flex:none;width:12px;height:12px;border-radius:4px;background:var(--bc,var(--accent));margin-top:12px}
+.pts.sm{font-size:21px;gap:12px}
+.pts.sm li::before{margin-top:10px}
+.pts small{display:block;color:var(--ink-2);font-size:.78em}
+.big-q{font-family:"Secular One";font-size:30px;line-height:1.35}
+.c2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+.c3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.c4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.c5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.slide .card{padding:18px 22px}
+.slide .callout{margin:0;font-size:18px}
+.slide .tbl table{font-size:17px}
+.slide th,.slide td{padding:9px 12px}
+.slide pre{font-size:15px;margin:0}
+.slide .material{font-size:16.5px}
+.tag-new{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:800;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--bc,var(--accent)) 14%,var(--surface));color:var(--bc,var(--accent))}
+.en-term{font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:500;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:2px 10px;margin-inline-start:12px;vertical-align:middle;direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* explainer: definition hero + three stacked rows */
+.xp{display:flex;flex-direction:column;justify-content:center;flex:1;min-height:0;gap:0}
+.xb{--c:var(--accent);position:relative;flex-shrink:0}
+.xb>b{display:flex;gap:10px;align-items:center;font-size:22px;font-weight:800;color:var(--c);line-height:1.3}
+.xb>b i{font-style:normal;font-size:26px}
+.xb p{margin:0;font-size:25px;line-height:1.5}
+.xb.what{background:color-mix(in srgb,var(--c) 9%,transparent);border-inline-start:8px solid var(--c);border-radius:6px 0 0 6px;padding:16px 26px;margin-bottom:14px}
+.xb.what>b{display:none}
+.xb.what p{font-size:35px;line-height:1.42;font-weight:500}
+.xb:not(.what){display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:24px;row-gap:8px;align-items:start;padding:11px 4px;border-top:1px solid var(--line)}
+.xb:not(.what):last-child{border-bottom:1px solid var(--line)}
+.xb:not(.what)>b{grid-column:1;grid-row:1/span 4;padding-top:3px}
+.xb:not(.what)>:not(b){grid-column:2}
+.xb pre{font-size:22px;padding:10px 16px;margin:0;line-height:1.5;justify-self:stretch}
+.xb code{font-size:.9em}
+.xb.what{--c:var(--p1)}.xb.ana{--c:var(--p2)}.xb.exm{--c:var(--p4)}.xb.why{--c:var(--claude)}
+/* opening: goals, roadmap, deal, routine */
+.goals{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.goals>div{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:23px;line-height:1.4}
+.goals i{font-style:normal;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--bc) 16%,var(--surface));font-size:24px}
+.slide .goals+.callout{font-size:23px}
+.road{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+.road>div{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.road>div.here{border:2px solid var(--bc);box-shadow:0 0 0 4px var(--glow)}
+.road .rn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:22px}
+.road b{font-family:"Secular One";font-weight:400;font-size:27px;margin-top:6px}
+.road small{font-size:22px;color:var(--ink-2)}
+.road ul{margin:10px 0 0;padding-inline-start:20px;font-size:23px;line-height:1.45;display:grid;gap:4px}
+.road em{margin-top:auto;padding-top:8px;font-style:normal;font-weight:800;font-size:22px;color:var(--bc)}
+.deal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.dl{border-radius:18px;padding:16px 22px;border:1px solid var(--line);background:var(--surface)}
+.dl.give{border-top:6px solid var(--p5)}.dl.do{border-top:6px solid var(--claude);background:color-mix(in srgb,var(--claude) 7%,var(--surface))}
+.dl>b{font-family:"Secular One";font-weight:400;font-size:26px}
+.dl ul{margin:8px 0 0;padding-inline-start:22px;font-size:22px;line-height:1.45;display:grid;gap:4px}
+.routine{display:grid;gap:12px}
+.routine>div{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+.routine .rn{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:23px}
+.routine p{margin:0;flex:1;font-size:26px;line-height:1.4}
+.routine .tm{flex:none;font-weight:800;font-size:23px;color:var(--bc);background:color-mix(in srgb,var(--bc) 12%,var(--surface));border-radius:999px;padding:4px 14px}
+/* in-class exercises 8-13: 22px reading size */
+.ex22 .s-lead,.ex22 .material,.ex22 .callout,.ex22 .deliver,.ex22 .tbl table{font-size:22px}
+.ex22 pre{font-size:22px}
+.slide.ex22 .deliver{font-size:22px}
+.ex22 code{font-size:22px}
+.ex22 .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
+.ex22 .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
+.ex22 .s-body>b,.ex22 .s-body b{font-size:22px}
+/* student site link + QR */
+.hw22 .pts.sm{font-size:22px}
+.hw22 .pts.sm li::before{margin-top:11px}
+.sitebox{display:grid;grid-template-columns:400px minmax(0,1fr);gap:40px;align-items:center}
+.qrbig{width:400px;height:400px;background:#fff;border-radius:22px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.qrbig svg,.qrsmall svg{display:block;width:100%;height:100%}
+.siteinfo .scan{font-size:24px;margin:0 0 8px;color:var(--ink-2)}
+.siteurl{display:inline-block;direction:ltr;unicode-bidi:isolate;font-family:"JetBrains Mono",monospace;font-weight:500;font-size:30px;color:var(--accent);text-decoration:none;border-bottom:3px solid color-mix(in srgb,var(--accent) 40%,transparent);line-height:1.4;overflow-wrap:anywhere}
+.siteurl.sm{font-size:22px;border-bottom-width:2px}
+.siteline{display:flex;gap:16px;align-items:center;font-size:22px;margin-top:6px}
+.qrsmall{flex:none;width:112px;height:112px;background:#fff;border-radius:12px;padding:5px;border:1px solid var(--line)}
+/* setup section */
+.setup .steps li{font-size:22px;display:block;position:relative;padding-inline-start:46px;min-height:34px}
+.setup .steps li::before{width:34px;height:34px;font-size:18px;position:absolute;inset-inline-start:0;top:0;display:grid}
+.setup .callout{font-size:22px}
+.setup .tbl table{font-size:22px}
+.setup .tbl td:first-child{white-space:nowrap}
+.setup .check li{font-size:22px}
+.appmock{direction:ltr;display:grid;grid-template-columns:170px minmax(0,1fr);height:300px;border:2px dashed var(--line);border-radius:16px;overflow:hidden;background:var(--surface);font-family:Heebo,sans-serif}
+.am-side{position:relative;background:var(--surface-2);padding:12px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.am-btn{border:1px solid var(--line);border-radius:9px;padding:5px 8px;background:var(--surface);font-weight:700}
+.am-item{font-weight:700;display:flex;align-items:center;gap:6px}
+.am-lbl{font-size:13px;color:var(--ink-2);margin-top:4px}
+.am-l{height:9px;border-radius:5px;background:color-mix(in srgb,var(--ink) 12%,transparent)}.am-l.s{width:60%}
+.am-acct{margin-top:auto;display:flex;align-items:center;gap:6px;font-weight:700}
+.am-main{position:relative;padding:16px;display:flex;flex-direction:column;gap:10px}
+.am-bub{height:30px;border-radius:12px;width:70%}
+.am-bub.u{align-self:flex-end;width:45%;background:color-mix(in srgb,var(--accent) 25%,transparent)}
+.am-bub.c{background:color-mix(in srgb,var(--claude) 22%,transparent)}.am-bub.s{width:50%}
+.am-input{margin-top:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:15px;background:var(--bg)}
+.am-plus{font-weight:800;font-size:20px}.am-ph{flex:1;color:var(--ink-2)}
+.am-model{display:flex;align-items:center;gap:4px;font-weight:700}
+.am-send{width:28px;height:28px;border-radius:8px;background:var(--claude);color:#fff;display:grid;place-items:center;font-weight:800}
+.am-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--p4);color:#1b1834;font-weight:800;font-size:13px;display:inline-grid;place-items:center}
+.am-side>.am-n{position:absolute;top:6px;right:6px}
+/* JSON parts 2-4: same reading sizes */
+.slide[data-title^="JSON:"] .lbl{font-size:22px;padding:9px 14px}
+.slide[data-title^="JSON:"] .lbl code{font-size:22px;min-width:96px}
+.slide[data-title^="JSON:"] .tbl table{font-size:22px}
+.slide[data-title^="JSON:"] .types td:nth-child(2){font-size:22px}
+.slide[data-title^="JSON:"] th,.slide[data-title^="JSON:"] td{padding:7px 12px}
+.slide[data-title^="JSON:"] .callout{font-size:22px}
+.slide[data-title^="JSON:"] .contact .fld{font-size:22px;padding:7px 2px}
+.slide[data-title^="JSON:"] .anat{font-size:23px}
+/* hero / divider / break */
+.slide.hero,.slide.divider,.slide.brk{background:linear-gradient(135deg,#120f2e,#2a1d6b);color:#f3f1ff;justify-content:center}
+.slide.hero::after,.slide.divider::after,.slide.brk::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 320px at 90% -10%,rgba(34,211,238,.25),transparent 60%),radial-gradient(640px 320px at 0% 115%,rgba(226,72,111,.22),transparent 60%);pointer-events:none}
+.hero>*,.divider>*,.brk>*{position:relative;z-index:1}
+.hero>.sfoot,.divider>.sfoot,.brk>.sfoot,.hero>.hero-keys{position:absolute}
+.slide.hero .sfoot,.slide.divider .sfoot,.slide.brk .sfoot{color:#bdb7ea}
+.hero h1{font-size:72px;margin:16px 0 10px;font-family:"Secular One"}
+.hero .sub{font-size:24px;color:#cfcaf5;max-width:900px;margin:0}
+.hero .crumbs{font-size:18px}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hero .kind-badge,.divider .kind-badge,.brk .kind-badge{font-size:16px;padding:5px 14px}
+.hero-keys{position:absolute;bottom:52px;inset-inline-start:60px;font-size:15px;color:#bdb7ea}
+.divider .num{font-family:"Secular One";font-size:120px;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.5)}
+.divider h2{font-size:56px;margin:8px 0 6px}
+.divider .sub{font-size:22px;color:#cfcaf5;margin:0 0 26px;max-width:900px}
+.blocks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:1100px}
+.blocks>div{border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:15px;color:#cfcaf5}
+.blocks>div b{display:block;color:#fff;font-size:17px}
+.blocks div .t{direction:ltr;text-align:right;font-weight:800;font-size:13px;color:#a5b4fc}
+.blocks>div.here{background:rgba(255,255,255,.2);border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+.blocks>div.done{opacity:.5}
+.brk{align-items:center;text-align:center}
+.brk h2{font-size:54px;margin:0}
+.brk .timer .tm{font-family:"Secular One";font-size:170px;min-width:0;line-height:1.05;direction:ltr;letter-spacing:2px;margin:6px 0}
+.brk .ret{font-size:26px;color:#cfcaf5}
+.brk .ret b{color:#fff;direction:ltr;unicode-bidi:isolate}
+.brk .btn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.brk .nextup{margin-top:24px;font-size:19px;color:#cfcaf5}
+/* timers on exercise slides */
+.timer{display:inline-flex;align-self:flex-start;gap:8px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:4px 6px 4px 12px}
+.timer .tm{font-family:"Secular One";font-size:22px;direction:ltr;min-width:66px;text-align:center}
+.timer.over .tm,.brk .timer.over .tm{color:var(--p3)}
+.brk .timer{border:0;background:none;flex-direction:column;padding:0;align-self:center;gap:6px}
+.exh{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.exh .ex-num{width:48px;height:48px;font-size:22px}
+.exh h2{margin:0}
+.exh .grow{flex:1}
+.slide .deliver{margin-top:0;font-size:17px}
+/* reveal (instructor solutions) */
+.reveal{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+.reveal:not(.shown) .rv-c{filter:blur(10px);opacity:.55;user-select:none;pointer-events:none}
+.rv-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;font-size:18px;padding:12px 22px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.reveal.shown>.rv-btn{display:none}
+.rv-c{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;transition:filter .3s,opacity .3s}
+.lock{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:800;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--p4) 18%,var(--surface));color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+/* misc slide components */
+.phone{width:340px;border-radius:30px;border:2px solid var(--line);background:var(--surface);padding:18px;box-shadow:var(--shadow)}
+.phone .msg{background:var(--surface-2);border-radius:14px;padding:12px 14px;font-size:20px;min-height:64px}
+.phone .sugg{display:flex;gap:6px;margin-top:12px}
+.phone .sugg span{flex:1;text-align:center;background:color-mix(in srgb,var(--accent) 14%,var(--surface));border-radius:10px;padding:8px 4px;font-weight:700;font-size:17px}
+.phone .sugg span:first-child{background:var(--accent);color:#fff}
+.disc{display:grid;gap:14px}
+.disc div{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 20px;font-size:23px}
+.disc div i{font-style:normal;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--bc) 16%,var(--surface));font-size:22px}
+.comp{border-radius:16px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.comp::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--c)}
+.comp b{font-size:22px;display:block}
+.comp span{color:var(--ink-2);font-size:17px}
+.comp .n{font-family:"Secular One";color:var(--c);font-size:16px}
+.mx{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.mx>div{border-radius:14px;padding:14px 16px;font-size:18px}
+.mx .h{background:none;font-weight:800;color:var(--ink-2);display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px}
+.mx .a{background:color-mix(in srgb,var(--good) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--good) 40%,transparent)}
+.mx .b{background:color-mix(in srgb,var(--p4) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--p4) 40%,transparent)}
+.mx .c{background:color-mix(in srgb,var(--bad) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--bad) 40%,transparent)}
+.mx b{display:block;font-size:20px}
+.ans{font-weight:800}.ans.a{color:var(--good)}.ans.b{color:color-mix(in srgb,var(--p4) 75%,var(--ink))}.ans.c{color:var(--bad)}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.why:not(.xb){border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--p2) 10%,var(--surface));border-inline-start:4px solid var(--p2);font-size:17px}
+.why:not(.xb)::before{content:"💡 למה זה עובד: ";font-weight:800}
+.mistake{border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--bad) 8%,var(--surface));border-inline-start:4px solid var(--bad);font-size:17px}
+.mistake::before{content:"⚠️ טעות נפוצה: ";font-weight:800}
+.anat{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:18px;padding:22px 26px;font-family:"JetBrains Mono",monospace;font-size:24px;line-height:1.9;direction:ltr;text-align:left}
+.anat .k{color:#a5b4fc}.anat .s{color:#fcd34d}.anat .n{color:#5eead4}.anat .p{color:#f472b6;font-weight:700}.anat .b{color:#94a3b8}
+.lbls{display:grid;gap:12px}
+.lbl{display:flex;gap:12px;align-items:center;font-size:19px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.lbl code{font-size:18px;flex:none;min-width:74px;text-align:center}
+.types td:nth-child(2){direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:16px}
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.contact .av{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--p5));color:#fff;display:grid;place-items:center;font-family:"Secular One";font-size:30px;margin:0 auto 8px}
+.contact .nm{text-align:center;font-family:"Secular One";font-size:26px}
+.contact .fld{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 2px;font-size:18px}
+.contact .fld span{color:var(--ink-2)}
+.slide .json{font-size:14.5px}
+.pstack{display:flex;flex-direction:column}
+.pstack pre{border-radius:0;margin:0;font-size:16px;line-height:1.55;padding:8px 18px}
+.pstack pre:first-child{border-radius:14px 14px 0 0;padding-top:14px}
+.pstack pre:last-child{border-radius:0 0 14px 14px;padding-bottom:14px}
+.bug{display:grid;gap:10px}
+.bug pre{font-size:17px;padding:12px 16px}
+.bug .fix{font-size:16px;margin-top:4px}
+.gl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gl div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:15px;line-height:1.45}
+.gl b{display:block;font-size:17px;color:var(--bc)}
+.gl span{color:var(--ink-2)}
+.slide .q{margin:0;padding:16px 20px}
+.slide .q>b{font-size:19px;display:block}
+.slide .q button.opt{font-size:17px;padding:7px 14px}
+.slide .q .opts{gap:7px}
+.slide .q .fb{font-size:15.5px}
+.qs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.fitl{display:grid;gap:8px}
+.fitl .row{justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px 8px 16px;font-size:19px}
+.fitl .seg button{font-size:15px}
+.rule{display:flex;gap:12px;align-items:flex-start;font-size:19px}
+.rule .rn{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One"}
+.take{display:grid;gap:12px}
+.take .card{display:flex;gap:16px;align-items:flex-start;padding:14px 18px}
+.take .n{font-family:"Secular One";font-size:34px;line-height:1;color:var(--c)}
+.take b{display:block;font-size:21px}
+.take span{font-size:16.5px;color:var(--ink-2)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;font-size:19px}
+.steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--bc);color:#fff;font-family:"Secular One";font-size:16px}
+.flowc{display:flex;align-items:stretch;gap:10px}
+.flowc>div{flex:1;border-radius:16px;padding:16px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.flowc>div.mid{background:linear-gradient(135deg,color-mix(in srgb,var(--p1) 85%,#fff),#22d3ee);color:#0d0c1a;border:0}
+.flowc>div i{font-style:normal;font-size:34px;display:block}
+.flowc>div b{display:block;font-size:20px}
+.flowc>div span{font-size:15px;color:var(--ink-2)}
+.flowc>div.mid span{color:#1b1834}
+.flowc .ar{flex:none;display:grid;place-items:center;font-size:28px;color:var(--accent);background:none;border:0;padding:0}
+.legend{display:flex;gap:10px;flex-wrap:wrap}
+.legend span{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-size:16px}
+/* bigger sims on slides */
+.slide .sim-body{padding:14px 20px 16px}
+.slide .sim-head{padding:10px 20px}
+.slide .nt-text{font-size:23px}
+.slide .cand{grid-template-columns:150px minmax(0,1fr) 60px;font-size:19px}
+.slide .tok-in{min-height:70px;font-size:19px}
+.slide .tk{font-size:18px}
+.slide .bubble{font-size:17px}
+.slide .mail{font-size:16.5px}
+.sim.nt[data-slider="1"] .nt-text{font-size:20px;min-height:0;padding:8px 16px}
+.sim.nt[data-slider="1"] .nt-cands{gap:4px;margin-top:10px}
+.sim.nt[data-slider="1"] .temp{margin-top:10px;padding:8px 14px}
+.sim.nt[data-slider="1"] .row.mt{margin-top:10px}
+
+/* ===================== chrome ===================== */
+#prog{position:fixed;top:0;right:0;height:4px;width:0;background:linear-gradient(270deg,var(--p1),var(--p2));z-index:70;transition:width .3s}
+#ctrl{position:fixed;bottom:10px;left:10px;display:flex;gap:4px;align-items:center;z-index:75;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:4px;opacity:.45;transition:opacity .2s}
+#ctrl:hover,#ctrl:focus-within{opacity:1}
+#ctrl button{border:0;background:none;color:var(--ink);font:inherit;font-size:17px;width:38px;height:34px;border-radius:9px;cursor:pointer;display:grid;place-items:center}
+#ctrl button:hover{background:var(--surface-2)}
+#ctrl button.on{background:var(--ink);color:var(--bg)}
+#count{font-weight:700;font-size:14px;padding:0 8px;direction:ltr;color:var(--ink-2);min-width:64px;text-align:center}
+#notes{position:fixed;left:0;right:0;bottom:0;height:34vh;display:none;z-index:72;background:var(--surface);border-top:2px solid var(--accent);box-shadow:0 -10px 30px rgba(0,0,0,.15);padding:12px 22px 54px;overflow:auto;font-size:17px;line-height:1.6}
+body.notes-on #notes{display:block}
+#notes .nh{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+#notes .nh b{font-family:"Secular One";font-size:19px;font-weight:400;margin-inline-end:6px}
+#notes ul{margin:4px 0;padding-inline-start:22px}
+#notes li{margin:3px 0}
+#notes .nx{color:var(--ink-2);font-size:14.5px;margin-top:6px}
+#ov{position:fixed;inset:0;display:none;overflow:auto;background:var(--bg);z-index:90;padding:22px 24px 60px}
+body.ov-on #ov{display:block}
+#ov h3{font-size:24px;margin:0 0 14px}
+#ov .ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px}
+.ov-cell{cursor:pointer;border-radius:12px;padding:6px;transition:.15s}
+.ov-cell:hover{background:var(--surface-2)}
+.ov-thumb{width:240px;height:135px;position:relative;overflow:hidden;border-radius:8px;border:2px solid var(--line);margin:0 auto}
+.ov-thumb .slide{display:flex;width:1280px;height:720px;right:0;top:0;left:auto;bottom:auto;transform:scale(.1875);transform-origin:top right;pointer-events:none;box-shadow:none}
+.ov-cell.cur .ov-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.ov-cell small{display:flex;gap:6px;justify-content:space-between;font-size:13px;color:var(--ink-2);padding:4px 6px 0}
+.ov-cell small b{color:var(--ink)}
+.ov-blk{grid-column:1/-1;font-family:"Secular One";font-size:19px;margin-top:8px;color:var(--ink-2)}
+#help{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:95;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 16px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .3s}
+#help.show{opacity:.92}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===================== print: one slide per page ===================== */
+@page{size:1280px 720px;margin:0}
+@media print{
+  html,body{height:auto;overflow:visible;background:#fff}
+  #deck{position:static;overflow:visible}
+  #stage{position:static;transform:none!important;width:1280px;height:auto}
+  .slide{display:flex!important;position:relative;inset:auto;width:1280px;height:720px;box-shadow:none;break-after:page;page-break-after:always;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sfoot b{visibility:visible}
+  #prog,#ctrl,#notes,#ov,#help,.rv-btn,.timer .btn,.brk .btn{display:none!important}
+  .reveal .rv-c{filter:none!important;opacity:1!important}
+  .card,.sim{box-shadow:none}
+}
+</style>
+<style>/* --- session 2 + 3 widget styles (from lecture pages) --- */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:6px 14px;border-radius:9px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+/* agenda */
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ag{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.ag::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c,var(--accent))}
+.ag .t{font-weight:800;font-size:13px;color:var(--c,var(--accent));direction:ltr;text-align:right}
+.ag b{display:block;margin:4px 0 2px}
+.ag span{font-size:14px;color:var(--ink-2)}
+/* anatomy */
+.anat{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.anat-flow{display:flex;flex-direction:column;gap:8px}
+.af{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);cursor:pointer;transition:.2s;font:inherit;color:inherit;text-align:right}
+.af:hover,.af.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.af .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);flex:none}
+.af small{display:block;color:var(--ink-2);font-size:12.5px}
+.anat-info{position:sticky;top:70px;padding:18px;border-radius:16px;background:var(--surface-2);min-height:180px}
+.anat-info .t{font-family:"Secular One";font-size:22px;color:var(--c)}
+/* process sim */
+.ps-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.ps-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.ps-stats div{padding:10px;border-radius:14px;background:var(--surface-2);text-align:center}
+.ps-stats b{display:block;font-family:"Secular One";font-size:26px;line-height:1.2}
+.ps-stats span{font-size:13px;color:var(--ink-2)}
+.steps{display:flex;flex-direction:column;gap:0;position:relative}
+.st{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);transition:.3s;position:relative}
+.st+.st{margin-top:22px}
+.st+.st::before{content:"";position:absolute;top:-22px;right:35px;width:2px;height:20px;background:var(--line)}
+.st .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st b{display:block}
+.st small{color:var(--ink-2);font-size:13px}
+.st .min{font-weight:800;font-size:14px;padding:3px 10px;border-radius:999px;background:var(--surface-2);white-space:nowrap}
+.st.active{border-color:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 22%,transparent);transform:scale(1.01)}
+.st.done{opacity:.55}
+.st.pain::after{content:"⚠️ צוואר בקבוק";position:absolute;top:-11px;left:14px;font-size:11.5px;font-weight:800;background:var(--p3);color:#fff;border-radius:7px;padding:1px 8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+.cmp{margin-top:14px;display:grid;gap:8px}
+.cmp .r{display:grid;grid-template-columns:90px minmax(0,1fr) 120px;white-space:nowrap;gap:10px;align-items:center;font-size:14px}
+.cmp .bw{height:16px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.cmp .bw i{display:block;height:100%;border-radius:6px;transition:width .6s}
+/* symbols */
+.syms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.sym{padding:12px 8px;border-radius:14px;border:2px solid var(--line);background:var(--surface);text-align:center;cursor:pointer;font:inherit;color:inherit;transition:.2s}
+.sym:hover,.sym.on{border-color:var(--accent)}
+.sym svg{width:100%;height:56px;display:block}
+.sym b{font-size:14px}
+.sym-info{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:70px}
+/* matrix */
+.mx{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start}
+.mx svg{width:100%;height:auto;display:block}
+.mx .dot{cursor:pointer;transition:.4s}
+.sl{display:grid;grid-template-columns:120px minmax(0,1fr) 48px;gap:10px;align-items:center;font-size:14.5px;margin-bottom:8px}
+.sl input{width:100%;accent-color:var(--accent)}
+.sl .v{font-weight:800;text-align:center;direction:ltr}
+.verdict{margin-top:10px;padding:12px 14px;border-radius:12px;font-weight:700;background:color-mix(in srgb,var(--vc) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 40%,transparent)}
+.task-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.task-list button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer}
+.task-list button.on{background:var(--ink);color:var(--bg)}
+/* roi */
+.roi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}
+.roi-in .sl{grid-template-columns:150px minmax(0,1fr) 64px}
+.roi-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.roi-out div{padding:12px;border-radius:14px;background:var(--surface-2)}
+.roi-out b{display:block;font-family:"Secular One";font-size:24px;line-height:1.2;unicode-bidi:plaintext;text-align:right}
+.roi-out span{font-size:13px;color:var(--ink-2)}
+.roi svg{width:100%;height:auto;display:block}
+.formula{direction:ltr;text-align:center;font-family:"JetBrains Mono",monospace;font-size:14px;padding:10px;border-radius:12px;background:var(--surface-2);margin-top:10px}
+/* doc template */
+.doc-t{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;counter-reset:d}
+.doc-t div{counter-increment:d;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14.5px}
+.doc-t div::before{content:counter(d) ". ";font-weight:800;color:var(--accent)}
+.doc-t b{font-size:15.5px}
+.qs-int{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.qs-int div{padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:15px}
+.qs-int div b{display:block;font-size:13px;color:var(--accent)}
+@media (max-width:820px){.anat,.mx,.roi{grid-template-columns:minmax(0,1fr)}.syms{grid-template-columns:repeat(3,minmax(0,1fr))}.doc-t,.qs-int{grid-template-columns:minmax(0,1fr)}.anat-info{position:static}}
+@media (max-width:480px){.roi-in .sl,.sl{grid-template-columns:96px minmax(0,1fr) 52px}.ps-stats b{font-size:21px}.st{grid-template-columns:38px minmax(0,1fr);}.st .min{grid-column:2;justify-self:start}}
+.en-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* json explorer */
+.jx2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.jtree{background:var(--code-bg);color:var(--code-ink);border-radius:16px;padding:16px 18px;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.85;direction:ltr;text-align:left;overflow-x:auto}
+.jtree .k{color:#a5b4fc;cursor:pointer;border-radius:4px;padding:0 2px}
+.jtree .k:hover{background:rgba(165,180,252,.18)}
+.jtree .k.sel{background:#a5b4fc;color:#16142a}
+.jtree .s{color:#fcd34d}.jtree .n{color:#5eead4}.jtree .b{color:#f9a8d4}.jtree .z{color:#94a3b8}
+.jtree .jr{white-space:pre}
+.jinfo{padding:18px;border-radius:16px;background:var(--surface-2)}
+.jpath{direction:ltr;text-align:left;font-family:"JetBrains Mono",monospace;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0 10px;word-break:break-all}
+.types{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.types span{font-size:12.5px;font-weight:700;padding:2px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.types span.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chal{margin-top:12px;padding:12px 14px;border-radius:12px;border:2px dashed var(--accent)}
+.chal .res{font-weight:800;margin-top:4px}
+/* validator */
+.val{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.val textarea{width:100%;min-height:170px;border-radius:14px;border:2px solid var(--line);background:var(--code-bg);color:var(--code-ink);font-family:"JetBrains Mono",monospace;font-size:13.5px;padding:12px 14px;direction:ltr;text-align:left;resize:vertical}
+.val textarea.ok{border-color:var(--good)}.val textarea.bad{border-color:var(--bad)}
+.vres{padding:14px 16px;border-radius:14px;background:var(--surface-2);font-size:15px}
+.vres b.ok{color:var(--good)}.vres b.bad{color:var(--bad)}
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:12px;align-items:stretch}
+.pg-col{display:flex;flex-direction:column;gap:10px}
+.pg label{font-size:13px;font-weight:700;color:var(--ink-2)}
+.pg select,.pg textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:7px 10px}
+.pg textarea{font-family:"JetBrains Mono",monospace;font-size:13px;min-height:96px;direction:ltr;text-align:left;background:var(--code-bg);color:var(--code-ink)}
+.raw{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;min-height:90px}
+.raw .m{color:#fcd34d;font-weight:700}.raw .h{color:#a5b4fc}
+.wire{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.wire .line{position:absolute;top:50%;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+.pkt{position:relative;z-index:1;font-size:26px;transition:transform .7s ease-in-out,opacity .3s;opacity:0}
+.node{font-size:13px;font-weight:800;color:var(--ink-2);text-align:center}
+.status{display:inline-flex;gap:8px;align-items:center;font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;direction:ltr}
+.status.s2{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.status.s4{background:color-mix(in srgb,var(--p4) 20%,transparent);color:color-mix(in srgb,var(--p4) 70%,var(--ink))}
+.status.s5{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.resp-expl{font-size:14px;color:var(--ink-2)}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;cursor:pointer}
+/* status codes */
+.codes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.code{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c)}
+.code b{font-family:"JetBrains Mono",monospace;font-size:20px;color:var(--c)}
+.code div{font-weight:700;margin:2px 0}
+.code span{font-size:13.5px;color:var(--ink-2)}
+/* oauth */
+.oa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.actor{padding:16px;border-radius:16px;border:2px solid var(--line);text-align:center;transition:.3s;background:var(--surface)}
+.actor .e{font-size:30px}
+.actor.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+.oa-step{padding:14px 16px;border-radius:14px;background:var(--surface-2);min-height:76px}
+.oa-step b{color:var(--accent)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* polling vs webhook */
+.pw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lane{padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--surface)}
+.lane h4{display:flex;justify-content:space-between}
+.track{position:relative;height:120px;border-radius:12px;background:var(--surface-2);margin:10px 0;overflow:hidden}
+.track .srv,.track .cli{position:absolute;top:8px;bottom:8px;width:64px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800;text-align:center;background:var(--surface);border:1px solid var(--line)}
+.track .srv{right:8px}.track .cli{left:8px}
+.msg{position:absolute;top:50%;font-size:18px;transform:translateY(-50%);transition:left .6s linear}
+.lane .st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.lane .st div{padding:8px;border-radius:10px;background:var(--surface-2)}
+.lane .st b{display:block;font-family:"Secular One";font-size:20px}
+.lane .st span{font-size:12px;color:var(--ink-2)}
+/* claude api */
+.ca{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.ca label{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-top:8px}
+.ca textarea,.ca select{width:100%;font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:8px 10px}
+.ca textarea{min-height:70px;resize:vertical}
+.ca .rq{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;font-family:"JetBrains Mono",monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;min-height:120px}
+.ca .rq .hl{background:#fcd34d;color:#16142a;border-radius:4px;padding:0 3px}
+@media (max-width:860px){.jx2,.val,.ca,.pw,.keys{grid-template-columns:minmax(0,1fr)}.pg{grid-template-columns:minmax(0,1fr)}.wire{min-height:70px}.wire .line{top:0;bottom:0;left:50%;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--line) 0 8px,transparent 8px 14px)}.codes{grid-template-columns:repeat(2,minmax(0,1fr))}.oa{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.codes{grid-template-columns:minmax(0,1fr)}.actor{padding:10px 6px}.actor .e{font-size:22px}}
+/* --- compact interactive widgets so they fit a 720px slide --- */
+.slide.w{padding:14px 44px 18px}
+.slide.w>.s-kicker{margin-bottom:0}
+.slide.w>h2{font-size:21px;margin:2px 0 6px;line-height:1.2}
+.slide.w>.s-body{margin-top:0}
+.slide.w .sim-head{display:none}
+.slide .sim-head{padding:9px 16px}.slide .sim-head h3{font-size:16px}
+.slide .sim-body{padding:10px 16px 12px}
+.slide .anat{gap:14px;color:var(--ink)}.slide .anat *{color:inherit}.slide .anat-flow{gap:3px}.slide .af{padding:3px 11px;gap:8px;color:var(--ink)}.slide .af .ic{width:23px;height:23px}.slide .af b{font-size:13.5px;color:var(--ink)}.slide .af small{font-size:10.5px;color:var(--ink-2)}.slide .anat-info .t{color:var(--c)}
+.slide .ps-top{gap:8px}.slide .ps-stats{margin:6px 0;gap:8px}.slide .ps-stats div{padding:5px}.slide .ps-stats b{font-size:17px}.slide .ps-stats span{font-size:11.5px}
+.slide .steps .st{padding:4px 11px;grid-template-columns:30px minmax(0,1fr) auto}
+.slide .steps .st .ic{width:30px;height:30px;font-size:14px;border-radius:9px}
+.slide .steps .st+.st{margin-top:6px}.slide .steps .st+.st::before{top:-6px;height:5px;right:28px}
+.slide .steps .st b{font-size:13.5px;line-height:1.2}.slide .steps .st small{font-size:11px}.slide .steps .st .min{font-size:11px;padding:2px 7px}.slide .steps .st.pain::after{font-size:10px;top:-8px}
+.slide .legend{margin-top:6px;font-size:11px;gap:9px}.slide .cmp{margin-top:6px}.slide .cmp .r{font-size:12px}
+.slide .syms .sym svg{height:42px}.slide .syms .sym{padding:8px 6px}
+.slide .mx{gap:14px}.slide .mx .sl,.slide .roi-in .sl{margin-bottom:5px;font-size:13px}
+.slide .roi{gap:14px}.slide .roi-out{gap:8px;margin-bottom:8px}.slide .roi-out div{padding:7px 10px}.slide .roi-out b{font-size:19px}
+/* session 3 widgets compaction */
+.slide .jx2{gap:12px}
+.slide .jtree{font-size:11px;line-height:1.55;padding:12px 14px}
+.slide .jinfo{padding:12px 14px}
+.slide .jpath{font-size:13px;padding:6px 10px;margin:4px 0 8px}
+.slide .chal{padding:9px 12px;margin-top:8px}
+.slide .val textarea{min-height:120px;font-size:12px}
+.slide .vres{padding:10px 12px;font-size:13.5px}
+.slide .pg{gap:10px;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .pg textarea{min-height:64px;font-size:12px}
+.slide .pg .raw{min-height:62px;font-size:11.5px;padding:8px 10px}
+.slide .pg label{font-size:12px}
+.slide .pg select{padding:5px 8px}
+.slide .codes{gap:8px}.slide .code{padding:9px 11px}.slide .code b{font-size:17px}.slide .code span{font-size:12px}
+.slide .keys{gap:12px}
+.slide .oa{gap:10px;margin-bottom:10px}.slide .actor{padding:9px}.slide .actor .e{font-size:24px}
+.slide .oa-step{min-height:56px;padding:10px 14px;font-size:14.5px}
+.slide .pw .track{height:84px}.slide .lane{padding:11px}.slide .lane .st b{font-size:16px}
+.slide .ca{gap:14px}
+.slide .ca label{margin-top:5px;font-size:12px}
+.slide .ca textarea{min-height:48px;font-size:13px}
+.slide .ca select{padding:5px 8px}
+.slide .ca .rq{min-height:84px;font-size:11.5px;padding:9px 11px}
+/* keep widget layouts 2-col on the fixed 1280 stage (never collapse by window width) */
+.slide .anat{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.slide .anat-info{position:static}
+.slide .af{background:var(--surface-2)}
+.slide .jx2{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.slide .val{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pg{grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr)}
+.slide .ca{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .pw{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .keys{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .mx{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.slide .roi{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.slide .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .codes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.slide .oa{grid-template-columns:repeat(3,minmax(0,1fr))}
+.slide .shot{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16;box-shadow:var(--shadow)}
+.slide .shot img{display:block;width:100%;height:auto}
+.slide .shot figcaption{padding:5px 12px;font-size:12px;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line)}
+.slide .shot{display:flex;flex-direction:column;max-height:100%}
+.slide .shot img{flex:1 1 auto;min-height:0;object-fit:contain}
+.slide .shot figcaption{flex:none;font-size:14px;line-height:1.45}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="deck"><div id="stage">
+
+<section class="slide hero" data-min="2" data-block="1" data-title="פתיחה">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 9 מתוך 15</b></div>
+  <h1>AI שעונה מהידע של העסק: RAG ב-Make, ו-Claude Desktop</h1>
+  <p class="sub">היום בונים "עוזר ידע" אמיתי: הלקוח שואל, Make מחפש במאגר של "בית ועיצוב", ו-Claude עונה רק ממה שנמצא — עם מקור. ואז רואים איך Claude Desktop עושה את אותו דבר, ועוד הרבה, בלי לבנות כלום.</p>
+  <div class="hero-meta"><span class="kind-badge">📚 RAG</span><span class="kind-badge">🔍 חיפוש בגיליון</span><span class="kind-badge">🧾 ציטוט מקור</span><span class="kind-badge">🖥️ Claude Desktop</span></div>
+  <div class="hero-keys">← / רווח: הבא · →: הקודם · N: הערות · O: סקירה · F: מסך מלא · D: בהיר/כהה · P: מסך מרצה</div>
+  <aside class="notes"><ul><li>המשפט של היום: "קודם מחפשים, אחר כך עונים".</li><li>לפני השיעור: לוודא ש-weizmann.ai/demo/knowledge.csv זמין.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="מה נשיג היום">
+  <div class="s-kicker">על המפגש</div>
+  <h2>בסוף המפגש תדעו…</h2>
+  <div class="s-body mid">
+    <div class="goals">
+      <div><i>🤥</i>להסביר למה AI ממציא, ואיך RAG מונע את זה</div>
+      <div><i>🧹</i>לאסוף ולנקות מאגר ידע: כפילויות, מידע ישן, שדות חסרים</div>
+      <div><i>🔍</i>לבנות ב-Make חיפוש לפני תשובה: מילת מפתח ← Search Rows ← Claude</div>
+      <div><i>🧾</i>לגרום ל-AI לענות רק מהמאגר, לצטט מקור, ולהגיד "לא יודע"</div>
+      <div><i>🧠</i>להבין מה זה Embeddings — חיפוש לפי משמעות</div>
+      <div><i>🖥️</i>להשתמש ב-Claude Desktop: Projects, Skills, משימות מתוזמנות, וחיבור ל-Make</div>
+    </div>
+  </div>
+  <aside class="notes"><ul><li>שלושה "להבין" ושלושה "לבנות".</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="1" data-title="מה נעשה היום">
+  <div class="s-kicker">מבנה המפגש</div>
+  <h2>מה נעשה היום</h2>
+  <div class="s-body mid">
+    <div class="agenda">
+      <div class="ag" style="--c:var(--p1)"><div class="t">חלק 1</div><b>למה AI ממציא</b><span>ומה זה RAG</span></div>
+      <div class="ag" style="--c:var(--claude)"><div class="t">חלק 2</div><b>שלוש רמות</b><span>פרומפט · חיפוש · Embeddings</span></div>
+      <div class="ag" style="--c:var(--p2)"><div class="t">חלק 3</div><b>המאגר</b><span>ייבוא וניקוי</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">הפסקה</div><b>הפסקה 1</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p5)"><div class="t">חלק 4</div><b>בונים ב-Make</b><span>שלב אחרי שלב, עם בדיקות</span></div>
+      <div class="ag" style="--c:var(--p4)"><div class="t">הפסקה</div><b>הפסקה 2</b><span>10 דקות</span></div>
+      <div class="ag" style="--c:var(--p3)"><div class="t">חלק 5</div><b>Claude Desktop</b><span>Projects, Skills, משימות, Make</span></div>
+      <div class="ag" style="--c:var(--p1)"><div class="t">חלק 6</div><b>תרגול</b><span>בונים בעצמכם</span></div>
+    </div>
+  </div>
+  <aside class="notes"><ul><li>חלק 4 הוא הלב: כל מודול עם צילום מסך ופלט אמיתי.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="1" data-title="השאלה של היום">
+  <div class="s-kicker">פתיחה</div>
+  <h2>מה Claude יודע על "בית ועיצוב"?</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>❌ בלי מאגר</b><div style="font-size:16px;margin-top:6px">"כמה עולה משלוח לחיפה?"<br><br>🤖 "בדרך כלל משלוח עולה בין 100 ל-300 ₪, תלוי בגודל…"<br><br><b>זה ניחוש.</b> Claude לא מכיר את החנות. הוא נותן תשובה שנשמעת נכונה.</div></div>
+      <div class="card" style="border-color:var(--claude)"><b>✅ עם מאגר (מה שנבנה היום)</b><div style="font-size:16px;margin-top:6px">"כמה עולה משלוח לחיפה?"<br><br>🤖 "משלוח לחיפה עולה 149 ₪ להזמנה עד 5,000 ₪, ומשלוח חינם להזמנה מעל 5,000 ₪. [מקור: מדיניות משלוחים, סעיף 1]"<br><br><b>זו תשובה אמיתית מהרצה שלנו.</b></div></div>
+    </div>
+    <div class="callout warn"><b>הבעיה</b>מודל שפה תמיד ינסה לענות. אם לא נותנים לו את העובדות — הוא ממלא את החסר. זה נקרא "הזיה" (Hallucination).</div>
+  </div>
+  <aside class="notes"><ul><li>שאלו את הכיתה: מי קיבל פעם תשובה בטוחה ושגויה מ-AI?</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="2" data-title="בלוק 2 · RAG בפשטות">
+  <div class="s-kicker">בלוק 2</div>
+  <h1>RAG: קודם מחפשים, אחר כך עונים</h1>
+  <p class="sub">Retrieval-Augmented Generation — שם מפחיד לרעיון פשוט.</p>
+  <aside class="notes"><ul><li>כמו עובד חדש: לא מצפים שיזכור הכול, נותנים לו את התיקייה הנכונה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="מה זה RAG">
+  <div class="s-kicker">העיקרון</div>
+  <h2>שלושה שלבים</h2>
+  <div class="s-body mid">
+    <div class="flowc">
+      <div><i>❓</i><b>שאלה</b><span>"כמה עולה משלוח לחיפה?"</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>🔍</i><b>שליפה (Retrieval)</b><span>מוצאים במאגר את 3–5 הקטעים הרלוונטיים</span></div><div class="ar">⟵</div>
+      <div class="mid"><i>📎</i><b>הקשר (Augmented)</b><span>מצרפים רק אותם לפרומפט</span></div><div class="ar">⟵</div>
+      <div><i>✍️</i><b>תשובה (Generation)</b><span>Claude עונה מהם, עם מקור</span></div>
+    </div>
+    <div class="callout tip"><b>למה לא לתת את כל המאגר?</b>במאגר קטן — אפשר (רמה 1). אבל מאגר של מאות עמודים: יקר (משלמים על כל מילה), איטי, ו-AI מתבלבל כשיש לו יותר מדי מידע לא רלוונטי.</div>
+  </div>
+  <aside class="notes"><ul><li>RAG הוא לא מוצר — הוא דפוס עבודה. אפשר לבנות אותו ב-Make, וב-Claude Projects הוא כבר מובנה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="2" data-title="שלוש רמות">
+  <div class="s-kicker">המפה</div>
+  <h2>שלוש דרכים לתת ל-AI ידע</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>רמה</th><th>איך</th><th>מתאים ל</th><th>החולשה</th></tr>
+      <tr><td><b>1 · הכול בפרומפט</b></td><td>מדביקים את כל הידע בפרומפט</td><td>עד כמה עשרות עמודים (הקטלוג במפגש 8)</td><td>יקר כשהמאגר גדל</td></tr>
+      <tr><td><b>2 · חיפוש לפי מילים</b></td><td>AI מוציא מילת מפתח ← חיפוש בגיליון ← רק התוצאות לפרומפט</td><td>מאגר של עשרות–מאות קטעים · <b>מה שנבנה היום</b></td><td>"ספה" לא מוצא "Диван"</td></tr>
+      <tr><td><b>3 · חיפוש לפי משמעות</b></td><td>Embeddings + מסד וקטורים</td><td>אלפי מסמכים, שאלות חופשיות</td><td>צריך מפתחות API, שירות נוסף, ועלות</td></tr>
+    </table></div>
+    <div class="callout tip"><b>והרמה הרביעית</b>Claude Projects: מעלים קבצים, ו-Claude עושה את כל זה בעצמו. נראה בחלק 5.</div>
+  </div>
+  <aside class="notes"><ul><li>רוב העסקים הקטנים מסתדרים מצוין עם רמות 1–2.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="4" data-block="2" data-title="Embeddings">
+  <div class="s-kicker">רמה 3 · הסבר בלי קוד</div>
+  <h2>Embeddings: חיפוש לפי משמעות</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>🔤 חיפוש לפי מילים (רמה 2)</b><div style="font-size:16px;margin-top:6px">מחפש את האותיות "ספה".<br>"ספה" ✅ · "ספות" ❌ (אם לא כתוב) · "Диван" ❌ · "משהו לשבת עליו בסלון" ❌</div></div>
+      <div class="card" style="border-color:var(--claude)"><b>🧭 חיפוש לפי משמעות (רמה 3)</b><div style="font-size:16px;margin-top:6px">כל טקסט הופך לרשימת מספרים — "כתובת" במפה של משמעויות. טקסטים עם משמעות דומה יושבים קרוב.<br>"ספה" ≈ "ספות" ≈ "Диван" ≈ "משהו לשבת עליו בסלון" ✅</div></div>
+    </div>
+    <div class="callout tip"><b>איך זה נראה ב-Make (בלי לבנות היום)</b>מודול Embeddings (למשל של OpenAI) הופך כל קטע למספרים ← שומרים במסד וקטורים (Pinecone, Qdrant — יש להם אפליקציות ב-Make) ← בשאלה: הופכים גם אותה למספרים ומבקשים "את 5 הקרובים". דורש מפתחות API ותשלום.</div>
+    <div class="callout tip"><b>הטריק שלנו במקום</b>בשלב מילת המפתח, Claude מתרגם את השאלה למילה בעברית. כך גם שאלה ברוסית מוצאת את הקטע — נראה את זה בבדיקות.</div>
+  </div>
+  <aside class="notes"><ul><li>המטפורה: מפה של עיר. "ספה" ו"כורסה" גרים באותה שכונה; "חשבונית" בשכונה אחרת.</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="3" data-title="בלוק 3 · המאגר">
+  <div class="s-kicker">בלוק 3</div>
+  <h1>מאגר הידע של "בית ועיצוב"</h1>
+  <p class="sub">25 קטעי ידע: משלוחים, החזרות, אחריות, תשלומים ועוד. וכמו בעסק אמיתי — לא נקי.</p>
+  <aside class="notes"><ul><li>הכלל: AI טוב כמו הידע שנותנים לו. מאגר מבולגן = תשובות מבולגנות.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="מבנה המאגר">
+  <div class="s-kicker">איך בונים מאגר</div>
+  <h2>שורה = קטע ידע אחד</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>עמודה</th><th>מה בה</th><th>למה</th></tr>
+      <tr><td><b>id</b></td><td>K-01, K-02…</td><td>כדי לדעת בדיוק מאיפה הגיעה תשובה</td></tr>
+      <tr><td><b>topic</b></td><td>משלוחים, החזרות…</td><td>נושא — גם עליו מחפשים</td></tr>
+      <tr><td><b>keywords</b></td><td>משלוח, משלוחים, הובלה, דמי משלוח…</td><td>המילים שלקוחות משתמשים בהן. <b>כאן החיפוש עובד</b></td></tr>
+      <tr><td><b>text</b></td><td>2–3 משפטים, עובדה אחת</td><td>מה ש-Claude יקרא</td></tr>
+      <tr><td><b>source</b></td><td>"מדיניות משלוחים, סעיף 1"</td><td>הציטוט בתשובה</td></tr>
+      <tr><td><b>updated</b></td><td>תאריך עדכון</td><td>כשיש סתירה — החדש מנצח</td></tr>
+    </table></div>
+    <div class="callout tip"><b>כמה גדול קטע?</b>קטן מספיק כדי לדבר על דבר אחד, גדול מספיק כדי להבין בלי הקשר. "משלוחים לכל הארץ" ו"משלוח לאילת" — שני קטעים, לא אחד.</div>
+  </div>
+  <aside class="notes"><ul><li>זה ה-Chunking: איך מחלקים ידע לקטעים. ב-Make יש גם מודול Chunk text למסמכים ארוכים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="המאגר באתר">
+  <div class="s-kicker">weizmann.ai/demo</div>
+  <h2>מורידים, ומייבאים ל-Google Sheets</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/kb-site.jpg" alt="באתר: "מאגר הידע של העסק" — כפתור ההורדה, האזהרה, והטבלה" style="max-height:380px;object-fit:contain"><figcaption>באתר: "מאגר הידע של העסק" — כפתור ההורדה, האזהרה, והטבלה</figcaption></figure><div><ol class="steps" style="--bc:var(--p2)">
+      <li>באתר: <b>מאגר הידע</b> ← ⬇️ הורדת המאגר (CSV)</li>
+      <li>Google Sheets ← גיליון חדש ← <span class="en">File · Import · Upload</span> ← בוחרים את הקובץ</li>
+      <li><span class="en">Import location</span>: <b>Replace current sheet</b> ← Import data</li>
+      <li>משנים את שם הלשונית ל-<b>ידע</b> (כך נמצא אותה ב-Make)</li>
+    </ol></div></div>
+    <div class="callout tip"><b>דרך נוספת</b>בתא A1 של גיליון ריק: <code>=IMPORTDATA("https://weizmann.ai/demo/knowledge.csv")</code> ← Allow access. הגיליון יתעדכן לבד כשהקובץ באתר משתנה. כך בנינו את הגיליון בהדגמה.</div>
+  </div>
+  <aside class="notes"><ul><li>אצלנו הגיליון נבנה מ-Make (Create a Spreadsheet + Update a Cell עם IMPORTDATA). לתלמידים — ייבוא רגיל.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="3" data-title="המאגר בגיליון">
+  <div class="s-kicker">כך זה נראה</div>
+  <h2>המאגר אחרי הייבוא</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/kb-sheet.jpg" alt="הגיליון "בית ועיצוב · מאגר ידע", לשונית "ידע": 25 שורות, 6 עמודות" style="max-height:470px;object-fit:contain"><figcaption>הגיליון "בית ועיצוב · מאגר ידע", לשונית "ידע": 25 שורות, 6 עמודות</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">כל שורה היא קטע. שימו לב לעמודה <b>updated</b>: גוגל הפך את התאריכים למספרים (46266). זה ייראה לנו בתשובה — ונטפל בזה בניקוי.</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>עמודה F: Format ← Number ← Date מחזיר תאריכים רגילים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="3" data-title="ניקוי הידע">
+  <div class="s-kicker">איסוף וניקוי</div>
+  <h2>ארבע בעיות שמסתתרות במאגר</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>שורה</th><th>הבעיה</th><th>מה יקרה בלי ניקוי</th><th>הפתרון</th></tr>
+      <tr><td>K-02</td><td>מדיניות 2024: משלוח 99 ₪ — סותר את K-01 (149 ₪)</td><td>AI עלול לצטט מחיר ישן</td><td>מוחקים, או מסמנים "בוטל"</td></tr>
+      <tr><td>K-21</td><td>שעות פתיחה ישנות (עד 13:00) — כפילות של K-10 (עד 14:00)</td><td>שתי תשובות שונות לאותה שאלה</td><td>מוחקים את הישנה</td></tr>
+      <tr><td>K-25</td><td>מבצע חנוכה — בלי מילות מפתח</td><td>חיפוש לפי keywords לא ימצא אותו</td><td>מוסיפים: מבצע, הנחה, חנוכה</td></tr>
+      <tr><td>עמודה F</td><td>תאריכים הפכו למספרים (46235)</td><td>"עודכן: 46235" בתשובה ללקוח</td><td>Format ← Date</td></tr>
+    </table></div>
+    <div class="callout warn"><b>הכלל</b>כל שעה שמשקיעים בניקוי המאגר חוסכת עשרות תשובות שגויות. RAG לא מתקן ידע גרוע — הוא רק מוצא אותו מהר יותר.</div>
+  </div>
+  <aside class="notes"><ul><li>בהדגמה השארנו את הבלגן בכוונה — כדי לראות מה קורה. בתשובה על שעות פתיחה Claude בחר נכון, אבל ציטט "עודכן: 46235".</li></ul></aside>
+</section>
+
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה 1">
+  <div class="s-kicker">הפסקה 1</div>
+  <h1>המאגר מוכן 📚<br>הפסקה — 10 דקות</h1>
+  <p class="sub">כשחוזרים: בונים את עוזר הידע ב-Make, מודול אחרי מודול.</p>
+  <div class="timer" data-sec="600" data-auto></div>
+  <aside class="notes"><ul><li>בהפסקה: שכל אחד ייבא את ה-CSV ל-Google Sheets שלו.</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="4" data-title="בלוק 4 · בונים ב-Make">
+  <div class="s-kicker">בלוק 4</div>
+  <h1>בונים את עוזר הידע</h1>
+  <p class="sub">שישה מודולים. כל אחד — מסך ההגדרות, ומה יצא ממנו בהרצה אמיתית.</p>
+  <aside class="notes"><ul><li>כל הצילומים מתרחיש אמיתי: "בית ועיצוב · עוזר ידע (RAG)".</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="התרחיש המלא">
+  <div class="s-kicker">התמונה הגדולה</div>
+  <h2>שישה מודולים, שאלה אחת, תשובה עם מקור</h2>
+  <div class="s-body mid">
+    <figure class="shot" style="margin:0"><img src="../assets/s09/rag-flow.jpg" alt="Webhook ← Simple Text Prompt ← Search Rows ← Text aggregator ← Simple Text Prompt ← Webhook response" style="max-height:160px;object-fit:contain"><figcaption>Webhook ← Simple Text Prompt ← Search Rows ← Text aggregator ← Simple Text Prompt ← Webhook response</figcaption></figure>
+    <div class="tbl" style="margin-top:10px"><table>
+      <tr><th>#</th><th>מודול</th><th>תפקיד ב-RAG</th></tr>
+      <tr><td>1</td><td>Custom webhook</td><td>השאלה נכנסת</td></tr>
+      <tr><td>2</td><td>Simple Text Prompt</td><td>מילת מפתח מהשאלה</td></tr>
+      <tr><td>3</td><td>Google Sheets · Search Rows</td><td><b>שליפה</b> — הקטעים הרלוונטיים</td></tr>
+      <tr><td>4</td><td>Tools · Text aggregator</td><td>מאחד את הקטעים לטקסט אחד</td></tr>
+      <tr><td>5</td><td>Simple Text Prompt</td><td><b>תשובה</b> — רק מהקטעים, עם מקור</td></tr>
+      <tr><td>6</td><td>Webhook response</td><td>התשובה חוזרת למי ששאל</td></tr>
+    </table></div>
+  </div>
+  <aside class="notes"><ul><li>הטריגר יכול להיות גם Telegram (תרגיל 4) או טופס באתר. העיקרון זהה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="שלב 1 · Webhook">
+  <div class="s-kicker">שלב 1</div>
+  <h2>Custom webhook: השאלה נכנסת</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-webhook.jpg" alt="Webhook בשם "עוזר ידע". אחרי שליחת שאלה ראשונה: "1 values detected" — השדה question" style="max-height:440px;object-fit:contain"><figcaption>Webhook בשם "עוזר ידע". אחרי שליחת שאלה ראשונה: "1 values detected" — השדה question</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">יוצרים Custom webhook ← שולחים שאלה ראשונה (מ-Hoppscotch, כמו במפגש 7) עם JSON:<br><code>{"question": "כמה עולה משלוח לחיפה?"}</code><br>Make לומד שיש שדה <b>question</b>, ומעכשיו הוא בועה.</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>בהדגמה שלחנו עם curl מהטרמינל — אותו דבר כמו Hoppscotch.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="שלב 2 · מילת מפתח">
+  <div class="s-kicker">שלב 2</div>
+  <h2>Claude מוציא מילת מפתח אחת מהשאלה</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-keyword.jpg" alt="הפרומפט: "הוצא מילת מפתח אחת בעברית… בלשון יחיד… ענה במילה אחת בלבד"" style="max-height:420px;object-fit:contain"><figcaption>הפרומפט: "הוצא מילת מפתח אחת בעברית… בלשון יחיד… ענה במילה אחת בלבד"</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/rag-out-keyword.jpg" alt="התוצאה: "משלוח". 1.03 קרדיטים" style="max-height:420px;object-fit:contain"><figcaption>התוצאה: "משלוח". 1.03 קרדיטים</figcaption></figure></div>
+    <div class="callout tip"><b>למה בעברית ובלשון יחיד?</b>כי ככה כתובות מילות המפתח במאגר. ובונוס: גם שאלה ברוסית תהפוך ל"החזרה" — ותמצא את הקטע.</div>
+  </div>
+  <aside class="notes"><ul><li>למה לא לחפש את כל השאלה? כי "כמה עולה משלוח לחיפה?" לא כתוב באף שורה. "משלוח" — כן.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="שלב 3 · Search Rows">
+  <div class="s-kicker">שלב 3 · השליפה</div>
+  <h2>Search Rows: מחפשים את מילת המפתח במאגר</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-search.jpg" alt="Filter: keywords (C) Contains (case insensitive) [2. Answer] — או — topic (B) Contains [2. Answer]" style="max-height:420px;object-fit:contain"><figcaption>Filter: keywords (C) Contains (case insensitive) [2. Answer] — או — topic (B) Contains [2. Answer]</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/rag-out-search.jpg" alt="התוצאה: 4 שורות (bundles). הראשונה K-01 — מדיניות המשלוחים" style="max-height:420px;object-fit:contain"><figcaption>התוצאה: 4 שורות (bundles). הראשונה K-01 — מדיניות המשלוחים</figcaption></figure></div>
+    <div class="callout tip"><b>שימו לב</b>Search Rows מחזיר <b>כמה bundles</b> — אחד לכל שורה שנמצאה. בלי השלב הבא, כל מודול אחריו היה רץ 4 פעמים.</div>
+  </div>
+  <aside class="notes"><ul><li>OR בין keywords ל-topic: כך גם שורה בלי מילות מפתח (K-25) יכולה להימצא לפי הנושא. Limit: 5.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="שלב 4 · Text aggregator">
+  <div class="s-kicker">שלב 4</div>
+  <h2>Text aggregator: ארבע שורות ← טקסט אחד</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-aggregator.jpg" alt="Source Module: Search Rows · Row separator: New row · Text: [id] topic: text (מקור: source, עודכן: updated)" style="max-height:420px;object-fit:contain"><figcaption>Source Module: Search Rows · Row separator: New row · Text: [id] topic: text (מקור: source, עודכן: updated)</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/rag-out-aggregator.jpg" alt="התוצאה: K-01, K-02, K-03, K-19 — ארבעה קטעים, כל אחד בשורה" style="max-height:420px;object-fit:contain"><figcaption>התוצאה: K-01, K-02, K-03, K-19 — ארבעה קטעים, כל אחד בשורה</figcaption></figure></div>
+    <div class="callout tip"><b>ההגדרה החשובה ביותר</b><b>Stop processing after an empty aggregation</b> — לא מסומן. כך גם כשהחיפוש לא מצא כלום, התרחיש ממשיך, ו-Claude יכול לענות "לא יודע".</div>
+  </div>
+  <aside class="notes"><ul><li>הפורמט של כל שורה הוא מה ש-Claude יקרא. בגלל זה המקור והתאריך בפנים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="שלב 5 · התשובה">
+  <div class="s-kicker">שלב 5 · התשובה</div>
+  <h2>Claude עונה רק מהקטעים, עם מקור</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:start"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-answer-prompt.jpg" alt="הכללים: רק מהקטעים · לא נמצא? "אין לי מידע, מעביר לנציג" · סתירה? העדכני · מקור בסוגריים מרובעים" style="max-height:420px;object-fit:contain"><figcaption>הכללים: רק מהקטעים · לא נמצא? "אין לי מידע, מעביר לנציג" · סתירה? העדכני · מקור בסוגריים מרובעים</figcaption></figure><figure class="shot" style="margin:0"><img src="../assets/s09/rag-out-answer.jpg" alt="התשובה: 149 ₪ עד 5,000 ₪, חינם מעל — [מקור: מדיניות משלוחים, סעיף 1]. 1.26 קרדיטים" style="max-height:420px;object-fit:contain"><figcaption>התשובה: 149 ₪ עד 5,000 ₪, חינם מעל — [מקור: מדיניות משלוחים, סעיף 1]. 1.26 קרדיטים</figcaption></figure></div>
+  </div>
+  <aside class="notes"><ul><li>Claude קיבל גם את K-02 (99 ₪, ישן) — ובחר נכון את K-01 לפי כלל "העדכני מנצח".</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="שלב 6 · Webhook response">
+  <div class="s-kicker">שלב 6</div>
+  <h2>Webhook response: התשובה חוזרת לשואל</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-response.jpg" alt="Status 200 · Body: [5. Answer]" style="max-height:300px;object-fit:contain"><figcaption>Status 200 · Body: [5. Answer]</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">מי ששלח את השאלה (Hoppscotch, טופס, אפליקציה) מקבל מיד את התשובה בחזרה — בלי מייל, בלי לחכות.<br><br>זמן כולל בהדגמה: כ-6 שניות.</div></div></div>
+  </div>
+  <aside class="notes"><ul><li>בתרגיל 4 מחליפים את זה ב-Telegram: הבוט עונה ללקוח.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="בדיקה 1 · שאלה רגילה">
+  <div class="s-kicker">בודקים · שאלה 1 מתוך 4</div>
+  <h2>השאלה הרגילה</h2>
+  <div class="s-body mid">
+<div class="card" style="margin-top:10px"><b>❓ כמה עולה משלוח לחיפה?</b><div style="font-size:16px;margin-top:6px;color:var(--ink-2)">🤖 משלוח לחיפה עולה 149 ₪ להזמנה עד 5,000 ₪, ומשלוח חינם להזמנה מעל 5,000 ₪. [מקור: מדיניות משלוחים, סעיף 1]</div></div>
+    <div class="callout tip"><b>מה בדקנו</b>מילת מפתח "משלוח" ← 4 קטעים ← תשובה מהקטע הנכון, עם מקור. ושימו לב: אילת לא הוזכרה — Claude לא "הוסיף" מידע לא רלוונטי.</div>
+  </div>
+  <aside class="notes"><ul><li>עלות השאלה: Webhook + 1.03 + 1 + 1 + 1.26 + Webhook response ≈ 5–6 קרדיטים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="בדיקה 2 · לא במאגר">
+  <div class="s-kicker">בודקים · שאלה 2 מתוך 4</div>
+  <h2>שאלה שאין לה תשובה במאגר</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-empty.jpg" alt="Text aggregator: Search Rows לא מצא כלום — יצא רק השלד הריק "[] : (מקור: , עודכן: )", והתרחיש המשיך" style="max-height:240px;object-fit:contain"><figcaption>Text aggregator: Search Rows לא מצא כלום — יצא רק השלד הריק "[] : (מקור: , עודכן: )", והתרחיש המשיך</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">מילת המפתח הייתה "מזרן" — אין שורה כזו במאגר. Search Rows החזיר 0 שורות, וה-aggregator בכל זאת הוציא bundle אחד, ריק. Claude קיבל קטעים ריקים וענה לפי הכלל.<div class="card" style="margin-top:10px"><b>❓ אתם מוכרים גם מזרנים?</b><div style="font-size:16px;margin-top:6px;color:var(--ink-2)">🤖 אין לי מידע על זה, מעביר לנציג.</div></div><div style="font-size:15px;margin-top:8px"><b>זה הניצחון הכי חשוב היום:</b> AI שאומר "לא יודע" שווה יותר מ-AI שממציא.</div></div></div></div>
+  </div>
+  <aside class="notes"><ul><li>בלי ההגדרה ב-aggregator — התרחיש היה נעצר אחרי Search Rows, והשואל לא היה מקבל שום תשובה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="בדיקה 3 · רוסית">
+  <div class="s-kicker">בודקים · שאלה 3 מתוך 4</div>
+  <h2>שאלה ברוסית — ובכל זאת נמצא</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-russian-keyword.jpg" alt=""Можно вернуть диван, если он не подошёл?" ← מילת המפתח: "החזרה"" style="max-height:260px;object-fit:contain"><figcaption>"Можно вернуть диван, если он не подошёл?" ← מילת המפתח: "החזרה"</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">שלב מילת המפתח עשה את העבודה של Embeddings בקטן: הבין את המשמעות ותרגם למילה של המאגר.<div class="card" style="margin-top:10px"><b>❓ Можно вернуть диван, если он не подошёл?</b><div style="font-size:16px;margin-top:6px;color:var(--ink-2)">🤖 כן, ניתן להחזיר מוצר תוך 14 יום מיום המסירה, באריזה המקורית ובלי שימוש, עם דמי טיפול של 5% או 100 ₪, הנמוך מביניהם… [מקור: מדיניות החזרות, סעיף 2]</div></div></div></div></div>
+  </div>
+  <aside class="notes"><ul><li>התשובה חזרה בעברית — שיפור לתרגול: "ענה בשפה של השאלה".</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="4" data-title="בדיקה 4 · סתירה">
+  <div class="s-kicker">בודקים · שאלה 4 מתוך 4</div>
+  <h2>שתי שורות סותרות — מה Claude עושה?</h2>
+  <div class="s-body mid">
+    <div class="grid2" style="align-items:center"><figure class="shot" style="margin:0"><img src="../assets/s09/rag-conflict.jpg" alt="הקטעים שנשלפו: K-10 (פתוח עד 14:00, עודכן 46235) ו-K-21 (עד 13:00, "ישן", עודכן 45689)" style="max-height:280px;object-fit:contain"><figcaption>הקטעים שנשלפו: K-10 (פתוח עד 14:00, עודכן 46235) ו-K-21 (עד 13:00, "ישן", עודכן 45689)</figcaption></figure>
+      <div class="card"><b>מה רואים כאן</b><div style="font-size:16px;margin-top:6px">Claude בחר נכון לפי "עודכן אחרון" — 14:00. אבל ציטט את המספר 46235: בדיוק בעיית התאריכים מהניקוי.<div class="card" style="margin-top:10px"><b>❓ עד איזו שעה אתם פתוחים ביום שישי?</b><div style="font-size:16px;margin-top:6px;color:var(--ink-2)">🤖 ביום שישי אולם התצוגה פתוח מ-9:00 עד 14:00. [מקור: דף יצירת קשר, עודכן: 46235]</div></div><div style="font-size:15px;margin-top:8px"><b>הלקח:</b> הפעם Claude הציל אותנו. לא סומכים על זה — מוחקים את K-21 ומתקנים את עמודת התאריך.</div></div></div></div>
+  </div>
+  <aside class="notes"><ul><li>שאלו את הכיתה: מה היה קורה אם K-21 היה החדש יותר בטעות?</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="4" data-title="כמה זה עולה">
+  <div class="s-kicker">חשבון</div>
+  <h2>כמה עולה תשובה?</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>מודול</th><th>קרדיטים (מההרצה)</th></tr>
+      <tr><td>Webhook + Webhook response</td><td>~2</td></tr>
+      <tr><td>Simple Text Prompt · מילת מפתח</td><td>1.03</td></tr>
+      <tr><td>Search Rows + Text aggregator</td><td>1 + 1</td></tr>
+      <tr><td>Simple Text Prompt · תשובה</td><td>1.26</td></tr>
+      <tr><td><b>סה"כ לשאלה</b></td><td><b>~6</b></td></tr>
+    </table></div>
+    <div class="callout tip"><b>השוואה</b>רמה 1 (כל 25 הקטעים בפרומפט) הייתה עולה יותר בטוקנים בכל שאלה — וזה גדל עם המאגר. ברמה 2 התשובה עולה בערך אותו דבר גם כשיש 500 קטעים.</div>
+  </div>
+  <aside class="notes"><ul><li>1,000 קרדיטים בחודש בתוכנית החינמית ≈ 160 שאלות. לבוט אמיתי — תוכנית בתשלום.</li></ul></aside>
+</section>
+
+<section class="slide brk" data-min="10" data-block="0" data-title="הפסקה 2">
+  <div class="s-kicker">הפסקה 2</div>
+  <h1>יש לנו עוזר ידע 🤖<br>הפסקה — 10 דקות</h1>
+  <p class="sub">כשחוזרים: Claude Desktop — RAG מוכן, ועוד הרבה.</p>
+  <div class="timer" data-sec="600" data-auto></div>
+  <aside class="notes"><ul><li>בקשו מכולם לפתוח את Claude Desktop.</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="5" data-title="בלוק 5 · Claude Desktop">
+  <div class="s-kicker">בלוק 5</div>
+  <h1>Claude Desktop: עוזר שעושה עבודה</h1>
+  <p class="sub">מה שבנינו ב-Make בשעה — ועוד דברים שאי אפשר לבנות שם.</p>
+  <aside class="notes"><ul><li>המסכים באפליקציה מתעדכנים לעיתים קרובות. אם משהו נראה אחרת — חפשו לפי השם.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Make או Claude">
+  <div class="s-kicker">החלטה</div>
+  <h2>מתי Make, ומתי Claude Desktop?</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>המצב</th><th>הכלי</th></tr>
+      <tr><td>תהליך קבוע שרץ לבד, בלי אדם, על כל ליד/שאלה</td><td>🟣 Make</td></tr>
+      <tr><td>לקוחות פונים ומקבלים תשובה (בוט, טופס)</td><td>🟣 Make (עם RAG)</td></tr>
+      <tr><td>אני עובד מול המחשב ורוצה עוזר חכם על הידע שלי</td><td>🟠 Claude · Projects</td></tr>
+      <tr><td>משימה שחוזרת — אבל דורשת שיקול דעת וכתיבה</td><td>🟠 Claude · Skills + משימות מתוזמנות</td></tr>
+      <tr><td>לעבוד על קבצים במחשב (לסדר, לסכם, ליצור דוחות)</td><td>🟠 Claude · Cowork</td></tr>
+      <tr><td>רוצה להפעיל את התרחישים שלי מתוך שיחה</td><td>🟣+🟠 Make כמחבר ב-Claude</td></tr>
+    </table></div>
+  </div>
+  <aside class="notes"><ul><li>המסר: לא "או-או". Claude הוא מקום העבודה, Make הוא המנוע שרץ ברקע.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="4" data-block="5" data-title="Projects">
+  <div class="s-kicker">Projects = RAG מוכן</div>
+  <h2>Projects: מאגר ידע + הוראות, בלי לבנות כלום</h2>
+  <div class="s-body mid">
+    <ol class="steps" style="--bc:var(--claude)">
+      <li>Projects ← פרויקט חדש: <b>בית ועיצוב · שירות לקוחות</b></li>
+      <li>Project knowledge ← מעלים את <code>knowledge.csv</code> (וגם PDF, Word, Excel, תמונות — עד 30MB לקובץ)</li>
+      <li>Instructions: "אתה נציג של בית ועיצוב. ענה רק לפי קבצי הפרויקט. אם אין מידע — אמור שתעביר לנציג. ציין את המקור."</li>
+      <li>שואלים את אותן ארבע שאלות מהבדיקות</li>
+    </ol>
+    <div class="callout tip"><b>ה-RAG מובנה</b>בתוכניות בתשלום, כשהידע בפרויקט גדל ומתקרב לגבול, Claude עובר אוטומטית למצב RAG — מחפש בקבצים במקום לקרוא הכול. עד פי 10 יותר תוכן. בלי הגדרה.</div>
+    <div class="callout warn"><b>ההבדל מ-Make</b>Project הוא בשבילכם, בשיחה. לקוח לא יכול לפנות אליו. בשביל לקוחות — התרחיש שבנינו.</div>
+  </div>
+  <aside class="notes"><ul><li>לכל Project יש גם זיכרון נפרד משלו. הגבלות: בחינם עד 5 פרויקטים.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Skills">
+  <div class="s-kicker">Skills</div>
+  <h2>Skills: מלמדים את Claude תהליך פעם אחת</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>מה זה</b><div style="font-size:16px;margin-top:6px">תיקייה עם קובץ <code>SKILL.md</code>: הוראות, דוגמאות, ולפעמים קבצים. Claude טוען אותה לבד כשהיא רלוונטית.<br><br>מובנים: Excel, Word, PowerPoint, PDF.</div></div>
+      <div class="card" style="border-color:var(--claude)"><b>דוגמה: "תשובה בסגנון בית ועיצוב"</b><div style="font-size:16px;margin-top:6px">טון חם וקצר · תמיד מציעים פגישה בתצוגה · אף פעם לא מבטיחים הנחה מעל 5% · חתימה קבועה.<br>מעכשיו כל טיוטה שתבקשו — בסגנון הזה.</div></div>
+    </div>
+    <ol class="steps" style="--bc:var(--claude);margin-top:10px">
+      <li>Settings ← Capabilities ← להפעיל <b>Code execution and file creation</b> (נדרש ל-Skills)</li>
+      <li>Customize ← Skills ← + ← Create skill (Claude יעזור לכתוב) או Upload a skill (קובץ zip)</li>
+    </ol>
+  </div>
+  <aside class="notes"><ul><li>Skill = "נוהל עבודה" שכתבתם פעם אחת. כמו Project instructions, אבל עובד בכל שיחה.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="משימות מתוזמנות">
+  <div class="s-kicker">Scheduled tasks</div>
+  <h2>משימות מתוזמנות: Claude עובד גם כשאתם לא</h2>
+  <div class="s-body mid">
+    <ol class="steps" style="--bc:var(--p3)">
+      <li>בסרגל הצד: <b>Scheduled</b> ← New task</li>
+      <li>Create with Claude (מתארים במילים) או Set up manually: שם, פרומפט, תדירות (שעתי, יומי, שבועי, ימי חול)</li>
+      <li>או בכל שיחה: מבקשים משהו ← לוחצים <b>Schedule</b></li>
+    </ol>
+    <div class="card" style="margin-top:10px"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"כל יום ראשון ב-8:00: עבור על קבצי הפרויקט 'בית ועיצוב', ובדוק אם יש מידע שסותר או ישן יותר משנה. תן לי רשימה של מה לתקן."<br>← בדיקת איכות אוטומטית למאגר הידע.</div></div>
+    <div class="callout tip"><b>איפה זה רץ</b>בענן כברירת מחדל — גם כשהמחשב כבוי. אם בוחרים תיקייה במחשב, המשימה רצה רק כשהמחשב דולק והאפליקציה פתוחה.</div>
+  </div>
+  <aside class="notes"><ul><li>זמין בתוכניות בתשלום. כל הרצה נפתחת כשיחה נפרדת שאפשר לקרוא.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Cowork">
+  <div class="s-kicker">Cowork</div>
+  <h2>Cowork: Claude שעובד על הקבצים שלכם</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>מה זה</b><div style="font-size:16px;margin-top:6px">מתארים תוצאה ← Claude מציג תוכנית ← מבצע: קורא וכותב קבצים בתיקייה שנתתם, יוצר Excel עם נוסחאות, מסמכים ומצגות, משתמש במחברים ובדפדפן.</div></div>
+      <div class="card" style="border-color:var(--p3)"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"בתיקיית 'חשבוניות נובמבר' יש 40 קבצי PDF. צור קובץ Excel עם ספק, תאריך, סכום ומע״מ לכל אחת, וסכום כולל בסוף."</div></div>
+    </div>
+    <div class="callout warn"><b>הרשאות</b>שלושה מצבים: Manual (מאשרים כל צעד), Auto, Skip. Claude שואל לפני מחיקה. מתחילים ב-Manual.</div>
+  </div>
+  <aside class="notes"><ul><li>זה כבר "סוכן" — נדבר על זה לעומק במפגש 10.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="3" data-block="5" data-title="Claude + Make">
+  <div class="s-kicker">החיבור</div>
+  <h2>Make כמחבר בתוך Claude</h2>
+  <div class="s-body mid">
+    <ol class="steps" style="--bc:var(--claude)">
+      <li>ב-Claude: Customize (או Settings) ← <b>Connectors</b> ← Browse ← מחפשים <b>Make</b> ← +</li>
+      <li>מתחברים ל-Make, בוחרים ארגון והרשאות ← Allow. בלי כתובת ובלי מפתח</li>
+      <li>בשיחה: "תריץ את תרחיש עוזר הידע עם השאלה: מה מדיניות ההחזרות?"</li>
+    </ol>
+    <div class="callout tip"><b>מה צריך בתרחיש</b>כדי ש-Claude יוכל להריץ: התרחיש פעיל (Active), מתוזמן <b>On demand</b>, ועם Scenario inputs/outputs מוגדרים (הכפתור I/O בסרגל התחתון). הרצת תרחישים — בכל תוכניות Make. ניהול תרחישים מ-Claude — רק בתוכנית בתשלום.</div>
+    <div class="callout tip"><b>וגם</b>Make MCP Toolboxes: בוחרים בדיוק אילו תרחישים Claude יכול להפעיל, וכל אחד — קריאה בלבד או גם כתיבה. מוסיפים ב-Claude כ-Custom connector.</div>
+  </div>
+  <aside class="notes"><ul><li>את החיבור עצמו לא בדקנו בכיתה עם התרחיש של היום — זה תרגיל בונוס.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="5" data-title="זיכרון">
+  <div class="s-kicker">Memory</div>
+  <h2>Claude זוכר — וזה גם דורש תשומת לב</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>🧠 מה הוא זוכר</b><div style="font-size:16px;margin-top:6px">דברים משיחות קודמות (תפקיד, העדפות, פרויקטים). לכל Project — זיכרון נפרד.<br>Settings ← Your Claude ← "Generate memory from chats".</div></div>
+      <div class="card" style="border-color:var(--p4)"><b>👻 שיחה זמנית</b><div style="font-size:16px;margin-top:6px">אייקון הרוח: שיחה שלא נשמרת בהיסטוריה ולא בזיכרון. למידע רגיש של לקוחות.</div></div>
+    </div>
+  </div>
+  <aside class="notes"><ul><li>בארגון (Team/Enterprise) — המנהל קובע אם הזיכרון פעיל.</li></ul></aside>
+</section>
+
+<section class="slide divider" data-min="1" data-block="6" data-title="בלוק 6 · תרגול">
+  <div class="s-kicker">בלוק 6</div>
+  <h1>אתם בונים</h1>
+  <p class="sub">מייבאים, מנקים, בונים עוזר ידע, ומשווים ל-Claude Project.</p>
+  <aside class="notes"><ul><li>בזוגות. תרגיל 4 (Telegram) למי שהספיק.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="התרגילים">
+  <div class="s-kicker">תרגול</div>
+  <h2>התרגילים של היום</h2>
+  <div class="s-body mid">
+    <div class="tbl"><table>
+      <tr><th>#</th><th>תרגיל</th></tr>
+      <tr><td>1</td><td>🧹 מייבאים את המאגר ל-Google Sheets ומנקים 4 בעיות</td></tr>
+      <tr><td>2</td><td>🔍 בונים את עוזר הידע: 6 מודולים, כמו בהדגמה</td></tr>
+      <tr><td>3</td><td>🧪 בודקים: 6 שאלות, כולל "לא במאגר" ושאלה בשפה אחרת</td></tr>
+      <tr><td>4</td><td>🤖 הבוט עונה: מחליפים את ה-Webhook ב-Telegram</td></tr>
+      <tr><td>5</td><td>📁 Claude Project: אותו מאגר, אותן שאלות — מה ההבדל?</td></tr>
+      <tr><td>6</td><td>✍️ Skill: "תשובה בסגנון בית ועיצוב"</td></tr>
+      <tr><td>⭐ בונוס</td><td>Claude מפעיל את תרחיש עוזר הידע דרך מחבר Make</td></tr>
+      <tr><td>📝 בית</td><td>משימה מתוזמנת: בדיקת איכות שבועית למאגר</td></tr>
+    </table></div>
+  </div>
+  <aside class="notes"><ul><li>דף התרגול: מפגש 9 ← תרגול.</li></ul></aside>
+</section>
+
+<section class="slide" data-min="45" data-block="6" data-title="זמן תרגול">
+  <div class="s-kicker">תרגול</div>
+  <h2>בונים בעצמכם</h2>
+  <div class="s-body mid">
+    <div class="grid2">
+      <div class="card"><b>🎯 בכיתה</b><div style="font-size:16px;margin-top:6px">תרגילים 1–3 ב-Make, ואז 5 ב-Claude.</div></div>
+      <div class="card" style="border-color:var(--p2)"><b>⚡ סיימתם?</b><div style="font-size:16px;margin-top:6px">4 (Telegram), 6 (Skill), והבונוס.</div></div>
+    </div>
+    <div class="timer" data-sec="2700"></div>
+    <div class="callout tip"><b>כשנתקעים</b>Search Rows לא מוצא? בדקו את מילת המפתח בפלט של שלב 2 · התרחיש נעצר אחרי החיפוש? "Stop processing after an empty aggregation" צריך להיות לא מסומן · כותרות לא מופיעות? בחרו שוב את הגיליון.</div>
+  </div>
+  <aside class="notes"><ul><li>לעבור בין הזוגות ולשאול: "מה Claude עונה על משהו שלא במאגר?"</li></ul></aside>
+</section>
+
+<section class="slide" data-min="2" data-block="6" data-title="מה למדנו">
+  <div class="s-kicker">סיכום</div>
+  <h2>מה לקחנו מהיום</h2>
+  <div class="s-body mid">
+    <div class="goals">
+      <div><i>🤥</i>AI ממציא כשאין לו עובדות. RAG = לתת לו את העובדות הנכונות</div>
+      <div><i>🔍</i>שליפה ← הקשר ← תשובה. ב-Make: מילת מפתח ← Search Rows ← aggregator ← Claude</div>
+      <div><i>🧹</i>מאגר נקי: שורה = קטע, מילות מפתח, מקור, תאריך. בלי כפילויות וסתירות</div>
+      <div><i>🧾</i>"רק מהקטעים", "לא יודע", "העדכני מנצח", "[מקור]"</div>
+      <div><i>🧠</i>Embeddings = חיפוש לפי משמעות. לרוב העסקים — רמה 2 מספיקה</div>
+      <div><i>🖥️</i>Claude Desktop: Projects, Skills, משימות מתוזמנות, Cowork, ו-Make כמחבר</div>
+    </div>
+    <div class="callout claude"><b>במפגש הבא</b>סוכני AI: מה ההבדל בין סוכן ל-Workflow, כלים, הרשאות, ומה קורה כשנותנים ל-AI לבחור לבד מה לעשות.</div>
+  </div>
+  <aside class="notes"><ul><li>שאלו: איזה מאגר ידע יש אצלכם בעבודה שהייתם רוצים שיענה לבד?</li></ul></aside>
+</section>
+
+<section class="slide hero" data-min="1" data-block="6" data-title="שאלות וסיום">
+  <div class="crumbs"><span>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI</span><span>›</span><b>מפגש 9</b></div>
+  <h1>שאלות?</h1>
+  <p class="sub">תודה! מהיום — AI שעונה מהידע שלכם, אומר מאיפה, ויודע להגיד "לא יודע".</p>
+  <div class="hero-meta"><span class="kind-badge">📚 RAG</span><span class="kind-badge">🧹 ניקוי ידע</span><span class="kind-badge">🧾 מקורות</span><span class="kind-badge">🖥️ Claude Desktop</span></div>
+  <aside class="notes"><ul><li>תזכורת: תרחישים כבויים.</li></ul></aside>
+</section>
+</div></div>
+<div id="ctrl" role="toolbar" aria-label="ניווט במצגת">
+  <button id="bPrev" title="הקודם (→)" aria-label="הקודם">→</button>
+  <span id="count">1 / 1</span>
+  <button id="bNext" title="הבא (← / רווח)" aria-label="הבא">←</button>
+  <button id="bNotes" title="הערות מרצה (N)" aria-label="הערות מרצה">📝</button>
+  <button id="bOv" title="סקירה (O)" aria-label="סקירה">▦</button>
+  <button id="bFs" title="מסך מלא (F)" aria-label="מסך מלא">⛶</button>
+  <button id="bTheme" title="מצב בהיר/כהה (D)" aria-label="מצב תצוגה">🌓</button>
+  <button id="bPv" title="מסך מרצה בחלון נפרד (P)" aria-label="מסך מרצה">🖥</button>
+</div>
+<aside id="notes" aria-live="polite"></aside>
+<div id="ov" aria-label="סקירת שקפים"><h3>סקירת שקפים</h3><div class="ovg" id="ovg"></div></div>
+<div id="help"></div>
+<script>
+(()=>{
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const stage=$('#stage'), deck=$('#deck'), notesEl=$('#notes');
+const slides=$$('#stage > .slide');
+const N=slides.length;
+const fmt=m=>Math.floor(m/60)+':'+String(m%60).padStart(2,'0');
+const BLK={0:'הפסקה',1:'בלוק 1 · פתיחה',2:'בלוק 2 · RAG בפשטות',3:'בלוק 3 · המאגר',4:'בלוק 4 · בונים ב-Make',5:'בלוק 5 · Claude Desktop',6:'בלוק 6 · תרגול'};
+
+/* ---------- per-slide metadata ---------- */
+let acc=0;
+slides.forEach((s,i)=>{
+  s.dataset.idx=i;
+  const m=+s.dataset.min||0; s._start=acc; acc+=m;
+  if(!s.dataset.title){const h=s.querySelector('h1,h2');s.dataset.title=h?h.textContent.trim():'שקף '+(i+1);}
+  const f=document.createElement('div');f.className='sfoot';
+  f.innerHTML=`<span>מפגש 9 · RAG ו-Claude Desktop</span><b>${i+1} / ${N}</b>`;s.appendChild(f);
+});
+const TOTAL=acc;
+const blockTot={};slides.forEach(s=>{const b=s.dataset.block;blockTot[b]=(blockTot[b]||0)+(+s.dataset.min||0);});
+console.info('[deck] slides:',N,'total minutes:',TOTAL,'per block:',JSON.stringify(blockTot));
+
+/* ---------- scaling ---------- */
+function fit(){
+  const nh=document.body.classList.contains('notes-on')?notesEl.offsetHeight:0;
+  deck.style.bottom=nh+'px';
+  const W=deck.clientWidth,H=deck.clientHeight;
+  const s=Math.min(W/1280,H/720);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit);
+
+/* ---------- navigation ---------- */
+let cur=-1;
+const help=$('#help');let helpT;
+function toast(t,ms){help.textContent=t;help.classList.add('show');clearTimeout(helpT);helpT=setTimeout(()=>help.classList.remove('show'),ms||1400);}
+function go(i){
+  i=Math.max(0,Math.min(N-1,i|0));
+  if(i===cur)return;
+  if(cur>=0)slides[cur].classList.remove('on');
+  cur=i;const s=slides[cur];s.classList.add('on');
+  $('#prog').style.width=((cur+1)/N*100)+'%';
+  $('#count').textContent=(cur+1)+' / '+N;
+  const h='#'+(cur+1);
+  if(location.hash!==h){try{history.replaceState(null,'',h)}catch(e){location.hash=h}}
+  renderNotes();
+  pvState();
+  s.dispatchEvent(new CustomEvent('enter'));
+  if(document.activeElement&&document.activeElement!==document.body&&!s.contains(document.activeElement)&&!$('#ctrl').contains(document.activeElement))document.activeElement.blur();
+}
+const next=()=>go(cur+1), prev=()=>go(cur-1);
+function fromHash(){const n=parseInt((location.hash||'').replace(/[^0-9]/g,''),10);return n>=1&&n<=N?n-1:0;}
+addEventListener('hashchange',()=>go(fromHash()));
+
+/* ---------- notes ---------- */
+function renderNotes(){
+  const s=slides[cur];const m=+s.dataset.min||0;const n=s.querySelector('.notes');
+  const nx=slides[cur+1];
+  notesEl.innerHTML=`<div class="nh"><b>${s.dataset.title}</b><span class="pill">שקף ${cur+1}/${N}</span><span class="pill">${BLK[s.dataset.block]||''}</span><span class="pill claude">⏱ ${m} דק'</span><span class="pill">מתוכנן: ${fmt(s._start)}–${fmt(s._start+m)}</span><span class="pill">סה"כ מפגש: ${TOTAL} דק'</span></div>`+
+    (n?n.innerHTML:'<p class="muted">אין הערות לשקף הזה.</p>')+
+    (nx?`<div class="nx">השקף הבא: ${nx.dataset.title} (${nx.dataset.min} דק')</div>`:'<div class="nx">זה השקף האחרון.</div>');
+}
+function toggleNotes(){document.body.classList.toggle('notes-on');$('#bNotes').classList.toggle('on',document.body.classList.contains('notes-on'));fit();}
+
+/* ---------- overview ---------- */
+const ovg=$('#ovg');let ovOn=false;
+function openOv(){
+  if(ovOn)return;ovOn=true;ovg.innerHTML='';let lastB=null;
+  slides.forEach((s,i)=>{
+    const b=s.dataset.block;
+    if(b!==lastB&&b!=='0'){const h=document.createElement('div');h.className='ov-blk';h.textContent=BLK[b];ovg.appendChild(h);}
+    if(b!=='0')lastB=b;
+    const c=document.createElement('div');c.className='ov-cell'+(i===cur?' cur':'');c.tabIndex=0;
+    const t=document.createElement('div');t.className='ov-thumb';t.appendChild(s);c.appendChild(t);
+    const l=document.createElement('small');l.innerHTML=`<b>${i+1}. ${s.dataset.title}</b><span>${s.dataset.min} דק'</span>`;c.appendChild(l);
+    c.onclick=()=>{closeOv();go(i);};
+    c.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();c.onclick();}};
+    ovg.appendChild(c);
+  });
+  document.body.classList.add('ov-on');$('#bOv').classList.add('on');
+  const cc=ovg.querySelector('.ov-cell.cur');if(cc)cc.scrollIntoView({block:'center'});
+}
+function closeOv(){
+  if(!ovOn)return;ovOn=false;
+  slides.forEach(s=>stage.appendChild(s));
+  ovg.innerHTML='';document.body.classList.remove('ov-on');$('#bOv').classList.remove('on');fit();
+}
+const toggleOv=()=>ovOn?closeOv():openOv();
+
+/* ---------- theme + fullscreen ---------- */
+const root=document.documentElement;
+try{const t=localStorage.getItem('s9deck-theme');if(t)root.dataset.theme=t;}catch(e){}
+function toggleTheme(){const d=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;root.dataset.theme=d?'light':'dark';try{localStorage.setItem('s9deck-theme',root.dataset.theme)}catch(e){}toast(d?'מצב בהיר':'מצב כהה');}
+function toggleFs(){try{if(document.fullscreenElement)document.exitFullscreen();else (document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).call(document.documentElement);}catch(e){toast('מסך מלא לא זמין בדפדפן הזה');}}
+document.addEventListener('fullscreenchange',()=>{$('#bFs').classList.toggle('on',!!document.fullscreenElement);setTimeout(fit,50);});
+
+/* ---------- controls ---------- */
+$('#bPrev').onclick=prev;$('#bNext').onclick=next;$('#bNotes').onclick=toggleNotes;$('#bOv').onclick=toggleOv;$('#bFs').onclick=toggleFs;$('#bTheme').onclick=toggleTheme;$('#bPv').onclick=openPresenter;
+
+/* ---------- keyboard (RTL: left = forward) ---------- */
+addEventListener('keydown',e=>{
+  const t=e.target;
+  if(t.closest&&t.closest('input,textarea,select,[contenteditable="true"]')){if(e.key==='Escape')t.blur();return;}
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(ovOn){
+    if(e.key==='Escape'||e.code==='KeyO'){e.preventDefault();closeOv();}
+    return;
+  }
+  const onBtn=t.tagName==='BUTTON'&&!$('#ctrl').contains(t);
+  switch(e.key){
+    case 'ArrowLeft':case 'PageDown':e.preventDefault();next();return;
+    case ' ':if(onBtn)return;e.preventDefault();e.shiftKey?prev():next();return;
+    case 'ArrowRight':case 'PageUp':e.preventDefault();prev();return;
+    case 'Home':e.preventDefault();go(0);return;
+    case 'End':e.preventDefault();go(N-1);return;
+  }
+  switch(e.code){
+    case 'KeyN':e.preventDefault();toggleNotes();return;
+    case 'KeyO':e.preventDefault();toggleOv();return;
+    case 'KeyF':e.preventDefault();toggleFs();return;
+    case 'KeyD':case 'KeyT':e.preventDefault();toggleTheme();return;
+    case 'KeyP':e.preventDefault();openPresenter();return;
+  }
+});
+
+/* ---------- click / tap zones + swipe ---------- */
+const INTERACTIVE='button,a,input,textarea,select,label,summary,details,.sim,.q,.reveal,.copybox,.timer,.fitl,.material,pre';
+deck.addEventListener('click',e=>{
+  if(ovOn||e.target.closest(INTERACTIVE))return;
+  if(getSelection&&String(getSelection()).length)return;
+  const x=e.clientX/innerWidth;
+  if(x<0.3)next();else if(x>0.7)prev();
+});
+let tx=null,ty=null;
+deck.addEventListener('touchstart',e=>{const p=e.changedTouches[0];tx=p.clientX;ty=p.clientY;},{passive:true});
+deck.addEventListener('touchend',e=>{if(tx===null)return;const p=e.changedTouches[0];const dx=p.clientX-tx,dy=p.clientY-ty;tx=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5&&!e.target.closest('input,textarea,.sim'))(dx>0?next:prev)();},{passive:true});
+
+/* ---------- timers ---------- */
+$$('.timer').forEach(el=>{
+  const total=+el.dataset.sec;let left=total,iv=null,started=false;
+  const isBrk=!!el.closest('.brk');
+  el.innerHTML=`<span class="tm"></span>${isBrk?'<div class="ret"></div>':''}<div class="row" style="gap:6px;justify-content:center"><button class="btn sm ghost t-go">▶ התחלה</button><button class="btn sm ghost t-rs" title="איפוס">↺</button></div>`;
+  const tm=el.querySelector('.tm'),go_=el.querySelector('.t-go'),ret=el.querySelector('.ret');
+  const draw=()=>{const a=Math.abs(left);tm.textContent=(left<0?'+':'')+Math.floor(a/60)+':'+String(a%60).padStart(2,'0');el.classList.toggle('over',left<0);go_.textContent=iv?'⏸ עצירה':(started?'▶ המשך':'▶ התחלה');};
+  const setRet=()=>{if(!ret)return;const d=new Date(Date.now()+Math.max(left,0)*1000);ret.innerHTML=`חוזרים בשעה <b>${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</b>`;};
+  const start=()=>{if(iv)return;started=true;setRet();iv=setInterval(()=>{left--;draw();},1000);draw();};
+  const stop=()=>{clearInterval(iv);iv=null;draw();};
+  go_.onclick=()=>iv?stop():start();
+  el.querySelector('.t-rs').onclick=()=>{stop();left=total;started=false;if(ret)ret.textContent='';draw();};
+  if(ret)ret.textContent='';
+  draw();
+  if(el.dataset.auto){const s=el.closest('.slide');s.addEventListener('enter',()=>{if(!started)start();});}
+});
+
+/* ---------- reveal toggles ---------- */
+$$('.reveal').forEach(r=>{const b=r.querySelector('.rv-btn');if(b)b.onclick=()=>r.classList.add('shown');});
+/* ---------- presenter view (popup for a second screen) ----------
+   The deck opens a blank named window, writes its document once, and from then on
+   both sides talk only through postMessage. That keeps working on file:// URLs,
+   where every page load gets its own opaque origin, and lets a reloaded deck
+   re-adopt the existing popup from its heartbeat (e.source). */
+const PV_NAME='session09-presenter';
+const DECK_ID=Math.random().toString(36).slice(2);
+let pw=null;
+function pvMark(){const b=$('#bPv');if(b)b.classList.toggle('on',!!pw);}
+function pvPost(m){
+  if(!pw)return;
+  try{if(pw.closed){pw=null;pvMark();return;}pw.postMessage(m,'*');}catch(e){pw=null;pvMark();}
+}
+function pvClone(el){const c=el.cloneNode(true);c.classList.add('on');c.querySelectorAll('.notes').forEach(x=>x.remove());return c.outerHTML;}
+function pvState(){
+  if(!pw||cur<0)return;
+  const s=slides[cur],nx=slides[cur+1],m=+s.dataset.min||0,n=s.querySelector('.notes');
+  pvPost({s9d:'state',deck:DECK_ID,idx:cur,n:N,title:s.dataset.title,min:m,start:s._start,total:TOTAL,
+    block:BLK[s.dataset.block]||'',notes:n?n.innerHTML:'',cur:pvClone(s),next:nx?pvClone(nx):'',
+    nextTitle:nx?nx.dataset.title:'',nextMin:nx?(+nx.dataset.min||0):0,hidden:!!s.querySelector('.reveal:not(.shown)')});
+  pvMark();
+}
+const PV_CSS=`
+.pv [hidden]{display:none!important}
+#pv-root{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:14px 18px;background:var(--bg);color:var(--ink)}
+.pv-top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pv-tt{display:flex;gap:12px;align-items:center;min-width:0;flex:1 1 320px}
+#pv-title{font-family:"Secular One";font-weight:400;font-size:30px;line-height:1.2}
+#pv-count{font-size:20px;direction:ltr;flex:none}
+.pv-clocks{display:flex;gap:10px;flex-wrap:wrap}
+.pv-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 14px;text-align:center;min-width:120px}
+.pv-box small{display:block;font-size:15px;color:var(--ink-2)}
+.pv-box b{display:block;font-family:"Secular One";font-weight:400;font-size:32px;direction:ltr;line-height:1.2}
+.pv-box.warn{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--surface))}
+.pv-box.warn b{color:var(--bad)}
+.pv-box.ok b{color:var(--good)}
+.pv-tbtn{display:flex;gap:4px;justify-content:center;margin-top:2px}
+.pv button{font:inherit;font-size:16px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:3px 12px;cursor:pointer}
+.pv button:hover{border-color:var(--accent)}
+.pv-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,32%);gap:16px;min-height:0}
+.pv-notes-wrap{display:flex;flex-direction:column;min-height:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 24px}
+.pv-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:17px;color:var(--ink-2);margin-bottom:8px}
+#pv-notes{flex:1;min-height:0;overflow:auto;font-size:var(--nfs,30px);line-height:1.5;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#pv-pace{direction:rtl;unicode-bidi:plaintext;font-size:26px}
+#pv-notes ul{margin:0;padding-inline-start:1.1em;display:grid;gap:.5em}
+#pv-notes b{color:var(--accent)}
+.pv-side{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.pv-side small{font-size:16px;color:var(--ink-2)}
+.pv-side small b{color:var(--ink)}
+.pv-thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:10px;border:2px solid var(--accent);background:var(--bg);flex:none}
+.pv-thumb.nx{border-color:var(--line);width:78%}
+.pv-stage{position:absolute;top:0;right:0;width:1280px;height:720px;transform-origin:top right;pointer-events:none}
+.pv-stage .slide{box-shadow:none}
+.pv-bot{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pv-bot .sp{flex:1}
+.pv-bot .lbl2{font-size:16px;color:var(--ink-2)}
+#pv-prev,#pv-nextb{font-size:22px;padding:8px 22px}
+#pv-fs{font-weight:800;direction:ltr;min-width:2.2em;text-align:center}
+#pv-disc{position:fixed;inset:0;background:rgba(10,9,22,.88);display:grid;place-items:center;z-index:9;color:#fff;text-align:center;padding:20px}
+#pv-disc b{font-family:"Secular One";font-size:42px;font-weight:400}
+#pv-disc p{font-size:24px;margin:8px 0 0}
+@media (max-width:900px){.pv-main{grid-template-columns:minmax(0,1fr)}.pv-side{display:none}}
+`;
+/* Runs inside the popup (serialized with toString). Only talks to the deck via postMessage. */
+function pvMain(){
+  const $=s=>document.querySelector(s);
+  let deckId=null,lastAck=0,curIdx=-1,slideT0=Date.now(),st=null,talk={run:false,acc:0,t0:0},fs=30;
+  try{const v=+localStorage.getItem('s9pv-font');if(v>=18&&v<=60)fs=v;}catch(e){}
+  const pad=n=>String(n).padStart(2,'0');
+  const fmtS=s=>{s=Math.max(0,Math.floor(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+pad(m):m)+':'+pad(x);};
+  const fmtM=m=>Math.floor(m/60)+':'+pad(m%60);
+  const send=m=>{try{if(window.opener&&!window.opener.closed)window.opener.postMessage(m,'*');}catch(e){}};
+  const cmd=c=>send({s9p:'cmd',cmd:c});
+  function setFont(v){fs=Math.max(18,Math.min(60,v));document.documentElement.style.setProperty('--nfs',fs+'px');$('#pv-fs').textContent=fs;try{localStorage.setItem('s9pv-font',String(fs));}catch(e){}}
+  const talkSec=()=>(talk.acc+(talk.run?Date.now()-talk.t0:0))/1000;
+  function fitThumbs(){document.querySelectorAll('.pv-thumb').forEach(t=>{const s=t.querySelector('.pv-stage');if(s)s.style.transform='scale('+(t.clientWidth/1280)+')';});}
+  function thumb(el,html){el.innerHTML=html?'<div class="pv-stage">'+html+'</div>':'';fitThumbs();}
+  function render(d){
+    if(d.idx!==curIdx){curIdx=d.idx;slideT0=Date.now();$('#pv-notes').scrollTop=0;}
+    st=d;deckId=d.deck;
+    document.title='מסך מרצה · '+(d.idx+1)+'/'+d.n;
+    $('#pv-title').textContent=d.title;
+    $('#pv-count').textContent=(d.idx+1)+' / '+d.n;
+    $('#pv-plan').textContent=d.block+' · מתוכנן '+fmtM(d.start)+'–'+fmtM(d.start+d.min)+' · סה"כ '+d.total+' דק\'';
+    $('#pv-notes').innerHTML=d.notes||'<p class="muted">אין הערות לשקף הזה.</p>';
+    $('#pv-hidden').hidden=!d.hidden;
+    thumb($('#pv-cur'),d.cur);
+    thumb($('#pv-next'),d.next);
+    $('#pv-nexttitle').textContent=d.next?d.nextTitle+' ('+d.nextMin+' דק\')':'זה השקף האחרון';
+    $('#pv-next').hidden=!d.next;
+    tick();
+  }
+  function tick(){
+    const now=new Date();
+    $('#pv-clock').textContent=pad(now.getHours())+':'+pad(now.getMinutes());
+    const ts=talkSec();
+    $('#pv-talk').textContent=fmtS(ts);
+    $('#pv-tgo').textContent=talk.run?'⏸':'▶';
+    if(st){
+      const el=(Date.now()-slideT0)/1000,plan=st.min*60;
+      $('#pv-slide').textContent=fmtS(el);
+      $('#pv-slideplan').textContent='מתוך '+st.min+' דק\'';
+      $('#pv-slidebox').classList.toggle('warn',plan>0&&el>plan);
+      const pb=$('#pv-pacebox');
+      if(talk.run||talk.acc>0){
+        const diff=Math.round(ts/60-st.start);
+        $('#pv-pace').textContent=diff===0?'בזמן':(diff>0?'באיחור '+diff+' דק\'':'לפני הזמן '+(-diff)+' דק\'');
+        pb.classList.toggle('warn',diff>=3);pb.classList.toggle('ok',diff<=0);
+      }else{$('#pv-pace').textContent='—';pb.classList.remove('warn','ok');}
+    }
+    const disc=!window.opener||window.opener.closed||Date.now()-lastAck>3000;
+    $('#pv-disc').hidden=!disc;
+  }
+  addEventListener('message',e=>{
+    if(!window.opener||e.source!==window.opener)return;
+    const d=e.data;if(!d||!d.s9d)return;
+    if(d.s9d==='bye'){lastAck=0;tick();return;}
+    lastAck=Date.now();
+    if(d.s9d==='state')render(d);else tick();
+  });
+  addEventListener('keydown',e=>{
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    const k=e.key;
+    if(k==='ArrowLeft'||k==='PageDown'||k===' '){e.preventDefault();if(e.shiftKey&&k===' ')cmd('prev');else cmd('next');}
+    else if(k==='ArrowRight'||k==='PageUp'){e.preventDefault();cmd('prev');}
+    else if(k==='Home'){e.preventDefault();cmd('home');}
+    else if(k==='End'){e.preventDefault();cmd('end');}
+    else if(k==='+'||k==='='){e.preventDefault();setFont(fs+2);}
+    else if(k==='-'||k==='_'){e.preventDefault();setFont(fs-2);}
+  });
+  $('#pv-prev').onclick=()=>cmd('prev');
+  $('#pv-nextb').onclick=()=>cmd('next');
+  $('#pv-fup').onclick=()=>setFont(fs+2);
+  $('#pv-fdn').onclick=()=>setFont(fs-2);
+  $('#pv-tgo').onclick=()=>{if(talk.run){talk.acc+=Date.now()-talk.t0;talk.run=false;}else{talk.t0=Date.now();talk.run=true;}tick();};
+  $('#pv-trs').onclick=()=>{talk={run:false,acc:0,t0:0};tick();};
+  addEventListener('resize',fitThumbs);
+  setFont(fs);
+  window.__pvTest={talkSec:()=>talkSec(),fs:()=>fs,idx:()=>curIdx,connected:()=>!$('#pv-disc').hidden?false:true};
+  const hello=()=>send({s9p:'hello',idx:curIdx,deck:deckId});
+  hello();
+  setInterval(()=>{hello();tick();},1000);
+  tick();
+}
+function pvDoc(){
+  const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+  const fl=document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  return '<!DOCTYPE html><html lang="he" dir="rtl" data-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>מסך מרצה · מפגש 9</title>'+
+  (fl?'<link rel="stylesheet" href="'+fl.href+'">':'')+'<style>'+css+'</style><style>'+PV_CSS+'</style></head><body class="pv">'+
+  '<div id="pv-root"><header class="pv-top"><div class="pv-tt"><span id="pv-count" class="pill"></span><b id="pv-title">מתחבר…</b></div>'+
+  '<div class="pv-clocks"><div class="pv-box"><small>השעה</small><b id="pv-clock"></b></div>'+
+  '<div class="pv-box" id="pv-slidebox"><small>בשקף הזה</small><b id="pv-slide">0:00</b><small id="pv-slideplan"></small></div>'+
+  '<div class="pv-box"><small>זמן ההרצאה</small><b id="pv-talk">0:00</b><div class="pv-tbtn"><button id="pv-tgo" title="התחלה/עצירה">▶</button><button id="pv-trs" title="איפוס">↺</button></div></div>'+
+  '<div class="pv-box" id="pv-pacebox"><small>מול התכנון</small><b id="pv-pace">—</b></div></div></header>'+
+  '<main class="pv-main"><section class="pv-notes-wrap"><div class="pv-meta"><span id="pv-plan"></span><span id="pv-hidden" class="lock" hidden>🔒 פתרון מוסתר בשקף</span></div><div id="pv-notes"></div></section>'+
+  '<aside class="pv-side"><small>עכשיו על המסך</small><div class="pv-thumb" id="pv-cur"></div><small>השקף הבא: <b id="pv-nexttitle"></b></small><div class="pv-thumb nx" id="pv-next"></div></aside></main>'+
+  '<footer class="pv-bot"><button id="pv-prev">→ הקודם</button><button id="pv-nextb">הבא ←</button><span class="sp"></span><span class="lbl2">גודל הטקסט</span><button id="pv-fdn" title="הקטנה (-)">A−</button><span id="pv-fs"></span><button id="pv-fup" title="הגדלה (+)">A+</button></footer>'+
+  '<div id="pv-disc" hidden><div><b>המצגת מנותקת</b><p>לחצו P בחלון המצגת כדי להתחבר מחדש.</p></div></div></div>'+
+  '<script>('+pvMain.toString()+')();<\/script></body></html>';
+}
+function openPresenter(){
+  if(pw&&!pw.closed){try{pw.focus();}catch(e){}pvState();return;}
+  let w=null;
+  try{w=window.open('',PV_NAME,'width=1280,height=800');}catch(e){}
+  if(!w){toast('הדפדפן חסם את החלון. אפשרו חלונות קופצים לקובץ הזה ולחצו P שוב',5000);return;}
+  let fresh=false;
+  try{fresh=!w.document.getElementById('pv-root');}catch(e){fresh=false;}
+  if(fresh){w.document.open();w.document.write(pvDoc());w.document.close();}
+  pw=w;pvState();
+  try{w.focus();}catch(e){}
+}
+addEventListener('message',e=>{
+  const d=e.data;if(!d||!d.s9p||!e.source)return;
+  if(e.source!==pw){pw=e.source;pvMark();}
+  if(d.s9p==='hello'){if(d.deck!==DECK_ID||d.idx!==cur)pvState();else pvPost({s9d:'ack'});}
+  else if(d.s9p==='cmd'){
+    if(d.cmd==='next')next();else if(d.cmd==='prev')prev();else if(d.cmd==='home')go(0);else if(d.cmd==='end')go(N-1);
+    pvState();
+  }
+});
+addEventListener('pagehide',()=>pvPost({s9d:'bye'}));
+/* ---------- boot ---------- */
+go(fromHash());
+fit();
+addEventListener('load',fit);
+})();
+</script>
+</body>
+</html>

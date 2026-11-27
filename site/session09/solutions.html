@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפגש 9 · פתרונות</title>
+<meta name="description" content="פתרונות מפגש 9: ניקוי המאגר, תרחיש עוזר הידע ב-Make, תוצאות הבדיקות, Telegram, Claude Project ו-Skill.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.fill td:last-child{min-width:160px;background:color-mix(in srgb,var(--surface-2) 60%,transparent)}
+.sol{border-radius:12px;padding:12px 16px;margin:10px 0;background:color-mix(in srgb,var(--good,#16a34a) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--good,#16a34a) 35%,var(--line))}
+.sol>b:first-child{display:block;margin-bottom:4px;color:var(--good,#16a34a)}
+.note{font-size:14.5px;color:var(--ink-2);margin:6px 0 0}
+.fix{display:grid;gap:10px}
+</style>
+</head>
+<body data-page="s09sol">
+<header class="top"><div class="wrap">
+  <div class="crumbs"><a href="../index.html" style="color:var(--ink-2)">אתר הקורס</a><span>›</span><b>מפגש 9</b><span>›</span><b>פתרונות</b></div>
+  <h1>פתרונות: RAG ב-Make, ו-Claude Desktop</h1>
+  <p class="sub">מה צריך לצאת בכל תרגיל, עם התוצאות האמיתיות מההדגמה.</p>
+</div></header>
+<nav class="tabs"><div class="wrap">
+  <a href="../index.html">🏠 כל המפגשים</a>
+  <a href="index.html">🛠️ תרגול</a>
+  <a href="slides.html">🎬 מצגת</a>
+  <a href="summary.html">📌 סיכום</a>
+  <a href="solutions.html" class="on">✅ פתרונות</a>
+  <a href="../session08/summary.html">⏪ מפגש 8</a>
+  <button class="theme" type="button" aria-label="מצב בהיר או כהה">🌓</button>
+</div></nav>
+<main class="wrap">
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">1</span><h3>מייבאים ומנקים</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>בעיה</th><th>שורה</th><th>תיקון</th></tr>
+      <tr><td>מחיר משלוח סותר</td><td>K-02 (99 ₪, מדיניות 2024)</td><td>מוחקים את K-02. K-01 (149 ₪) הוא העדכני</td></tr>
+      <tr><td>שעות פתיחה כפולות</td><td>K-21 (עד 13:00, "ישן")</td><td>מוחקים את K-21. K-10 (עד 14:00) העדכני</td></tr>
+      <tr><td>בלי מילות מפתח</td><td>K-25 (מבצע חנוכה)</td><td>keywords: מבצע, הנחה, חנוכה, sale</td></tr>
+      <tr><td>תאריכים כמספרים</td><td>עמודה F</td><td>Format ← Number ← Date</td></tr>
+    </table></div>
+    <p class="note">אחרי הניקוי: 23 שורות. ב-RAG מאגר נקי חשוב יותר ממודל חכם יותר.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">2</span><h3>עוזר הידע · מה יצא בהרצה אמיתית</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Custom webhook ← Simple Text Prompt (מילת מפתח) ← Search Rows (keywords OR topic, Limit 5) ← Text aggregator (New row, לא לעצור כשריק) ← Simple Text Prompt (תשובה) ← Webhook response</div>
+    <figure style="margin:10px auto 14px;max-width:420px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s09/rag-out-search.jpg" alt="Search Rows על "משלוח": 4 שורות — K-01, K-02, K-03, K-19" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">Search Rows על "משלוח": 4 שורות — K-01, K-02, K-03, K-19</figcaption></figure>
+    <figure style="margin:10px auto 14px;max-width:420px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0d0d16"><img src="../assets/s09/rag-out-answer.jpg" alt="התשובה: 149 ₪ עד 5,000 ₪, חינם מעל — [מקור: מדיניות משלוחים, סעיף 1]" style="display:block;width:100%;height:auto" loading="lazy"><figcaption style="padding:6px 12px;font-size:13px;color:var(--ink-2);background:var(--surface-2)">התשובה: 149 ₪ עד 5,000 ₪, חינם מעל — [מקור: מדיניות משלוחים, סעיף 1]</figcaption></figure>
+    <div class="tbl"><table>
+      <tr><th>מודול</th><th>קרדיטים בהרצה</th></tr>
+      <tr><td>מילת מפתח (Haiku)</td><td>1.03</td></tr>
+      <tr><td>Search Rows · Text aggregator</td><td>1 · 1</td></tr>
+      <tr><td>תשובה (Haiku)</td><td>1.26</td></tr>
+      <tr><td>סה"כ לשאלה, כולל Webhooks</td><td>~6</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">3</span><h3>בדיקות · התשובות מההדגמה</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שאלה</th><th>התשובה בהרצה שלנו</th></tr>
+      <tr><td>כמה עולה משלוח לחיפה?</td><td>149 ₪ עד 5,000 ₪, חינם מעל. [מקור: מדיניות משלוחים, סעיף 1] — בחר נכון בין K-01 ל-K-02 הישן</td></tr>
+      <tr><td>אתם מוכרים גם מזרנים?</td><td>"אין לי מידע על זה, מעביר לנציג." — החיפוש לא מצא, ה-aggregator המשיך עם טקסט ריק</td></tr>
+      <tr><td>Можно вернуть диван…?</td><td>מילת המפתח: "החזרה" ← 14 יום, באריזה המקורית, דמי טיפול 5% או 100 ₪… [מקור: מדיניות החזרות, סעיף 2]. ענה בעברית</td></tr>
+      <tr><td>עד איזו שעה בשישי?</td><td>9:00–14:00 [מקור: דף יצירת קשר, עודכן: 46235] — נכון, אבל המספר הוא בעיית התאריך</td></tr>
+    </table></div>
+    <p class="note"><b>"ענה בשפה של השאלה"</b> — מוסיפים לפרומפט 2, והתשובה לרוסית תצא ברוסית. <b>שני נושאים</b> — "עד 2 מילות מפתח" עובד רק אם בונים שני כללי חיפוש; פתרון פשוט יותר: להריץ את החיפוש פעמיים (שני Search Rows ושני aggregators).</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">4</span><h3>Telegram</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מבנה</b>Telegram Watch Updates ← Simple Text Prompt ← Search Rows ← Text aggregator ← Simple Text Prompt ← Telegram Send a Text Message or a Reply (Chat ID = Message › Chat › ID)</div>
+    <p class="note">Chat ID מגיע מהטריגר — עונים למי ששאל, לא לעצמכם (כמו בוט המלאי במפגש 7).</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">5</span><h3>Claude Project מול Make</h3></div>
+  <div class="fix">
+
+    <div class="tbl"><table>
+      <tr><th>שאלה</th><th>Make</th><th>Claude Project</th></tr>
+      <tr><td>דיוק</td><td>טוב, כל עוד מילת המפתח נכונה</td><td>בדרך כלל טוב יותר — קורא את כל המאגר (מאגר קטן) או מחפש לפי משמעות</td></tr>
+      <tr><td>שאלה עם שני נושאים</td><td>מוצא רק אחד</td><td>עונה על שניהם</td></tr>
+      <tr><td>לקוח יכול להשתמש?</td><td>כן — Webhook, טופס, Telegram</td><td>לא — רק אתם, בשיחה</td></tr>
+      <tr><td>עדכון מאגר</td><td>משנים את הגיליון — מיד</td><td>מעלים קובץ מחדש לפרויקט</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">6</span><h3>Skill</h3></div>
+  <div class="fix">
+
+    <div class="sol"><b>✅ מה צריך לקרות</b>בשיחה רגילה, כשמבקשים לנסח תשובה ללקוח, Claude מזכיר שהוא משתמש ב-Skill, והתשובה: חמה, עד 4 משפטים, מציעה לבוא לתצוגה, לא מבטיחה כחול (צבע בהזמנה אישית — צריך לבדוק), וחתומה "חם, צוות בית ועיצוב 🛋️".</div>
+    <p class="note">ה-Skill לא מפעיל? בדקו ש-Code execution פעיל, ושהתיאור "מתי להשתמש" ברור — Claude מחליט לפיו.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">★</span><h3>Claude מפעיל את התרחיש</h3></div>
+  <div class="fix">
+
+    <p class="note">לפי התיעוד של Make: הרשאת "Run your scenarios" עובדת בכל תוכניות Make, לתרחישים שהם Active, מתוזמנים On demand, ועם inputs/outputs מוגדרים. ניהול תרחישים (צפייה ועריכה) מ-Claude — רק בתוכנית בתשלום. לא נבדק בהדגמה.</p>
+  </div>
+</div>
+</section>
+<section class="blk">
+<div class="card ex">
+  <div class="ex-head"><span class="ex-num">7</span><h3>משימה מתוזמנת</h3></div>
+  <div class="fix">
+
+    <p class="note">התוצאה הצפויה על המאגר המקורי (לפני ניקוי): K-01/K-02 סותרים, K-10/K-21 כפולים, K-02 ו-K-21 ישנים, K-25 בלי מילות מפתח. ונושאים חסרים שכדאי להוסיף — למשל מזרנים, אם לקוחות שואלים.</p>
+  </div>
+</div>
+</section></main>
+<footer>מיישם אוטומציה עסקית מתקדמת באמצעות כלי AI · מפגש 9 · פתרונות</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
