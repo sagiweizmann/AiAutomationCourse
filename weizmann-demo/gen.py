@@ -114,7 +114,7 @@ for l in leads:
 write(f'{API}/products.json', {'products': [
     dict(id=i, name=n, category=c, price=pr, stock=s) for i, n, c, pr, s in PRODUCTS]})
 import csv
-with open(os.path.join(D, 'knowledge.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+with open(os.path.join(D, 'knowledge.csv'), 'w', encoding='utf-8', newline='') as f:
     w = csv.writer(f)
     w.writerow(['id', 'topic', 'keywords', 'text', 'source', 'updated'])
     w.writerows(KNOWLEDGE)
