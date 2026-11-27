@@ -292,8 +292,8 @@ B.append(slide(5, 'Cowork', 'Cowork', 'Cowork: Claude שעובד על הקבצי
     'בצילומים של הפרויקט רואים ליד Chat את הכפתור Cowork. בתוכניות בתשלום — לוחצים ועוברים למצב עבודה על קבצים. מפגש 10.', 3))
 B.append(two(5, 'Claude + Make', 'החיבור', 'Make כמחבר בתוך Claude', 'cl-make-search', 'Plugins ← חיפוש "Make": מחבר (Connector), ומחבר + Skills',
     'cl-make-connector', 'דף המחבר: mcp.make.com · 67 כלים — scenarios_list, scenarios_create, scenarios_activate… · Connect',
-    'לוחצים Connect ← מתחברים ל-Make ומאשרים. לא חיברנו בהדגמה — זה דורש התחברות לחשבון Make.', 3,
-    tip('מה Claude יכול לעשות', 'לראות, ליצור, לעדכן ולהפעיל תרחישים — מתוך שיחה. להרצת תרחיש: Active + On demand + Scenario inputs/outputs (הכפתור I/O). ניהול תרחישים — תוכנית Make בתשלום.') ))
+    'לוחצים Connect ← מתחברים ל-Make ומאשרים. לא חיברנו בהדגמה — זה דורש התחברות לחשבון Make.', 3, mh=290, callout=
+    tip('מה Claude יכול לעשות', 'לראות, ליצור, לעדכן ולהפעיל תרחישים מתוך שיחה. להרצה: Active + On demand + inputs/outputs (I/O). ניהול — תוכנית Make בתשלום.') ))
 # ================================================================== BLOCK 6
 B.append(divider(6, 'בלוק 6 · תרגול', 'אתם בונים', 'מייבאים, מנקים, בונים עוזר ידע, ומשווים ל-Claude Project.', 'בזוגות. תרגיל 4 (Telegram) למי שהספיק.'))
 B.append(slide(6, 'התרגילים', 'תרגול', 'התרגילים של היום', '''    <div class="tbl"><table>
