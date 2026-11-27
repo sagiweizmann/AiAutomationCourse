@@ -1,6 +1,8 @@
 # Builds site/session09/{slides,index,solutions,summary}.html from session 8 templates.
 # Run: python3 tools/session9.py
-import os, re
+import os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from session9_theory import theory_rag, theory_mcp
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'site')
 S8 = os.path.join(ROOT, 'session08')
 OUT = os.path.join(ROOT, 'session09')
@@ -106,6 +108,8 @@ B.append(slide(2, 'Embeddings', 'רמה 3 · הסבר בלי קוד', 'Embedding
     tip('הטריק שלנו במקום', 'בשלב מילת המפתח, Claude מתרגם את השאלה למילה בעברית. כך גם שאלה ברוסית מוצאת את הקטע — נראה את זה בבדיקות.'),
     'המטפורה: מפה של עיר. "ספה" ו"כורסה" גרים באותה שכונה; "חשבונית" בשכונה אחרת.', 4))
 
+B.extend(theory_rag(slide, tip))
+
 # ================================================================== BLOCK 3
 B.append(divider(3, 'בלוק 3 · המאגר', 'מאגר הידע של "בית ועיצוב"', '25 קטעי ידע: משלוחים, החזרות, אחריות, תשלומים ועוד. וכמו בעסק אמיתי — לא נקי.', 'הכלל: AI טוב כמו הידע שנותנים לו. מאגר מבולגן = תשובות מבולגנות.'))
 B.append(slide(3, 'מבנה המאגר', 'איך בונים מאגר', 'שורה = קטע ידע אחד', '''    <div class="tbl"><table>
@@ -171,12 +175,12 @@ B.append(two(4, 'שלב 2 · מילת מפתח', 'שלב 2', 'Claude מוציא 
 B.append(two(4, 'שלב 3 · Search Rows', 'שלב 3 · השליפה', 'Search Rows: מחפשים את מילת המפתח במאגר',
     'rag-search', 'Filter: keywords (C) Contains (case insensitive) [2. Answer] — או — topic (B) Contains [2. Answer]',
     'rag-out-search', 'התוצאה: 4 שורות (bundles). הראשונה K-01 — מדיניות המשלוחים',
-    'OR בין keywords ל-topic: כך גם שורה בלי מילות מפתח (K-25) יכולה להימצא לפי הנושא. Limit: 5.', 3,
+    'OR בין keywords ל-topic: כך גם שורה בלי מילות מפתח (K-25) יכולה להימצא לפי הנושא. Limit: 5.', 3, mh=350, callout=
     tip('שימו לב', 'Search Rows מחזיר <b>כמה bundles</b> — אחד לכל שורה שנמצאה. בלי השלב הבא, כל מודול אחריו היה רץ 4 פעמים.')))
 B.append(two(4, 'שלב 4 · Text aggregator', 'שלב 4', 'Text aggregator: ארבע שורות ← טקסט אחד',
     'rag-aggregator', 'Source Module: Search Rows · Row separator: New row · Text: [id] topic: text (מקור: source, עודכן: updated)',
     'rag-out-aggregator', 'התוצאה: K-01, K-02, K-03, K-19 — ארבעה קטעים, כל אחד בשורה',
-    'הפורמט של כל שורה הוא מה ש-Claude יקרא. בגלל זה המקור והתאריך בפנים.', 3,
+    'הפורמט של כל שורה הוא מה ש-Claude יקרא. בגלל זה המקור והתאריך בפנים.', 3, mh=350, callout=
     tip('ההגדרה החשובה ביותר', '<b>Stop processing after an empty aggregation</b> — לא מסומן. כך גם כשהחיפוש לא מצא כלום, התרחיש ממשיך, ו-Claude יכול לענות "לא יודע".')))
 B.append(two(4, 'שלב 5 · התשובה', 'שלב 5 · התשובה', 'Claude עונה רק מהקטעים, עם מקור',
     'rag-answer-prompt', 'הכללים: רק מהקטעים · לא נמצא? "אין לי מידע, מעביר לנציג" · סתירה? העדכני · מקור בסוגריים מרובעים',
@@ -290,6 +294,7 @@ B.append(slide(5, 'Cowork', 'Cowork', 'Cowork: Claude שעובד על הקבצי
       <div class="card" style="border-color:var(--p3)"><b>דוגמה</b><div style="font-size:16px;margin-top:6px">"בתיקיית 'חשבוניות נובמבר' יש 40 קבצי PDF. צור קובץ Excel עם ספק, תאריך, סכום ומע״מ לכל אחת, וסכום כולל בסוף."</div></div>
     </div>''' + tip('הרשאות', 'שלושה מצבים: Manual (מאשרים כל צעד), Auto, Skip. Claude שואל לפני מחיקה. מתחילים ב-Manual.', 'warn'),
     'בצילומים של הפרויקט רואים ליד Chat את הכפתור Cowork. בתוכניות בתשלום — לוחצים ועוברים למצב עבודה על קבצים. מפגש 10.', 3))
+B.extend(theory_mcp(slide, tip))
 B.append(two(5, 'Claude + Make', 'החיבור', 'Make כמחבר בתוך Claude', 'cl-make-search', 'Plugins ← חיפוש "Make": מחבר (Connector), ומחבר + Skills',
     'cl-make-connector', 'דף המחבר: mcp.make.com · 67 כלים — scenarios_list, scenarios_create, scenarios_activate… · Connect',
     'לוחצים Connect ← מתחברים ל-Make ומאשרים. לא חיברנו בהדגמה — זה דורש התחברות לחשבון Make.', 3, mh=290, callout=
